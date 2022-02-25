@@ -15,7 +15,8 @@ class CreateMtrPositions extends Migration
     {
         Schema::create('mtr_positions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_info_id');
+            $table->uuid('order_info_id');
+            $table->enum('status', ['На рассмотрении', 'Согласовано', 'Отклонено']);
             $table->string('mnemocode');
             $table->string('nomenclature');
             $table->enum('unit', ['шт.', 'кг.', 'л.']);
@@ -23,7 +24,7 @@ class CreateMtrPositions extends Migration
             $table->unsignedDouble('price_without_vat');
             $table->unsignedDouble('amount_without_vat');
             $table->unsignedDouble('total_amount');
-            $table->timestamp('delivery time');
+            $table->timestamp('delivery_time');
             $table->string('delivery_address');//справочник скорее всего, но мб вручную будет
             $table->timestamps();
         });
