@@ -11,13 +11,13 @@ class MtrPosition extends Model
 {
     use HasFactory;
 
-    protected $table = 'mtr_positions';
+    protected $table = 'mtr_positions'; #positons in order
 
     protected $fillable = [
         'order_info_id',
-        'mnemocode',
-        'nomenclature',
-        'unit',
+//        'mnemocode',
+//        'nomenclature',
+//        'unit',    Id позиции
         'count',
         'price_without_vat',
         'amount_without_vat',
