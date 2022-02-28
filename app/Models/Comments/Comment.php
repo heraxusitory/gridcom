@@ -2,7 +2,7 @@
 
 namespace App\Models\Comments;
 
-use App\Models\MtrPositions\MtrPosition;
+use App\Models\OrderPosition;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -20,7 +20,7 @@ class Comment extends Model
 
     public function positions(): BelongsToMany
     {
-        return $this->belongsToMany(MtrPosition::class, 'mtr_positions_to_comments', 'comment_id', 'mtr_position_id');
+        return $this->belongsToMany(OrderPosition::class, 'order_positions_to_comments', 'comment_id', 'mtr_position_id');
 
     }
 }

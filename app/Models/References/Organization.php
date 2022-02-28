@@ -1,14 +1,14 @@
 <?php
 
 
-namespace App\Models\ContrAgents;
+namespace App\Models\References;
 
 
 use Illuminate\Database\Eloquent\Model;
 
-class ContrAgent extends Model
+class Organization extends Model
 {
-    protected $table = 'contr_agents';
+    protected $table = 'organizations';
 
     protected $fillable = [
         'name',

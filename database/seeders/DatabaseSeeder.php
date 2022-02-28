@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Comments\Comment;
-use App\Models\MtrPositions\MtrPosition;
+use App\Models\OrderPositions\OrderPosition;
 use App\Models\Orders\Order;
 use Faker\Generator;
 use Illuminate\Database\Seeder;
@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
 
         $order = Order::create($order_info_data);
 
-        $mtr = MtrPosition::create([
+        $mtr = OrderPosition::create([
             'order_info_id' => $order->id,
             'status' => 'Согласовано',
             'mnemocode' => '5345534545',

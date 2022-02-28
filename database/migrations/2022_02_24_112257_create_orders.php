@@ -14,36 +14,36 @@ class CreateOrders extends Migration
     public function up()
     {
         Schema::create('orders', function (Blueprint $table) {
-            $table->uuid('id')->primary();
-            $table->boolean('is_external');
-//            $table->uuid('number')->unique(); //генерится автоматически
+            $table->id();
+//            $table->boolean('is_external');
+            $table->uuid('number')->unique(); //генерится автоматически
             $table->timestamp('order_date'); //генерится автоматически
 //            $table->timestamp('approval_date');
             $table->timestamp('deadline_date');
             $table->enum('customer_status', ['Согласовано', 'На рассмотрении', 'Отклонено']);
             $table->enum('provider_status', ['Согласовано', 'Согласовано частично', 'На рассмотрении', 'Отклонено', 'Черновик']);
-            $table->string('customer_filial_branch');
-            $table->string('work_agreement'); //справочник
-            $table->timestamp('work_agreement_date'); //автоматически подставлять из справочника по work_agreement_id
-            $table->enum('work_type', ['Разработка', 'Интеграция', 'Строительство']);
-            $table->string('object');
-            $table->string('sub_object');
-            $table->timestamp('work_start_date');
-            $table->timestamp('work_end_date');
+            $table->unsignedBigInteger('customer_id');
+//            $table->string('work_agreement'); //справочник
+//            $table->timestamp('work_agreement_date'); //автоматически подставлять из справочника по work_agreement_id
+//            $table->enum('work_type', ['Разработка', 'Интеграция', 'Строительство']);
+//            $table->string('object');
+//            $table->string('sub_object');
+//            $table->timestamp('work_start_date');
+//            $table->timestamp('work_end_date');
 
-            $table->string('provider'); //cправочник или вручную
-            $table->string('provider_contract');//справочник или вручную
-            $table->timestamp('provider_contract_date');//справочник или вручную, автоматически подставлять из provider_contract
-            $table->string('provider_full_name');
-            $table->string('provider_email');
-            $table->string('provider_phone');
+            $table->unsignedBigInteger('provider_id'); //cправочник или вручную
+//            $table->string('provider_contract');//справочник или вручную
+//            $table->timestamp('provider_contract_date');//справочник или вручную, автоматически подставлять из provider_contract
+//            $table->string('provider_full_name');
+//            $table->string('provider_email');
+//            $table->string('provider_phone');
 
-            $table->string('contractor'); //справочник или пишем сами
-            $table->string('contractor_full_name');
-            $table->string('contractor_email');
-            $table->string('contractor_phone');
-            $table->string('contractor_responsible_full_name');
-            $table->string('contractor_responsible_phone');
+            $table->unsignedBigInteger('contractor_id'); //справочник или пишем сами
+//            $table->string('contractor_full_name');
+//            $table->string('contractor_email');
+//            $table->string('contractor_phone');
+//            $table->string('contractor_responsible_full_name');
+//            $table->string('contractor_responsible_phone');
 
             $table->timestamps();
         });

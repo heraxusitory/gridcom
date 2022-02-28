@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMtrPositionsToComments extends Migration
+class CreateContrAgents extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class CreateMtrPositionsToComments extends Migration
      */
     public function up()
     {
-        Schema::create('mtr_positions_to_comments', function (Blueprint $table) {
-            $table->unsignedBigInteger('mtr_position_id');
-            $table->unsignedBigInteger('comment_id');
+        Schema::create('contr_agents', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
@@ -26,6 +27,6 @@ class CreateMtrPositionsToComments extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('mtr_positions_to_comments');
+        Schema::dropIfExists('contr_agents');
     }
 }
