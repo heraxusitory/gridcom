@@ -30,6 +30,21 @@ class Order extends Model
         'contractor_id',
     ];
 
+    const ACTION_DRAFT = 'draft';
+    const ACTION_APPROVE = 'approve';
+
+    const CUSTOMER_STATUS_NOT_AGREED = 'Не согласовано';
+    const CUSTOMER_STATUS_AGREED = 'Согласовано';
+    const CUSTOMER_STATUS_DRAFT = 'Черновик';
+    const CUSTOMER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
+    const CUSTOMER_STATUS_CANCELED = 'Аннулировано';
+
+    const PROVIDER_STATUS_NOT_AGREED = 'Не согласовано';
+    const PROVIDER_STATUS_AGREED = 'Согласовано';
+    const PROVIDER_STATUS_DRAFT = 'Черновик';
+    const PROVIDER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
+    const PROVIDER_STATUS_CANCELED = 'Аннулировано';
+
     public function positions(): HasMany
     {
         return $this->hasMany(OrderPosition::class, 'order_id', 'id');

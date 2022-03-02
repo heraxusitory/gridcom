@@ -304,7 +304,6 @@ class DatabaseSeeder extends Seeder
                     $unit = NomenclatureUnit::query()->firstOrCreate([
                         'name' => $unit,
                     ]);
-                    dump($unit);
                     $nomenclature_model->units()->attach($unit->id);
                 }
             }

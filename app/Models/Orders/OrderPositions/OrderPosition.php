@@ -27,6 +27,10 @@ class OrderPosition extends Model
         'delivery_address',
     ];
 
+    const STATUS_AGREED = 'Согласовано';
+    const STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
+    const STATUS_REJECTED = 'Отклонено';
+
     public function nomenclature()
     {
         return $this->belongsTo(Nomenclature::class, 'nomenclature_id', 'id');

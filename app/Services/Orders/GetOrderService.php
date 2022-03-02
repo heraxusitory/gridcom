@@ -20,7 +20,7 @@ class GetOrderService implements IService
 
     public function run()
     {
-        return Order::query()
+        $order = Order::query()
             ->with([
                 'customer',
                 'provider',
@@ -30,5 +30,8 @@ class GetOrderService implements IService
                 'positions.unit'
             ])
             ->findOrFail($this->order_id);
+
+        $order->amount_total = $order->positions->sum('amount_without_vat');
+        return $order;
     }
 }

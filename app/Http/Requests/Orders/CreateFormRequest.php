@@ -26,7 +26,7 @@ class CreateFormRequest extends FormRequest
     {
         return [
 //            'number' => ,
-            'action' => [Rule::in(['draft', 'approve'])],
+            'action' => ['required', Rule::in(['draft', 'approve'])],
             'order_date' => 'date_format:d.m.Y',
             'deadline_date' => 'required|date_format:d.m.Y',
 //            'customer_status',

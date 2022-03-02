@@ -20,7 +20,7 @@ class CreateOrders extends Migration
             $table->timestamp('order_date'); //генерится автоматически
 //            $table->timestamp('approval_date');
             $table->timestamp('deadline_date');
-            $table->enum('customer_status', ['Согласовано', 'На рассмотрении', 'Отклонено']);
+            $table->enum('customer_status', ['Согласовано', 'На рассмотрении', 'Отклонено', 'Черновик']);
             $table->enum('provider_status', ['Согласовано', 'Согласовано частично', 'На рассмотрении', 'Отклонено', 'Черновик']);
             $table->unsignedBigInteger('customer_id');
 //            $table->string('work_agreement'); //справочник

@@ -33,7 +33,20 @@ class CreateOrderService implements IService
     {
         $payload = $this->payload;
 
-        return DB::transaction(function () use ($payload) {
+        switch ($payload['action']) {
+            case Order::ACTION_DRAFT:
+                $customer_status = Order::CUSTOMER_STATUS_DRAFT;
+                $provider_status = Order::PROVIDER_STATUS_DRAFT;
+                break;
+            case Order::ACTION_APPROVE:
+                $customer_status = Order::CUSTOMER_STATUS_UNDER_CONSIDERATION;
+                $provider_status = Order::PROVIDER_STATUS_UNDER_CONSIDERATION;
+                break;
+            default:
+                break;
+        }
+
+        return DB::transaction(function () use ($payload, $customer_status, $provider_status) {
             $customer_data = $payload['customer'];
             $provider_data = $payload['provider'];
             $contractor_data = $payload['contractor'];
@@ -96,8 +109,8 @@ class CreateOrderService implements IService
             $order = Order::query()->create([
                 'order_date' => Carbon::today()->format('d.m.Y'),
                 'deadline_date' => $payload['deadline_date'],
-                'customer_status' => 'На рассмотрении',
-                'provider_status' => 'Черновик',
+                'customer_status' => $customer_status,
+                'provider_status' => $provider_status,
                 'customer_id' => $customer->id,
                 'provider_id' => $provider->id,
                 'contractor_id' => $contractor->id,
@@ -105,12 +118,10 @@ class CreateOrderService implements IService
 
             //positions
             foreach ($positions_data as $position) {
-                $nomenclature_id = $position['nomenclature_id'];
-
-                $position = OrderPosition::query()->create([
-                    'order_id' => $order->id,
-                    'status' => 'На рассмотрении',
-                    'nomenclature_id' => $nomenclature_id,
+                $order->positions()->create([
+//                    'order_id' => $order->id,
+                    'status' => OrderPosition::STATUS_UNDER_CONSIDERATION,
+                    'nomenclature_id' => $position['nomenclature_id'],
                     'unit_id' => $position['unit_id'],
                     'count' => $position['count'],
                     'price_without_vat' => $position['price_without_vat'],
