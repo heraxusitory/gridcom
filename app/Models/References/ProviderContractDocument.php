@@ -11,7 +11,7 @@ class ProviderContractDocument extends Model
     protected $table = 'provider_contracts';
 
     protected $fillable = [
-        'provider_contract',
-        'provider_contract_date',
+        'number',
+        'date',
     ];
 }

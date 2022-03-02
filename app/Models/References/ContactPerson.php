@@ -5,6 +5,7 @@ namespace App\Models\References;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ContactPerson extends Model
@@ -18,8 +19,8 @@ class ContactPerson extends Model
         'phone',
     ];
 
-    public function contrAgentName(): hasOne
+    public function contrAgentName(): belongsTo
     {
-        return $this->hasOne(ContrAgent::class, 'contr_agent_id', 'id');
+        return $this->belongsTo(ContrAgent::class, 'contr_agent_id', 'id');
     }
 }

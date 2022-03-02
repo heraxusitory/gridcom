@@ -16,7 +16,7 @@ class CreateOrders extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
 //            $table->boolean('is_external');
-            $table->uuid('number')->unique(); //генерится автоматически
+            $table->string('number')->unique(); //генерится автоматически
             $table->timestamp('order_date'); //генерится автоматически
 //            $table->timestamp('approval_date');
             $table->timestamp('deadline_date');

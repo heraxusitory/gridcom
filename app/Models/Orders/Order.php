@@ -6,6 +6,7 @@ use App\Models\Contractor;
 use App\Models\Customer;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
+use App\Traits\UsesOrderNumber;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Order extends Model
 {
-    use HasFactory, UsesUuid;
+    use HasFactory, UsesOrderNumber;
 
     protected $table = 'orders';
 
@@ -31,21 +32,21 @@ class Order extends Model
 
     public function positions(): HasMany
     {
-        return $this->hasMany(OrderPosition::class, 'order_info_id', 'id');
+        return $this->hasMany(OrderPosition::class, 'order_id', 'id');
     }
 
-    public function customer(): hasOne
+    public function customer()
     {
-        return $this->hasOne(Customer::class, 'customer_id', 'id');
+        return $this->belongsTo(Customer::class, 'customer_id', 'id');
     }
 
-    public function provider(): hasOne
+    public function provider()
     {
-        return $this->hasOne(Provider::class, 'provider_id', 'id');
+        return $this->belongsTo(Provider::class, 'provider_id', 'id');
     }
 
-    public function contractor(): hasOne
+    public function contractor()
     {
-        return $this->hasOne(Contractor::class, 'contractor_id', 'id');
+        return $this->belongsTo(Contractor::class, 'contractor_id', 'id');
     }
 }

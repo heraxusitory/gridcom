@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateOrderCustomers extends Migration
+class CreateNomenclatureToUnit extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateOrderCustomers extends Migration
      */
     public function up()
     {
-        Schema::create('order_customers', function (Blueprint $table) {
+        Schema::create('nomenclature_to_unit', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('organization_id');
-            $table->unsignedBigInteger('work_agreement_id');
-            $table->string('work_type');
-            $table->unsignedBigInteger('object_id');
-            $table->unsignedBigInteger('sub_object_id');
+            $table->unsignedBigInteger('nomenclature_id');
+            $table->unsignedBigInteger('unit_id');
             $table->timestamps();
         });
     }
@@ -31,6 +28,6 @@ class CreateOrderCustomers extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('nomenclature_to_unit');
     }
 }

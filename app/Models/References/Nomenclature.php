@@ -12,7 +12,11 @@ class Nomenclature extends Model
 
     protected $fillable = [
         'mnemocode',
-        'nomenclature',
-        'unit',
+        'name',
     ];
+
+    public function units()
+    {
+        return $this->belongsToMany(NomenclatureUnit::class, 'nomenclature_to_unit', 'unit_id', 'nomenclature_id');
+    }
 }

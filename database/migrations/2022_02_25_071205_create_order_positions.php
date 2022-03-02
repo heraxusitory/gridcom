@@ -15,16 +15,17 @@ class CreateOrderPositions extends Migration
     {
         Schema::create('order_positions', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('order_info_id');
+            $table->unsignedBigInteger('order_id');
             $table->enum('status', ['На рассмотрении', 'Согласовано', 'Отклонено']);
             $table->unsignedBigInteger('nomenclature_id');
+            $table->unsignedBigInteger('unit_id');
 //            $table->string('mnemocode');
 //            $table->string('nomenclature');
 //            $table->enum('unit', ['шт.', 'кг.', 'л.']);
             $table->unsignedDouble('count');
             $table->unsignedDouble('price_without_vat');
             $table->unsignedDouble('amount_without_vat');
-            $table->unsignedDouble('total_amount');
+//            $table->unsignedDouble('total_amount');
             $table->timestamp('delivery_time');
             $table->string('delivery_address');//справочник скорее всего, но мб вручную будет
             $table->timestamps();

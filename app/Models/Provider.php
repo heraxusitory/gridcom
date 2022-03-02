@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Provider extends Model
 {
-    protected $table = 'providers';
+    protected $table = 'order_providers';
 
     protected $fillable = [
         'provider_contract_id',
