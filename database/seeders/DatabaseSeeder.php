@@ -2,10 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\References\ContactPerson;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
-use App\Models\References\CustomerSubObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\NomenclatureUnit;
 use App\Models\References\Organization;
