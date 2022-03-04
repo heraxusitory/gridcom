@@ -15,7 +15,7 @@ class ReferenceController extends Controller
 {
     public function getOrganizations()
     {
-        $organizations = Organization::query()->pluck('name', 'id');
+        $organizations = Organization::all();
         return response()->json(['data' => $organizations]);
     }
 

@@ -23,7 +23,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $faker = new Generator();
 //        $order_info_data = [
 //            'is_external' => false,
 ////            'number' => 19583,
@@ -297,7 +296,6 @@ class DatabaseSeeder extends Seeder
                     'name' => $nomenclature['name'],
                 ]);
 
-                dump($nomenclature);
                 foreach ($nomenclature['units'] as $unit) {
                     $unit = NomenclatureUnit::query()->firstOrCreate([
                         'name' => $unit,

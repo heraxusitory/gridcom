@@ -22,8 +22,10 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::group(['prefix' => 'orders'], function () {
     Route::get('', [OrderController::class, 'index']);
+    Route::get('{order_id}', [OrderController::class, 'getOrder']);
+    Route::put('{order_id}', [OrderController::class, 'update']);
+    Route::delete('{order_id}', [OrderController::class, 'delete']);
     Route::post('create', [OrderController::class, 'create']);
-    Route::post('{order_id}', [OrderController::class, 'getOrder']);
 
     Route::group(['prefix' => 'references'], function () {
         Route::get('organizations', [ReferenceController::class, 'getOrganizations']);
