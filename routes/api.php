@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConsignmentNotes\ConsignmentNoteController;
 use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Orders\References\ReferenceController;
 use Illuminate\Http\Request;
@@ -33,5 +34,20 @@ Route::group(['prefix' => 'orders'], function () {
         Route::get('provider_contracts', [ReferenceController::class, 'getProviderContracts']);
         Route::get('objects', [ReferenceController::class, 'getObjects']);
         Route::get('contr_agents', [ReferenceController::class, 'getContrAgents']);
+    });
+});
+
+Route::group(['prefix' => 'consignments'], function () {
+    Route::get('', [ConsignmentNoteController::class, 'index']);
+    Route::post('create', [ConsignmentNoteController::class, 'create']);
+    Route::post('create', [ConsignmentNoteController::class, 'update']);
+});
+
+Route::group(['prefix' => 'integrations/as-mts/synchronization'], function () {
+    Route::group(['prefix' => 'preferences'], function () {
+        Route::post('organizations', [\App\Http\Controllers\Integrations\AsMts\SyncReferenceController::class, 'syncOrganizations']);
+    });
+    Route::group(['prefix' => 'orders'], function () {
+        Route::post('', [\App\Http\Controllers\Integrations\AsMts\SyncOrderController::class, 'sync']);
     });
 });

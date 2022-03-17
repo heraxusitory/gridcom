@@ -11,6 +11,7 @@ class CustomerSubObject extends Model
     protected $table = 'customer_sub_objects';
 
     protected $fillable = [
+        'uuid',
         'customer_object_id',
         'name',
     ];

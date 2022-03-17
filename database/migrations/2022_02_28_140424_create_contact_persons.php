@@ -15,6 +15,7 @@ class CreateContactPersons extends Migration
     {
         Schema::create('contact_persons', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('contr_agent_id');
             $table->string('full_name');
             $table->string('email');

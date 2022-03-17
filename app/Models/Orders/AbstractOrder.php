@@ -1,25 +1,25 @@
 <?php
 
+
 namespace App\Models\Orders;
+
 
 use App\Models\Contractor;
 use App\Models\Customer;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
-use App\Traits\UsesOrderNumber;
-use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class Order extends Model
+abstract class AbstractOrder extends Model
 {
-    use HasFactory, UsesOrderNumber;
+    use HasFactory;
 
     protected $table = 'orders';
 
     protected $fillable = [
+        'uuid',
         'number',
         'order_date',
         'deadline_date',
@@ -28,6 +28,10 @@ class Order extends Model
         'customer_id',
         'provider_id',
         'contractor_id',
+    ];
+
+    protected $hidden = [
+        'uuid',
     ];
 
     const ACTION_DRAFT = 'draft';
@@ -44,6 +48,28 @@ class Order extends Model
     const PROVIDER_STATUS_DRAFT = 'Черновик';
     const PROVIDER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const PROVIDER_STATUS_CANCELED = 'Аннулировано';
+
+    public static function getCustomerStatuses(): array
+    {
+        return [
+            self::CUSTOMER_STATUS_NOT_AGREED,
+            self::CUSTOMER_STATUS_AGREED,
+            self::CUSTOMER_STATUS_DRAFT,
+            self::CUSTOMER_STATUS_UNDER_CONSIDERATION,
+            self::CUSTOMER_STATUS_CANCELED,
+        ];
+    }
+
+    public static function getProviderStatuses(): array
+    {
+        return [
+            self::PROVIDER_STATUS_NOT_AGREED,
+            self::PROVIDER_STATUS_AGREED,
+            self::PROVIDER_STATUS_DRAFT,
+            self::PROVIDER_STATUS_UNDER_CONSIDERATION,
+            self::PROVIDER_STATUS_CANCELED,
+        ];
+    }
 
     public function positions(): HasMany
     {

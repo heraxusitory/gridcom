@@ -4,8 +4,6 @@
 namespace App\Traits;
 
 
-use Illuminate\Support\Facades\Log;
-
 trait UsesOrderNumber
 {
     protected static function booted()

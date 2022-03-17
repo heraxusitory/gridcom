@@ -15,17 +15,15 @@ class CreateOrderPositions extends Migration
     {
         Schema::create('order_positions', function (Blueprint $table) {
             $table->id();
+            $table->uuid('position_id')->index(); //TODO спорный вопрос делать ли это поле и тем более уникальным для обеих сторон
             $table->unsignedBigInteger('order_id');
+            $table->unique(['position_id', 'order_id'], 'op_position_id_order_id_unique');
             $table->enum('status', ['На рассмотрении', 'Согласовано', 'Отклонено']);
             $table->unsignedBigInteger('nomenclature_id');
             $table->unsignedBigInteger('unit_id');
-//            $table->string('mnemocode');
-//            $table->string('nomenclature');
-//            $table->enum('unit', ['шт.', 'кг.', 'л.']);
             $table->unsignedDouble('count');
             $table->unsignedDouble('price_without_vat');
             $table->unsignedDouble('amount_without_vat');
-//            $table->unsignedDouble('total_amount');
             $table->timestamp('delivery_time');
             $table->string('delivery_address');//справочник скорее всего, но мб вручную будет
             $table->timestamps();

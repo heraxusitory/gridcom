@@ -4,7 +4,7 @@
 namespace App\Services\Orders;
 
 
-use App\Models\Orders\Order;
+use App\Models\Orders\LKK\Order;
 use App\Services\IService;
 
 class GetOrdersService implements IService

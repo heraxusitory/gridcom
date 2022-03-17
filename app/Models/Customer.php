@@ -21,25 +21,27 @@ class Customer extends Model
         'work_type',
         'object_id',
         'sub_object_id',
+        'work_start_date',
+        'work_end_date',
     ];
 
     public function organization(): hasOne
     {
-        return $this->hasOne(Organization::class, 'organization_id', 'id');
+        return $this->hasOne(Organization::class, 'id', 'organization_id');
     }
 
     public function contract(): hasOne
     {
-        return $this->hasOne(WorkAgreementDocument::class, 'works_agreement', 'id');
+        return $this->hasOne(WorkAgreementDocument::class, 'id', 'work_agreement_id');
     }
 
     public function object(): hasOne
     {
-        return $this->hasOne(CustomerObject::class, 'object_id', 'id');
+        return $this->hasOne(CustomerObject::class, 'id', 'object_id');
     }
 
     public function subObject(): hasOne
     {
-        return $this->hasOne(CustomerSubObject::class, 'sub_object_id', 'id');
+        return $this->hasOne(CustomerSubObject::class, 'id', 'sub_object_id');
     }
 }

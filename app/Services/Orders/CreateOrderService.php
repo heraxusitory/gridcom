@@ -6,7 +6,7 @@ namespace App\Services\Orders;
 
 use App\Models\Contractor;
 use App\Models\Customer;
-use App\Models\Orders\Order;
+use App\Models\Orders\LKK\Order;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
 use App\Models\References\ContactPerson;
@@ -18,6 +18,7 @@ use App\Models\References\WorkAgreementDocument;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class CreateOrderService implements IService
 {
@@ -73,40 +74,51 @@ class CreateOrderService implements IService
                 'work_type' => $customer_data['work_type'],
                 'object_id' => $customer_object->id,
                 'sub_object_id' => $customer_sub_object->id,
+                'work_start_date' => $customer_data['work_start_date'],
+                'work_end_date' => $customer_data['work_end_date'],
             ]);
 
             //provider
-            $provider_id = $provider_data['id'];
+            $provider_id = $provider_data['contr_agent_id'];
             $provider_contract_id = $provider_data['contract_id'];
 
             $provider_contr_agent = ContrAgent::query()->findOrFail($provider_id);
             $provider_contract = ProviderContractDocument::query()
                 ->findOrFail($provider_contract_id);
 
-            $provider_contact_data = array_merge($provider_data['contact'], ['contr_agent_id' => $provider_contr_agent->id]);
-            $provider_contact = ContactPerson::query()
-                ->firstOrCreate($provider_contact_data);
+//            $provider_contact_data = array_merge($provider_data['contact'], ['contr_agent_id' => $provider_contr_agent->id]);
+//            $provider_contact = ContactPerson::query()
+//                ->findOrFail($provider_data['contact_id']);
 
             $provider = Provider::query()->create([
                 'provider_contract_id' => $provider_contract->id,
-                'contact_id' => $provider_contact->id,
+//                'contact_id' => $provider_contact->id,
+                'contr_agent_id' => $provider_contr_agent->id,
+                'full_name' => $provider_data['contact']['full_name'],
+                'email' => $provider_data['contact']['email'],
+                'phone' => $provider_data['contact']['phone'],
             ]);
 
             //contractor
 
-            $contractor_id = $contractor_data['id'];
+            $contractor_id = $contractor_data['contr_agent_id'];
             $contractor_contr_agent = ContrAgent::query()->findOrFail($contractor_id);
-            $contractor_contact_data = array_merge($contractor_data['contact'], ['contr_agent_id' => $contractor_contr_agent->id]);
-            $contractor_contact = ContactPerson::query()
-                ->firstOrCreate($contractor_contact_data);
+//            $contractor_contact_data = array_merge($contractor_data['contact'], ['contr_agent_id' => $contractor_contr_agent->id]);
+//            $contractor_contact = ContactPerson::query()
+//                ->findOrFail($contractor_data['contact_id']);
 
             $contractor = Contractor::query()->create([
-                'contact_id' => $contractor_contact->id,
+//                'contact_id' => $contractor_contact->id,
+                'contr_agent_id' => $contractor_data['contr_agent_id'],
+                'full_name' => $contractor_data['contact']['full_name'],
+                'email' => $contractor_data['contact']['email'],
+                'phone' => $contractor_data['contact']['phone'],
                 'contractor_responsible_full_name' => $contractor_data['responsible_full_name'],
                 'contractor_responsible_phone' => $contractor_data['responsible_phone'],
             ]);
 
             $order = Order::query()->create([
+                'uuid' => Str::uuid(),
                 'order_date' => Carbon::today()->format('d.m.Y'),
                 'deadline_date' => $payload['deadline_date'],
                 'customer_status' => $customer_status,
@@ -120,6 +132,7 @@ class CreateOrderService implements IService
             foreach ($positions_data as $position) {
                 $order->positions()->create([
 //                    'order_id' => $order->id,
+                    'position_id' => Str::uuid(),
                     'status' => OrderPosition::STATUS_UNDER_CONSIDERATION,
                     'nomenclature_id' => $position['nomenclature_id'],
                     'unit_id' => $position['unit_id'],

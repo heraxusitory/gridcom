@@ -15,6 +15,7 @@ class CreateNomenclatureUnits extends Migration
     {
         Schema::create('nomenclature_units', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('name');
             $table->timestamps();
         });

@@ -15,6 +15,7 @@ class CreateNomenclature extends Migration
     {
         Schema::create('nomenclature', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('mnemocode')->unique();
             $table->string('name');
             $table->timestamps();

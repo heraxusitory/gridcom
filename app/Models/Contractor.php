@@ -13,13 +13,17 @@ class Contractor extends Model
     protected $table = 'order_contractors';
 
     protected $fillable = [
-        'contact_id',
+//        'contact_id',
+        'contr_agent_id',
+        'full_name',
+        'email',
+        'phone',
         'contractor_responsible_full_name',
         'contractor_responsible_phone',
     ];
 
     public function contact(): hasOne
     {
-        return $this->hasOne(ContactPerson::class, 'contact_id', 'id');
+        return $this->hasOne(ContactPerson::class, 'id', 'contact_id');
     }
 }

@@ -15,6 +15,7 @@ class CreateCustomerSubObjects extends Migration
     {
         Schema::create('customer_sub_objects', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('customer_object_id');
             $table->string('name');
             $table->timestamps();
