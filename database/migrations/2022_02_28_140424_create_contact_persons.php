@@ -18,7 +18,7 @@ class CreateContactPersons extends Migration
             $table->uuid('uuid')->unique();
             $table->unsignedBigInteger('contr_agent_id');
             $table->string('full_name');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('phone');
             $table->timestamps();
         });

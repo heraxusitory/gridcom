@@ -11,6 +11,7 @@ class Nomenclature extends Model
     protected $table = 'nomenclature';
 
     protected $fillable = [
+        'uuid',
         'mnemocode',
         'name',
     ];

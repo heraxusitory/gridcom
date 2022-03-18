@@ -28,7 +28,7 @@ use Illuminate\Validation\Rule;
 
 class SyncOrderController extends Controller
 {
-    public function sync(Request $request)
+    public function pull(Request $request)
     {
         Validator::make($request->all(), [
             'orders' => 'required|array',

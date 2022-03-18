@@ -30,14 +30,14 @@ class OrderPosition extends Model
     ];
 
     const STATUS_AGREED = 'Согласовано';
-    const STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
+//    const STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const STATUS_REJECTED = 'Отклонено';
 
     public static function getStatuses(): array
     {
         return [
             self::STATUS_AGREED,
-            self::STATUS_UNDER_CONSIDERATION,
+//            self::STATUS_UNDER_CONSIDERATION,
             self::STATUS_REJECTED,
         ];
     }

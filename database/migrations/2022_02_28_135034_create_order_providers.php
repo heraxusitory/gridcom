@@ -19,8 +19,10 @@ class CreateOrderProviders extends Migration
 //            $table->unsignedBigInteger('contact_id');
             $table->unsignedBigInteger('contr_agent_id');
             $table->string('full_name');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('phone');
+            $table->text('rejected_comment')->nullable();
+            $table->text('agreed_comment')->nullable();
             $table->timestamps();
         });
     }

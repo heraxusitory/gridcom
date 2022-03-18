@@ -27,7 +27,7 @@ class SyncReferenceController extends Controller
                 'organizations' => 'required|array',
                 'organizations.*.id' => 'required|uuid',
                 'organizations.*.name' => 'required|string|max:255'
-            ]);
+            ])->validate();
         $organizations = $request->organizations;
 
         try {
@@ -51,7 +51,7 @@ class SyncReferenceController extends Controller
             'contr_agents' => 'required|array',
             'contr_agents.*.id' => 'required|uuid',
             'contr_agents.*.name' => 'required|string|max:255',
-        ]);
+        ])->validate();
         $contr_agents = $request->contr_agents;
 
         try {
@@ -76,16 +76,17 @@ class SyncReferenceController extends Controller
             'contact_persons.*.id' => 'required|uuid',
             'contact_persons.*.contr_agent_id' => 'required|uuid|exists:contr_agents,uuid',
             'contact_persons.*.full_name' => 'required|string|max:255',
-            'contact_persons.*.email' => 'required|string|max:255',
+            'contact_persons.*.email' => 'nullable|string|max:255',
             'contact_persons.*.phone' => 'required|string|max:255',
-        ]);
+        ])->validate();
         $contact_persons = $request->contact_persons;
 
         try {
             foreach ($contact_persons as $contact_person) {
-                ContactPerson::query()->updateOrCreate(['uuid' => $contact_person['uuid']],
+                $contr_agent = ContrAgent::query()->where('uuid', $contact_person['contr_agent_id'])->firstOrFail();
+                ContactPerson::query()->updateOrCreate(['uuid' => $contact_person['id']],
                     [
-                        'contr_agent_id' => $contact_person['contr_agent_id'],
+                        'contr_agent_id' => $contr_agent->id,
                         'full_name' => $contact_person['full_name'],
                         'email' => $contact_person['email'],
                         'phone' => $contact_person['phone'],
@@ -108,7 +109,7 @@ class SyncReferenceController extends Controller
             'customer_objects' => 'required|array',
             'customer_objects.*.id' => 'required|uuid',
             'customer_objects.*.name' => 'required|string|max:255',
-        ]);
+        ])->validate();
 
         $customer_objects = $request->customer_objects;
 
@@ -137,15 +138,16 @@ class SyncReferenceController extends Controller
             'customer_sub_objects.*.id' => 'required|uuid',
             'customer_sub_objects.*.name' => 'required|string|max:255',
             'customer_sub_objects.*.customer_object_id' => 'required|uuid|exists:customer_objects,uuid',
-        ]);
+        ])->validate();
         $sub_objects = $request->customer_sub_objects;
 
         try {
             foreach ($sub_objects as $sub_object) {
+                $customer_object = CustomerObject::query()->where('uuid', $sub_object['customer_object_id'])->firstOrFail();
                 CustomerSubObject::query()->updateOrCreate(['uuid' => $sub_object['id']],
                     [
                         'name' => $sub_object['name'],
-                        'customer_object_id' => $sub_object['customer_object_id'],
+                        'customer_object_id' => $customer_object->id,
                     ]);
             }
             return response()->json();
@@ -164,9 +166,9 @@ class SyncReferenceController extends Controller
         Validator::make($request->all(), [
             'nomenclature' => 'required|array',
             'nomenclature.*.id' => 'required|uuid',
-            'nomenclature.*.mnemocode' => 'required|string|unique:nomenclature|max:255',
+            'nomenclature.*.mnemocode' => 'required|string|max:255',
             'nomenclature.*.name' => 'required|string|max:255'
-        ]);
+        ])->validate();
         $nomenlcature = $request->nomenclature;
 
         try {
@@ -194,7 +196,7 @@ class SyncReferenceController extends Controller
             'nomenclature_units' => 'required|array',
             'nomenclature_units.*.id' => 'required|uuid',
             'nomenclature_units.*.name' => 'required|string|max:255',
-        ]);
+        ])->validate();
 
         $units = $request->nomenclature_units;
         try {
@@ -221,8 +223,8 @@ class SyncReferenceController extends Controller
             'provider_contracts' => 'required|array',
             'provider_contracts.*.id' => 'required|uuid',
             'provider_contracts.*.number' => 'required|string|max:255',
-            'provider_contracts.*.date' => 'required|timestamp',
-        ]);
+            'provider_contracts.*.date' => 'required|date_format:d.m.Y',
+        ])->validate();
         $contracts = $request->provider_contracts;
 
         try {
@@ -250,13 +252,13 @@ class SyncReferenceController extends Controller
             'work_agreements' => 'required|array',
             'work_agreements.*.id' => 'required|uuid',
             'work_agreements.*.number' => 'required|string|max:255',
-            'work_agreements.*.date' => 'required|timestamp',
-        ]);
+            'work_agreements.*.date' => 'required|date_format:d.m.Y',
+        ])->validate();
         $contracts = $request->work_agreements;
 
         try {
             foreach ($contracts as $contract) {
-                WorkAgreementDocument::query()->updateOrCreate(['id' => $contract['id']],
+                WorkAgreementDocument::query()->updateOrCreate(['uuid' => $contract['id']],
                     [
                         'number' => $contract['number'],
                         'date' => $contract['date'],

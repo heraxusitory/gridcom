@@ -18,10 +18,11 @@ class CreateOrderContractors extends Migration
 //            $table->unsignedBigInteger('contact_id');
             $table->unsignedBigInteger('contr_agent_id');
             $table->string('full_name');
-            $table->string('email');
+            $table->string('email')->nullable();
             $table->string('phone');
             $table->string('contractor_responsible_full_name');
             $table->string('contractor_responsible_phone');
+            $table->text('comment')->nullable();
             $table->timestamps();
         });
     }

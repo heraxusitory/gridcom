@@ -45,6 +45,7 @@ abstract class AbstractOrder extends Model
 
     const PROVIDER_STATUS_NOT_AGREED = 'Не согласовано';
     const PROVIDER_STATUS_AGREED = 'Согласовано';
+    const PROVIDER_STATUS_PARTIALLY_AGREED = 'Согласовано частично';
     const PROVIDER_STATUS_DRAFT = 'Черновик';
     const PROVIDER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const PROVIDER_STATUS_CANCELED = 'Аннулировано';
@@ -65,6 +66,7 @@ abstract class AbstractOrder extends Model
         return [
             self::PROVIDER_STATUS_NOT_AGREED,
             self::PROVIDER_STATUS_AGREED,
+            self::PROVIDER_STATUS_PARTIALLY_AGREED,
             self::PROVIDER_STATUS_DRAFT,
             self::PROVIDER_STATUS_UNDER_CONSIDERATION,
             self::PROVIDER_STATUS_CANCELED,
