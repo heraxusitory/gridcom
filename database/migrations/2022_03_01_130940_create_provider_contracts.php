@@ -15,6 +15,7 @@ class CreateProviderContracts extends Migration
     {
         Schema::create('provider_contracts', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('number');
             $table->timestamp('date');
             $table->timestamps();

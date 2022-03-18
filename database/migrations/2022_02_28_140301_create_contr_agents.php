@@ -15,6 +15,7 @@ class CreateContrAgents extends Migration
     {
         Schema::create('contr_agents', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('name');
             $table->timestamps();
         });

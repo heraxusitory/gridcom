@@ -11,6 +11,7 @@ class WorkAgreementDocument extends Model
     protected $table = 'work_agreements';
 
     protected $fillable = [
+        'uuid',
         'number',
         'date',
     ];

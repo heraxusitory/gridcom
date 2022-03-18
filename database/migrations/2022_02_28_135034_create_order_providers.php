@@ -16,7 +16,13 @@ class CreateOrderProviders extends Migration
         Schema::create('order_providers', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('provider_contract_id');
-            $table->unsignedBigInteger('contact_id');
+//            $table->unsignedBigInteger('contact_id');
+            $table->unsignedBigInteger('contr_agent_id');
+            $table->string('full_name');
+            $table->string('email')->nullable();
+            $table->string('phone');
+            $table->text('rejected_comment')->nullable();
+            $table->text('agreed_comment')->nullable();
             $table->timestamps();
         });
     }

@@ -20,6 +20,8 @@ class CreateOrderCustomers extends Migration
             $table->string('work_type');
             $table->unsignedBigInteger('object_id');
             $table->unsignedBigInteger('sub_object_id');
+            $table->timestamp('work_start_date');
+            $table->timestamp('work_end_date');
             $table->timestamps();
         });
     }

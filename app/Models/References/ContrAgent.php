@@ -12,11 +12,17 @@ class ContrAgent extends Model
     protected $table = 'contr_agents';
 
     protected $fillable = [
-      'name',
+        'uuid',
+        'name',
     ];
 
     public function contacts(): hasMany
     {
         return $this->hasMany(ContactPerson::class, 'contr_agent_id', 'id');
+    }
+
+    public function lkk_local_contacts()
+    {
+
     }
 }

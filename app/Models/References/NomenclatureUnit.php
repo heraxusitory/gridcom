@@ -11,6 +11,7 @@ class NomenclatureUnit extends Model
     protected $table = 'nomenclature_units';
 
     protected $fillable = [
+        'uuid',
         'name',
     ];
 

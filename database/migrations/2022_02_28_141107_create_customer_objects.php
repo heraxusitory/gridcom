@@ -15,6 +15,7 @@ class CreateCustomerObjects extends Migration
     {
         Schema::create('customer_objects', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->unique();
             $table->string('name');
             $table->timestamps();
         });

@@ -15,16 +15,20 @@ class Provider extends Model
 
     protected $fillable = [
         'provider_contract_id',
-        'contact_id',
+//        'contact_id',
+        'contr_agent_id',
+        'full_name',
+        'email',
+        'phone',
     ];
 
     public function contract(): hasOne
     {
-        return $this->hasOne(ProviderContractDocument::class, 'provider_contract_id', 'id');
+        return $this->hasOne(ProviderContractDocument::class, 'id', 'provider_contract_id');
     }
 
     public function contact(): hasOne
     {
-        return $this->hasOne(ContactPerson::class, 'contact_id', 'id');
+        return $this->hasOne(ContactPerson::class, 'id', 'contact_id');
     }
 }
