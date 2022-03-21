@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ConsignmentNotes extends Migration
+class Consignments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,11 @@ class ConsignmentNotes extends Migration
      */
     public function up()
     {
-        Schema::create('consignment_notes', function (Blueprint $table) {
+        Schema::create('consignments', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid')->index();
             $table->string('number');
+            $table->unique(['uuid', 'number'], 'consignments_uuid_number_unique');
             $table->timestamp('date');
             $table->unsignedBigInteger('order_id');
             $table->string('responsible_full_name');

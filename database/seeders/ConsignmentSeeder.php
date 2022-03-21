@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\ConsignmentNotes\ConsignmentNote;
+use App\Models\Consignments\Consignment;
 use App\Models\Orders\LKK\Order;
 use Carbon\Carbon;
 use Faker\Factory;
@@ -31,7 +31,7 @@ class ConsignmentSeeder extends Seeder
                 'responsible_phone' => $faker->phoneNumber,
                 'comment' => $faker->realText(200),
             ];
-            ConsignmentNote::query()->create($consignment_data);
+            Consignment::query()->create($consignment_data);
         }
     }
 }

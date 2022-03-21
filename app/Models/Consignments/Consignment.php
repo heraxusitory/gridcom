@@ -1,21 +1,23 @@
 <?php
 
 
-namespace App\Models\ConsignmentNotes;
+namespace App\Models\Consignments;
 
 
-use App\Models\Orders\Order;
+use App\Models\Orders\LKK\Order;
+use App\Traits\UsesConsignmentNumber;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class ConsignmentNote extends Model
+class Consignment extends Model
 {
-    use HasFactory;
+    use HasFactory, UsesConsignmentNumber;
 
-    protected $table = 'consignment_notes';
+    protected $table = 'consignments';
 
     protected $fillable = [
+        'uuid',
         'number',
         'date',
         'order_id',
@@ -27,5 +29,10 @@ class ConsignmentNote extends Model
     public function order(): hasOne
     {
         return $this->hasOne(Order::class, 'id', 'order_id');
+    }
+
+    public function positions()
+    {
+        return $this->hasMany(ConsignmentPosition::class, 'consignment_id', 'id');
     }
 }

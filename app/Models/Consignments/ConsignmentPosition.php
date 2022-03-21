@@ -1,20 +1,20 @@
 <?php
 
 
-namespace App\Models\ConsignmentNotes;
+namespace App\Models\Consignments;
 
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ConsignmentNotePosition extends Model
+class ConsignmentPosition extends Model
 {
     use HasFactory;
 
-    protected $table = 'consignment_note_positions';
+    protected $table = 'consignment_positions';
 
     protected $fillable = [
-        'consignment_note_id',
+        'consignment_id',
         'nomenclature_id',
         'unit_id',
         'count',

@@ -16,6 +16,10 @@ class ContrAgent extends Model
         'name',
     ];
 
+    protected $hidden = [
+        'uuid'
+    ];
+
     public function contacts(): hasMany
     {
         return $this->hasMany(ContactPerson::class, 'contr_agent_id', 'id');

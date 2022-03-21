@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ConsignmentNotes\ConsignmentNoteController;
+use App\Http\Controllers\Consignments\ConsignmentController;
 use App\Http\Controllers\Integrations\AsMts\SyncOrderController;
 use App\Http\Controllers\Integrations\AsMts\SyncReferenceController;
 use App\Http\Controllers\Orders\OrderContractorController;
@@ -53,9 +53,18 @@ Route::group(['prefix' => 'orders'], function () {
 });
 
 Route::group(['prefix' => 'consignments'], function () {
-    Route::get('', [ConsignmentNoteController::class, 'index']);
-    Route::post('create', [ConsignmentNoteController::class, 'create']);
-    Route::post('create', [ConsignmentNoteController::class, 'update']);
+    Route::get('', [ConsignmentController::class, 'index']);
+    Route::get('{consignment_id}', [ConsignmentController::class, 'getConsignment']);
+    Route::post('create', [ConsignmentController::class, 'create']);
+//    Route::post('', [ConsignmentController::class, 'update']);
+
+    Route::group(['prefix' => 'references'], function () {
+        Route::get('organizations', [ConsignmentController::class, 'getOrganizations']);
+        Route::get('contr-agents', [ConsignmentController::class, 'getContrAgents']);
+        Route::get('work-agreements', [ConsignmentController::class, 'getWorkAgreements']);
+        Route::get('provider-contracts', [ConsignmentController::class, 'getProviderContracts']);
+    });
+    Route::get('orders', [ConsignmentController::class, 'getOrders']);
 });
 
 Route::group(['prefix' => 'integrations/as-mts/'], function () {
