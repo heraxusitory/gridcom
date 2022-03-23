@@ -4,7 +4,6 @@
 namespace App\Services\PaymentRegisters;
 
 
-use App\Models\Orders\LKK\Order;
 use App\Models\PaymentRegisters\PaymentRegister;
 use App\Services\IService;
 use Carbon\Carbon;
@@ -12,9 +11,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
-class CreatePaymentRegisterService implements IService
+class UpdatePaymentRegisterService implements IService
 {
-    public function __construct(private $payload)
+    public function __construct(private $payload, private PaymentRegister $payment_register)
     {
     }
 
@@ -23,11 +22,11 @@ class CreatePaymentRegisterService implements IService
         $data = $this->payload;
 
         switch ($data['action']) {
-            case Order::ACTION_DRAFT:
+            case PaymentRegister::ACTION_DRAFT:
                 $customer_status = PaymentRegister::CUSTOMER_STATUS_DRAFT;
                 $provider_status = PaymentRegister::PROVIDER_STATUS_DRAFT;
                 break;
-            case Order::ACTION_APPROVE:
+            case PaymentRegister::ACTION_APPROVE:
                 $customer_status = PaymentRegister::CUSTOMER_STATUS_UNDER_CONSIDERATION;
                 $provider_status = PaymentRegister::PROVIDER_STATUS_UNDER_CONSIDERATION;
                 break;
@@ -36,8 +35,7 @@ class CreatePaymentRegisterService implements IService
         }
 
         return DB::transaction(function () use ($data, $customer_status, $provider_status) {
-            $payment_register = PaymentRegister::query()->create([
-                'uuid' => Str::uuid(),
+            $this->payment_register->update([
                 'customer_status' => $customer_status,
                 'provider_status' => $provider_status,
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
@@ -49,18 +47,23 @@ class CreatePaymentRegisterService implements IService
                 'date' => Carbon::today()->format('d.m.Y'),
             ]);
 
+            $position_ids = [];
             foreach ($data['positions'] as $position) {
-                $payment_register->positions()->create([
-                    'position_id' => Str::uuid(),
+                $position = $this->payment_register->positions()->updateOrCreate([
+                    'position_id' => $data['position_id'] ?? null,
+                ], [
+                    'position_id' => $position['position_id'] ?? Str::uuid(),
                     'order_id' => $position['order_id'],
                     'payment_order_number' => $position['payment_order_number'],
                     'payment_order_date' => $position['payment_order_date'],
                     'amount_payment' => $position['amount_payment'],
                     'payment_type' => $position['payment_type'],
                 ]);
+                $position_ids[] = $position->id;
             }
+            $this->payment_register->positions()->whereNotIn('id', $position_ids)->delete();
 
-            return $payment_register;
+            return $this->payment_register;
         });
     }
 }

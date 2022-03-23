@@ -7,10 +7,9 @@ use App\Models\PaymentRegisters\PaymentRegister;
 use App\Models\PaymentRegisters\PaymentRegisterPosition;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class CreatePaymentRegisterFormRequest extends FormRequest
+class UpdatePaymentRegisterFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

@@ -4,13 +4,18 @@
 namespace App\Http\Controllers\PaymentRegisters;
 
 
+use App\GraphQL\Mutations\Update;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRegisters\CreatePaymentRegisterFormRequest;
+use App\Http\Requests\PaymentRegisters\UpdatePaymentRegisterFormRequest;
 use App\Models\Orders\LKK\Order;
 use App\Models\PaymentRegisters\PaymentRegister;
 use App\Models\Provider;
 use App\Models\References\ProviderContractDocument;
 use App\Services\PaymentRegisters\CreatePaymentRegisterService;
+use App\Services\PaymentRegisters\GetPaymentRegisterService;
+use App\Services\PaymentRegisters\GetPaymentRegistersService;
+use App\Services\PaymentRegisters\UpdatePaymentRegisterService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -19,26 +24,108 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Safe\Exceptions\PgsqlException;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\File\Exception\UnexpectedTypeException;
 
 class PaymentRegisterController extends Controller
 {
+    public function index(Request $request)
+    {
+        try {
+            $register_payments = (new GetPaymentRegistersService())->run();
+            return response()->json($register_payments);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch
+        (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getPaymentRegister(Request $request, $payment_register_id)
+    {
+        try {
+            $register_payment = (new GetPaymentRegisterService($payment_register_id))->run();
+            return response()->json(['data' => $register_payment]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch
+        (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+
     public function create(CreatePaymentRegisterFormRequest $request)
     {
-//        try {
+        try {
             $payment_register = (new CreatePaymentRegisterService($request->all()))->run();
+            return response()->json(['data' => $payment_register], 201);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch
+        (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function update(UpdatePaymentRegisterFormRequest $request, $payment_register_id)
+    {
+        try {
+            /* @var PaymentRegister $payment_register */
+            $payment_register = PaymentRegister::query()->findOrFail($payment_register_id);
+            throw_if($payment_register->customer_status !== PaymentRegister::CUSTOMER_STATUS_DRAFT &&
+                $payment_register->provider_status !== PaymentRegister::PROVIDER_STATUS_DRAFT,
+                new BadRequestException('Невозможно редактировать реестр платежей. Реестр платежей отправлен на согласование', 400));
+
+            $payment_register = (new UpdatePaymentRegisterService($request->all(), $payment_register))->run();
             return response()->json(['data' => $payment_register]);
-//        } catch (ModelNotFoundException $e) {
-//            return response()->json(['message' => $e->getMessage()], 404);
-//        } catch
-//        (\Exception $e) {
-//            if ($e->getCode() >= 400 && $e->getCode() < 500)
-//                return response()->json(['message' => $e->getMessage()], $e->getCode());
-//            else {
-//                Log::error($e->getMessage(), $e->getTrace());
-//                return response()->json(['message' => 'System error'], 500);
-//            }
-//        }
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function delete(Request $request, $register_payment_id)
+    {
+        try {
+            $register_payment = PaymentRegister::query()->findOrFail($register_payment_id);
+            DB::transaction(function () use ($register_payment) {
+                $register_payment->positions()->delete();
+                $register_payment->delete();
+            });
+            return response()->json('', 204);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
     }
 
     public function searchProviderContracts(Request $request)

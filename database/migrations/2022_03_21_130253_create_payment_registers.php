@@ -17,6 +17,8 @@ class CreatePaymentRegisters extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->string('number')->index();
+            $table->string('customer_status');
+            $table->string('provider_status');
             $table->unsignedBigInteger('provider_contr_agent_id');
             $table->unsignedBigInteger('contractor_contr_agent_id');
             $table->unsignedBigInteger('provider_contract_id');

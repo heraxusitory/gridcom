@@ -26,9 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Route::group(['prefix' => 'contractor'], function () {
-//
-//});
 Route::group(['prefix' => 'references'], function () {
     Route::get('organizations', [ReferenceController::class, 'getOrganizations']);
     Route::get('work_agreements', [ReferenceController::class, 'getWorkAgreements']);
@@ -57,19 +54,17 @@ Route::group(['prefix' => 'consignments'], function () {
     Route::get('', [ConsignmentController::class, 'index']);
     Route::get('{consignment_id}', [ConsignmentController::class, 'getConsignment']);
     Route::post('create', [ConsignmentController::class, 'create']);
-//    Route::post('', [ConsignmentController::class, 'update']);
-
-//    Route::group(['prefix' => 'references'], function () {
-//        Route::get('organizations', [ConsignmentController::class, 'getOrganizations']);
-//        Route::get('contr-agents', [ConsignmentController::class, 'getContrAgents']);
-//        Route::get('work-agreements', [ConsignmentController::class, 'getWorkAgreements']);
-//        Route::get('provider-contracts', [ConsignmentController::class, 'getProviderContracts']);
-//    });
     Route::get('search-orders', [ConsignmentController::class, 'searchOrders']);
 });
 
 Route::group(['prefix' => 'payment-registers'], function () {
+    Route::get('', [PaymentRegisterController::class, 'index']);
     Route::post('create', [PaymentRegisterController::class, 'create']);
+    Route::group(['prefix' => '{payment_register_id}'], function () {
+        Route::get('', [PaymentRegisterController::class, 'getPaymentRegister']);
+        Route::put('', [PaymentRegisterController::class, 'update']);
+        Route::delete('', [PaymentRegisterController::class, 'delete']);
+    });
     Route::get('search-provider-contracts', [PaymentRegisterController::class, 'searchProviderContracts']);
     Route::get('search-orders', [PaymentRegisterController::class, 'searchOrders']);
 });

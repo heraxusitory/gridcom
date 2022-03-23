@@ -15,12 +15,10 @@ class CreatePaymentRegisterPositions extends Migration
     {
         Schema::create('payment_register_positions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('position_id');
             $table->unsignedBigInteger('payment_register_id');
             $table->unsignedBigInteger('order_id');
-            $table->string('customer_status');
-            $table->string('provider_status');
-            $table->string('payment_order');
+            $table->string('payment_order_number');
             $table->timestamp('payment_order_date');
             $table->unsignedDouble('amount_payment');
             $table->enum('payment_type', ['Аванс', 'Постоплата']);
