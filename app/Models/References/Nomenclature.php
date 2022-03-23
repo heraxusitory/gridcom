@@ -14,6 +14,7 @@ class Nomenclature extends Model
         'uuid',
         'mnemocode',
         'name',
+        'price',
     ];
 
     public function units()

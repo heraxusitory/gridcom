@@ -20,7 +20,7 @@ class OrderPosition extends Model
         'order_id',
         'status',
         'nomenclature_id',
-        'unit_id',
+//        'unit_id',
         'count',
         'price_without_vat',
         'amount_without_vat',

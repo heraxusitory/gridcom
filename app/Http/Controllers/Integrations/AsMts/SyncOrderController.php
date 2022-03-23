@@ -65,7 +65,7 @@ class SyncOrderController extends Controller
             'orders.*.order_positions.*.position_id' => 'required|uuid',
             'orders.*.order_positions.*.status' => Rule::in(OrderPosition::getStatuses()),
             'orders.*.order_positions.*.nomenclature_id' => 'required|uuid|exists:nomenclature,uuid',
-            'orders.*.order_positions.*.unit_id' => 'required|uuid|exists:nomenclature_units,uuid',
+//            'orders.*.order_positions.*.unit_id' => 'required|uuid|exists:nomenclature_units,uuid',
             'orders.*.order_positions.*.count' => 'required|numeric',
             'orders.*.order_positions.*.price_without_vat' => 'required|numeric',
             'orders.*.order_positions.*.amount_without_vat' => 'required|numeric',
@@ -87,7 +87,7 @@ class SyncOrderController extends Controller
                     $organization = Organization::query()->where('uuid', $customer_data['organization_id'])->firstOrFail();
                     $work_agreement = WorkAgreementDocument::query()->where('uuid', $customer_data['work_agreement_id'])->firstOrFail();
                     $customer_object = CustomerObject::query()->where('uuid', $customer_data['object_id'])->firstOrFail();
-                    $customer_sub_object = CustomerSubObject::query()->where('uuid', $customer_data['sub_object_id'])->firstOrFail();
+                    $customer_sub_object = $customer_object->subObjects()->where('uuid', $customer_data['sub_object_id'])->firstOrFail();
                     $customer_data['organization_id'] = $organization->id;
                     $customer_data['work_agreement_id'] = $work_agreement->id;
                     $customer_data['object_id'] = $customer_object->id;
@@ -132,11 +132,11 @@ class SyncOrderController extends Controller
 
                     foreach ($position_data as $position) {
                         $nomenclature = Nomenclature::query()->where('uuid', $position['nomenclature_id'])->firstOrFail();
-                        $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $position['unit_id'])->firstOrFail();
+//                        $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $position['unit_id'])->firstOrFail();
                         $order->positions()->updateOrCreate(['position_id' => $position['position_id']], [
                             'status' => $position['status'],
                             'nomenclature_id' => $nomenclature->id,
-                            'unit_id' => $nomenclature_unit->id,
+                            #'unit_id' => $nomenclature_unit->id,
                             'count' => $position['count'],
                             'price_without_vat' => $position['price_without_vat'],
                             'amount_without_vat' => $position['amount_without_vat'],

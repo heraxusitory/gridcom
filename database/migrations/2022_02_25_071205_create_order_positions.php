@@ -20,7 +20,7 @@ class CreateOrderPositions extends Migration
             $table->unique(['position_id', 'order_id'], 'op_position_id_order_id_unique');
             $table->enum('status', [/*'На рассмотрении',*/ 'Согласовано', 'Отклонено']);
             $table->unsignedBigInteger('nomenclature_id');
-            $table->unsignedBigInteger('unit_id');
+//            $table->unsignedBigInteger('unit_id');
             $table->unsignedDouble('count');
             $table->unsignedDouble('price_without_vat');
             $table->unsignedDouble('amount_without_vat');

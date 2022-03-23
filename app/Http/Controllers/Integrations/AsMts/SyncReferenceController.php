@@ -15,6 +15,7 @@ use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
@@ -167,17 +168,24 @@ class SyncReferenceController extends Controller
             'nomenclature' => 'required|array',
             'nomenclature.*.id' => 'required|uuid',
             'nomenclature.*.mnemocode' => 'required|string|max:255',
-            'nomenclature.*.name' => 'required|string|max:255'
+            'nomenclature.*.name' => 'required|string|max:255',
+            'nomenclature.*.price' => 'required|numeric',
+            'nomenclature.*.unit_id' => 'required|exists:nomenclature_units,uuid',
         ])->validate();
         $nomenlcature = $request->nomenclature;
 
         try {
             foreach ($nomenlcature as $item) {
-                Nomenclature::query()->updateOrCreate(['uuid' => $item['id']],
-                    [
-                        'mnemocode' => $item['mnemocode'],
-                        'name' => $item['name'],
-                    ]);
+                DB::transaction(function () use ($item) {
+                    $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $item['unit_id'])->firstOrFail();
+                    $nomenclature = Nomenclature::query()->updateOrCreate(['uuid' => $item['id']],
+                        [
+                            'mnemocode' => $item['mnemocode'],
+                            'name' => $item['name'],
+                            'price' => $item['price'],
+                        ]);
+                    $nomenclature->units()->attach($nomenclature_unit->id);
+                });
             }
             return response()->json();
         } catch (\Exception $e) {

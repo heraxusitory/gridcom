@@ -31,4 +31,9 @@ class Provider extends Model
     {
         return $this->hasOne(ContactPerson::class, 'id', 'contact_id');
     }
+
+    public function provider_contract()
+    {
+        return $this->hasOne(ProviderContractDocument::class, 'id', 'provider_contract_id');
+    }
 }

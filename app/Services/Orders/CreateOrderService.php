@@ -19,6 +19,7 @@ use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class CreateOrderService implements IService
 {
@@ -44,7 +45,7 @@ class CreateOrderService implements IService
                 $provider_status = Order::PROVIDER_STATUS_UNDER_CONSIDERATION;
                 break;
             default:
-                break;
+                throw new BadRequestException('Action is required', 400);
         }
 
         return DB::transaction(function () use ($payload, $customer_status, $provider_status) {

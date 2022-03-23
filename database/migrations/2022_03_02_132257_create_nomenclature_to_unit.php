@@ -17,7 +17,6 @@ class CreateNomenclatureToUnit extends Migration
             $table->id();
             $table->unsignedBigInteger('nomenclature_id');
             $table->unsignedBigInteger('unit_id');
-            $table->timestamps();
         });
     }
 

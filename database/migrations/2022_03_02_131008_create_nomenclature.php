@@ -18,6 +18,7 @@ class CreateNomenclature extends Migration
             $table->uuid('uuid')->unique();
             $table->string('mnemocode')->unique();
             $table->string('name');
+            $table->unsignedDouble('price');
             $table->timestamps();
         });
     }

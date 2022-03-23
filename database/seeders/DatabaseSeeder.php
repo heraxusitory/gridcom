@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
+use App\Models\References\CustomerSubObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\NomenclatureUnit;
 use App\Models\References\Organization;
@@ -13,6 +14,7 @@ use Carbon\Carbon;
 use Faker\Generator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class DatabaseSeeder extends Seeder
@@ -186,6 +188,7 @@ class DatabaseSeeder extends Seeder
                     'кг',
                     'шт',
                 ],
+                'price' => 32434.23
             ],
             [
                 'mnemocode' => "ffd5455434",
@@ -194,6 +197,8 @@ class DatabaseSeeder extends Seeder
                     'кг',
                     'шт',
                 ],
+                'price' => 32434.23
+
             ],
             [
                 'mnemocode' => "qqq3234356",
@@ -201,6 +206,8 @@ class DatabaseSeeder extends Seeder
                 'units' => [
                     'шт',
                 ],
+                'price' => 32434.23
+
             ],
             [
                 'mnemocode' => "gf34dgh6f",
@@ -210,6 +217,7 @@ class DatabaseSeeder extends Seeder
                     'л',
                     'шт',
                 ],
+                'price' => 32434.23
             ],
         ];
 
@@ -248,6 +256,7 @@ class DatabaseSeeder extends Seeder
                     'mnemocode' => $nomenclature['mnemocode'],
                     'name' => $nomenclature['name'],
                     'uuid' => Str::uuid(),
+                    'price' => $nomenclature['price'],
                 ]);
 
                 foreach ($nomenclature['units'] as $unit) {
@@ -263,5 +272,79 @@ class DatabaseSeeder extends Seeder
         $this->call([
             ConsignmentSeeder::class,
         ]);
+
+
+        //create json structure for sync order for integration example
+        $object = CustomerObject::query()->firstOrFail();
+        $example = [
+            "orders" => [
+                [
+                    "id" => "15e38984-9fdd-11ec-a20a-00155d9b77db",
+                    "number" => "000000001",
+                    "order_date" => "01.12.2022",
+                    "deadline_date" => "02.03.2023",
+                    "customer_status" => "Согласовано",
+                    "provider_status" => "Не согласовано",
+                    "order_customer" => [
+                        "organization_id" => Organization::query()->firstOrFail()->uuid,
+                        "work_agreement_id" => WorkAgreementDocument::query()->firstOrFail()->uuid,
+                        "work_type" => "Строительство",
+                        "object_id" => $object->uuid,
+                        "sub_object_id" => $object->subObjects()->firstOrFail()->uuid,
+                        "work_start_date" => "01.12.2022",
+                        "work_end_date" => "20.10.2025"
+                    ],
+                    "order_provider" => [
+                        "contr_agent_id" => ContrAgent::query()->findOrFail(1)->uuid,
+                        "provider_contract_id" => ProviderContractDocument::query()->findOrFail(1)->uuid,
+                        "full_name" => "Full Name",
+                        "email" => "fddsd@mail.ru",
+                        "phone" => "+54566456546"
+                    ],
+                    "order_contractor" => [
+                        "contr_agent_id" => ContrAgent::query()->findOrFail(1)->uuid,
+                        "full_name" => "Name Name",
+                        "email" => "fsdf@mail.ru",
+                        "phone" => "+95947374834",
+                        "contractor_responsible_full_name" => "Ответственный О.О.",
+                        "contractor_responsible_phone" => "89172223126"
+                    ],
+                    "order_positions" => [
+                        [
+                            "position_id" => "6b92a3f6-c551-4ab2-9e7b-e36a683194f9",
+                            "status" => "Согласовано",
+                            "nomenclature_id" => Nomenclature::query()->findOrFail(1)->uuid,
+                            "count" => 100,
+                            "price_without_vat" => 200,
+                            "amount_without_vat" => 20000,
+                            "delivery_time" => "01.10.2034",
+                            "delivery_address" => "address"
+                        ],
+                        [
+                            "position_id" => "6b92a3f6-c351-4ab2-9e7b-e36a683194f9",
+                            "status" => "Согласовано",
+                            "nomenclature_id" => Nomenclature::query()->findOrFail(2)->uuid,
+                            "count" => 300,
+                            "price_without_vat" => 300,
+                            "amount_without_vat" => 90000,
+                            "delivery_time" => "04.04.2022",
+                            "delivery_address" => "address"
+                        ],
+                        [
+                            "position_id" => "6b92a3f6-c351-4ab2-9e7b-e36a683194f9",
+                            "status" => "Согласовано",
+                            "nomenclature_id" => Nomenclature::query()->findOrFail(3)->uuid,
+                            "count" => 300,
+                            "price_without_vat" => 300,
+                            "amount_without_vat" => 90000,
+                            "delivery_time" => "04.04.2022",
+                            "delivery_address" => "address"
+                        ],
+                    ]
+                ]
+            ]
+        ];
+        Log::debug('example_order_request_for_sync', $example);
+
     }
 }

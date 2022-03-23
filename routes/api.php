@@ -7,6 +7,7 @@ use App\Http\Controllers\Orders\OrderContractorController;
 use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Orders\OrderProviderController;
 use App\Http\Controllers\Orders\References\ReferenceController;
+use App\Http\Controllers\PaymentRegisters\PaymentRegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -28,6 +29,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //Route::group(['prefix' => 'contractor'], function () {
 //
 //});
+Route::group(['prefix' => 'references'], function () {
+    Route::get('organizations', [ReferenceController::class, 'getOrganizations']);
+    Route::get('work_agreements', [ReferenceController::class, 'getWorkAgreements']);
+    Route::get('provider_contracts', [ReferenceController::class, 'getProviderContracts']);
+    Route::get('objects', [ReferenceController::class, 'getObjects']);
+    Route::get('contr_agents', [ReferenceController::class, 'getContrAgents']);
+});
+
 Route::group(['prefix' => 'orders'], function () {
     Route::get('', [OrderController::class, 'index']);
     Route::post('create', [OrderContractorController::class, 'create']);
@@ -42,14 +51,6 @@ Route::group(['prefix' => 'orders'], function () {
         Route::post('reject', [OrderProviderController::class, 'reject']);
         Route::post('reject_positions', [OrderProviderController::class, 'rejectPositions']);
     });
-
-    Route::group(['prefix' => 'references'], function () {
-        Route::get('organizations', [ReferenceController::class, 'getOrganizations']);
-        Route::get('work_agreements', [ReferenceController::class, 'getWorkAgreements']);
-        Route::get('provider_contracts', [ReferenceController::class, 'getProviderContracts']);
-        Route::get('objects', [ReferenceController::class, 'getObjects']);
-        Route::get('contr_agents', [ReferenceController::class, 'getContrAgents']);
-    });
 });
 
 Route::group(['prefix' => 'consignments'], function () {
@@ -58,13 +59,19 @@ Route::group(['prefix' => 'consignments'], function () {
     Route::post('create', [ConsignmentController::class, 'create']);
 //    Route::post('', [ConsignmentController::class, 'update']);
 
-    Route::group(['prefix' => 'references'], function () {
-        Route::get('organizations', [ConsignmentController::class, 'getOrganizations']);
-        Route::get('contr-agents', [ConsignmentController::class, 'getContrAgents']);
-        Route::get('work-agreements', [ConsignmentController::class, 'getWorkAgreements']);
-        Route::get('provider-contracts', [ConsignmentController::class, 'getProviderContracts']);
-    });
-    Route::get('orders', [ConsignmentController::class, 'getOrders']);
+//    Route::group(['prefix' => 'references'], function () {
+//        Route::get('organizations', [ConsignmentController::class, 'getOrganizations']);
+//        Route::get('contr-agents', [ConsignmentController::class, 'getContrAgents']);
+//        Route::get('work-agreements', [ConsignmentController::class, 'getWorkAgreements']);
+//        Route::get('provider-contracts', [ConsignmentController::class, 'getProviderContracts']);
+//    });
+    Route::get('search-orders', [ConsignmentController::class, 'searchOrders']);
+});
+
+Route::group(['prefix' => 'payment-registers'], function () {
+    Route::post('create', [PaymentRegisterController::class, 'create']);
+    Route::get('search-provider-contracts', [PaymentRegisterController::class, 'searchProviderContracts']);
+    Route::get('search-orders', [PaymentRegisterController::class, 'searchOrders']);
 });
 
 Route::group(['prefix' => 'integrations/as-mts/'], function () {
