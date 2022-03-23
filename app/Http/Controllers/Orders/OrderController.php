@@ -49,4 +49,9 @@ class OrderController extends Controller
             }
         }
     }
+
+    public function getReport(Request $request, $order_id)
+    {
+
+    }
 }

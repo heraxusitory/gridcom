@@ -43,6 +43,12 @@ Route::group(['prefix' => 'orders'], function () {
         Route::put('', [OrderContractorController::class, 'update']);
         Route::delete('', [OrderContractorController::class, 'delete']);
 
+        Route::group(['prefix' => 'positions'], function () {
+           Route::group(['prefix' => '{order_position}'], function () {
+               Route::patch('', [OrderProviderController::class, 'changePosition']);
+           });
+        });
+
         //роуты поставщика
         Route::post('approve', [OrderProviderController::class, 'approve']);
         Route::post('reject', [OrderProviderController::class, 'reject']);

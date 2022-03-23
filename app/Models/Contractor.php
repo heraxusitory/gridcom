@@ -20,6 +20,7 @@ class Contractor extends Model
         'phone',
         'contractor_responsible_full_name',
         'contractor_responsible_phone',
+        'comment',
     ];
 
     public function contact(): hasOne

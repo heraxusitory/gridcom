@@ -26,6 +26,9 @@ class OrderPosition extends Model
         'amount_without_vat',
 //        'total_amount',
         'delivery_time',
+        'delivery_plan_time',
+        'customer_comment',
+        'provider_comment',
         'delivery_address',
     ];
 

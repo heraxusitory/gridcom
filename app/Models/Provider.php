@@ -20,6 +20,8 @@ class Provider extends Model
         'full_name',
         'email',
         'phone',
+        'rejected_comment',
+        'agreed_comment',
     ];
 
     public function contract(): hasOne

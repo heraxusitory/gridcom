@@ -132,6 +132,34 @@ class OrderProviderController extends OrderController
         }
     }
 
+    public function changePosition(Request $request, $order_id, $order_position_id)
+    {
+        Validator::make($request->all(), [
+            'delivery_plan_time' => 'nullable|date_format:d.m.Y',
+            'comment' => 'nullable|string',
+        ])->validate();
+
+        try {
+            $order = Order::query()->findOrFail($order_id);
+            $position = $order->positions()->findOrFail($order_position_id);
+            $position->delivery_plan_time = $request->delivery_plan_time;
+            $position->provider_comment = $request->comment;
+            $position->save();
+
+            return response()->json(['data' => $position]);
+        } catch
+        (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
     public function close()
     {
 

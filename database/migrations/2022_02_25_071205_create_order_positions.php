@@ -25,7 +25,10 @@ class CreateOrderPositions extends Migration
             $table->unsignedDouble('price_without_vat');
             $table->unsignedDouble('amount_without_vat');
             $table->timestamp('delivery_time');
+            $table->timestamp('delivery_plan_time')->nullable();
             $table->string('delivery_address');//справочник скорее всего, но мб вручную будет
+            $table->text('customer_comment')->nullable();
+            $table->text('provider_comment')->nullable();
             $table->timestamps();
         });
     }

@@ -2,7 +2,7 @@
 
 namespace App\Models\Comments;
 
-use App\Models\OrderPosition;
+use App\Models\Orders\OrderPositions\OrderPosition;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
