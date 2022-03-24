@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Orders\LKK\Order;
 use App\Services\Orders\GetOrderService;
 use App\Services\Orders\GetOrdersService;
+use App\Services\Orders\Reports\GetReportService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -52,6 +53,8 @@ class OrderController extends Controller
 
     public function getReport(Request $request, $order_id)
     {
-
+        /* @var Order $order */
+        $order = Order::query()->findOrFail($order_id);
+        return response()->json(['data' => (new GetReportService($order))->run()]);
     }
 }

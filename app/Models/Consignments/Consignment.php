@@ -19,12 +19,24 @@ class Consignment extends Model
     protected $fillable = [
         'uuid',
         'number',
+        'is_approved',
         'date',
         'order_id',
         'responsible_full_name',
         'responsible_phone',
         'comment',
     ];
+
+    private const ACTION_DRAFT = 'draft';
+    private const ACTION_APPROVE = 'approve';
+
+    public static function getActions(): array
+    {
+        return [
+            self::ACTION_APPROVE,
+            self::ACTION_DRAFT,
+        ];
+    }
 
     public function order(): hasOne
     {

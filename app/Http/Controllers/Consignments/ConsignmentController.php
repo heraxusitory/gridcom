@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Consignments;
 
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Consignments\CreateConsignmentFormRequest;
+use App\Http\Requests\Consignments\UpdateConsignmentFormRequest;
 use App\Models\Consignments\Consignment;
 use App\Models\Orders\LKK\Order;
 use App\Models\Provider;
@@ -15,12 +17,14 @@ use App\Models\References\WorkAgreementDocument;
 use App\Services\ConsignmentNotes\CreateConsignmentService;
 use App\Services\ConsignmentNotes\GetConsignmentService;
 use App\Services\ConsignmentNotes\GetConsignmentsService;
+use App\Services\ConsignmentNotes\UpdateConsignmentService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class ConsignmentController extends Controller
 {
@@ -59,25 +63,8 @@ class ConsignmentController extends Controller
         }
     }
 
-    public function create(Request $request)
+    public function create(CreateConsignmentFormRequest $request)
     {
-        Validator::make($request->all(), [
-            'order_id' => 'required|exists:orders,id',
-            'responsible_full_name' => 'required|string|max:255',
-            'responsible_phone' => 'required|string|max:255',
-            'comment' => 'required|string',
-            'positions' => 'required|array',
-            'positions.*' => 'required',
-            'positions.*.nomenclature_id' => 'required|integer|exists:nomenclature,id',
-            'positions.*.unit_id' => 'required|integer|exists:nomenclature_units,id',
-            'positions.*.count' => 'required|numeric',
-            'positions.*.price_without_vat' => 'required|numeric',
-            //TODO отрефакторить ставку НДС
-            'positions.*.vat_rate' => ['required', Rule::in([1, 1.13, 1.2, 1.3, 1.4])],
-            'positions.*.country' => 'required|string',
-            'positions.*.cargo_custom_declaration' => 'required|string',
-            'positions.*.declaration' => 'required|string',
-        ])->validate();
         try {
             $consignment = (new CreateConsignmentService($request->all()))->run();
             return response()->json(['data' => $consignment]);
@@ -91,29 +78,48 @@ class ConsignmentController extends Controller
         }
     }
 
-//    public function getOrganizations(Request $request)
-//    {
-//        $organizations = Organization::query()->paginate(15);
-//        return response()->json($organizations);
-//    }
-//
-//    public function getContrAgents(Request $request)
-//    {
-//        $contr_agents = ContrAgent::query()->paginate();
-//        return response()->json($contr_agents);
-//    }
-//
-//    public function getWorkAgreements(Request $request)
-//    {
-//        $work_agreements = WorkAgreementDocument::query()->paginate();
-//        return response()->json($work_agreements);
-//    }
-//
-//    public function getProviderContracts(Request $request)
-//    {
-//        $provider_contracts = ProviderContractDocument::query()->paginate();
-//        return response()->json($provider_contracts);
-//    }
+    public function update(UpdateConsignmentFormRequest $request, $consignment_id)
+    {
+        try {
+            /* @var Consignment $consignment */
+            $consignment = Consignment::query()->findOrFail($consignment_id);
+            throw_if($consignment->is_approved,
+                new BadRequestException('Невозможно редактировать накладную. Накладная отправлена на согласование', 400));
+
+            $consignment = (new UpdateConsignmentService($request->all(), $consignment))->run();
+            return response()->json(['data' => $consignment]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function delete(Request $request, $consignment_id)
+    {
+        try {
+            $consignment = Consignment::query()->findOrFail($consignment_id);
+            DB::transaction(function () use ($consignment) {
+                $consignment->positions()->delete();
+                $consignment->delete();
+            });
+            return response()->json('', 204);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
 
     public function searchOrders(Request $request)
     {

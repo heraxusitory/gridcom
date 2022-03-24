@@ -14,6 +14,7 @@ class ConsignmentPosition extends Model
     protected $table = 'consignment_positions';
 
     protected $fillable = [
+        'position_id',
         'consignment_id',
         'nomenclature_id',
         'unit_id',

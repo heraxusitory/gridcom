@@ -18,6 +18,7 @@ class Consignments extends Migration
             $table->uuid('uuid')->index();
             $table->string('number');
             $table->unique(['uuid', 'number'], 'consignments_uuid_number_unique');
+            $table->boolean('is_approved')->default(false);
             $table->timestamp('date');
             $table->unsignedBigInteger('order_id');
             $table->string('responsible_full_name');

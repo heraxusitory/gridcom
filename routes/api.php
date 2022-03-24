@@ -40,13 +40,14 @@ Route::group(['prefix' => 'orders'], function () {
 
     Route::group(['prefix' => '{order_id}'], function () {
         Route::get('', [OrderController::class, 'getOrder']);
+        Route::get('report', [OrderController::class, 'getReport']);
         Route::put('', [OrderContractorController::class, 'update']);
         Route::delete('', [OrderContractorController::class, 'delete']);
 
         Route::group(['prefix' => 'positions'], function () {
-           Route::group(['prefix' => '{order_position}'], function () {
-               Route::patch('', [OrderProviderController::class, 'changePosition']);
-           });
+            Route::group(['prefix' => '{order_position}'], function () {
+                Route::patch('', [OrderProviderController::class, 'changePosition']);
+            });
         });
 
         //роуты поставщика
@@ -58,7 +59,11 @@ Route::group(['prefix' => 'orders'], function () {
 
 Route::group(['prefix' => 'consignments'], function () {
     Route::get('', [ConsignmentController::class, 'index']);
-    Route::get('{consignment_id}', [ConsignmentController::class, 'getConsignment']);
+    Route::group(['prefix' => '{consignment_id}'], function () {
+        Route::get('', [ConsignmentController::class, 'getConsignment']);
+        Route::put('', [ConsignmentController::class, 'update']);
+        Route::delete('', [ConsignmentController::class, 'delete']);
+    });
     Route::post('create', [ConsignmentController::class, 'create']);
     Route::get('search-orders', [ConsignmentController::class, 'searchOrders']);
 });
