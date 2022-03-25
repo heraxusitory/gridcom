@@ -59,28 +59,28 @@ Route::group(['prefix' => 'orders'], function () {
 
 Route::group(['prefix' => 'consignments'], function () {
     Route::get('', [ConsignmentController::class, 'index']);
+    Route::post('create', [ConsignmentController::class, 'create']);
+    Route::get('search-orders', [ConsignmentController::class, 'searchOrders']);
     Route::group(['prefix' => '{consignment_id}'], function () {
         Route::get('', [ConsignmentController::class, 'getConsignment']);
         Route::put('', [ConsignmentController::class, 'update']);
         Route::delete('', [ConsignmentController::class, 'delete']);
     });
-    Route::post('create', [ConsignmentController::class, 'create']);
-    Route::get('search-orders', [ConsignmentController::class, 'searchOrders']);
 });
 
 Route::group(['prefix' => 'payment-registers'], function () {
     Route::get('', [PaymentRegisterController::class, 'index']);
     Route::post('create', [PaymentRegisterController::class, 'create']);
+    Route::get('search-provider-contracts', [PaymentRegisterController::class, 'searchProviderContracts']);
+    Route::get('search-orders', [PaymentRegisterController::class, 'searchOrders']);
     Route::group(['prefix' => '{payment_register_id}'], function () {
         Route::get('', [PaymentRegisterController::class, 'getPaymentRegister']);
         Route::put('', [PaymentRegisterController::class, 'update']);
         Route::delete('', [PaymentRegisterController::class, 'delete']);
     });
-    Route::get('search-provider-contracts', [PaymentRegisterController::class, 'searchProviderContracts']);
-    Route::get('search-orders', [PaymentRegisterController::class, 'searchOrders']);
 });
 
-Route::group(['prefix' => 'integrations/as-mts/'], function () {
+Route::group(['prefix' => 'integrations/as-mts/', 'middleware' => 'auth.basic'], function () {
     Route::group(['prefix' => 'preferences'], function () {
         Route::post('organizations/sync', [SyncReferenceController::class, 'syncOrganizations']);
         Route::post('provider_contracts/sync', [SyncReferenceController::class, 'syncProviderContracts']);

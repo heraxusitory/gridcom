@@ -4,28 +4,21 @@
 namespace App\Http\Controllers\PaymentRegisters;
 
 
-use App\GraphQL\Mutations\Update;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRegisters\CreatePaymentRegisterFormRequest;
 use App\Http\Requests\PaymentRegisters\UpdatePaymentRegisterFormRequest;
 use App\Models\Orders\LKK\Order;
 use App\Models\PaymentRegisters\PaymentRegister;
-use App\Models\Provider;
-use App\Models\References\ProviderContractDocument;
 use App\Services\PaymentRegisters\CreatePaymentRegisterService;
 use App\Services\PaymentRegisters\GetPaymentRegisterService;
 use App\Services\PaymentRegisters\GetPaymentRegistersService;
 use App\Services\PaymentRegisters\UpdatePaymentRegisterService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use Safe\Exceptions\PgsqlException;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
-use Symfony\Component\HttpFoundation\File\Exception\UnexpectedTypeException;
 
 class PaymentRegisterController extends Controller
 {

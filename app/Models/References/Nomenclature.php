@@ -4,6 +4,7 @@
 namespace App\Models\References;
 
 
+use App\Models\Orders\OrderPositions\OrderPosition;
 use Illuminate\Database\Eloquent\Model;
 
 class Nomenclature extends Model

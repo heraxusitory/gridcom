@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreatePaymentRegisters extends Migration
+class CreateConsignmentRegisters extends Migration
 {
     /**
      * Run the migrations.
@@ -13,18 +13,22 @@ class CreatePaymentRegisters extends Migration
      */
     public function up()
     {
-        Schema::create('payment_registers', function (Blueprint $table) {
+        //TODO работа на сегодня
+        Schema::create('consignment_registers', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->index();
             $table->string('number')->index();
             $table->string('customer_status');
             $table->string('provider_status');
-            $table->unsignedBigInteger('provider_contr_agent_id');
+            $table->unsignedBigInteger('customer_contr_agent_id');
             $table->unsignedBigInteger('contractor_contr_agent_id');
-            $table->unsignedBigInteger('provider_contract_id');
+            $table->unsignedBigInteger('provider_contr_agent_id');
+            $table->unsignedBigInteger('customer_object_id');
+            $table->unsignedBigInteger('customer_sub_object_id');
+            $table->unsignedBigInteger('work_agreement_id');
             $table->string('responsible_full_name');
             $table->string('responsible_phone');
-            $table->string('comment');
+            $table->text('comment');
             $table->timestamp('date');
             $table->timestamps();
         });
@@ -37,6 +41,6 @@ class CreatePaymentRegisters extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('payment_registers');
+        Schema::dropIfExists('consignment_registers');
     }
 }
