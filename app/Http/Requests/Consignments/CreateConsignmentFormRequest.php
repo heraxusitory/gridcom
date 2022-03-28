@@ -25,7 +25,7 @@ class CreateConsignmentFormRequest extends FormRequest
             'responsible_full_name' => 'required|string|max:255',
             'responsible_phone' => 'required|string|max:255',
             'comment' => 'required|string',
-        ]);
+        ])->validate();
 
         $order_id = request()->order_id;
         $order = Order::query()

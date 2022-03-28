@@ -1,21 +1,21 @@
 <?php
 
 
-namespace App\Services\ConsignmentNotes;
+namespace App\Services\Consignments;
 
 
 use App\Models\Consignments\Consignment;
 use App\Services\IService;
 
-class GetConsignmentsService implements IService
+class GetConsignmentService implements IService
 {
-    public function __construct(private $payload)
+    public function __construct(private $payload, private Consignment $consignment)
     {
     }
 
     public function run()
     {
-        $consignments = Consignment::query()->with([
+        $consignment = $this->consignment->newQuery()->with([
             'order',
             'order.customer.contract',
             'order.customer.organization',
@@ -24,8 +24,8 @@ class GetConsignmentsService implements IService
             'order.provider.contact.contrAgentName',
             'order.provider.contract',
             'order.contractor.contact.contrAgentName',
-        ])->paginate();
-        return $consignments;
-    }
+        ])->first();
 
+        return $consignment;
+    }
 }

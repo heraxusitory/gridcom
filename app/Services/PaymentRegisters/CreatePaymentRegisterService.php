@@ -23,11 +23,11 @@ class CreatePaymentRegisterService implements IService
         $data = $this->payload;
 
         switch ($data['action']) {
-            case Order::ACTION_DRAFT:
+            case PaymentRegister::ACTION_DRAFT:
                 $customer_status = PaymentRegister::CUSTOMER_STATUS_DRAFT;
                 $provider_status = PaymentRegister::PROVIDER_STATUS_DRAFT;
                 break;
-            case Order::ACTION_APPROVE:
+            case PaymentRegister::ACTION_APPROVE:
                 $customer_status = PaymentRegister::CUSTOMER_STATUS_UNDER_CONSIDERATION;
                 $provider_status = PaymentRegister::PROVIDER_STATUS_UNDER_CONSIDERATION;
                 break;

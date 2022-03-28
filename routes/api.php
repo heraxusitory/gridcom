@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ConsignmentRegisters\ConsignmentRegisterController;
 use App\Http\Controllers\Consignments\ConsignmentController;
 use App\Http\Controllers\Integrations\AsMts\SyncOrderController;
 use App\Http\Controllers\Integrations\AsMts\SyncReferenceController;
@@ -65,6 +66,18 @@ Route::group(['prefix' => 'consignments'], function () {
         Route::get('', [ConsignmentController::class, 'getConsignment']);
         Route::put('', [ConsignmentController::class, 'update']);
         Route::delete('', [ConsignmentController::class, 'delete']);
+    });
+});
+
+Route::group(['prefix' => 'consignment-registers'], function () {
+    Route::get('', [ConsignmentRegisterController::class, 'index']);
+    Route::post('create', [ConsignmentRegisterController::class, 'create']);
+    Route::get('search-orders', [ConsignmentRegisterController::class, 'searchOrders']);
+    Route::get('search-consignments', [ConsignmentRegisterController::class, 'searchConsignments']);
+    Route::group(['prefix' => '{consignment_id}'], function () {
+        Route::get('', [ConsignmentRegisterController::class, 'getConsignmentRegister']);
+        Route::put('', [ConsignmentRegisterController::class, 'update']);
+        Route::delete('', [ConsignmentRegisterController::class, 'delete']);
     });
 });
 

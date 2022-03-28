@@ -20,7 +20,9 @@ class CreateConsignmentRegisters extends Migration
             $table->string('number')->index();
             $table->string('customer_status');
             $table->string('provider_status');
-            $table->unsignedBigInteger('customer_contr_agent_id');
+            $table->boolean('is_approved')->default(false);
+//            $table->unsignedBigInteger('order_id');
+            $table->unsignedBigInteger('organization_id');
             $table->unsignedBigInteger('contractor_contr_agent_id');
             $table->unsignedBigInteger('provider_contr_agent_id');
             $table->unsignedBigInteger('customer_object_id');

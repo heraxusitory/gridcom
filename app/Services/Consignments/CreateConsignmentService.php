@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\ConsignmentNotes;
+namespace App\Services\Consignments;
 
 
 use App\Models\Consignments\Consignment;

@@ -18,7 +18,7 @@ class ConsignmentPositions extends Migration
             $table->uuid('position_id');
             $table->unsignedBigInteger('consignment_id');
             $table->unsignedBigInteger('nomenclature_id');
-            $table->unsignedBigInteger('unit_id');
+//            $table->unsignedBigInteger('unit_id');
             $table->unsignedDouble('count');
             $table->unsignedDouble('price_without_vat');
             $table->unsignedDouble('amount_without_vat');

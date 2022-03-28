@@ -4,6 +4,7 @@
 namespace App\Models\Consignments;
 
 
+use App\Models\References\Nomenclature;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -27,4 +28,9 @@ class ConsignmentPosition extends Model
         'cargo_custom_declaration',
         'declaration',
     ];
+
+    public function nomenclature()
+    {
+        return $this->belongsTo(Nomenclature::class, 'nomenclature_id', 'id');
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Services\ConsignmentNotes;
+namespace App\Services\Consignments;
 
 
 use App\Models\Consignments\Consignment;
@@ -42,7 +42,7 @@ class UpdateConsignmentService implements IService
                 $amount_without_vat = round($position['price_without_vat'] * $position['count'], 2);
                 $amount_with_vat = round($amount_without_vat * $position['vat_rate'], 2);
                 $position = $this->consignment->positions()->updateOrCreate([
-                    'position_id' => $data['position_id'] ?? null
+                    'position_id' => $position['position_id'] ?? null
                 ], [
                     'position_id' => $position['position_id'] ?? Str::uuid(),
                     'nomenclature_id' => $position['nomenclature_id'],

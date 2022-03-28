@@ -11,10 +11,10 @@ use App\Models\Consignments\Consignment;
 use App\Models\Orders\LKK\Order;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\References\Nomenclature;
-use App\Services\ConsignmentNotes\CreateConsignmentService;
-use App\Services\ConsignmentNotes\GetConsignmentService;
-use App\Services\ConsignmentNotes\GetConsignmentsService;
-use App\Services\ConsignmentNotes\UpdateConsignmentService;
+use App\Services\Consignments\CreateConsignmentService;
+use App\Services\Consignments\GetConsignmentService;
+use App\Services\Consignments\GetConsignmentsService;
+use App\Services\Consignments\UpdateConsignmentService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,6 +45,7 @@ class ConsignmentController extends Controller
 
 
         try {
+            /* @var Consignment $consignment */
             $consignment = Consignment::query()->findOrFail($consignment_id);
             $consignment = (new GetConsignmentService($request->all(), $consignment))->run();
             return response()->json(['data' => $consignment]);
