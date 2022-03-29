@@ -4,6 +4,7 @@ use App\Http\Controllers\ConsignmentRegisters\ConsignmentRegisterController;
 use App\Http\Controllers\Consignments\ConsignmentController;
 use App\Http\Controllers\Integrations\AsMts\SyncOrderController;
 use App\Http\Controllers\Integrations\AsMts\SyncReferenceController;
+use App\Http\Controllers\Notifications\ProviderNotificationController;
 use App\Http\Controllers\Orders\OrderContractorController;
 use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Orders\OrderProviderController;
@@ -93,8 +94,28 @@ Route::group(['prefix' => 'payment-registers'], function () {
     });
 });
 
+//TODO отрефакторить по приходу
+//Route::group(['prefix' => 'contractor-notifications'], function () {
+////    Route::get('', [ContractorNotificationController::class, 'index']);
+//    Route::post('', [ProviderNotificationController::class, 'create']);
+//    Route::group(['prefix' => '{notification_id}'], function () {
+//        Route::get('', [ProviderNotificationController::class, 'getNotification']);
+//        Route::put('', [ProviderNotificationController::class, 'update']);
+//        Route::delete('', [ProviderNotificationController::class, 'delete']);
+//    });
+//});
+//Route::group(['prefix' => 'organization-notifications'], function () {
+//    Route::get('', [ProviderNotificationController::class, 'index']);
+//    Route::post('', [ProviderNotificationController::class, 'create']);
+//    Route::group(['prefix' => '{notification_id}'], function () {
+//        Route::get('', [ProviderNotificationController::class, 'getNotification']);
+//        Route::put('', [ProviderNotificationController::class, 'update']);
+//        Route::delete('', [ProviderNotificationController::class, 'delete']);
+//    });
+//});
+
 Route::group(['prefix' => 'integrations/as-mts/', 'middleware' => 'auth.basic'], function () {
-    Route::group(['prefix' => 'preferences'], function () {
+    Route::group(['prefix' => 'references'], function () {
         Route::post('organizations/sync', [SyncReferenceController::class, 'syncOrganizations']);
         Route::post('provider_contracts/sync', [SyncReferenceController::class, 'syncProviderContracts']);
         Route::post('work_agreements/sync', [SyncReferenceController::class, 'syncWorkAgreements']);
