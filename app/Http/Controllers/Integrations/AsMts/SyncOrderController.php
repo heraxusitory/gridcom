@@ -25,12 +25,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class SyncOrderController extends Controller
 {
     public function pull(Request $request)
     {
-        Validator::make($request->all(), [
+        $validator = Validator::make($request->all(), [
             'orders' => 'required|array',
             'orders.*.id' => 'required|uuid',
             'orders.*.number' => 'required|string|max:255',
@@ -42,7 +43,7 @@ class SyncOrderController extends Controller
             'orders.*.order_customer.work_agreement_id' => 'required|uuid|exists:work_agreements,uuid',
             'orders.*.order_customer.work_type' => 'required|string|max:255',
             'orders.*.order_customer.object_id' => 'required|uuid|exists:customer_objects,uuid',
-            'orders.*.order_customer.sub_object_id' => 'required|uuid|exists:customer_sub_objects,uuid',
+            'orders.*.order_customer.sub_object_id' => ['required|uuid|exists:customer_sub_objects,uuid'],
             'orders.*.order_customer.work_start_date' => 'required|date_format:d.m.Y',
             'orders.*.order_customer.work_end_date' => 'required|date_format:d.m.Y',
 
@@ -72,6 +73,20 @@ class SyncOrderController extends Controller
             'orders.*.order_positions.*.delivery_time' => 'required|date_format:d.m.Y',
             'orders.*.order_positions.*.delivery_address' => 'required|string|max:255',
         ])->validate();
+
+        $orders = $request->all()['orders'];
+        foreach ($orders as $key => $order) {
+            $object_id = $order['order_customer']['object_id'];
+            $sub_object_id = $order['order_customer']['sub_object_id'];
+            $customer_sub_object = CustomerSubObject::query()->find($sub_object_id);
+            throw_if($customer_sub_object->customer_object_id !== $object_id,
+                new BadRequestException('The selected orders.' . $key . '.order_customer.sub_object_id is invalid', 422));
+        }
+
+        Validator::validate($request->all(), [
+            'orders.*.order_customer.object_id' => 'required|uuid|exists:customer_objects,uuid',
+            'orders.*.order_customer.sub_object_id' => ['required|uuid|exists:customer_sub_objects,uuid'],
+        ]);
 
 //        dd($request);
         $data = $request->all()['orders'];
