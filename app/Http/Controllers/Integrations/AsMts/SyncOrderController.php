@@ -84,8 +84,10 @@ class SyncOrderController extends Controller
                 throw_if($customer_sub_object->customer_object_id !== $customer_object->id,
                     new BadRequestException('The selected orders.' . $key . '.order_customer.sub_object_id is invalid', 422));
             }
-        } catch (\Exception | BadRequestException $e) {
+        } catch (BadRequestException $e) {
             return response()->json($e->getMessage(), $e->getCode());
+        } catch (\Exception $e) {
+            return response()->json('System error', $e->getCode());
         }
 
         $data = $request->all()['orders'];
