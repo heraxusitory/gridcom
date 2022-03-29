@@ -74,21 +74,19 @@ class SyncOrderController extends Controller
             'orders.*.order_positions.*.delivery_address' => 'required|string|max:255',
         ])->validate();
 
-        $orders = $request->all()['orders'];
-        foreach ($orders as $key => $order) {
-            $object_id = $order['order_customer']['object_id'];
-            $sub_object_id = $order['order_customer']['sub_object_id'];
-            $customer_sub_object = CustomerSubObject::query()->find($sub_object_id);
-            throw_if($customer_sub_object->customer_object_id !== $object_id,
-                new BadRequestException('The selected orders.' . $key . '.order_customer.sub_object_id is invalid', 422));
+        try {
+            $orders = $request->all()['orders'];
+            foreach ($orders as $key => $order) {
+                $object_id = $order['order_customer']['object_id'];
+                $sub_object_id = $order['order_customer']['sub_object_id'];
+                $customer_sub_object = CustomerSubObject::query()->find($sub_object_id);
+                throw_if($customer_sub_object->customer_object_id !== $object_id,
+                    new BadRequestException('The selected orders.' . $key . '.order_customer.sub_object_id is invalid', 422));
+            }
+        } catch (BadRequestException $e) {
+            return response()->json($e->getMessage(), $e->getCode());
         }
 
-        Validator::validate($request->all(), [
-            'orders.*.order_customer.object_id' => 'required|uuid|exists:customer_objects,uuid',
-            'orders.*.order_customer.sub_object_id' => ['required|uuid|exists:customer_sub_objects,uuid'],
-        ]);
-
-//        dd($request);
         $data = $request->all()['orders'];
 
         try {
