@@ -43,7 +43,7 @@ class SyncOrderController extends Controller
             'orders.*.order_customer.work_agreement_id' => 'required|uuid|exists:work_agreements,uuid',
             'orders.*.order_customer.work_type' => 'required|string|max:255',
             'orders.*.order_customer.object_id' => 'required|uuid|exists:customer_objects,uuid',
-            'orders.*.order_customer.sub_object_id' => ['required|uuid|exists:customer_sub_objects,uuid'],
+            'orders.*.order_customer.sub_object_id' => 'required|uuid|exists:customer_sub_objects,uuid',
             'orders.*.order_customer.work_start_date' => 'required|date_format:d.m.Y',
             'orders.*.order_customer.work_end_date' => 'required|date_format:d.m.Y',
 
