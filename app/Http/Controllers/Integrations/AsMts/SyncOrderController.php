@@ -79,11 +79,12 @@ class SyncOrderController extends Controller
             foreach ($orders as $key => $order) {
                 $object_id = $order['order_customer']['object_id'];
                 $sub_object_id = $order['order_customer']['sub_object_id'];
-                $customer_sub_object = CustomerSubObject::query()->find($sub_object_id);
-                throw_if($customer_sub_object->customer_object_id !== $object_id,
+                $customer_object = CustomerObject::query()->where('uuid', $object_id)->firstOrFail();
+                $customer_sub_object = CustomerSubObject::query()->where('uuid', $sub_object_id)->firstOrFail();
+                throw_if($customer_sub_object->customer_object_id !== $customer_object->id,
                     new BadRequestException('The selected orders.' . $key . '.order_customer.sub_object_id is invalid', 422));
             }
-        } catch (BadRequestException $e) {
+        } catch (\Exception | BadRequestException $e) {
             return response()->json($e->getMessage(), $e->getCode());
         }
 
