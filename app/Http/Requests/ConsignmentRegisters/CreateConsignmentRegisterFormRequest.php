@@ -62,6 +62,7 @@ class CreateConsignmentRegisterFormRequest extends FormRequest
             ->with('positions')
             ->get();
 
+        //TODO проверить еще раз работоспособность этой вещи, не уверен до конца что работает по замыслу
         foreach ($consignments as $consignment) {
             $nomenclature_ids = $consignment->positions->pluck('nomenclature_id')->unique();
 

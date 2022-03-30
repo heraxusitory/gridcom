@@ -346,5 +346,7 @@ class DatabaseSeeder extends Seeder
         ];
         Log::debug('example_order_request_for_sync', $example);
 
+        $this->call(ProviderOrderSeeder::class);
+
     }
 }

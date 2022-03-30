@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Orders\References;
+namespace App\Http\Controllers\References;
 
 
 use App\Http\Controllers\Controller;

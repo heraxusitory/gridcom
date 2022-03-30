@@ -14,4 +14,13 @@ class Organization extends Model
         'uuid',
         'name',
     ];
+
+//    public function notifications()
+//    {
+//        return $this->belongsToMany(Notification::class,
+//            NotificationToOrganization::class,
+//            'notification_id',
+//            'organization_id'
+//        );
+//    }
 }

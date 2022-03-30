@@ -17,7 +17,7 @@ class ConsignmentRegister extends Model
         'uuid',
         'number',
         'customer_status',
-        'provider_status',
+        'contr_agent_status',
 
         'organization_id',
         'contractor_contr_agent_id',
@@ -46,6 +46,8 @@ class ConsignmentRegister extends Model
     const PROVIDER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const PROVIDER_STATUS_CANCELED = 'Аннулировано';
 
+    const CONTRACTOR_STATUS_SELF_PURCHASE = 'Самозакуп';
+
     public static function getActions(): array
     {
         return [
@@ -59,5 +61,5 @@ class ConsignmentRegister extends Model
         return $this->hasMany(
             ConsignmentRegisterPositions::class,
             'consignment_register_id', 'id');
-        }
+    }
 }

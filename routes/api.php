@@ -4,12 +4,14 @@ use App\Http\Controllers\ConsignmentRegisters\ConsignmentRegisterController;
 use App\Http\Controllers\Consignments\ConsignmentController;
 use App\Http\Controllers\Integrations\AsMts\SyncOrderController;
 use App\Http\Controllers\Integrations\AsMts\SyncReferenceController;
+use App\Http\Controllers\Notifications\ContractorNotificationController;
 use App\Http\Controllers\Notifications\ProviderNotificationController;
 use App\Http\Controllers\Orders\OrderContractorController;
 use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Orders\OrderProviderController;
 use App\Http\Controllers\Orders\References\ReferenceController;
 use App\Http\Controllers\PaymentRegisters\PaymentRegisterController;
+use App\Http\Controllers\ProviderOrders\ProviderOrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +61,20 @@ Route::group(['prefix' => 'orders'], function () {
     });
 });
 
+Route::group(['prefix' => 'provider-orders'], function () {
+    Route::get('', [ProviderOrderController::class, 'index']);
+    Route::group(['prefix' => '{provider_order_id}'], function () {
+        Route::get('', [ProviderOrderController::class, 'getOrder']);
+        Route::group(['prefix' => 'requirement-corrections'], function () {
+            Route::group(['prefix' => '{requirement_correction_id}'], function () {
+                Route::post('approve', [ProviderOrderController::class, 'approve']);
+                Route::post('reject', [ProviderOrderController::class, 'reject']);
+                Route::post('reject-positions', [ProviderOrderController::class, 'rejectPositions']);
+            });
+        });
+    });
+});
+
 Route::group(['prefix' => 'consignments'], function () {
     Route::get('', [ConsignmentController::class, 'index']);
     Route::post('create', [ConsignmentController::class, 'create']);
@@ -94,16 +110,17 @@ Route::group(['prefix' => 'payment-registers'], function () {
     });
 });
 
-//TODO отрефакторить по приходу
-//Route::group(['prefix' => 'contractor-notifications'], function () {
-////    Route::get('', [ContractorNotificationController::class, 'index']);
-//    Route::post('', [ProviderNotificationController::class, 'create']);
-//    Route::group(['prefix' => '{notification_id}'], function () {
-//        Route::get('', [ProviderNotificationController::class, 'getNotification']);
-//        Route::put('', [ProviderNotificationController::class, 'update']);
-//        Route::delete('', [ProviderNotificationController::class, 'delete']);
-//    });
-//});
+Route::group(['prefix' => 'contractor-notifications'], function () {
+    Route::get('', [ContractorNotificationController::class, 'index']);
+    Route::get('search-orders', [ContractorNotificationController::class, 'searchOrders']);
+    Route::get('search-provider-contracts', [ContractorNotificationController::class, 'searchProviderContracts']);
+    Route::post('', [ContractorNotificationController::class, 'create']);
+    Route::group(['prefix' => '{notification_id}'], function () {
+        Route::get('', [ContractorNotificationController::class, 'getNotification']);
+        Route::put('', [ContractorNotificationController::class, 'update']);
+        Route::delete('', [ContractorNotificationController::class, 'delete']);
+    });
+});
 //Route::group(['prefix' => 'organization-notifications'], function () {
 //    Route::get('', [ProviderNotificationController::class, 'index']);
 //    Route::post('', [ProviderNotificationController::class, 'create']);

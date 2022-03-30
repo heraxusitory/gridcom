@@ -47,7 +47,7 @@ class UpdateConsignmentRegisterService implements IService
             $this->consignment_register->update([
                 'date' => Carbon::today()->format('d.m.Y'),
                 'customer_status' => $customer_status,
-                'provider_status' => $provider_status,
+                'contr_agent_status' => $provider_status,
                 'organization_id' => $data['organization_id'],
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
