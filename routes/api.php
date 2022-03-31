@@ -5,13 +5,13 @@ use App\Http\Controllers\Consignments\ConsignmentController;
 use App\Http\Controllers\Integrations\AsMts\SyncOrderController;
 use App\Http\Controllers\Integrations\AsMts\SyncReferenceController;
 use App\Http\Controllers\Notifications\ContractorNotificationController;
-use App\Http\Controllers\Notifications\ProviderNotificationController;
+use App\Http\Controllers\Notifications\OrganizationNotificationController;
 use App\Http\Controllers\Orders\OrderContractorController;
 use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Orders\OrderProviderController;
-use App\Http\Controllers\Orders\References\ReferenceController;
 use App\Http\Controllers\PaymentRegisters\PaymentRegisterController;
 use App\Http\Controllers\ProviderOrders\ProviderOrderController;
+use App\Http\Controllers\References\ReferenceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -121,15 +121,17 @@ Route::group(['prefix' => 'contractor-notifications'], function () {
         Route::delete('', [ContractorNotificationController::class, 'delete']);
     });
 });
-//Route::group(['prefix' => 'organization-notifications'], function () {
-//    Route::get('', [ProviderNotificationController::class, 'index']);
-//    Route::post('', [ProviderNotificationController::class, 'create']);
-//    Route::group(['prefix' => '{notification_id}'], function () {
-//        Route::get('', [ProviderNotificationController::class, 'getNotification']);
-//        Route::put('', [ProviderNotificationController::class, 'update']);
-//        Route::delete('', [ProviderNotificationController::class, 'delete']);
-//    });
-//});
+Route::group(['prefix' => 'organization-notifications'], function () {
+    Route::get('', [OrganizationNotificationController::class, 'index']);
+    Route::post('', [OrganizationNotificationController::class, 'create']);
+    Route::get('search-orders', [OrganizationNotificationController::class, 'searchOrders']);
+    Route::get('search-contracts', [OrganizationNotificationController::class, 'searchContracts']);
+    Route::group(['prefix' => '{notification_id}'], function () {
+        Route::get('', [OrganizationNotificationController::class, 'getNotification']);
+        Route::put('', [OrganizationNotificationController::class, 'update']);
+        Route::delete('', [OrganizationNotificationController::class, 'delete']);
+    });
+});
 
 Route::group(['prefix' => 'integrations/as-mts/', 'middleware' => 'auth.basic'], function () {
     Route::group(['prefix' => 'references'], function () {

@@ -4,6 +4,7 @@
 namespace App\Models\ProviderOrders\Positions;
 
 
+use App\Models\References\Nomenclature;
 use Illuminate\Database\Eloquent\Model;
 
 class ActualProviderOrderPosition extends Model
@@ -23,4 +24,9 @@ class ActualProviderOrderPosition extends Model
         'delivery_address',
         'organization_comment',
     ];
+
+    public function nomenclature()
+    {
+        return $this->hasOne(Nomenclature::class, 'id', 'nomenclature_id');
+    }
 }

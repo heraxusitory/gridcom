@@ -134,7 +134,7 @@ class ContractorNotificationController extends Controller
             /** @var ContractorNotification $contractor_notification */
             $contractor_notification = ContractorNotification::query()->findOrFail($contractor_notification_id);
             throw_if($contractor_notification->status !== ContractorNotification::CONTRACTOR_STATUS_DRAFT
-                , new BadRequestException('Заказ уже отправлен на согласование подрядчику', 400));
+                , new BadRequestException('Уведомление уже отправлено на согласование подрядчику', 400));
             return response()->json(['data' => (new UpdateContractorNotificationService($request->all(), $contractor_notification))->run()]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);

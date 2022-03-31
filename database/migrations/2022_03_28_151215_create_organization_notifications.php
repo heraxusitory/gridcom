@@ -18,17 +18,18 @@ class CreateOrganizationNotifications extends Migration
             $table->uuid('uuid')->index();
             $table->timestamp('date');
             $table->string('status');
-            $table->string('stage');
-            $table->unsignedBigInteger('contractor_contr_agent_id');
+            $table->string('contract_stage');
+            $table->unsignedBigInteger('organization_id');
             $table->unsignedBigInteger('provider_contr_agent_id');
-            $table->unsignedBigInteger('work_agreement_id');
+            $table->string('contract_number');
+            $table->string('contract_date');
             $table->timestamp('date_fact_delivery');
             $table->string('delivery_address');
             $table->string('car_info');
             $table->string('driver_phone');
             $table->string('responsible_full_name');
             $table->string('responsible_phone');
-            $table->text('comment');
+            $table->text('organization_comment')->nullable();
             $table->timestamps();
         });
     }

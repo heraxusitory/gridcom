@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Requests\Notifications\ContractorNotification;
+namespace App\Http\Requests\Notifications\OrganizationNotification;
 
 use App\Models\Notifications\Notification;
-use App\Models\Orders\LKK\Order;
+use App\Models\ProviderOrders\ProviderOrder;
+use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class CreateContractorNotificationFormRequest extends FormRequest
+class UpdateOrganizationNotificationFormRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,21 +31,36 @@ class CreateContractorNotificationFormRequest extends FormRequest
         $data = request()->all();
         Validator::validate($data, [
             'action' => ['required', Rule::in(Notification::getActions())],
-            'contractor_contr_agent_id' => 'required|exists:contr_agents,id',
+            'organization_id' => 'required|exists:organizations,id',
+            'contract_number' => 'required|string|exists:provider_orders,contract_number',
+            'contract_date' => 'required|date_format:d.m.Y|exists:provider_orders,contract_date',
             'provider_contr_agent_id' => 'required|exists:contr_agents,id', #TODO заглушка, поменять когда будут сущности ролей и пользователей для поставщика
+            'contract_stage' => ['required', Rule::in(ProviderOrder::STAGES())]
         ]);
 
-        $orders = Order::query()
-            ->whereRelation('contractor', 'contr_agent_id', $data['contractor_contr_agent_id'])
-            ->whereRelation('provider', 'contr_agent_id', $data['provider_contr_agent_id'])
-            ->with(['provider', 'positions'])->get();
+        $order_query = ProviderOrder::query()
+            ->where('organization_id', $data['organization_id'])
+            ->where('provider_contr_agent_id', $data['provider_contr_agent_id'])
+            ->where('contract_number', $data['contract_number'])
+            ->where('contract_date', $data['contract_date'])
+            ->with(['actual_positions.nomenclature']);
+        $orders = $order_query->get();
 
-        $provider_contract_ids = $orders->map(function ($order) {
-            return $order->provider->provider_contract_id;
-        })->unique();
+        $contract_numbers = $orders->pluck('contract_number');
+        $contract_dates = $orders->pluck('contract_date')->map(function ($date) {
+            return (new Carbon($date))->format('d.m.Y');
+        });
+
+        $orders = $order_query->where('contract_stage', $data['contract_stage'])->get();
+
+//        $provider_contract_ids = $orders->map(function ($order) {
+//            return $order->provider->provider_contract_id;
+//        })->unique();
 
         Validator::validate($data, [
-            'provider_contract_id' => ['required', Rule::in($provider_contract_ids)],
+            'contract_number' => ['required', Rule::in($contract_numbers)],
+            'contract_date' => ['required', Rule::in($contract_dates)],
+            'provider_contr_agent_id' => 'required|exists:contr_agents,id', #TODO заглушка, поменять когда будут сущности ролей и пользователей для поставщика
             'date_fact_delivery' => ['required', 'date_format:d.m.Y'],
             'delivery_address' => ['required', 'string', 'max:255'],
             'car_info' => ['required', 'string', 'max:255'],
@@ -57,19 +73,11 @@ class CreateContractorNotificationFormRequest extends FormRequest
             'positions.*' => 'required',
         ]);
 
-//        foreach ($orders as $order) {
-//            $nomenclature_ids = $order->positions->pluck('nomenclature_id')->unique();
-//
-//            Validator::validate(request()->all(), [
-//                'positions.*.order_id' => ['required', Rule::in($order->pluck('id'))],
-//                'positions.*.nomenclature_id' => ['required', 'integer', Rule::in($nomenclature_ids)],
-//            ]);
-//        }
         foreach ($data['positions'] as $key => $position) {
             Validator::validate($data, [
                 'positions.' . $key . '.order_id' => ['required', Rule::in($orders->pluck('id'))],
             ]);
-            $nomenclature_ids = $orders->find($position['order_id'])->positions->pluck('nomenclature_id')->unique();
+            $nomenclature_ids = $orders->find($position['order_id'])->actual_positions->pluck('nomenclature_id')->unique();
 
             Validator::validate($data, [
                 'positions.' . $key . '.nomenclature_id' => ['required', 'integer', Rule::in($nomenclature_ids)],
