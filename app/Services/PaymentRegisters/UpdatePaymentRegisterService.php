@@ -50,7 +50,7 @@ class UpdatePaymentRegisterService implements IService
             $position_ids = [];
             foreach ($data['positions'] as $position) {
                 $position = $this->payment_register->positions()->updateOrCreate([
-                    'position_id' => $data['position_id'] ?? null,
+                    'position_id' => $position['position_id'] ?? null,
                 ], [
                     'position_id' => $position['position_id'] ?? Str::uuid(),
                     'order_id' => $position['order_id'],

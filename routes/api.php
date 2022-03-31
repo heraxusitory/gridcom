@@ -10,8 +10,11 @@ use App\Http\Controllers\Orders\OrderContractorController;
 use App\Http\Controllers\Orders\OrderController;
 use App\Http\Controllers\Orders\OrderProviderController;
 use App\Http\Controllers\PaymentRegisters\PaymentRegisterController;
+use App\Http\Controllers\PriceNegotiations\PriceNegotiationController;
 use App\Http\Controllers\ProviderOrders\ProviderOrderController;
 use App\Http\Controllers\References\ReferenceController;
+use App\Http\Controllers\RequestAdditionNomenclatureController;
+use App\Http\Controllers\RequestAdditionObjectController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -130,6 +133,41 @@ Route::group(['prefix' => 'organization-notifications'], function () {
         Route::get('', [OrganizationNotificationController::class, 'getNotification']);
         Route::put('', [OrganizationNotificationController::class, 'update']);
         Route::delete('', [OrganizationNotificationController::class, 'delete']);
+    });
+});
+
+Route::group(['prefix' => 'price-negotiations'], function () {
+    Route::get('', [PriceNegotiationController::class, 'index']);
+    Route::post('', [PriceNegotiationController::class, 'create']);
+    Route::get('search-orders', [PriceNegotiationController::class, 'searchOrdersWithNomenclature']);
+    Route::group(['prefix' => '{price_negotiation_id}'], function () {
+        Route::get('', [PriceNegotiationController::class, 'getPriceNegotiation']);
+        Route::post('', [PriceNegotiationController::class, 'update']);
+        Route::delete('', [PriceNegotiationController::class, 'delete']);
+    });
+});
+
+Route::group(['prefix' => 'request-addition'], function () {
+    Route::group(['prefix' => 'nomenclature'], function () {
+        Route::get('', [RequestAdditionNomenclatureController::class, 'index']);
+        Route::post('', [RequestAdditionNomenclatureController::class, 'create']);
+        Route::group(['prefix' => '{nomenclature_id}'], function () {
+            Route::get('', [RequestAdditionNomenclatureController::class, 'get']);
+            Route::post('', [RequestAdditionNomenclatureController::class, 'update']);
+            Route::delete('', [RequestAdditionNomenclatureController::class, 'delete']);
+        });
+    });
+});
+
+Route::group(['prefix' => 'request-addition'], function () {
+    Route::group(['prefix' => 'objects'], function () {
+        Route::get('', [RequestAdditionObjectController::class, 'index']);
+        Route::post('', [RequestAdditionObjectController::class, 'create']);
+        Route::group(['prefix' => '{nomenclature_id}'], function () {
+            Route::get('', [RequestAdditionObjectController::class, 'get']);
+            Route::post('', [RequestAdditionObjectController::class, 'update']);
+            Route::delete('', [RequestAdditionObjectController::class, 'delete']);
+        });
     });
 });
 
