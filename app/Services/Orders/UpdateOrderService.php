@@ -9,6 +9,7 @@ use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\References\ContactPerson;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
+use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
@@ -21,7 +22,8 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 class UpdateOrderService implements IService
 {
     public function __construct(private $payload, private Order $order)
-    {}
+    {
+    }
 
     public function run()
     {
@@ -121,6 +123,7 @@ class UpdateOrderService implements IService
             //positions
             $position_ids = [];
             foreach ($positions_data as $position) {
+                $nomenclature = Nomenclature::query()->findOrFail($position['nomenclature_id']);
                 $position = $this->order->positions()->updateOrCreate(['position_id' => $position['position_id'] ?? null], [
 //                    'order_id' => $order->id,
                     'position_id' => $position['position_id'] ?? Str::uuid(),
@@ -128,8 +131,8 @@ class UpdateOrderService implements IService
                     'nomenclature_id' => $position['nomenclature_id'],
                     'unit_id' => $position['unit_id'],
                     'count' => $position['count'],
-                    'price_without_vat' => $position['price_without_vat'],
-                    'amount_without_vat' => round($position['count'] * $position['price_without_vat'], 2),
+                    'price_without_vat' => $nomenclature->price,
+                    'amount_without_vat' => round($position['count'] * $nomenclature->price, 2),
 //                    'total_amount',
                     'delivery_time' => $position['delivery_time'],
                     'delivery_address' => $position['delivery_address'],

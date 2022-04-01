@@ -18,7 +18,6 @@ class ConsignmentPosition extends Model
         'position_id',
         'consignment_id',
         'nomenclature_id',
-        'unit_id',
         'count',
         'price_without_vat',
         'amount_without_vat',

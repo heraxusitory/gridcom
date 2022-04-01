@@ -6,6 +6,7 @@ namespace App\Services\Consignments;
 
 use App\Models\Consignments\Consignment;
 use App\Models\PaymentRegisters\PaymentRegister;
+use App\Models\References\Nomenclature;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -39,16 +40,16 @@ class UpdateConsignmentService implements IService
 
             $position_ids = [];
             foreach ($data['positions'] as $position) {
-                $amount_without_vat = round($position['price_without_vat'] * $position['count'], 2);
+                $nomenclature = Nomenclature::query()->findOrFail($position['nomenclature_id']);
+                $amount_without_vat = round($nomenclature->price * $position['count'], 2);
                 $amount_with_vat = round($amount_without_vat * $position['vat_rate'], 2);
                 $position = $this->consignment->positions()->updateOrCreate([
                     'position_id' => $position['position_id'] ?? null
                 ], [
                     'position_id' => $position['position_id'] ?? Str::uuid(),
                     'nomenclature_id' => $position['nomenclature_id'],
-                    'unit_id' => $position['unit_id'],
                     'count' => $position['count'],
-                    'price_without_vat' => $position['price_without_vat'],
+                    'price_without_vat' => $nomenclature->price,
                     'amount_without_vat' => $amount_without_vat,
                     'vat_rate' => $position['vat_rate'],
                     'amount_with_vat' => $amount_with_vat,

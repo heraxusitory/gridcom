@@ -12,6 +12,7 @@ use App\Models\Provider;
 use App\Models\References\ContactPerson;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
+use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
@@ -131,6 +132,7 @@ class CreateOrderService implements IService
 
             //positions
             foreach ($positions_data as $position) {
+                $nomenclature = Nomenclature::query()->findOrFail($position['nomenclature_id']);
                 $order->positions()->create([
 //                    'order_id' => $order->id,
                     'position_id' => Str::uuid(),
@@ -138,8 +140,8 @@ class CreateOrderService implements IService
                     'nomenclature_id' => $position['nomenclature_id'],
                     'unit_id' => $position['unit_id'],
                     'count' => $position['count'],
-                    'price_without_vat' => $position['price_without_vat'],
-                    'amount_without_vat' => round($position['count'] * $position['price_without_vat'], 2),
+                    'price_without_vat' => $nomenclature->price,
+                    'amount_without_vat' => round($position['count'] * $nomenclature->price, 2),
 //                    'total_amount',
                     'delivery_time' => $position['delivery_time'],
                     'delivery_address' => $position['delivery_address'],

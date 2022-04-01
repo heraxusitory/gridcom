@@ -5,6 +5,7 @@ namespace App\Services\Consignments;
 
 
 use App\Models\Consignments\Consignment;
+use App\Models\References\Nomenclature;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ class CreateConsignmentService implements IService
     {
         $data = $this->payload;
         return DB::transaction(function () use ($data) {
+            /** @var Consignment $consignment */
             $consignment = Consignment::query()->create([
                 'uuid' => Str::uuid(),
                 'date' => Carbon::today()->format('d.m.Y'),
@@ -30,14 +32,14 @@ class CreateConsignmentService implements IService
             ]);
 
             foreach ($data['positions'] as $position) {
-                $amount_without_vat = round($position['price_without_vat'] * $position['count'], 2);
+                $nomenclature = Nomenclature::query()->findOrFail($position['nomenclature_id']);
+                $amount_without_vat = round($nomenclature->price * $position['count'], 2);
                 $amount_with_vat = round($amount_without_vat * $position['vat_rate'], 2);
                 $consignment->positions()->create([
                     'position_id' => Str::uuid(),
                     'nomenclature_id' => $position['nomenclature_id'],
-                    'unit_id' => $position['unit_id'],
                     'count' => $position['count'],
-                    'price_without_vat' => $position['price_without_vat'],
+                    'price_without_vat' => $nomenclature->price,
                     'amount_without_vat' => $amount_without_vat,
                     'vat_rate' => $position['vat_rate'],
                     'amount_with_vat' => $amount_with_vat,

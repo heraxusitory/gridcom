@@ -34,9 +34,9 @@ class UpdateConsignmentFormRequest extends FormRequest
             'positions' => 'required_if:action,approve|array',
             'positions.*' => 'required',
             'positions.*.nomenclature_id' => 'required|integer|exists:nomenclature,id',
-            'positions.*.unit_id' => 'required|integer|exists:nomenclature_units,id',
+//            'positions.*.unit_id' => 'required|integer|exists:nomenclature_units,id',
             'positions.*.count' => 'required|numeric',
-            'positions.*.price_without_vat' => 'required|numeric',
+//            'positions.*.price_without_vat' => 'required|numeric',
             //TODO отрефакторить ставку НДС
             'positions.*.vat_rate' => ['required', Rule::in([1, 1.13, 1.2, 1.3, 1.4])],
             'positions.*.country' => 'required|string',
