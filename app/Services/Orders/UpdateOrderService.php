@@ -4,7 +4,7 @@
 namespace App\Services\Orders;
 
 
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\References\ContactPerson;
 use App\Models\References\ContrAgent;

@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Consignments\CreateConsignmentFormRequest;
 use App\Http\Requests\Consignments\UpdateConsignmentFormRequest;
 use App\Models\Consignments\Consignment;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\References\Nomenclature;
 use App\Services\Consignments\CreateConsignmentService;

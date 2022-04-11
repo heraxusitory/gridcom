@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Notifications\ContractorNotification\CreateContractorNotificationFormRequest;
 use App\Http\Requests\Notifications\ContractorNotification\UpdateContractorNotificationFormRequest;
 use App\Models\Notifications\ContractorNotification;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Services\ContractorNotifications\CreateContractorNotificationService;
 use App\Services\ContractorNotifications\GetContractorNotificationService;
 use App\Services\ContractorNotifications\IndexContractorNotificationService;

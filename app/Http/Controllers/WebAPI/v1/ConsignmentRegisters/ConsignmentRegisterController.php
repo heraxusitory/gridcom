@@ -9,7 +9,7 @@ use App\Http\Requests\ConsignmentRegisters\CreateConsignmentRegisterFormRequest;
 use App\Http\Requests\ConsignmentRegisters\UpdateConsignmentRegisterFormRequest;
 use App\Models\ConsignmentRegisters\ConsignmentRegister;
 use App\Models\Consignments\Consignment;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Services\ConsignmentRegisters\CreateConsignmentRegisterService;
 use App\Services\ConsignmentRegisters\GetConsignmentRegisterService;
 use App\Services\ConsignmentRegisters\GetConsignmentRegistersService;

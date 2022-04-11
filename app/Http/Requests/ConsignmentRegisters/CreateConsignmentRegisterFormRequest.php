@@ -6,7 +6,7 @@ namespace App\Http\Requests\ConsignmentRegisters;
 
 use App\Models\ConsignmentRegisters\ConsignmentRegister;
 use App\Models\Consignments\Consignment;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
