@@ -5,17 +5,15 @@ namespace App\Http\Controllers\WebAPI\v1\RequestAdditions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RequestAdditionNomenclatures\CreateRANomenclatureFormRequest;
 use App\Http\Requests\RequestAdditionNomenclatures\UpdateRANomenclatureFormRequest;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\References\Organization;
 use App\Models\RequestAdditions\RequestAdditionNomenclature;
 use App\Services\RequestAdditionNomenclatures\CreateRequestAdditionNomenclatureService;
 use App\Services\RequestAdditionNomenclatures\UpdateRequestAdditionNomenclatureService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class RequestAdditionNomenclatureController extends Controller

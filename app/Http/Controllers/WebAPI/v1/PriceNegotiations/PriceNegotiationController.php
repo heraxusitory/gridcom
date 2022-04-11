@@ -5,7 +5,7 @@ namespace App\Http\Controllers\WebAPI\v1\PriceNegotiations;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PriceNegotiations\CreatePriceNegotiationFormRequest;
 use App\Http\Requests\PriceNegotiations\UpdatePriceNegotiationFormRequest;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\CustomerObject;

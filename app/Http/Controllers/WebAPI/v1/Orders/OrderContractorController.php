@@ -5,7 +5,7 @@ namespace App\Http\Controllers\WebAPI\v1\Orders;
 
 
 use App\Http\Requests\Orders\CreateFormRequest;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Services\Orders\CreateOrderService;
 use App\Services\Orders\UpdateOrderService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;

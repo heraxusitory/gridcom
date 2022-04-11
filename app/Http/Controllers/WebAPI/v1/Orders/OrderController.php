@@ -5,13 +5,12 @@ namespace App\Http\Controllers\WebAPI\v1\Orders;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Services\Orders\GetOrderService;
 use App\Services\Orders\GetOrdersService;
 use App\Services\Orders\Reports\GetReportService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
@@ -44,7 +43,6 @@ class OrderController extends Controller
     public function getOrder(Request $request, $order_id)
     {
         try {
-//            $user = Auth::user();
             $order = Order::query();
             if ($this->user->isProvider()) {
                 $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());

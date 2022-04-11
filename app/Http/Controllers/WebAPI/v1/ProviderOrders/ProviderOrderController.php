@@ -5,13 +5,11 @@ namespace App\Http\Controllers\WebAPI\v1\ProviderOrders;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Provider;
 use App\Models\ProviderOrders\Corrections\RequirementCorrection;
 use App\Models\ProviderOrders\Corrections\RequirementCorrectionPosition;
 use App\Models\ProviderOrders\ProviderOrder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;

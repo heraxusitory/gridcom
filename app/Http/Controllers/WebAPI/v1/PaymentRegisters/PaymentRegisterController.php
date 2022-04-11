@@ -7,7 +7,7 @@ namespace App\Http\Controllers\WebAPI\v1\PaymentRegisters;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRegisters\CreatePaymentRegisterFormRequest;
 use App\Http\Requests\PaymentRegisters\UpdatePaymentRegisterFormRequest;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\PaymentRegisters\PaymentRegister;
 use App\Services\PaymentRegisters\CreatePaymentRegisterService;
 use App\Services\PaymentRegisters\GetPaymentRegisterService;
