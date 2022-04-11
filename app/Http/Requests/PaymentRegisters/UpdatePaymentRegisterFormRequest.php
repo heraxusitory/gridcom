@@ -6,6 +6,7 @@ use App\Models\Orders\LKK\Order;
 use App\Models\PaymentRegisters\PaymentRegister;
 use App\Models\PaymentRegisters\PaymentRegisterPosition;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
@@ -43,7 +44,7 @@ class UpdatePaymentRegisterFormRequest extends FormRequest
         return [
             'action' => [Rule::in(PaymentRegister::getActions())],
             'provider_contr_agent_id' => 'required|exists:contr_agents,id',
-            'contractor_contr_agent_id' => 'required|exists:contr_agents,id',
+            'contractor_contr_agent_id' => ['required','exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
             'provider_contract_id' => ['required', Rule::in($provider_contract_ids)],
             'responsible_full_name' => 'required|string',
             'responsible_phone' => 'required|string',

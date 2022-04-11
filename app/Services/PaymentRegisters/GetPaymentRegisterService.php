@@ -14,7 +14,7 @@ class GetPaymentRegisterService implements IService
 
     public function __construct(private $payment_register_id)
     {
-        $this->user = Auth::user();
+        $this->user = auth('webapi')->user();
     }
 
     public function run()

@@ -15,9 +15,11 @@ use App\Services\PaymentRegisters\GetPaymentRegistersService;
 use App\Services\PaymentRegisters\UpdatePaymentRegisterService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class PaymentRegisterController extends Controller
@@ -125,7 +127,7 @@ class PaymentRegisterController extends Controller
     {
         Validator::make($request->all(), [
             'provider_contr_agent_id' => 'required|exists:contr_agents,id',
-            'contractor_contr_agent_id' => 'required|exists:contr_agents,id',
+            'contractor_contr_agent_id' => ['required','exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
         ])->validate();
 
 
@@ -158,7 +160,7 @@ class PaymentRegisterController extends Controller
     {
         Validator::make($request->all(), [
             'provider_contr_agent_id' => 'required|exists:contr_agents,id',
-            'contractor_contr_agent_id' => 'required|exists:contr_agents,id',
+            'contractor_contr_agent_id' => ['required','exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
             'provider_contract_id' => 'required|exists:provider_contracts,id',
         ])->validate();
 

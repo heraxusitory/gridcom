@@ -85,7 +85,11 @@ class ProviderOrderController extends Controller
         ])->validate();
 
         try {
-            $order = ProviderOrder::query()->findOrFail($provider_order_id);
+            $order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $order->findOrFail($provider_order_id);
             /** @var RequirementCorrection $requirement_correction */
             $requirement_correction = $order->requirement_corrections()->findOrFail($requirement_correction_id);
 
@@ -122,7 +126,11 @@ class ProviderOrderController extends Controller
         ])->validate();
 
         try {
-            $order = ProviderOrder::query()->findOrFail($provider_order_id);
+            $order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $order->findOrFail($provider_order_id);
             $requirement_correction = $order->requirement_corrections()->findOrFail($requirement_correction_id);
 
 
@@ -162,7 +170,11 @@ class ProviderOrderController extends Controller
     public function rejectPositions(Request $request, $provider_order_id, $requirement_correction_id)
     {
         try {
-            $order = ProviderOrder::query()->findOrFail($provider_order_id);
+            $order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $order->findOrFail($provider_order_id);
             $requirement_correction = $order->requirement_corrections()->findOrFail($requirement_correction_id);
             $requirement_correction_positions_ids = $requirement_correction->positions()->pluck('id');
         } catch (ModelNotFoundException $e) {
