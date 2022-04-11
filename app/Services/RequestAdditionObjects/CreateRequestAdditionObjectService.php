@@ -35,7 +35,7 @@ class CreateRequestAdditionObjectService implements IService
                 'uuid' => Str::uuid(),
                 'date' => Carbon::today()->format('d.m.Y'),
                 'file_url' => $file_link ?? null,
-                'contr_agent_id' => $this->user->contr_agent_id,
+                'contr_agent_id' => $this->user->contr_agent_id(),
                 'work_agreement_id' => $data['work_agreement_id'] ?? null,
                 'provider_contract_id' => $data['provider_contract_id'] ?? null,
                 'organization_id' => $data['organization_id'],

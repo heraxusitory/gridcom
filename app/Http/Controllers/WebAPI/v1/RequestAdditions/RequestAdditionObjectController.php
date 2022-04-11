@@ -137,13 +137,13 @@ class RequestAdditionObjectController extends Controller
 
     public function getOrganizations(Request $request)
     {
-        //TODO: костыль переделать , когда будут роли и юзеры
-        Validator::validate($request->all(), [
-            'contr_agent_type' => ['required', Rule::in(['provider', 'contractor']),
-            ]
-        ]);
+//        //TODO: костыль переделать , когда будут роли и юзеры
+//        Validator::validate($request->all(), [
+//            'contr_agent_type' => ['required', Rule::in(['provider', 'contractor']),
+//            ]
+//        ]);
 
-        if ($request->contr_agent_type === 'contractor') {
+        if ($this->user->isContractor()) {
             Validator::validate($request->all(), [
                 'contract_id' => 'required|exists:work_agreements,id'
             ]);
@@ -154,8 +154,7 @@ class RequestAdditionObjectController extends Controller
 
             return Organization::query()->whereIn('id', $organization_ids)->get();
 
-        }
-        if ($request->contr_agent_type === 'provider') {
+        } elseif ($this->user->isProvider()) {
             Validator::validate($request->all(), [
                 'contract_id' => 'required|exists:provider_contracts,id'
             ]);
@@ -166,6 +165,8 @@ class RequestAdditionObjectController extends Controller
                 ->pluck('customer.organization_id')->unique();
 
             return Organization::query()->whereIn('id', $organization_ids)->get();
+        } else {
+            throw new BadRequestException('Данное действие разрешено следующим ролям: подрядчик, поставщик.', 403);
         }
     }
 }

@@ -33,8 +33,8 @@ class CreateRAObjectFormRequest extends FormRequest
         //TODO: костыль переделать , когда будут роли и юзеры
         Validator::validate($data, [
             'action' => ['required', Rule::in(RequestAdditionObject::getActions())],
+            'contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])]
 //            'contr_agent_type' => ['required', Rule::in(['provider', 'contractor']),
-
         ]);
 
         if (Auth::user()->isContractor()) {

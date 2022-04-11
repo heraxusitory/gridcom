@@ -129,7 +129,7 @@ class OrganizationNotificationController extends Controller
         $data = $request->all();
         Validator::validate($data, [
             'organization_id' => ['required', 'exists:organizations,id'],
-            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id'],
+            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
         ]);
 
         $contracts = ProviderOrder::query()
@@ -146,7 +146,7 @@ class OrganizationNotificationController extends Controller
         $data = $request->all();
         Validator::validate($data, [
             'organization_id' => ['required', 'exists:organizations,id'],
-            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id'],
+            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
             'contract_number' => 'required|string|max:255',
             'contract_date' => 'required|date_format:d.m.Y',
             'contract_stage' => ['required', Rule::in(ProviderOrder::STAGES())]

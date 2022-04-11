@@ -6,6 +6,7 @@ use App\Models\Notifications\Notification;
 use App\Models\ProviderOrders\ProviderOrder;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -34,7 +35,7 @@ class CreateOrganizationNotificationFormRequest extends FormRequest
             'organization_id' => 'required|exists:organizations,id',
             'contract_number' => 'required|string|exists:provider_orders,contract_number',
             'contract_date' => 'required|date_format:d.m.Y|exists:provider_orders,contract_date',
-            'provider_contr_agent_id' => 'required|exists:contr_agents,id', #TODO заглушка, поменять когда будут сущности ролей и пользователей для поставщика
+            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])], #TODO заглушка, поменять когда будут сущности ролей и пользователей для поставщика
             'contract_stage' => ['required', Rule::in(ProviderOrder::STAGES())]
         ]);
 

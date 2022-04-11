@@ -33,7 +33,7 @@ class ContractorNotificationController extends Controller
         $data = $request->all();
         Validator::validate($data, [
             'contractor_contr_agent_id' => ['required', 'exists:contr_agents,id'],
-            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id'],
+            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
         ]);
 
         $orders = Order::query()
@@ -52,7 +52,7 @@ class ContractorNotificationController extends Controller
         $data = $request->all();
         Validator::validate($data, [
             'contractor_contr_agent_id' => ['required', 'exists:contr_agents,id'],
-            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id'],
+            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
         ]);
 
         $order_query = Order::query()

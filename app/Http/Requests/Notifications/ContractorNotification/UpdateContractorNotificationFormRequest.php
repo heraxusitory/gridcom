@@ -5,6 +5,7 @@ namespace App\Http\Requests\Notifications\ContractorNotification;
 use App\Models\Notifications\Notification;
 use App\Models\Orders\LKK\Order;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -31,7 +32,7 @@ class UpdateContractorNotificationFormRequest extends FormRequest
         Validator::validate($data, [
             'action' => ['required', Rule::in(Notification::getActions())],
             'contractor_contr_agent_id' => 'required|exists:contr_agents,id',
-            'provider_contr_agent_id' => 'required|exists:contr_agents,id', #TODO заглушка, поменять когда будут сущности ролей и пользователей для поставщика
+            'provider_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])] #TODO заглушка, поменять когда будут сущности ролей и пользователей для поставщика
         ]);
 
         $orders = Order::query()
