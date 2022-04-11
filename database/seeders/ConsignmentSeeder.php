@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Consignments\Consignment;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
