@@ -20,6 +20,7 @@ class RequestAdditionObject extends Model
         'uuid',
         'number',
         'date',
+        'contr_agent_id',
         'work_agreement_id',
         'provider_contract_id',
         'organization_id',

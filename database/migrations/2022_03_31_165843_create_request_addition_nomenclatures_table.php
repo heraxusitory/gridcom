@@ -18,6 +18,7 @@ class CreateRequestAdditionNomenclaturesTable extends Migration
             $table->uuid('uuid');
             $table->string('number');
             $table->timestamp('date');
+            $table->unsignedBigInteger('contr_agent_id');
             $table->unsignedBigInteger('work_agreement_id')->nullable();
             $table->unsignedBigInteger('provider_contract_id')->nullable();
             $table->unsignedBigInteger('organization_id');

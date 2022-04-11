@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Orders;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
 
 class CreateFormRequest extends FormRequest
@@ -49,7 +50,7 @@ class CreateFormRequest extends FormRequest
             'provider.contact.phone' => 'required|string',
 //            'provider.contact_id' => 'required|integer',
 
-            'contractor.contr_agent_id' => 'required|exists:contr_agents,id',
+            'contractor.contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
 //            'contractor.contact_id' => 'required|exists:contact_persons,id',
             'contractor.contact.full_name' => 'required|string',
             'contractor.contact.email' => 'required|string',

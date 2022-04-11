@@ -9,6 +9,7 @@ use App\Models\Customer;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
 use App\Models\References\Nomenclature;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;

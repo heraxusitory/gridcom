@@ -7,6 +7,7 @@ namespace App\Services\RequestAdditionNomenclatures;
 use App\Models\RequestAdditions\RequestAdditionNomenclature;
 use App\Services\IService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -14,8 +15,11 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class CreateRequestAdditionNomenclatureService implements IService
 {
+    private ?\Illuminate\Contracts\Auth\Authenticatable $user;
+
     public function __construct(private $payload)
     {
+        $this->user = Auth::user();
     }
 
     public function run()
@@ -33,6 +37,7 @@ class CreateRequestAdditionNomenclatureService implements IService
                 'uuid' => Str::uuid(),
                 'date' => Carbon::today()->format('d.m.Y'),
                 'file_url' => $file_link ?? null,
+                'contr_agent_id' => $this->user->contr_agent_id(),
                 'work_agreement_id' => $data['work_agreement_id'] ?? null,
                 'provider_contract_id' => $data['provider_contract_id'] ?? null,
                 'organization_id' => $data['organization_id'],

@@ -7,6 +7,7 @@ namespace App\Services\RequestAdditionObjects;
 use App\Models\RequestAdditions\RequestAdditionObject;
 use App\Services\IService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -16,6 +17,7 @@ class CreateRequestAdditionObjectService implements IService
 {
     public function __construct(private $payload)
     {
+        $this->user = Auth::user();
     }
 
     public function run()
@@ -33,6 +35,7 @@ class CreateRequestAdditionObjectService implements IService
                 'uuid' => Str::uuid(),
                 'date' => Carbon::today()->format('d.m.Y'),
                 'file_url' => $file_link ?? null,
+                'contr_agent_id' => $this->user->contr_agent_id,
                 'work_agreement_id' => $data['work_agreement_id'] ?? null,
                 'provider_contract_id' => $data['provider_contract_id'] ?? null,
                 'organization_id' => $data['organization_id'],

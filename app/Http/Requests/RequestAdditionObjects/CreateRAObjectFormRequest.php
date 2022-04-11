@@ -5,8 +5,10 @@ namespace App\Http\Requests\RequestAdditionObjects;
 use App\Models\Orders\LKK\Order;
 use App\Models\RequestAdditions\RequestAdditionObject;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class CreateRAObjectFormRequest extends FormRequest
 {
@@ -31,11 +33,11 @@ class CreateRAObjectFormRequest extends FormRequest
         //TODO: костыль переделать , когда будут роли и юзеры
         Validator::validate($data, [
             'action' => ['required', Rule::in(RequestAdditionObject::getActions())],
-            'contr_agent_type' => ['required', Rule::in(['provider', 'contractor']),
-            ]
+//            'contr_agent_type' => ['required', Rule::in(['provider', 'contractor']),
+
         ]);
 
-        if ($data['contr_agent_type'] === 'contractor') {
+        if (Auth::user()->isContractor()) {
             Validator::validate($data, [
                 'work_agreement_id' => 'required|exists:work_agreements,id'
             ]);
@@ -46,8 +48,7 @@ class CreateRAObjectFormRequest extends FormRequest
 
 //            return Organization::query()->whereIn('id', $organization_ids)->pluck('id');
 
-        }
-        if ($data['contr_agent_type'] === 'provider') {
+        } elseif (Auth::user()->isProvider()) {
             Validator::validate($data, [
                 'provider_contract_id' => 'required|exists:provider_contracts,id'
             ]);
@@ -58,6 +59,8 @@ class CreateRAObjectFormRequest extends FormRequest
                 ->pluck('customer.organization_id')->unique();
 
 //            return Organization::query()->whereIn('id', $organization_ids)->pluck('id');
+        } else {
+            throw new BadRequestException('Данное действие разрешено следующим ролям: подрядчик, поставщик.', 403);
         }
 
         return [
