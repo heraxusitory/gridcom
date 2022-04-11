@@ -239,7 +239,7 @@ class DatabaseSeeder extends Seeder
             }
 
             foreach ($contr_agents as $contr_agent) {
-                $contr_agent_model = ContrAgent::query()->create(['name' => $contr_agent['name'], 'uuid' => Str::uuid(), 'inn' => rand(43454534, 434343434)]);
+                $contr_agent_model = ContrAgent::query()->create(['name' => $contr_agent['name'], 'uuid' => Str::uuid()]);
                 foreach ($contr_agent['contacts'] as $contact) {
                     $contact['uuid'] = Str::uuid();
                     $contr_agent_model->contacts()->create($contact);
