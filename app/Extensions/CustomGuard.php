@@ -145,7 +145,8 @@ class CustomGuard implements Guard
 //        }
         $class = $this->provider->getModel();
         $user = new $class();
-        $user->name = $this->decodedToken->name;
+        $user->name = $this->decodedToken->name ?? null;
+        $user->email = $this->decodedToken->email ?? null;
         $user->company_IN = $this->decodedToken->company_IN ?? null;
         $user->roles = $this->getRoles(env('KEYCLOAK_ALLOWED_RESOURCES'));
 
