@@ -25,7 +25,7 @@ class ContractorNotificationController extends Controller
 
     public function __construct()
     {
-        $this->user = Auth::user();
+        $this->user = auth('webapi')->user();
     }
 
     public function searchProviderContracts(Request $request)

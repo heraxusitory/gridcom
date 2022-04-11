@@ -22,7 +22,7 @@ class RequestAdditionObjectController extends Controller
 {
     public function __construct()
     {
-        $this->user = Auth::user();
+        $this->user = auth('webapi')->user();
     }
 
     public function index(Request $request)

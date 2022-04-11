@@ -29,7 +29,7 @@ class ConsignmentRegisterController extends Controller
 
     public function __construct()
     {
-        $this->user = Auth::user();
+        $this->user = auth('webapi')->user();
     }
 
     public function searchOrders(Request $request)
@@ -96,7 +96,7 @@ class ConsignmentRegisterController extends Controller
     {
         try {
             $consignment_register = ConsignmentRegister::query();
-            if ($this->isProvider()) {
+            if ($this->user->isProvider()) {
                 $consignment_register->where('provider_contr_agent_id', $this->user->contr_agent_id());
             } elseif ($this->user->isContractor()) {
                 $consignment_register->where('contractor_contr_agent_id', $this->user->contr_agent_id());

@@ -43,7 +43,11 @@ class OrderContractorController extends OrderController
          * @var Order $order
          */
         try {
-            $order = Order::query()->findOrFail($order_id);
+            $order = Order::query();
+            if ($this->user->isContractor()) {
+                $order->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id());
+            }
+            $order = $order->findOrFail($order_id);
             throw_if($order->customer_status !== Order::CUSTOMER_STATUS_DRAFT &&
                 $order->provider_status !== Order::PROVIDER_STATUS_DRAFT,
                 new BadRequestException('Невозможно редактировать заказ на поставку. Заказ отправлен на согласование', 400));
