@@ -38,6 +38,7 @@ class Permission extends Model
     public const RESOURCE_REFERENCE_ORGANIZATIONS = 'organizations';
     public const RESOURCE_REFERENCE_PROVIDER_CONTRACTS = 'provider_contracts';
     public const RESOURCE_REFERENCE_WORK_AGREEMENTS = 'work_agreements';
+
     public const RESOURCE_REQUEST_ADDITION_NOMENCLATURES = 'request_addition_nomenclatures';
     public const RESOURCE_REQUEST_ADDITION_OBJECTS = 'request_addition_objects';
 
