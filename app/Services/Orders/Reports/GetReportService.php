@@ -6,13 +6,10 @@ namespace App\Services\Orders\Reports;
 
 use App\Models\Consignments\Consignment;
 use App\Models\Consignments\ConsignmentPosition;
-use App\Models\Orders\LKK\Order;
-use App\Models\PaymentRegisters\PaymentRegister;
+use App\Models\Orders\Order;
 use App\Models\PaymentRegisters\PaymentRegisterPosition;
-use App\Models\References\Nomenclature;
 use App\Services\IService;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Log;
 
 class GetReportService implements IService
 {

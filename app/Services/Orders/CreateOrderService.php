@@ -6,7 +6,7 @@ namespace App\Services\Orders;
 
 use App\Models\Contractor;
 use App\Models\Customer;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
 use App\Models\References\ContactPerson;

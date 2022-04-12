@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\RequestAdditionObjects;
 
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\RequestAdditions\RequestAdditionObject;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
