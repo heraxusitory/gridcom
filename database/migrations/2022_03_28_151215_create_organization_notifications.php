@@ -15,7 +15,7 @@ class CreateOrganizationNotifications extends Migration
     {
         Schema::create('organization_notifications', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->index();
+            $table->uuid('uuid')->unique();
             $table->timestamp('date');
             $table->string('status');
             $table->string('contract_stage');

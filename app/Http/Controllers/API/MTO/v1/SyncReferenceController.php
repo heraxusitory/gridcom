@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\API\MTO;
+namespace App\Http\Controllers\API\MTO\v1;
 
 
 use App\Http\Controllers\Controller;
@@ -33,7 +33,12 @@ class SyncReferenceController extends Controller
 
         try {
             foreach ($organizations as $organization) {
-                Organization::query()->updateOrCreate(['uuid' => $organization['id']], ['name' => $organization['name']]);
+                Organization::query()->updateOrCreate([
+                    'uuid' => $organization['id']
+                ], [
+                    'name' => $organization['name'],
+                    'is_confirmed' => true,
+                ]);
             }
             return response()->json();
         } catch (\Exception $e) {
@@ -57,7 +62,12 @@ class SyncReferenceController extends Controller
 
         try {
             foreach ($contr_agents as $contr_agent) {
-                ContrAgent::query()->updateOrCreate(['uuid' => $contr_agent['id']], ['name' => $contr_agent['name']]);
+                ContrAgent::query()->updateOrCreate([
+                    'uuid' => $contr_agent['id']
+                ], [
+                    'name' => $contr_agent['name'],
+                    'is_confirmed' => true,
+                ]);
             }
             return response()->json();
         } catch (\Exception $e) {
@@ -116,10 +126,12 @@ class SyncReferenceController extends Controller
 
         try {
             foreach ($customer_objects as $customer_object) {
-                CustomerObject::query()->updateOrCreate(['uuid' => $customer_object['id']],
-                    [
-                        'name' => $customer_object['name'],
-                    ]);
+                CustomerObject::query()->updateOrCreate([
+                    'uuid' => $customer_object['id']
+                ], [
+                    'name' => $customer_object['name'],
+                    'is_confirmed' => true,
+                ]);
             }
             return response()->json();
         } catch (\Exception $e) {
@@ -145,11 +157,13 @@ class SyncReferenceController extends Controller
         try {
             foreach ($sub_objects as $sub_object) {
                 $customer_object = CustomerObject::query()->where('uuid', $sub_object['customer_object_id'])->firstOrFail();
-                CustomerSubObject::query()->updateOrCreate(['uuid' => $sub_object['id']],
-                    [
-                        'name' => $sub_object['name'],
-                        'customer_object_id' => $customer_object->id,
-                    ]);
+                CustomerSubObject::query()->updateOrCreate([
+                    'uuid' => $sub_object['id']
+                ], [
+                    'name' => $sub_object['name'],
+                    'customer_object_id' => $customer_object->id,
+                    'is_confirmed' => true,
+                ]);
             }
             return response()->json();
         } catch (\Exception $e) {
@@ -178,12 +192,14 @@ class SyncReferenceController extends Controller
             foreach ($nomenlcature as $item) {
                 DB::transaction(function () use ($item) {
                     $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $item['unit_id'])->firstOrFail();
-                    $nomenclature = Nomenclature::query()->updateOrCreate(['uuid' => $item['id']],
-                        [
-                            'mnemocode' => $item['mnemocode'],
-                            'name' => $item['name'],
-                            'price' => $item['price'],
-                        ]);
+                    $nomenclature = Nomenclature::query()->updateOrCreate([
+                        'uuid' => $item['id']
+                    ], [
+                        'mnemocode' => $item['mnemocode'],
+                        'name' => $item['name'],
+                        'price' => $item['price'],
+                        'is_confirmed' => true,
+                    ]);
                     $nomenclature->units()->attach($nomenclature_unit->id);
                 });
             }
@@ -209,10 +225,12 @@ class SyncReferenceController extends Controller
         $units = $request->nomenclature_units;
         try {
             foreach ($units as $unit) {
-                NomenclatureUnit::query()->updateOrCreate(['uuid' => $unit['id']],
-                    [
-                        'name' => $unit['name'],
-                    ]);
+                NomenclatureUnit::query()->updateOrCreate([
+                    'uuid' => $unit['id']
+                ], [
+                    'name' => $unit['name'],
+                    'is_confirmed' => true,
+                ]);
             }
             return response()->json();
         } catch (\Exception $e) {
@@ -237,11 +255,13 @@ class SyncReferenceController extends Controller
 
         try {
             foreach ($contracts as $contract) {
-                ProviderContractDocument::query()->updateOrCreate(['uuid' => $contract['id']],
-                    [
-                        'number' => $contract['number'],
-                        'date' => $contract['date'],
-                    ]);
+                ProviderContractDocument::query()->updateOrCreate([
+                    'uuid' => $contract['id']
+                ], [
+                    'number' => $contract['number'],
+                    'date' => $contract['date'],
+                    'is_confirmed' => true,
+                ]);
             }
             return response()->json();
         } catch (\Exception $e) {
@@ -266,11 +286,13 @@ class SyncReferenceController extends Controller
 
         try {
             foreach ($contracts as $contract) {
-                WorkAgreementDocument::query()->updateOrCreate(['uuid' => $contract['id']],
-                    [
-                        'number' => $contract['number'],
-                        'date' => $contract['date'],
-                    ]);
+                WorkAgreementDocument::query()->updateOrCreate([
+                    'uuid' => $contract['id']
+                ], [
+                    'number' => $contract['number'],
+                    'date' => $contract['date'],
+                    'is_confirmed' => true,
+                ]);
             }
             return response()->json();
         } catch (\Exception $e) {

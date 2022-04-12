@@ -14,5 +14,6 @@ class CustomerSubObject extends Model
         'uuid',
         'customer_object_id',
         'name',
+        'is_confirmed',
     ];
 }

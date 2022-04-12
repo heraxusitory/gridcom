@@ -16,8 +16,9 @@ class CreateWorkAgreements extends Migration
         Schema::create('work_agreements', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('number');
-            $table->timestamp('date');
+            $table->string('number')->nullable();
+            $table->timestamp('date')->nullable();
+            $table->boolean('is_confirmed')->default('false');
             $table->timestamps();
         });
     }

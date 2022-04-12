@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\API\MTO;
+namespace App\Http\Controllers\API\MTO\v1;
 
 
 use App\Http\Controllers\Controller;
@@ -38,23 +38,23 @@ class SyncOrderController extends Controller
             'orders.*.customer_status' => Rule::in(Order::getCustomerStatuses()),
             'orders.*.provider_status' => Rule::in(Order::getProviderStatuses()),
 
-            'orders.*.order_customer.organization_id' => 'required|uuid|exists:organizations,uuid',
-            'orders.*.order_customer.work_agreement_id' => 'required|uuid|exists:work_agreements,uuid',
+            'orders.*.order_customer.organization_id' => 'required|uuid',
+            'orders.*.order_customer.work_agreement_id' => 'required|uuid',
             'orders.*.order_customer.work_type' => 'required|string|max:255',
-            'orders.*.order_customer.object_id' => 'required|uuid|exists:customer_objects,uuid',
-            'orders.*.order_customer.sub_object_id' => 'required|uuid|exists:customer_sub_objects,uuid',
+            'orders.*.order_customer.object_id' => 'required|uuid',
+            'orders.*.order_customer.sub_object_id' => 'required|uuid',
             'orders.*.order_customer.work_start_date' => 'required|date_format:d.m.Y',
             'orders.*.order_customer.work_end_date' => 'required|date_format:d.m.Y',
 
-            'orders.*.order_provider.provider_contract_id' => 'required|uuid|exists:provider_contracts,uuid',
+            'orders.*.order_provider.provider_contract_id' => 'required|uuid',
 //            'orders.order_provider.contact_id' => 'required|uuid|exists:contact_persons,uuid',
-            'orders.*.order_provider.contr_agent_id' => 'required|uuid|exists:contr_agents,uuid',
+            'orders.*.order_provider.contr_agent_id' => 'required|uuid',
             'orders.*.order_provider.full_name' => 'required|string|max:255',
             'orders.*.order_provider.email' => 'required|string|max:255',
             'orders.*.order_provider.phone' => 'required|string|max:255',
 
 //            'orders.order_contractor.contact_id' => 'required|uuid|exists:contact_persons,uuid',
-            'orders.*.order_contractor.contr_agent_id' => 'required|uuid|exists:contr_agents,uuid',
+            'orders.*.order_contractor.contr_agent_id' => 'required|uuid',
             'orders.*.order_contractor.full_name' => 'required|string|max:255',
             'orders.*.order_contractor.email' => 'required|string|max:255',
             'orders.*.order_contractor.phone' => 'required|string|max:255',
@@ -64,7 +64,7 @@ class SyncOrderController extends Controller
             'orders.*.order_positions' => 'required|array',
             'orders.*.order_positions.*.position_id' => 'required|uuid',
             'orders.*.order_positions.*.status' => Rule::in(OrderPosition::getStatuses()),
-            'orders.*.order_positions.*.nomenclature_id' => 'required|uuid|exists:nomenclature,uuid',
+            'orders.*.order_positions.*.nomenclature_id' => 'required|uuid',
 //            'orders.*.order_positions.*.unit_id' => 'required|uuid|exists:nomenclature_units,uuid',
             'orders.*.order_positions.*.count' => 'required|numeric',
             'orders.*.order_positions.*.price_without_vat' => 'required|numeric',
@@ -75,18 +75,26 @@ class SyncOrderController extends Controller
 
         try {
             $orders = $request->all()['orders'];
+
             foreach ($orders as $key => $order) {
                 $object_id = $order['order_customer']['object_id'];
                 $sub_object_id = $order['order_customer']['sub_object_id'];
-                $customer_object = CustomerObject::query()->where('uuid', $object_id)->firstOrFail();
-                $customer_sub_object = CustomerSubObject::query()->where('uuid', $sub_object_id)->firstOrFail();
-                throw_if($customer_sub_object->customer_object_id !== $customer_object->id,
-                    new BadRequestException('The selected orders.' . $key . '.order_customer.sub_object_id is invalid', 422));
+                $customer_object = CustomerObject::query()->firstOrCreate([
+                    'uuid' => $object_id,
+                ]);
+                $customer_sub_object = CustomerSubObject::query()->firstOrCreate([
+                    'uuid' => $sub_object_id,
+                ], [
+                    'customer_object_id' => $customer_object->id,
+                ]);
+//                throw_if($customer_sub_object->customer_object_id !== $customer_object->id,
+//                    new BadRequestException('The selected orders.' . $key . '.order_customer.sub_object_id is invalid', 422));
             }
         } catch (BadRequestException $e) {
             return response()->json($e->getMessage(), $e->getCode());
         } catch (\Exception $e) {
-            return response()->json('System error', $e->getCode());
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json('System error', 500);
         }
 
         $data = $request->all()['orders'];
@@ -99,27 +107,39 @@ class SyncOrderController extends Controller
                     $contractor_data = $item['order_contractor'];
                     $position_data = $item['order_positions'];
 
-                    $organization = Organization::query()->where('uuid', $customer_data['organization_id'])->firstOrFail();
-                    $work_agreement = WorkAgreementDocument::query()->where('uuid', $customer_data['work_agreement_id'])->firstOrFail();
-                    $customer_object = CustomerObject::query()->where('uuid', $customer_data['object_id'])->firstOrFail();
-                    $customer_sub_object = $customer_object->subObjects()->where('uuid', $customer_data['sub_object_id'])->firstOrFail();
+                    $organization = Organization::query()->firstOrCreate([
+                        'uuid' => $customer_data['organization_id'],
+                    ]);
+                    $work_agreement = WorkAgreementDocument::query()->firstOrCreate([
+                        'uuid' => $customer_data['work_agreement_id'],
+                    ]);
+                    $customer_object = CustomerObject::query()->firstOrCreate([
+                        'uuid' => $customer_data['object_id'],
+                    ]);
+                    $customer_sub_object = $customer_object->subObjects()->firstOrCreate([
+                        'uuid' => $customer_data['sub_object_id'],
+                    ]);
                     $customer_data['organization_id'] = $organization->id;
                     $customer_data['work_agreement_id'] = $work_agreement->id;
                     $customer_data['object_id'] = $customer_object->id;
                     $customer_data['sub_object_id'] = $customer_sub_object->id;
 
-                    $provider_contr_agent = ContrAgent::query()->where('uuid', $provider_data['contr_agent_id'])->firstOrFail();
-                    $provider_contract = ProviderContractDocument::query()->where('uuid', $provider_data['provider_contract_id'])->firstOrFail();
+                    $provider_contr_agent = ContrAgent::query()->firstOrCreate([
+                        'uuid' => $provider_data['contr_agent_id'],
+                    ]);
+                    $provider_contract = ProviderContractDocument::query()->firstOrCreate([
+                        'uuid' => $provider_data['provider_contract_id'],
+                    ]);
                     $provider_data['contr_agent_id'] = $provider_contr_agent->id;
                     $provider_data['provider_contract_id'] = $provider_contract->id;
 
-                    $contractor_contr_agent = ContrAgent::query()->where('uuid', $contractor_data['contr_agent_id'])->firstOrFail();
+                    $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
+                        'uuid' => $contractor_data['contr_agent_id'],
+                    ]);
                     $contractor_data['contr_agent_id'] = $contractor_contr_agent->id;
-//                    $customer = Customer::fill($customer_data);
-//                    $provider = Provider::fill($provider_data);
-//                    $contractor = Contractor::fill($contractor_data);
 
-                    $order = Order::query()->where(['uuid' => $item['id'], 'number' => $item['number']])->firstOr(
+                    $order = Order::query()->where('uuid', $item['id'])->firstOr(
+                    //Если обьект новый и его нужно создать
                         function () use ($item, $customer_data, $provider_data, $contractor_data) {
                             $customer = Customer::query()->create($customer_data);
                             $provider = Provider::query()->create($provider_data);
@@ -139,14 +159,24 @@ class SyncOrderController extends Controller
                                 ]);
                         });
 
+                    //Если обьект существует и его нужно обновить
                     if (!$order->wasRecentlyCreated) {
                         $order->customer()->update($customer_data);
                         $order->provider()->update($provider_data);
                         $order->contractor()->update($contractor_data);
+                        $order->update([
+                            'number' => $item['number'],
+                            'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
+                            'deadline_date' => $item['deadline_date'],
+                            'customer_status' => $item['customer_status'],
+                            'provider_status' => $item['provider_status'],
+                        ]);
                     }
 
                     foreach ($position_data as $position) {
-                        $nomenclature = Nomenclature::query()->where('uuid', $position['nomenclature_id'])->firstOrFail();
+                        $nomenclature = Nomenclature::query()->firstOrCreate([
+                            'uuid' => $position['nomenclature_id'],
+                        ]);
 //                        $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $position['unit_id'])->firstOrFail();
                         $order->positions()->updateOrCreate(['position_id' => $position['position_id']], [
                             'status' => $position['status'],
@@ -163,12 +193,8 @@ class SyncOrderController extends Controller
             }
             return response()->json();
         } catch (\Exception $e) {
-            if ($e->getCode() >= 400 && $e->getCode() < 500)
-                return response()->json(['message' => $e->getMessage()], $e->getCode());
-            else {
-                Log::error($e->getMessage(), $e->getTrace());
-                return response()->json(['message' => 'System error'], 500);
-            }
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
         }
     }
 }

@@ -16,6 +16,7 @@ class Nomenclature extends Model
         'mnemocode',
         'name',
         'price',
+        'is_confirmed',
     ];
 
     public function units()

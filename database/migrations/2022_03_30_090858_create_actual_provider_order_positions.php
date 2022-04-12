@@ -15,7 +15,7 @@ class CreateActualProviderOrderPositions extends Migration
     {
         Schema::create('actual_provider_order_positions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('position_id');
+            $table->uuid('position_id')->unique();
             $table->unsignedBigInteger('provider_order_id');
             $table->unsignedBigInteger('nomenclature_id');
             $table->unsignedDouble('count');

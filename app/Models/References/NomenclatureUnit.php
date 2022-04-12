@@ -13,6 +13,7 @@ class NomenclatureUnit extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'is_confirmed',
     ];
 
     public function nomenclatures()

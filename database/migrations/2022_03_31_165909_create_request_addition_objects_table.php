@@ -15,7 +15,7 @@ class CreateRequestAdditionObjectsTable extends Migration
     {
         Schema::create('request_addition_objects', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->string('number');
             $table->timestamp('date');
             $table->unsignedBigInteger('contr_agent_id');

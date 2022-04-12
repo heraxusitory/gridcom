@@ -15,7 +15,7 @@ class CreateRequirementCorrectionPositions extends Migration
     {
         Schema::create('requirement_correction_positions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('position_id');
+            $table->uuid('position_id')->unique();
             $table->unsignedBigInteger('requirement_correction_id');
             $table->string('status');
             $table->unsignedBigInteger('nomenclature_id');

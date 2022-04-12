@@ -13,6 +13,7 @@ class Organization extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'is_confirmed',
     ];
 
 //    public function notifications()

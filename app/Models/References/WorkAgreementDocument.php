@@ -14,5 +14,6 @@ class WorkAgreementDocument extends Model
         'uuid',
         'number',
         'date',
+        'is_confirmed',
     ];
 }

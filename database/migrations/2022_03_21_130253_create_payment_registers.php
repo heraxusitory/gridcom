@@ -15,7 +15,7 @@ class CreatePaymentRegisters extends Migration
     {
         Schema::create('payment_registers', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->index();
+            $table->uuid('uuid')->unique();
             $table->string('number')->index();
             $table->string('customer_status');
             $table->string('provider_status');

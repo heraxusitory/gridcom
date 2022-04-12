@@ -15,7 +15,7 @@ class CreateProviderOrders extends Migration
     {
         Schema::create('provider_orders', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->string('number');
             $table->timestamp('order_date');
             $table->string('contract_number');

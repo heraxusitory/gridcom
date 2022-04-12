@@ -16,9 +16,10 @@ class CreateNomenclature extends Migration
         Schema::create('nomenclature', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('mnemocode')->unique();
-            $table->string('name');
-            $table->unsignedDouble('price');
+            $table->string('mnemocode')->unique()->nullable();
+            $table->string('name')->nullable();
+            $table->unsignedDouble('price')->nullable();
+            $table->boolean('is_confirmed')->default('false');
             $table->timestamps();
         });
     }

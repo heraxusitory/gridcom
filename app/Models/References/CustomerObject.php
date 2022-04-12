@@ -14,6 +14,7 @@ class CustomerObject extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'is_confirmed',
     ];
 
     public function subObjects(): HasMany

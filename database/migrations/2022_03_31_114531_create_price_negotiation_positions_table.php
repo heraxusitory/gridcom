@@ -15,7 +15,7 @@ class CreatePriceNegotiationPositionsTable extends Migration
     {
         Schema::create('price_negotiation_positions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('position_id');
+            $table->uuid('position_id')->unique();
             $table->unsignedBigInteger('price_negotiation_id');
             $table->unsignedBigInteger('nomenclature_id');
             $table->unsignedDouble('new_price_without_vat');

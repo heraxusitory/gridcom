@@ -15,7 +15,7 @@ class CreatePriceNegotiationsTable extends Migration
     {
         Schema::create('price_negotiations', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->enum('type', ['contract_work', 'contract_home_method']);
             $table->string('number');
             $table->timestamp('date');

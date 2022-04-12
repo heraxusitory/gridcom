@@ -15,7 +15,7 @@ class CreateOrderCorrectionPositions extends Migration
     {
         Schema::create('order_correction_positions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('position_id');
+            $table->uuid('position_id')->unique();
             $table->unsignedBigInteger('order_correction_id');
             $table->unsignedBigInteger('nomenclature_id');
             $table->unsignedDouble('count');

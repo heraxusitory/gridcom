@@ -4,7 +4,7 @@
 namespace App\Models\References;
 
 
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\Provider;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +16,7 @@ class ProviderContractDocument extends Model
         'uuid',
         'number',
         'date',
+        'is_confirmed',
     ];
 
     public function orders()

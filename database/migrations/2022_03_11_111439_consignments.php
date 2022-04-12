@@ -15,9 +15,9 @@ class Consignments extends Migration
     {
         Schema::create('consignments', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->index();
+            $table->uuid('uuid')->unique();
             $table->string('number');
-            $table->unique(['uuid', 'number'], 'consignments_uuid_number_unique');
+//            $table->unique(['uuid', 'number'], 'consignments_uuid_number_unique');
             $table->boolean('is_approved')->default(false);
             $table->timestamp('date');
             $table->unsignedBigInteger('order_id');

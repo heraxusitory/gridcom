@@ -15,7 +15,7 @@ class CreateRequirementCorrections extends Migration
     {
         Schema::create('requirement_corrections', function (Blueprint $table) {
             $table->id();
-            $table->uuid('correction_id');
+            $table->uuid('correction_id')->unique();
             $table->unsignedBigInteger('provider_order_id');
             $table->timestamp('date');
             $table->string('number');

@@ -15,7 +15,7 @@ class CreateContractorNotifications extends Migration
     {
         Schema::create('contractor_notifications', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->index();
+            $table->uuid('uuid')->unique();
             $table->timestamp('date');
             $table->string('status');
             $table->unsignedBigInteger('contractor_contr_agent_id');

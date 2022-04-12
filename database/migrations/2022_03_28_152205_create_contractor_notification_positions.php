@@ -15,7 +15,7 @@ class CreateContractorNotificationPositions extends Migration
     {
         Schema::create('contractor_notification_positions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('position_id');
+            $table->uuid('position_id')->unique();
             $table->unsignedBigInteger('contractor_notification_id');
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('nomenclature_id');

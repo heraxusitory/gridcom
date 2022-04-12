@@ -5,7 +5,6 @@ namespace App\Models\References;
 
 
 use App\Models\User;
-use App\Models\UserToContrAgent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -16,6 +15,7 @@ class ContrAgent extends Model
     protected $fillable = [
         'uuid',
         'name',
+        'is_confirmed',
     ];
 
     protected $hidden = [

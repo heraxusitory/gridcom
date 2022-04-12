@@ -15,7 +15,7 @@ class CreateRequestAdditionNomenclaturesTable extends Migration
     {
         Schema::create('request_addition_nomenclatures', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid');
+            $table->uuid('uuid')->unique();
             $table->string('number');
             $table->timestamp('date');
             $table->unsignedBigInteger('contr_agent_id');

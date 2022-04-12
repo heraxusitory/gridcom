@@ -1,7 +1,7 @@
 <?php
 
 
-use App\Http\Controllers\API\MTO\SyncReferenceController;
+use App\Http\Controllers\API\MTO\v1\SyncReferenceController;
 
 Route::group(['prefix' => 'references'], function () {
     Route::post('organizations/sync', [SyncReferenceController::class, 'syncOrganizations']);

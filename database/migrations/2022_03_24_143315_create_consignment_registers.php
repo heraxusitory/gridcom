@@ -16,7 +16,7 @@ class CreateConsignmentRegisters extends Migration
         //TODO работа на сегодня
         Schema::create('consignment_registers', function (Blueprint $table) {
             $table->id();
-            $table->uuid('uuid')->index();
+            $table->uuid('uuid')->unique();
             $table->string('number')->index();
             $table->string('customer_status');
             $table->string('contr_agent_status');
