@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Http\Controllers\Integrations\AsMts;
+namespace App\Http\Controllers\API\MTO;
 
 
 use App\Http\Controllers\Controller;

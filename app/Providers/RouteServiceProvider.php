@@ -39,15 +39,15 @@ class RouteServiceProvider extends ServiceProvider
         $this->configureWebAPIRateLimiting();
 
         $this->routes(function () {
-            Route::prefix('api')
+            Route::prefix('api/integrations/lkk-mto')
                 ->middleware('api')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/api.php'));
+                ->group(base_path('routes/api/lkk-mto/v1/index.php'));
 
             Route::prefix('webapi')
                 ->middleware('webapi')
                 ->namespace($this->namespace)
-                ->group(base_path('routes/webapi/index.php'));
+                ->group(base_path('routes/webapi/v1/index.php'));
 
             Route::middleware('web')
                 ->namespace($this->namespace)

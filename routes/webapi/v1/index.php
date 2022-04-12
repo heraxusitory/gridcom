@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth:webapi']], function () {
 
-    Route::get('me', [\App\Http\Controllers\AuthController::class, 'me']);
+    Route::get('me', [AuthController::class, 'me']);
     require 'references.php';
     require 'orders.php';
     require 'provider_orders.php';
