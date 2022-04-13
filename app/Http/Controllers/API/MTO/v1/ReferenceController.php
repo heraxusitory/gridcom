@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class SyncReferenceController extends Controller
+class ReferenceController extends Controller
 {
     public function syncOrganizations(Request $request)
     {

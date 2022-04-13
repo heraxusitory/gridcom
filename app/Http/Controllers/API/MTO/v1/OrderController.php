@@ -26,9 +26,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
-class SyncOrderController extends Controller
+class OrderController extends Controller
 {
-    public function pull(Request $request)
+    public function sync(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'orders' => 'required|array',
@@ -173,12 +173,13 @@ class SyncOrderController extends Controller
                         ]);
                     }
 
+                    $position_ids = [];
                     foreach ($position_data as $position) {
                         $nomenclature = Nomenclature::query()->firstOrCreate([
                             'uuid' => $position['nomenclature_id'],
                         ]);
 //                        $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $position['unit_id'])->firstOrFail();
-                        $order->positions()->updateOrCreate(['position_id' => $position['position_id']], [
+                        $position = $order->positions()->updateOrCreate(['position_id' => $position['position_id']], [
                             'status' => $position['status'],
                             'nomenclature_id' => $nomenclature->id,
                             #'unit_id' => $nomenclature_unit->id,
@@ -188,7 +189,9 @@ class SyncOrderController extends Controller
                             'delivery_time' => $position['delivery_time'],
                             'delivery_address' => $position['delivery_address'],
                         ]);
+                        $position_ids[] = $position->id;
                     }
+                    $order->positions()->whereNotIn('id', $position_ids)->delete();
                 });
             }
             return response()->json();

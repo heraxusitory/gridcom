@@ -3,7 +3,7 @@
 namespace App\Http\Requests\Notifications\ContractorNotification;
 
 use App\Models\Notifications\Notification;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;

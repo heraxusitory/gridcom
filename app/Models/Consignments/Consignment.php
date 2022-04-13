@@ -4,7 +4,7 @@
 namespace App\Models\Consignments;
 
 
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Traits\UsesConsignmentNumber;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

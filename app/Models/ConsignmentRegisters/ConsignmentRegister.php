@@ -56,6 +56,41 @@ class ConsignmentRegister extends Model
         ];
     }
 
+    public static function getCustomerStatuses(): array
+    {
+        return [
+            self::CUSTOMER_STATUS_AGREED,
+            self::CUSTOMER_STATUS_NOT_AGREED,
+            self::CUSTOMER_STATUS_UNDER_CONSIDERATION,
+            self::CUSTOMER_STATUS_UNDER_CONSIDERATION,
+            self::CUSTOMER_STATUS_DRAFT,
+            self::CUSTOMER_STATUS_CANCELED
+        ];
+    }
+
+    public static function getProviderStatuses(): array
+    {
+        return [
+            self::PROVIDER_STATUS_AGREED,
+            self::PROVIDER_STATUS_DRAFT,
+            self::PROVIDER_STATUS_UNDER_CONSIDERATION,
+            self::PROVIDER_STATUS_NOT_AGREED,
+            self::PROVIDER_STATUS_CANCELED
+        ];
+    }
+
+    public static function getContrAgentStatuses(): array
+    {
+        return [
+            self::PROVIDER_STATUS_AGREED,
+            self::PROVIDER_STATUS_DRAFT,
+            self::PROVIDER_STATUS_UNDER_CONSIDERATION,
+            self::PROVIDER_STATUS_NOT_AGREED,
+            self::PROVIDER_STATUS_CANCELED,
+            self::CONTRACTOR_STATUS_SELF_PURCHASE,
+        ];
+    }
+
     public function positions()
     {
         return $this->hasMany(
