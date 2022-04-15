@@ -77,7 +77,7 @@ class CreateConsignmentRegisterFormRequest extends FormRequest
 //            'positions.*.price_without_vat' => 'required|numeric',
             //TODO отрефакторить ставку НДС
             'positions.*.vat_rate' => ['required', Rule::in([1, 1.13, 1.2, 1.3, 1.4])],
-            'positions.*.country' => 'required|string',
+            'positions.*.country' => ['required','string', Rule::in(array_keys(config('countries')))],
             'positions.*.cargo_custom_declaration' => 'required|string',
             'positions.*.declaration' => 'required|string',
         ];
