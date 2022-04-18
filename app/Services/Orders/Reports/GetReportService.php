@@ -27,7 +27,9 @@ class GetReportService implements IService
 
 
         $consignment_last_date = Consignment::query()
-            ->where('order_id', $this->order->id)
+            ->whereHas('positions',function ($q) {
+                $q->where('order_id', $this->order->id);
+            })
             ->orderByDesc('date')
             ->first()?->date;
         $this->top_report['payment_period'] = isset($consignment_last_date) ? (new Carbon($consignment_last_date))->format('d.m.Y') . ' - ' . (new Carbon($consignment_last_date))->addMonth()->format('d.m.Y') : null;
@@ -51,7 +53,7 @@ class GetReportService implements IService
             consignments.date as consignment_date
             ")
             ->join('consignments', 'consignment_positions.consignment_id', 'consignments.id')
-            ->where('consignments.order_id', $this->order->id)
+            ->where('consignment_positions.order_id', $this->order->id)
             ->orderBy('consignments.date')
             ->get();
 
@@ -85,7 +87,7 @@ class GetReportService implements IService
             consignments.date as delivery_fact_time
             ")
             ->join('consignments', 'consignment_positions.consignment_id', 'consignments.id')
-            ->where('consignments.order_id', $this->order->id)
+            ->where('consignment_positions.order_id', $this->order->id)
             ->join('nomenclature', 'consignment_positions.nomenclature_id', '=', 'nomenclature.id')
             ->groupBy(['nomenclature.mnemocode', 'consignments.date'])
             ->orderBy('consignments.date')
