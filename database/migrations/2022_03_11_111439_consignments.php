@@ -17,10 +17,17 @@ class Consignments extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('number');
+            $table->unsignedBigInteger('organization_id');
+            $table->unsignedBigInteger('provider_contr_agent_id');
+            $table->unsignedBigInteger('provider_contract_id');
+            $table->unsignedBigInteger('contractor_contr_agent_id');
+            $table->unsignedBigInteger('work_agreement_id');
+            $table->unsignedBigInteger('customer_object_id');
+            $table->unsignedBigInteger('customer_sub_object_id');
 //            $table->unique(['uuid', 'number'], 'consignments_uuid_number_unique');
             $table->boolean('is_approved')->default(false);
             $table->timestamp('date');
-            $table->unsignedBigInteger('order_id');
+//            $table->unsignedBigInteger('order_id');
             $table->string('responsible_full_name');
             $table->string('responsible_phone');
             $table->tinyText('comment');
