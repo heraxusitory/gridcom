@@ -17,6 +17,7 @@ class CreateNomenclatureUnits extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('name');
+            $table->boolean('is_confirmed')->default('false');
             $table->timestamps();
         });
     }
