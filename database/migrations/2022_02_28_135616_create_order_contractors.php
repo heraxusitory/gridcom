@@ -16,12 +16,12 @@ class CreateOrderContractors extends Migration
         Schema::create('order_contractors', function (Blueprint $table) {
             $table->id();
 //            $table->unsignedBigInteger('contact_id');
-            $table->unsignedBigInteger('contr_agent_id');
-            $table->string('full_name');
+            $table->unsignedBigInteger('contr_agent_id')->nullable();
+            $table->string('full_name')->nullable();
             $table->string('email')->nullable();
-            $table->string('phone');
-            $table->string('contractor_responsible_full_name');
-            $table->string('contractor_responsible_phone');
+            $table->string('phone')->nullable();
+            $table->string('contractor_responsible_full_name')->nullable();
+            $table->string('contractor_responsible_phone')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();
         });

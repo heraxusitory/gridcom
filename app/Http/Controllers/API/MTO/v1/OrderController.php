@@ -33,10 +33,10 @@ class OrderController extends Controller
         $validator = Validator::make($request->all(), [
             'orders' => 'required|array',
             'orders.*.id' => 'required|uuid',
-            'orders.*.number' => 'required|string|max:255',
-            'orders.*.deadline_date' => 'required|date_format:d.m.Y',
-            'orders.*.customer_status' => Rule::in(Order::getCustomerStatuses()),
-            'orders.*.provider_status' => Rule::in(Order::getProviderStatuses()),
+            'orders.*.number' => 'nullable|string|max:255',
+            'orders.*.deadline_date' => 'nullable|date_format:d.m.Y',
+            'orders.*.customer_status' => [Rule::in(Order::getCustomerStatuses())],
+            'orders.*.provider_status' => [Rule::in(Order::getProviderStatuses())],
 
             'orders.*.order_customer.organization_id' => 'required|uuid',
             'orders.*.order_customer.work_agreement_id' => 'required|uuid',
@@ -49,28 +49,28 @@ class OrderController extends Controller
             'orders.*.order_provider.provider_contract_id' => 'required|uuid',
 //            'orders.order_provider.contact_id' => 'required|uuid|exists:contact_persons,uuid',
             'orders.*.order_provider.contr_agent_id' => 'required|uuid',
-            'orders.*.order_provider.full_name' => 'required|string|max:255',
-            'orders.*.order_provider.email' => 'required|string|max:255',
-            'orders.*.order_provider.phone' => 'required|string|max:255',
+            'orders.*.order_provider.full_name' => 'nullable|string|max:255',
+            'orders.*.order_provider.email' => 'nullable|string|max:255',
+            'orders.*.order_provider.phone' => 'nullable|string|max:255',
 
 //            'orders.order_contractor.contact_id' => 'required|uuid|exists:contact_persons,uuid',
             'orders.*.order_contractor.contr_agent_id' => 'required|uuid',
-            'orders.*.order_contractor.full_name' => 'required|string|max:255',
-            'orders.*.order_contractor.email' => 'required|string|max:255',
-            'orders.*.order_contractor.phone' => 'required|string|max:255',
-            'orders.*.order_contractor.contractor_responsible_full_name' => 'required|string|max:255',
-            'orders.*.order_contractor.contractor_responsible_phone' => 'required|string|max:255',
+            'orders.*.order_contractor.full_name' => 'nullable|string|max:255',
+            'orders.*.order_contractor.email' => 'nullable|string|max:255',
+            'orders.*.order_contractor.phone' => 'nullable|string|max:255',
+            'orders.*.order_contractor.contractor_responsible_full_name' => 'nullable|string|max:255',
+            'orders.*.order_contractor.contractor_responsible_phone' => 'nullable|string|max:255',
 
-            'orders.*.order_positions' => 'required|array',
+            'orders.*.order_positions' => 'nullable|array',
             'orders.*.order_positions.*.position_id' => 'required|uuid',
-            'orders.*.order_positions.*.status' => Rule::in(OrderPosition::getStatuses()),
+            'orders.*.order_positions.*.status' => ['nullable', Rule::in(OrderPosition::getStatuses())],
             'orders.*.order_positions.*.nomenclature_id' => 'required|uuid',
 //            'orders.*.order_positions.*.unit_id' => 'required|uuid|exists:nomenclature_units,uuid',
-            'orders.*.order_positions.*.count' => 'required|numeric',
-            'orders.*.order_positions.*.price_without_vat' => 'required|numeric',
-            'orders.*.order_positions.*.amount_without_vat' => 'required|numeric',
-            'orders.*.order_positions.*.delivery_time' => 'required|date_format:d.m.Y',
-            'orders.*.order_positions.*.delivery_address' => 'required|string|max:255',
+            'orders.*.order_positions.*.count' => 'nullable|numeric',
+            'orders.*.order_positions.*.price_without_vat' => 'nullable|numeric',
+            'orders.*.order_positions.*.amount_without_vat' => 'nullable|numeric',
+            'orders.*.order_positions.*.delivery_time' => 'nullable|date_format:d.m.Y',
+            'orders.*.order_positions.*.delivery_address' => 'nullable|string|max:255',
         ])->validate();
 
         try {
@@ -102,10 +102,10 @@ class OrderController extends Controller
         try {
             foreach ($data as $item) {
                 DB::transaction(function () use ($item) {
-                    $customer_data = $item['order_customer'];
-                    $provider_data = $item['order_provider'];
-                    $contractor_data = $item['order_contractor'];
-                    $position_data = $item['order_positions'];
+                    $customer_data = $item['order_customer'] ?? [];
+                    $provider_data = $item['order_provider'] ?? [];
+                    $contractor_data = $item['order_contractor'] ?? [];
+                    $position_data = $item['order_positions'] ?? [];
 
                     $organization = Organization::query()->firstOrCreate([
                         'uuid' => $customer_data['organization_id'],
@@ -148,9 +148,9 @@ class OrderController extends Controller
                             return Order::query()->create(
                                 [
                                     'uuid' => $item['id'],
-                                    'number' => $item['number'],
+                                    'number' => $item['number'] ?? null,
                                     'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
-                                    'deadline_date' => $item['deadline_date'],
+                                    'deadline_date' => $item['deadline_date'] ?? null,
                                     'customer_status' => $item['customer_status'],
                                     'provider_status' => $item['provider_status'],
                                     'customer_id' => $customer->id,
@@ -165,9 +165,9 @@ class OrderController extends Controller
                         $order->provider()->update($provider_data);
                         $order->contractor()->update($contractor_data);
                         $order->update([
-                            'number' => $item['number'],
+                            'number' => $item['number'] ?? null,
                             'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
-                            'deadline_date' => $item['deadline_date'],
+                            'deadline_date' => $item['deadline_date'] ?? null,
                             'customer_status' => $item['customer_status'],
                             'provider_status' => $item['provider_status'],
                         ]);
@@ -180,14 +180,14 @@ class OrderController extends Controller
                         ]);
 //                        $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $position['unit_id'])->firstOrFail();
                         $position = $order->positions()->updateOrCreate(['position_id' => $position['position_id']], [
-                            'status' => $position['status'],
+                            'status' => $position['status'] ?? null,
                             'nomenclature_id' => $nomenclature->id,
                             #'unit_id' => $nomenclature_unit->id,
-                            'count' => $position['count'],
-                            'price_without_vat' => $position['price_without_vat'],
-                            'amount_without_vat' => $position['amount_without_vat'],
-                            'delivery_time' => $position['delivery_time'],
-                            'delivery_address' => $position['delivery_address'],
+                            'count' => $position['count'] ?? null,
+                            'price_without_vat' => $position['price_without_vat'] ?? null,
+                            'amount_without_vat' => $position['amount_without_vat'] ?? null,
+                            'delivery_time' => $position['delivery_time'] ?? null,
+                            'delivery_address' => $position['delivery_address'] ?? null,
                         ]);
                         $position_ids[] = $position->id;
                     }
