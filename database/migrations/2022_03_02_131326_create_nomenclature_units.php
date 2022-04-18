@@ -16,7 +16,7 @@ class CreateNomenclatureUnits extends Migration
         Schema::create('nomenclature_units', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->boolean('is_confirmed')->default('false');
             $table->timestamps();
         });

@@ -150,13 +150,13 @@ class ReferenceController extends Controller
             'customer_sub_objects' => 'required|array',
             'customer_sub_objects.*.id' => 'required|uuid',
             'customer_sub_objects.*.name' => 'required|string|max:255',
-            'customer_sub_objects.*.customer_object_id' => 'required|uuid|exists:customer_objects,uuid',
+            'customer_sub_objects.*.customer_object_id' => 'required|uuid',
         ])->validate();
         $sub_objects = $request->customer_sub_objects;
 
         try {
             foreach ($sub_objects as $sub_object) {
-                $customer_object = CustomerObject::query()->where('uuid', $sub_object['customer_object_id'])->firstOrFail();
+                $customer_object = CustomerObject::query()->firstOrCreate(['uuid' => $sub_object['customer_object_id']]);
                 CustomerSubObject::query()->updateOrCreate([
                     'uuid' => $sub_object['id']
                 ], [
@@ -184,14 +184,14 @@ class ReferenceController extends Controller
             'nomenclature.*.mnemocode' => 'required|string|max:255',
             'nomenclature.*.name' => 'required|string|max:255',
             'nomenclature.*.price' => 'required|numeric',
-            'nomenclature.*.unit_id' => 'required|exists:nomenclature_units,uuid',
+            'nomenclature.*.unit_id' => 'required|uuid',
         ])->validate();
         $nomenlcature = $request->nomenclature;
 
         try {
             foreach ($nomenlcature as $item) {
                 DB::transaction(function () use ($item) {
-                    $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $item['unit_id'])->firstOrFail();
+                    $nomenclature_unit = NomenclatureUnit::query()->firstOrCreate(['uuid' => $item['unit_id']]);
                     $nomenclature = Nomenclature::query()->updateOrCreate([
                         'uuid' => $item['id']
                     ], [
