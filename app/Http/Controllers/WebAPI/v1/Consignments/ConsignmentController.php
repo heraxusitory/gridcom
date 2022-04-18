@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\WebAPI\v1\Consignments;
 
 
+use App\Extensions\CustomValidators\CreateConsignmentValidator;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Consignments\CreateConsignmentFormRequest;
 use App\Http\Requests\Consignments\UpdateConsignmentFormRequest;
@@ -53,9 +54,9 @@ class ConsignmentController extends Controller
         try {
             $consignment = Consignment::query();
             if ($this->user->isProvider()) {
-                $consignment->whereRelation('order.provider', 'contr_agent_id', $this->user->contr_agent_id());
+                $consignment->where('provider_contr_agent_id', $this->user->contr_agent_id());
             } elseif ($this->user->isContractor()) {
-                $consignment->whereRelation('order.contractor', 'contr_agent_id', $this->user->contr_agent_id());
+                $consignment->where('contractor_contr_agent_id', $this->user->contr_agent_id());
             }
             /** @var Consignment $consignment */
             $consignment = $consignment->findOrFail($consignment_id);
@@ -75,17 +76,21 @@ class ConsignmentController extends Controller
 
     public function create(CreateConsignmentFormRequest $request)
     {
-        try {
+//        try {
             $consignment = (new CreateConsignmentService($request->all()))->run();
             return response()->json(['data' => $consignment]);
-        } catch (\Exception $e) {
-            if ($e->getCode() >= 400 && $e->getCode() < 500)
-                return response()->json(['message' => $e->getMessage()], $e->getCode());
-            else {
-                Log::error($e->getMessage(), $e->getTrace());
-                return response()->json(['message' => 'System error'], 500);
-            }
-        }
+//        } catch (ModelNotFoundException $e) {
+//            return response()->json(['message' => $e->getMessage()], 404);
+//        } catch (BadRequestException $e) {
+//            return response()->json(['message' => $e->getMessage()], 422);
+//        } catch (\Exception $e) {
+//            if ($e->getCode() >= 400 && $e->getCode() < 500)
+//                return response()->json(['message' => $e->getMessage()], $e->getCode());
+//            else {
+//                Log::error($e->getMessage(), $e->getTrace());
+//                return response()->json(['message' => 'System error'], 500);
+//            }
+//        }
     }
 
     public function update(UpdateConsignmentFormRequest $request, $consignment_id)

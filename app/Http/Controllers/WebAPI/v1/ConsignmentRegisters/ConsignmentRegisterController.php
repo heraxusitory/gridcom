@@ -56,13 +56,27 @@ class ConsignmentRegisterController extends Controller
 
     public function searchConsignments(Request $request)
     {
-        Validator::make($request->all(), [
-            'order_ids' => ['required', 'array'],
-            'order_ids.*' => ['required', 'exists:orders,id']
+        $data = $request->all();
+        Validator::make($data, [
+//            'order_ids' => ['required', 'array'],
+//            'order_ids.*' => ['required', 'exists:orders,id']
+            'organization_id' => 'required|integer|exists:organizations,id',
+            'provider_contr_agent_id' => 'required|integer|exists:contr_agents,id',
+            'contractor_contr_agent_id' => 'required|integer|exists:contr_agents,id',
+            'customer_object_id' => 'required|integer|exists:customer_objects,id',
+            'customer_sub_object_id' => 'required|integer|exists:customer_sub_objects,id',
+            'work_agreement_id' => 'required|integer|exists:work_agreements,id',
         ])->validate();
 
         $consignments = Consignment::query()
-            ->whereIn('order_id', $request->order_ids)
+            ->where([
+                'organization_id' => $data['organization_id'],
+                'provider_contr_agent_id' => $data['provider_contr_agent_id'],
+                'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
+                'customer_object_id' => $data['customer_object_id'],
+                'customer_sub_object_id' => $data['customer_sub_object_id'],
+                'work_agreement_id' => $data['work_agreement_id'],
+            ])
             ->with('positions.nomenclature')
             ->get();
 

@@ -15,7 +15,13 @@ class GetConsignmentService implements IService
 
     public function run()
     {
-        $consignment = $this->consignment->newQuery()->with([
+        $consignment = $this->consignment->newQuery()
+            ->with([
+                'provider',
+                'contractor',
+                'work_agreement',
+                'provider_contract',
+            ])/*->with([
             'order',
             'order.customer.contract',
             'order.customer.organization',
@@ -24,7 +30,7 @@ class GetConsignmentService implements IService
             'order.provider.contact.contrAgentName',
             'order.provider.contract',
             'order.contractor.contact.contrAgentName',
-        ])->first();
+        ])*/ ->first();
 
         return $consignment;
     }

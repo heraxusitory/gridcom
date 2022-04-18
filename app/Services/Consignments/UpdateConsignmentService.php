@@ -32,7 +32,14 @@ class UpdateConsignmentService implements IService
         return DB::transaction(function () use ($data) {
             $this->consignment->update([
                 'date' => Carbon::today()->format('d.m.Y'),
-                'order_id' => $data['order_id'],
+//                'order_id' => $data['order_id'],
+                'organization_id' => $data['organization_id'],
+                'provider_contr_agent_id' => $data['provider_contr_agent_id'],
+                'provider_contract_id' => $data['provider_contract_id'],
+                'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
+                'work_agreement_id' => $data['work_agreement_id'],
+                'customer_object_id' => $data['customer_object_id'],
+                'customer_sub_object_id' => $data['customer_sub_object_id'],
                 'responsible_full_name' => $data['responsible_full_name'],
                 'responsible_phone' => $data['responsible_phone'],
                 'comment' => $data['comment'],
@@ -47,6 +54,7 @@ class UpdateConsignmentService implements IService
                     'position_id' => $position['position_id'] ?? null
                 ], [
                     'position_id' => $position['position_id'] ?? Str::uuid(),
+                    'order_id' => $position['order_id'],
                     'nomenclature_id' => $position['nomenclature_id'],
                     'count' => $position['count'],
                     'price_without_vat' => $nomenclature->price,

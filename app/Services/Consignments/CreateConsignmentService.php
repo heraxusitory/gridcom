@@ -25,7 +25,14 @@ class CreateConsignmentService implements IService
             $consignment = Consignment::query()->create([
                 'uuid' => Str::uuid(),
                 'date' => Carbon::today()->format('d.m.Y'),
-                'order_id' => $data['order_id'],
+                'organization_id' => $data['organization_id'],
+                'provider_contr_agent_id' => $data['provider_contr_agent_id'],
+                'provider_contract_id' => $data['provider_contract_id'],
+                'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
+                'work_agreement_id' => $data['work_agreement_id'],
+                'customer_object_id' => $data['customer_object_id'],
+                'customer_sub_object_id' => $data['customer_sub_object_id'],
+//                'order_id' => $data['order_id'],
                 'responsible_full_name' => $data['responsible_full_name'],
                 'responsible_phone' => $data['responsible_phone'],
                 'comment' => $data['comment'],
@@ -37,6 +44,7 @@ class CreateConsignmentService implements IService
                 $amount_with_vat = round($amount_without_vat * $position['vat_rate'], 2);
                 $consignment->positions()->create([
                     'position_id' => Str::uuid(),
+                    'order_id' => $position['order_id'],
                     'nomenclature_id' => $position['nomenclature_id'],
                     'count' => $position['count'],
                     'price_without_vat' => $nomenclature->price,
