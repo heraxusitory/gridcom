@@ -4,14 +4,12 @@
 namespace App\Models\Consignments;
 
 
-use App\Models\Orders\Order;
 use App\Models\References\ContrAgent;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
 use App\Traits\UsesConsignmentNumber;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Consignment extends Model
 {

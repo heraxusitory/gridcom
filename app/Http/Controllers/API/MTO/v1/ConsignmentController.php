@@ -7,7 +7,13 @@ namespace App\Http\Controllers\API\MTO\v1;
 use App\Http\Controllers\Controller;
 use App\Models\Consignments\Consignment;
 use App\Models\Orders\Order;
+use App\Models\References\ContrAgent;
+use App\Models\References\CustomerObject;
+use App\Models\References\CustomerSubObject;
 use App\Models\References\Nomenclature;
+use App\Models\References\Organization;
+use App\Models\References\ProviderContractDocument;
+use App\Models\References\WorkAgreementDocument;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,13 +30,21 @@ class ConsignmentController extends Controller
             'consignments.*.id' => 'required|uuid',
             'consignments.*.number' => 'required|string|max:255',
             'consignments.*.date' => 'required|date_format:d.m.Y',
-            'consignments.*.order_id' => 'required|uuid|exists:orders,uuid',
-            'consignments.*.responsible_full_name' => 'required|string|max:255',
-            'consignments.*.responsible_phone' => 'required|string|max:255',
-            'consignments.*.comment' => 'required|string',
+            'consignments.*.organization_id' => ['required', 'uuid',],
+            'consignments.*.provider_contr_agent_id' => 'required|uuid',
+            'consignments.*.provider_contract_id' => 'required|uuid',
+            'consignments.*.contractor_contr_agent_id' => 'required|uuid',
+            'consignments.*.work_agreement_id' => 'required|uuid',
+            'consignments.*.customer_object_id' => 'required|uuid',
+            'consignments.*.customer_sub_object_id' => 'required|uuid',
+//            'consignments.*.order_id' => 'required|uuid|exists:orders,uuid',
+            'consignments.*.responsible_full_name' => 'nullable|string|max:255',
+            'consignments.*.responsible_phone' => 'nullable|string|max:255',
+            'consignments.*.comment' => 'nullable|string',
 
-            'consignments.*.positions' => 'required|array',
+            'consignments.*.positions' => 'nullable|array',
             'consignments.*.positions.*.id' => 'required|uuid',
+            'consignments.*.positions.*.order_id' => 'required|uuid|exists:orders,uuid',
             'consignments.*.positions.*.nomenclature_id' => 'required|uuid',
             'consignments.*.positions.*.count' => 'required|numeric',
             'consignments.*.positions.*.price_without_vat' => 'required|numeric',
@@ -48,17 +62,30 @@ class ConsignmentController extends Controller
             foreach ($data as $item) {
                 DB::transaction(function () use ($item) {
                     $position_data = $item['positions'];
-                    $order = Order::query()->where('uuid', $item['order_id'])->firstOrFail();
+
+                    $organization = Organization::query()->firstOrCreate(['uuid' => $item['organization_id']]);
+                    $provider_contr_agent = ContrAgent::query()->firstOrCreate(['uuid' => $item['provider_contr_agent_id']]);
+                    $provider_contract = ProviderContractDocument::query()->firstOrCreate(['uuid' => $item['provider_contract_id']]);
+                    $contractor_contr_agent = ContrAgent::query()->firstOrCreate(['uuid' => $item['contractor_contr_agent_id']]);
+                    $work_agreement = WorkAgreementDocument::query()->firstOrCreate(['uuid' => $item['work_agreement_id']]);
+                    $object = CustomerObject::query()->firstOrCreate(['uuid' => $item['customer_object_id']]);
+                    $sub_object = $object->subObjects()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
 
                     $consignment = Consignment::query()->updateOrCreate([
                         'uuid' => $item['id'],
                     ], [
                         'number' => $item['number'],
                         'date' => (new Carbon($item['date']))->format('d.m.Y'),
-                        'order_id' => $order->id,
-                        'responsible_full_name' => $item['responsible_full_name'],
-                        'responsible_phone' => $item['responsible_phone'],
-                        'comment' => $item['comment'],
+                        'organization_id' => $organization->id,
+                        'provider_contr_agent_id' => $provider_contr_agent->id,
+                        'provider_contract_id' => $provider_contract->id,
+                        'contractor_contr_agent_id' => $contractor_contr_agent->id,
+                        'work_agreement_id' => $work_agreement->id,
+                        'customer_object_id' => $object->id,
+                        'customer_sub_object_id' => $sub_object->id,
+                        'responsible_full_name' => $item['responsible_full_name'] ?? null,
+                        'responsible_phone' => $item['responsible_phone'] ?? null,
+                        'comment' => $item['comment'] ?? null,
                     ]);
 
                     $position_ids = [];
@@ -66,10 +93,13 @@ class ConsignmentController extends Controller
                         $nomenclature = Nomenclature::query()->firstOrCreate([
                             'uuid' => $position['nomenclature_id'],
                         ]);
+                        $order = Order::query()->where('uuid', $position['order_id'])->firstOrFail();
+
                         $position = $consignment->positions()->updateOrCreate([
                             'position_id' => $position['id'],
                         ],
                             [
+                                'order_id' => $order->id,
                                 'nomenclature_id' => $nomenclature->id,
                                 'count' => $position['count'],
                                 'price_without_vat' => $position['price_without_vat'],

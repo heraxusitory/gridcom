@@ -28,12 +28,14 @@ class ConsignmentRegisterController
             'consignment_registers.*.number' => 'required|string|max:255',
             'consignment_registers.*.customer_status' => Rule::in(ConsignmentRegister::getCustomerStatuses()),
             'consignment_registers.*.contr_agent_status' => Rule::in(ConsignmentRegister::getContrAgentStatuses()),
+
             'consignment_registers.*.organization_id' => 'required|uuid',
             'consignment_registers.*.contractor_contr_agent_id' => 'required|uuid',
             'consignment_registers.*.provider_contr_agent_id' => 'required|uuid',
             'consignment_registers.*.customer_object_id' => 'required|uuid',
             'consignment_registers.*.customer_sub_object_id' => 'required|uuid',
             'consignment_registers.*.work_agreement_id' => 'required|uuid',
+
             'consignment_registers.*.responsible_full_name' => 'required|string|max:255',
             'consignment_registers.*.responsible_phone' => 'required|string|max:255',
             'consignment_registers.*.comment' => 'required|string',
