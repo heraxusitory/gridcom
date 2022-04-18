@@ -15,7 +15,7 @@ class CreateOrderPositions extends Migration
     {
         Schema::create('order_positions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('position_id')->unique(); //TODO спорный вопрос делать ли это поле и тем более уникальным для обеих сторон
+            $table->uuid('position_id'); //TODO спорный вопрос делать ли это поле и тем более уникальным для обеих сторон
             $table->unsignedBigInteger('order_id');
 //            $table->unique(['position_id', 'order_id'], 'op_position_id_order_id_unique');
             $table->enum('status', [/*'На рассмотрении',*/ 'Согласовано', 'Отклонено']);

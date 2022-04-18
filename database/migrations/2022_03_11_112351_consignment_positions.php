@@ -15,7 +15,7 @@ class ConsignmentPositions extends Migration
     {
         Schema::create('consignment_positions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('position_id')->unique();
+            $table->uuid('position_id');
             $table->unsignedBigInteger('order_id');
             $table->unsignedBigInteger('consignment_id');
             $table->unsignedBigInteger('nomenclature_id');

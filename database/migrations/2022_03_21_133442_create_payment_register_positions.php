@@ -15,7 +15,7 @@ class CreatePaymentRegisterPositions extends Migration
     {
         Schema::create('payment_register_positions', function (Blueprint $table) {
             $table->id();
-            $table->uuid('position_id')->unique();
+            $table->uuid('position_id');
             $table->unsignedBigInteger('payment_register_id');
             $table->unsignedBigInteger('order_id');
             $table->string('payment_order_number');
