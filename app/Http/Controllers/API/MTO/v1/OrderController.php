@@ -62,7 +62,7 @@ class OrderController extends Controller
             'orders.*.order_contractor.contractor_responsible_phone' => 'nullable|string|max:255',
 
             'orders.*.order_positions' => 'nullable|array',
-            'orders.*.order_positions.*.position_id' => 'required|uuid',
+            'orders.*.order_positions.*.position_id' => 'required|uuid|unique:order_positions,position_id',
             'orders.*.order_positions.*.status' => ['nullable', Rule::in(OrderPosition::getStatuses())],
             'orders.*.order_positions.*.nomenclature_id' => 'required|uuid',
 //            'orders.*.order_positions.*.unit_id' => 'required|uuid|exists:nomenclature_units,uuid',
@@ -99,7 +99,7 @@ class OrderController extends Controller
 
         $data = $request->all()['orders'];
 
-        try {
+//        try {
             foreach ($data as $item) {
                 DB::transaction(function () use ($item) {
                     $customer_data = $item['order_customer'] ?? [];
@@ -195,9 +195,9 @@ class OrderController extends Controller
                 });
             }
             return response()->json();
-        } catch (\Exception $e) {
-            Log::error($e->getMessage(), $e->getTrace());
-            return response()->json(['message' => 'System error'], 500);
-        }
+//        } catch (\Exception $e) {
+//            Log::error($e->getMessage(), $e->getTrace());
+//            return response()->json(['message' => 'System error'], 500);
+//        }
     }
 }
