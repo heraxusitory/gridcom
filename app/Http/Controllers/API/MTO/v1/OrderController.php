@@ -141,18 +141,21 @@ class OrderController extends Controller
                             $provider = Provider::query()->create($provider_data);
                             $contractor = Contractor::query()->create($contractor_data);
 
-                            return Order::query()->create(
-                                [
-                                    'uuid' => $item['id'],
-                                    'number' => $item['number'] ?? null,
-                                    'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
-                                    'deadline_date' => $item['deadline_date'] ?? null,
-                                    'customer_status' => $item['customer_status'],
-                                    'provider_status' => $item['provider_status'],
-                                    'customer_id' => $customer->id,
-                                    'provider_id' => $provider->id,
-                                    'contractor_id' => $contractor->id,
-                                ]);
+                            //TODO проверить number
+                            return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor) {
+                                return Order::query()->create(
+                                    [
+                                        'uuid' => $item['id'],
+                                        'number' => $item['number'] ?? null,
+                                        'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
+                                        'deadline_date' => $item['deadline_date'] ?? null,
+                                        'customer_status' => $item['customer_status'],
+                                        'provider_status' => $item['provider_status'],
+                                        'customer_id' => $customer->id,
+                                        'provider_id' => $provider->id,
+                                        'contractor_id' => $contractor->id,
+                                    ]);
+                            });
                         });
 
                     //Если обьект существует и его нужно обновить
