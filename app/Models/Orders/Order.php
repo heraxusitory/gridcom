@@ -8,15 +8,14 @@ use App\Models\Contractor;
 use App\Models\Customer;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
-
-use App\Traits\UsesOrderNumber;
+use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Order extends Model
 {
-    use HasFactory, UsesOrderNumber;
+    use HasFactory, UsesNumberLKK;
 
     protected $table = 'orders';
 

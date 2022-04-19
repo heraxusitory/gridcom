@@ -3,12 +3,13 @@
 namespace App\Models\ConsignmentRegisters;
 
 use App\Traits\UsesConsignmentRegisterNumber;
+use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ConsignmentRegister extends Model
 {
-    use HasFactory, UsesConsignmentRegisterNumber;
+    use HasFactory, UsesNumberLKK;
 
 
     protected $table = 'consignment_registers';

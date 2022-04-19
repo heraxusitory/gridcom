@@ -7,13 +7,13 @@ namespace App\Models\Consignments;
 use App\Models\References\ContrAgent;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
-use App\Traits\UsesConsignmentNumber;
+use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Consignment extends Model
 {
-    use HasFactory, UsesConsignmentNumber;
+    use HasFactory, UsesNumberLKK;
 
     protected $table = 'consignments';
 
