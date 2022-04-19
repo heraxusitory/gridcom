@@ -29,6 +29,7 @@ class GetOrdersService implements IService
         } elseif ($this->user->isContractor()) {
             $orders->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id());
         }
+        $orders->withSum('positions', 'amount_without_vat');
         return $orders->get();
     }
 }
