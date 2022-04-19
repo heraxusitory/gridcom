@@ -11,6 +11,9 @@ class RoleMiddleware
 
     public function handle($request, Closure $next, ...$roles)
     {
+        //TODO hot fix
+        return $next($request);
+
 //        dd($role);
 //        dd(Auth::hasRole(env('KEYCLOAK_ALLOWED_RESOURCES'), $role));
         foreach ($roles as $role) {
