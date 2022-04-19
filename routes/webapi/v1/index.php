@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 //
 //});
 
-Route::group([/*'middleware' => ['auth:webapi']*/], function () {
+Route::group(['middleware' => ['auth:webapi']], function () {
 
     Route::get('me', [AuthController::class, 'me']);
     require 'references.php';
