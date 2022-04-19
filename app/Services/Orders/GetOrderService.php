@@ -22,8 +22,8 @@ class GetOrderService implements IService
     {
         $order = Order::query()
             ->with([
-                'customer',
-                'provider',
+                'customer.contract',
+                'provider.contract',
                 'contractor',
                 'positions',
                 'positions.nomenclature',

@@ -23,7 +23,7 @@ class GetOrdersService implements IService
 
     public function run()
     {
-        $orders = Order::query()->with(['customer', 'provider', 'contractor']);
+        $orders = Order::query()->with(['customer.contract', 'provider.contract', 'contractor']);
         if ($this->user->isProvider()) {
             $orders->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
         } elseif ($this->user->isContractor()) {
