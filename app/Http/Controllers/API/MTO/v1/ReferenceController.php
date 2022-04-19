@@ -37,7 +37,7 @@ class ReferenceController extends Controller
                     'uuid' => $organization['id']
                 ], [
                     'name' => $organization['name'],
-                    'is_confirmed' => true,
+                    'is_visible_to_client' => true,
                 ]);
             }
             return response()->json();
@@ -66,7 +66,7 @@ class ReferenceController extends Controller
                     'uuid' => $contr_agent['id']
                 ], [
                     'name' => $contr_agent['name'],
-                    'is_confirmed' => true,
+                    'is_visible_to_client' => true,
                 ]);
             }
             return response()->json();
@@ -130,7 +130,7 @@ class ReferenceController extends Controller
                     'uuid' => $customer_object['id']
                 ], [
                     'name' => $customer_object['name'],
-                    'is_confirmed' => true,
+                    'is_visible_to_client' => true,
                 ]);
             }
             return response()->json();
@@ -162,7 +162,7 @@ class ReferenceController extends Controller
                 ], [
                     'name' => $sub_object['name'],
                     'customer_object_id' => $customer_object->id,
-                    'is_confirmed' => true,
+                    'is_visible_to_client' => true,
                 ]);
             }
             return response()->json();
@@ -198,7 +198,7 @@ class ReferenceController extends Controller
                         'mnemocode' => $item['mnemocode'],
                         'name' => $item['name'],
                         'price' => $item['price'],
-                        'is_confirmed' => true,
+                        'is_visible_to_client' => true,
                     ]);
                     $nomenclature->units()->attach($nomenclature_unit->id);
                 });
@@ -229,7 +229,7 @@ class ReferenceController extends Controller
                     'uuid' => $unit['id']
                 ], [
                     'name' => $unit['name'],
-                    'is_confirmed' => true,
+                    'is_visible_to_client' => true,
                 ]);
             }
             return response()->json();
@@ -260,7 +260,7 @@ class ReferenceController extends Controller
                 ], [
                     'number' => $contract['number'],
                     'date' => $contract['date'],
-                    'is_confirmed' => true,
+                    'is_visible_to_client' => true,
                 ]);
             }
             return response()->json();
@@ -291,7 +291,7 @@ class ReferenceController extends Controller
                 ], [
                     'number' => $contract['number'],
                     'date' => $contract['date'],
-                    'is_confirmed' => true,
+                    'is_visible_to_client' => true,
                 ]);
             }
             return response()->json();
