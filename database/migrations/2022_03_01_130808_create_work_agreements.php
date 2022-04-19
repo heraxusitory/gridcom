@@ -18,7 +18,7 @@ class CreateWorkAgreements extends Migration
             $table->uuid('uuid')->unique();
             $table->string('number')->nullable();
             $table->timestamp('date')->nullable();
-            $table->boolean('is_confirmed')->default('false');
+            $table->boolean('is_visible_to_client')->default('false');
             $table->timestamps();
         });
     }

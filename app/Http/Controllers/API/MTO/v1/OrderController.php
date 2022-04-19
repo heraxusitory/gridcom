@@ -12,9 +12,7 @@ use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
-use App\Models\References\CustomerSubObject;
 use App\Models\References\Nomenclature;
-use App\Models\References\NomenclatureUnit;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
@@ -23,8 +21,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
-use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class OrderController extends Controller
 {
@@ -46,9 +44,11 @@ class OrderController extends Controller
             'orders.*.order_customer.work_start_date' => 'required|date_format:d.m.Y',
             'orders.*.order_customer.work_end_date' => 'required|date_format:d.m.Y',
 
-            'orders.*.order_provider.provider_contract_id' => 'required|uuid',
+            'orders.*.order_provider.provider_contract_id' => 'nullable|required_without:orders.*.order_provider.provider_contract_name|uuid',
+            'orders.*.order_provider.provider_contract_name' => 'nullable|required_without:orders.*.order_provider.provider_contract_id|string|max:255',
 //            'orders.order_provider.contact_id' => 'required|uuid|exists:contact_persons,uuid',
-            'orders.*.order_provider.contr_agent_id' => 'required|uuid',
+            'orders.*.order_provider.contr_agent_id' => 'nullable|required_without:orders.*.order_provider.contr_agent_name|uuid',
+            'orders.*.order_provider.contr_agent_name' => 'nullable|required_without:orders.*.order_provider.contr_agent_id|string|max:255',
             'orders.*.order_provider.full_name' => 'nullable|string|max:255',
             'orders.*.order_provider.email' => 'nullable|string|max:255',
             'orders.*.order_provider.phone' => 'nullable|string|max:255',
@@ -72,30 +72,6 @@ class OrderController extends Controller
             'orders.*.order_positions.*.delivery_time' => 'nullable|date_format:d.m.Y',
             'orders.*.order_positions.*.delivery_address' => 'nullable|string|max:255',
         ])->validate();
-
-        try {
-            $orders = $request->all()['orders'];
-
-            foreach ($orders as $key => $order) {
-                $object_id = $order['order_customer']['object_id'];
-                $sub_object_id = $order['order_customer']['sub_object_id'];
-                $customer_object = CustomerObject::query()->firstOrCreate([
-                    'uuid' => $object_id,
-                ]);
-                $customer_sub_object = CustomerSubObject::query()->firstOrCreate([
-                    'uuid' => $sub_object_id,
-                ], [
-                    'customer_object_id' => $customer_object->id,
-                ]);
-//                throw_if($customer_sub_object->customer_object_id !== $customer_object->id,
-//                    new BadRequestException('The selected orders.' . $key . '.order_customer.sub_object_id is invalid', 422));
-            }
-        } catch (BadRequestException $e) {
-            return response()->json($e->getMessage(), $e->getCode());
-        } catch (\Exception $e) {
-            Log::error($e->getMessage(), $e->getTrace());
-            return response()->json('System error', 500);
-        }
 
         $data = $request->all()['orders'];
 
@@ -124,12 +100,30 @@ class OrderController extends Controller
                     $customer_data['object_id'] = $customer_object->id;
                     $customer_data['sub_object_id'] = $customer_sub_object->id;
 
-                    $provider_contr_agent = ContrAgent::query()->firstOrCreate([
-                        'uuid' => $provider_data['contr_agent_id'],
-                    ]);
-                    $provider_contract = ProviderContractDocument::query()->firstOrCreate([
-                        'uuid' => $provider_data['provider_contract_id'],
-                    ]);
+                    if (isset($provider_data['contr_agent_id'])) {
+                        $provider_contr_agent = ContrAgent::query()->firstOrCreate([
+                            'uuid' => $provider_data['contr_agent_id'],
+                        ]);
+                    } elseif (isset($provider_data['contr_agent_name'])) {
+                        $provider_contr_agent = ContrAgent::query()->firstOrCreate([
+                            'name' => $provider_data['contr_agent_name'],
+                        ], [
+                            'uuid' => Str::uuid(),
+                        ]);
+                    }
+
+                    if (isset($provider_data['provider_contract_id'])) {
+                        $provider_contract = ProviderContractDocument::query()->firstOrCreate([
+                            'uuid' => $provider_data['provider_contract_id'],
+                        ]);
+                    } elseif (isset($provider_data['provider_contract_name'])) {
+                        $provider_contract = ProviderContractDocument::query()->firstOrCreate([
+                            'number' => $provider_data['provider_contract_name'],
+                        ], [
+                            'uuid' => Str::uuid(),
+                        ]);
+                    }
+
                     $provider_data['contr_agent_id'] = $provider_contr_agent->id;
                     $provider_data['provider_contract_id'] = $provider_contract->id;
 
@@ -137,6 +131,8 @@ class OrderController extends Controller
                         'uuid' => $contractor_data['contr_agent_id'],
                     ]);
                     $contractor_data['contr_agent_id'] = $contractor_contr_agent->id;
+                    unset($contractor_data['contr_agent_name']);
+                    unset($provider_data['contr_agent_name']);
 
                     $order = Order::query()->where('uuid', $item['id'])->firstOr(
                     //Если обьект новый и его нужно создать

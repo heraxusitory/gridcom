@@ -19,7 +19,7 @@ class CreateNomenclature extends Migration
             $table->string('mnemocode')->unique()->nullable();
             $table->string('name')->nullable();
             $table->unsignedDouble('price')->nullable();
-            $table->boolean('is_confirmed')->default('false');
+            $table->boolean('is_visible_to_client')->default('false');
             $table->timestamps();
         });
     }

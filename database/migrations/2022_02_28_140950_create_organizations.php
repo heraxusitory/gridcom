@@ -17,7 +17,7 @@ class CreateOrganizations extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('name')->nullable();
-            $table->boolean('is_confirmed')->default('false');
+            $table->boolean('is_visible_to_client')->default('false');
             $table->timestamps();
         });
     }

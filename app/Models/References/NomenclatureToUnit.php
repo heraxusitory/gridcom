@@ -13,6 +13,6 @@ class NomenclatureToUnit extends Model
     protected $fillable = [
         'nomenclature_id',
         'unit_id',
-        'is_confirmed',
+        'is_visible_to_client',
     ];
 }

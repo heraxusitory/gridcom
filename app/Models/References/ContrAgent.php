@@ -15,7 +15,9 @@ class ContrAgent extends Model
     protected $fillable = [
         'uuid',
         'name',
-        'is_confirmed',
+        //поле отвечает за то, что если запись создается автоматически (не по обмену из АС МТО), то оно является неподтвержденным
+//        'is_confirmed',
+        'is_visible_to_client',
     ];
 
     protected $hidden = [
