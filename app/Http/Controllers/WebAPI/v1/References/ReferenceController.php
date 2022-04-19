@@ -46,7 +46,7 @@ class ReferenceController extends Controller
 
     public function getNomenclature()
     {
-        $nomenclature = Nomenclature::query()->paginate();
+        $nomenclature = Nomenclature::query()->get();
         return response()->json(['data' => $nomenclature]);
     }
 }
