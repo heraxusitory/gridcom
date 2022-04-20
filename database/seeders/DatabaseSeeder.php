@@ -274,7 +274,6 @@ class DatabaseSeeder extends Seeder
         ]);
 
 
-        //create json structure for sync order for integration example
         $object = CustomerObject::query()->firstOrFail();
         $example = [
             "orders" => [
@@ -344,9 +343,10 @@ class DatabaseSeeder extends Seeder
                 ]
             ]
         ];
-        Log::debug('example_order_request_for_sync', $example);
+//        Log::debug('example_order_request_for_sync', $example);
 
         $this->call(ProviderOrderSeeder::class);
+        $this->call(AuthMTOLKKUserSeeder::class);
 
     }
 }
