@@ -28,9 +28,9 @@ class Consignments extends Migration
             $table->boolean('is_approved')->default(false);
             $table->timestamp('date');
 //            $table->unsignedBigInteger('order_id');
-            $table->string('responsible_full_name');
-            $table->string('responsible_phone');
-            $table->tinyText('comment');
+            $table->string('responsible_full_name')->nullable();
+            $table->string('responsible_phone')->nullable();
+            $table->tinyText('comment')->nullable();
             $table->timestamps();
         });
     }

@@ -28,9 +28,9 @@ class CreateConsignmentRegisters extends Migration
             $table->unsignedBigInteger('customer_object_id');
             $table->unsignedBigInteger('customer_sub_object_id');
             $table->unsignedBigInteger('work_agreement_id');
-            $table->string('responsible_full_name');
-            $table->string('responsible_phone');
-            $table->text('comment');
+            $table->string('responsible_full_name')->nullable();
+            $table->string('responsible_phone')->nullable();
+            $table->text('comment')->nullable();
             $table->timestamp('date');
             $table->timestamps();
         });
