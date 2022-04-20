@@ -61,6 +61,7 @@ class CreateRolesPermissionsTable extends Migration
             Permission::RESOURCE_REFERENCE_ORGANIZATIONS . '.' . Permission::ACTION_VIEW,
             Permission::RESOURCE_REFERENCE_PROVIDER_CONTRACTS . '.' . Permission::ACTION_VIEW,
             Permission::RESOURCE_REFERENCE_WORK_AGREEMENTS . '.' . Permission::ACTION_VIEW,
+            Permission::RESOURCE_REFERENCE_NOMENCLATURE . '.' . Permission::ACTION_VIEW,
         ])->pluck('id');
 
         $provider_permission_ids = Permission::query()->whereIn('slug', [
@@ -104,6 +105,7 @@ class CreateRolesPermissionsTable extends Migration
             Permission::RESOURCE_REFERENCE_ORGANIZATIONS . '.' . Permission::ACTION_VIEW,
             Permission::RESOURCE_REFERENCE_PROVIDER_CONTRACTS . '.' . Permission::ACTION_VIEW,
             Permission::RESOURCE_REFERENCE_WORK_AGREEMENTS . '.' . Permission::ACTION_VIEW,
+            Permission::RESOURCE_REFERENCE_NOMENCLATURE . '.' . Permission::ACTION_VIEW,
         ])->pluck('id');
 
         $contractor_role = Role::query()->where('slug', Role::CONTRACTOR())->first();

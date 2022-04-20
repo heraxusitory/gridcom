@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Extensions\CustomGuard;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
+use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
 use App\Policies\References\ContrAgentPolicy;
+use App\Policies\References\NomenclaturePolicy;
 use App\Policies\References\ObjectPolicy;
 use App\Policies\References\OrganizationPolicy;
 use App\Policies\References\ProviderContractPolicy;
@@ -30,6 +32,7 @@ class AuthServiceProvider extends ServiceProvider
         ContrAgent::class => ContrAgentPolicy::class,
         ProviderContractDocument::class => ProviderContractPolicy::class,
         WorkAgreementDocument::class => WorkAgreementPolicy::class,
+        Nomenclature::class => NomenclaturePolicy::class,
     ];
 
     /**
