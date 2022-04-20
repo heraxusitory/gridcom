@@ -61,7 +61,7 @@ class ReferenceController extends Controller
 
     public function getNomenclature(Request $request)
     {
-        $nomenclature_query = Nomenclature::query();
+        $nomenclature_query = Nomenclature::query()->with('units');
         if (isset($request->name))
             $nomenclature_query->where('name', 'ILIKE', "%{$request->name}%");
 //        $per_page = isset($request->per_page) && (int)$request->per_page ? abs($request->per_page) : config('pagination.per_page');
