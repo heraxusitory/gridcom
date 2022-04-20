@@ -75,129 +75,129 @@ class OrderController extends Controller
 
         $data = $request->all()['orders'];
 
-//        try {
-        foreach ($data as $item) {
-            DB::transaction(function () use ($item) {
-                $customer_data = $item['order_customer'] ?? [];
-                $provider_data = $item['order_provider'] ?? [];
-                $contractor_data = $item['order_contractor'] ?? [];
-                $position_data = $item['order_positions'] ?? [];
+        try {
+            foreach ($data as $item) {
+                DB::transaction(function () use ($item) {
+                    $customer_data = $item['order_customer'] ?? [];
+                    $provider_data = $item['order_provider'] ?? [];
+                    $contractor_data = $item['order_contractor'] ?? [];
+                    $position_data = $item['order_positions'] ?? [];
 
-                $organization = Organization::query()->firstOrCreate([
-                    'uuid' => $customer_data['organization_id'],
-                ]);
-                $work_agreement = WorkAgreementDocument::query()->firstOrCreate([
-                    'uuid' => $customer_data['work_agreement_id'],
-                ]);
-                $customer_object = CustomerObject::query()->firstOrCreate([
-                    'uuid' => $customer_data['object_id'],
-                ]);
-                $customer_sub_object = $customer_object->subObjects()->firstOrCreate([
-                    'uuid' => $customer_data['sub_object_id'],
-                ]);
-                $customer_data['organization_id'] = $organization->id;
-                $customer_data['work_agreement_id'] = $work_agreement->id;
-                $customer_data['object_id'] = $customer_object->id;
-                $customer_data['sub_object_id'] = $customer_sub_object->id;
-
-                if (isset($provider_data['contr_agent_id'])) {
-                    $provider_contr_agent = ContrAgent::query()->firstOrCreate([
-                        'uuid' => $provider_data['contr_agent_id'],
+                    $organization = Organization::query()->firstOrCreate([
+                        'uuid' => $customer_data['organization_id'],
                     ]);
-                } elseif (isset($provider_data['contr_agent_name'])) {
-                    $provider_contr_agent = ContrAgent::query()->firstOrCreate([
-                        'name' => $provider_data['contr_agent_name'],
-                    ], [
-                        'uuid' => Str::uuid(),
+                    $work_agreement = WorkAgreementDocument::query()->firstOrCreate([
+                        'uuid' => $customer_data['work_agreement_id'],
                     ]);
-                }
-
-                if (isset($provider_data['provider_contract_id'])) {
-                    $provider_contract = ProviderContractDocument::query()->firstOrCreate([
-                        'uuid' => $provider_data['provider_contract_id'],
+                    $customer_object = CustomerObject::query()->firstOrCreate([
+                        'uuid' => $customer_data['object_id'],
                     ]);
-                } elseif (isset($provider_data['provider_contract_name'])) {
-                    $provider_contract = ProviderContractDocument::query()->firstOrCreate([
-                        'number' => $provider_data['provider_contract_name'],
-                    ], [
-                        'uuid' => Str::uuid(),
+                    $customer_sub_object = $customer_object->subObjects()->firstOrCreate([
+                        'uuid' => $customer_data['sub_object_id'],
                     ]);
-                }
+                    $customer_data['organization_id'] = $organization->id;
+                    $customer_data['work_agreement_id'] = $work_agreement->id;
+                    $customer_data['object_id'] = $customer_object->id;
+                    $customer_data['sub_object_id'] = $customer_sub_object->id;
 
-                $provider_data['contr_agent_id'] = $provider_contr_agent->id;
-                $provider_data['provider_contract_id'] = $provider_contract->id;
+                    if (isset($provider_data['contr_agent_id'])) {
+                        $provider_contr_agent = ContrAgent::query()->firstOrCreate([
+                            'uuid' => $provider_data['contr_agent_id'],
+                        ]);
+                    } elseif (isset($provider_data['contr_agent_name'])) {
+                        $provider_contr_agent = ContrAgent::query()->firstOrCreate([
+                            'name' => $provider_data['contr_agent_name'],
+                        ], [
+                            'uuid' => Str::uuid(),
+                        ]);
+                    }
 
-                $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
-                    'uuid' => $contractor_data['contr_agent_id'],
-                ]);
-                $contractor_data['contr_agent_id'] = $contractor_contr_agent->id;
+                    if (isset($provider_data['provider_contract_id'])) {
+                        $provider_contract = ProviderContractDocument::query()->firstOrCreate([
+                            'uuid' => $provider_data['provider_contract_id'],
+                        ]);
+                    } elseif (isset($provider_data['provider_contract_name'])) {
+                        $provider_contract = ProviderContractDocument::query()->firstOrCreate([
+                            'number' => $provider_data['provider_contract_name'],
+                        ], [
+                            'uuid' => Str::uuid(),
+                        ]);
+                    }
 
-                unset($provider_data['contr_agent_name']);
-                unset($provider_data['provider_contract_name']);
+                    $provider_data['contr_agent_id'] = $provider_contr_agent->id;
+                    $provider_data['provider_contract_id'] = $provider_contract->id;
 
-                $order = Order::query()->where('uuid', $item['id'])->firstOr(
-                //Если обьект новый и его нужно создать
-                    function () use ($item, $customer_data, $provider_data, $contractor_data) {
-                        $customer = Customer::query()->create($customer_data);
-                        $provider = Provider::query()->create($provider_data);
-                        $contractor = Contractor::query()->create($contractor_data);
+                    $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
+                        'uuid' => $contractor_data['contr_agent_id'],
+                    ]);
+                    $contractor_data['contr_agent_id'] = $contractor_contr_agent->id;
 
-                        //TODO проверить number
-                        return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor) {
-                            return Order::query()->create(
-                                [
-                                    'uuid' => $item['id'],
-                                    'number' => $item['number'] ?? null,
-                                    'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
-                                    'deadline_date' => $item['deadline_date'] ?? null,
-                                    'customer_status' => $item['customer_status'],
-                                    'provider_status' => $item['provider_status'],
-                                    'customer_id' => $customer->id,
-                                    'provider_id' => $provider->id,
-                                    'contractor_id' => $contractor->id,
-                                ]);
+                    unset($provider_data['contr_agent_name']);
+                    unset($provider_data['provider_contract_name']);
+
+                    $order = Order::query()->where('uuid', $item['id'])->firstOr(
+                    //Если обьект новый и его нужно создать
+                        function () use ($item, $customer_data, $provider_data, $contractor_data) {
+                            $customer = Customer::query()->create($customer_data);
+                            $provider = Provider::query()->create($provider_data);
+                            $contractor = Contractor::query()->create($contractor_data);
+
+                            //TODO проверить number
+                            return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor) {
+                                return Order::query()->create(
+                                    [
+                                        'uuid' => $item['id'],
+                                        'number' => $item['number'] ?? null,
+                                        'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
+                                        'deadline_date' => $item['deadline_date'] ?? null,
+                                        'customer_status' => $item['customer_status'],
+                                        'provider_status' => $item['provider_status'],
+                                        'customer_id' => $customer->id,
+                                        'provider_id' => $provider->id,
+                                        'contractor_id' => $contractor->id,
+                                    ]);
+                            });
                         });
-                    });
 
-                //Если обьект существует и его нужно обновить
-                if (!$order->wasRecentlyCreated) {
-                    $order->customer()->update($customer_data);
-                    $order->provider()->update($provider_data);
-                    $order->contractor()->update($contractor_data);
-                    $order->update([
-                        'number' => $item['number'] ?? null,
-                        'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
-                        'deadline_date' => $item['deadline_date'] ?? null,
-                        'customer_status' => $item['customer_status'],
-                        'provider_status' => $item['provider_status'],
-                    ]);
-                }
+                    //Если обьект существует и его нужно обновить
+                    if (!$order->wasRecentlyCreated) {
+                        $order->customer()->update($customer_data);
+                        $order->provider()->update($provider_data);
+                        $order->contractor()->update($contractor_data);
+                        $order->update([
+                            'number' => $item['number'] ?? null,
+                            'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
+                            'deadline_date' => $item['deadline_date'] ?? null,
+                            'customer_status' => $item['customer_status'],
+                            'provider_status' => $item['provider_status'],
+                        ]);
+                    }
 
-                $position_ids = [];
-                foreach ($position_data as $position) {
-                    $nomenclature = Nomenclature::query()->firstOrCreate([
-                        'uuid' => $position['nomenclature_id'],
-                    ]);
+                    $position_ids = [];
+                    foreach ($position_data as $position) {
+                        $nomenclature = Nomenclature::query()->firstOrCreate([
+                            'uuid' => $position['nomenclature_id'],
+                        ]);
 //                        $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $position['unit_id'])->firstOrFail();
-                    $position = $order->positions()->updateOrCreate(['position_id' => $position['position_id']], [
-                        'status' => $position['status'] ?? null,
-                        'nomenclature_id' => $nomenclature->id,
-                        #'unit_id' => $nomenclature_unit->id,
-                        'count' => $position['count'] ?? null,
-                        'price_without_vat' => $position['price_without_vat'] ?? null,
-                        'amount_without_vat' => $position['amount_without_vat'] ?? null,
-                        'delivery_time' => $position['delivery_time'] ?? null,
-                        'delivery_address' => $position['delivery_address'] ?? null,
-                    ]);
-                    $position_ids[] = $position->id;
-                }
-                $order->positions()->whereNotIn('id', $position_ids)->delete();
-            });
+                        $position = $order->positions()->updateOrCreate(['position_id' => $position['position_id']], [
+                            'status' => $position['status'] ?? null,
+                            'nomenclature_id' => $nomenclature->id,
+                            #'unit_id' => $nomenclature_unit->id,
+                            'count' => $position['count'] ?? null,
+                            'price_without_vat' => $position['price_without_vat'] ?? null,
+                            'amount_without_vat' => $position['amount_without_vat'] ?? null,
+                            'delivery_time' => $position['delivery_time'] ?? null,
+                            'delivery_address' => $position['delivery_address'] ?? null,
+                        ]);
+                        $position_ids[] = $position->id;
+                    }
+                    $order->positions()->whereNotIn('id', $position_ids)->delete();
+                });
+            }
+            return response()->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
         }
-        return response()->json();
-//        } catch (\Exception $e) {
-//            Log::error($e->getMessage(), $e->getTrace());
-//            return response()->json(['message' => 'System error'], 500);
-//        }
     }
 }
