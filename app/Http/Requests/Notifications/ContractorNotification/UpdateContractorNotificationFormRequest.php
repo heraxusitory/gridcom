@@ -70,7 +70,7 @@ class UpdateContractorNotificationFormRequest extends FormRequest
 
         return [
             'positions.*.count' => ['required', 'numeric'],
-            'positions.*.vat_rate' => ['required', 'numeric', Rule::in([1, 1.13, 1.2, 1.3, 1.4])],
+            'positions.*.vat_rate' => ['required', 'numeric', Rule::in(array_keys(config('vat_rates')))],
         ];
     }
 }
