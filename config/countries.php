@@ -1,248 +1,1009 @@
 <?php
 
 return [
-    'EU' => 'European Union',
-    'AP' => 'Asia/Pacific Region',
-    'AF' => 'Afghanistan',
-    'AL' => 'Albania',
-    'DZ' => 'Algeria',
-    'AS' => 'American Samoa',
-    'AD' => 'Andorra',
-    'AO' => 'Angola',
-    'AI' => 'Anguilla',
-    'AG' => 'Antigua and Barbuda',
-    'AR' => 'Argentina',
-    'AM' => 'Armenia',
-    'AW' => 'Aruba',
-    'AU' => 'Australia',
-    'AT' => 'Austria',
-    'AZ' => 'Azerbaijan',
-    'BS' => 'Bahamas',
-    'BH' => 'Bahrain',
-    'BD' => 'Bangladesh',
-    'BB' => 'Barbados',
-    'BY' => 'Belarus',
-    'BE' => 'Belgium',
-    'BZ' => 'Belize',
-    'BJ' => 'Benin',
-    'BM' => 'Bermuda',
-    'BT' => 'Bhutan',
-    'BO' => 'Bolivia',
-    'BA' => 'Bosnia and Herzegovina',
-    'BW' => 'Botswana',
-    'BR' => 'Brazil',
-    'IO' => 'British Indian Ocean Territory',
-    'VG' => 'British Virgin Islands',
-    'BN' => 'Brunei',
-    'BG' => 'Bulgaria',
-    'BF' => 'Burkina Faso',
-    'BI' => 'Burundi',
-    'KH' => 'Cambodia',
-    'CM' => 'Cameroon',
-    'CA' => 'Canada',
-    'CV' => 'Cape Verde',
-    'KY' => 'Cayman Islands',
-    'CF' => 'Central African Republic',
-    'TD' => 'Chad',
-    'CL' => 'Chile',
-    'CN' => 'China',
-    'CX' => 'Christmas Island',
-    'CC' => 'Cocos Islands',
-    'CO' => 'Colombia',
-    'KM' => 'Comoros',
-    'CK' => 'Cook Islands',
-    'CR' => 'Costa Rica',
-    'HR' => 'Croatia',
-    'CU' => 'Cuba',
-    'CW' => 'Curacao',
-    'CY' => 'Cyprus',
-    'CZ' => 'Czech Republic',
-    'CD' => 'Democratic Republic of the Congo',
-    'DK' => 'Denmark',
-    'DJ' => 'Djibouti',
-    'DM' => 'Dominica',
-    'DO' => 'Dominican Republic',
-    'TL' => 'East Timor',
-    'EC' => 'Ecuador',
-    'EG' => 'Egypt',
-    'SV' => 'El Salvador',
-    'GQ' => 'Equatorial Guinea',
-    'ER' => 'Eritrea',
-    'EE' => 'Estonia',
-    'ET' => 'Ethiopia',
-    'FK' => 'Falkland Islands',
-    'FO' => 'Faroe Islands',
-    'FJ' => 'Fiji',
-    'FI' => 'Finland',
-    'FR' => 'France',
-    'PF' => 'French Polynesia',
-    'GA' => 'Gabon',
-    'GM' => 'Gambia',
-    'GE' => 'Georgia',
-    'DE' => 'Germany',
-    'GH' => 'Ghana',
-    'GI' => 'Gibraltar',
-    'GR' => 'Greece',
-    'GL' => 'Greenland',
-    'GD' => 'Grenada',
-    'GP' => 'Guadeloupe',
-    'GU' => 'Guam',
-    'GT' => 'Guatemala',
-    'GG' => 'Guernsey',
-    'GN' => 'Guinea',
-    'GW' => 'Guinea-Bissau',
-    'GY' => 'Guyana',
-    'HT' => 'Haiti',
-    'HN' => 'Honduras',
-    'HK' => 'Hong Kong',
-    'HU' => 'Hungary',
-    'IS' => 'Iceland',
-    'IN' => 'India',
-    'ID' => 'Indonesia',
-    'IR' => 'Iran',
-    'IQ' => 'Iraq',
-    'IE' => 'Ireland',
-    'IM' => 'Isle of Man',
-    'IL' => 'Israel',
-    'IT' => 'Italy',
-    'CI' => 'Ivory Coast',
-    'JM' => 'Jamaica',
-    'JP' => 'Japan',
-    'JE' => 'Jersey',
-    'JO' => 'Jordan',
-    'KZ' => 'Kazakhstan',
-    'KE' => 'Kenya',
-    'KI' => 'Kiribati',
-    'XK' => 'Kosovo',
-    'KW' => 'Kuwait',
-    'KG' => 'Kyrgyzstan',
-    'LA' => 'Laos',
-    'LV' => 'Latvia',
-    'LB' => 'Lebanon',
-    'LS' => 'Lesotho',
-    'LR' => 'Liberia',
-    'LY' => 'Libya',
-    'LI' => 'Liechtenstein',
-    'LT' => 'Lithuania',
-    'LU' => 'Luxembourg',
-    'MO' => 'Macau',
-    'MK' => 'Macedonia',
-    'MG' => 'Madagascar',
-    'MW' => 'Malawi',
-    'MY' => 'Malaysia',
-    'MV' => 'Maldives',
-    'ML' => 'Mali',
-    'MT' => 'Malta',
-    'MH' => 'Marshall Islands',
-    'MR' => 'Mauritania',
-    'MU' => 'Mauritius',
-    'YT' => 'Mayotte',
-    'MX' => 'Mexico',
-    'FM' => 'Micronesia',
-    'MD' => 'Moldova',
-    'MC' => 'Monaco',
-    'MN' => 'Mongolia',
-    'ME' => 'Montenegro',
-    'MS' => 'Montserrat',
-    'MA' => 'Morocco',
-    'MZ' => 'Mozambique',
-    'MM' => 'Myanmar',
-    'NA' => 'Namibia',
-    'NR' => 'Nauru',
-    'NP' => 'Nepal',
-    'NL' => 'Netherlands',
-    'AN' => 'Netherlands Antilles',
-    'NC' => 'New Caledonia',
-    'NZ' => 'New Zealand',
-    'NI' => 'Nicaragua',
-    'NE' => 'Niger',
-    'NG' => 'Nigeria',
-    'NU' => 'Niue',
-    'KP' => 'North Korea',
-    'MP' => 'Northern Mariana Islands',
-    'NO' => 'Norway',
-    'OM' => 'Oman',
-    'PK' => 'Pakistan',
-    'PW' => 'Palau',
-    'PS' => 'Palestine',
-    'PA' => 'Panama',
-    'PG' => 'Papua New Guinea',
-    'PY' => 'Paraguay',
-    'PE' => 'Peru',
-    'PH' => 'Philippines',
-    'PN' => 'Pitcairn',
-    'PL' => 'Poland',
-    'PT' => 'Portugal',
-    'PR' => 'Puerto Rico',
-    'QA' => 'Qatar',
-    'CG' => 'Republic of the Congo',
-    'RE' => 'Reunion',
-    'RO' => 'Romania',
-    'RU' => 'Russia',
-    'RW' => 'Rwanda',
-    'BL' => 'Saint Barthelemy',
-    'SH' => 'Saint Helena',
-    'KN' => 'Saint Kitts and Nevis',
-    'LC' => 'Saint Lucia',
-    'MF' => 'Saint Martin',
-    'PM' => 'Saint Pierre and Miquelon',
-    'VC' => 'Saint Vincent and the Grenadines',
-    'WS' => 'Samoa',
-    'SM' => 'San Marino',
-    'ST' => 'Sao Tome and Principe',
-    'SA' => 'Saudi Arabia',
-    'SN' => 'Senegal',
-    'RS' => 'Serbia',
-    'SC' => 'Seychelles',
-    'SL' => 'Sierra Leone',
-    'SG' => 'Singapore',
-    'SX' => 'Sint Maarten',
-    'SK' => 'Slovakia',
-    'SI' => 'Slovenia',
-    'SB' => 'Solomon Islands',
-    'SO' => 'Somalia',
-    'ZA' => 'South Africa',
-    'KR' => 'South Korea',
-    'SS' => 'South Sudan',
-    'ES' => 'Spain',
-    'LK' => 'Sri Lanka',
-    'SD' => 'Sudan',
-    'SR' => 'Suriname',
-    'SJ' => 'Svalbard and Jan Mayen',
-    'SZ' => 'Swaziland',
-    'SE' => 'Sweden',
-    'CH' => 'Switzerland',
-    'SY' => 'Syria',
-    'TW' => 'Taiwan',
-    'TJ' => 'Tajikistan',
-    'TZ' => 'Tanzania',
-    'TH' => 'Thailand',
-    'TG' => 'Togo',
-    'TK' => 'Tokelau',
-    'TO' => 'Tonga',
-    'TT' => 'Trinidad and Tobago',
-    'TN' => 'Tunisia',
-    'TR' => 'Turkey',
-    'TM' => 'Turkmenistan',
-    'TC' => 'Turks and Caicos Islands',
-    'TV' => 'Tuvalu',
-    'VI' => 'U.S. Virgin Islands',
-    'UG' => 'Uganda',
-    'UA' => 'Ukraine',
-    'AE' => 'United Arab Emirates',
-    'GB' => 'United Kingdom',
-    'US' => 'United States',
-    'UY' => 'Uruguay',
-    'UZ' => 'Uzbekistan',
-    'VU' => 'Vanuatu',
-    'VA' => 'Vatican',
-    'VE' => 'Venezuela',
-    'VN' => 'Vietnam',
-    'WF' => 'Wallis and Futuna',
-    'YE' => 'Yemen',
-    'ZM' => 'Zambia',
-    'ZW' => 'Zimbabwe',
-    'MQ' => 'Martinique',
-    'GF' => 'French Guiana',
-    'BQ' => 'Bonaire, Sint Eustatius and Saba'
+    "AB" => [
+        "name" => "АБХАЗИЯ",
+        "code" => "895"
+    ],
+    "AU" => [
+        "name" => "АВСТРАЛИЯ",
+        "code" => "036"
+    ],
+    "AT" => [
+        "name" => "АВСТРИЯ",
+        "code" => "040"
+    ],
+    "AZ" => [
+        "name" => "АЗЕРБАЙДЖАН",
+        "code" => "031"
+    ],
+    "AL" => [
+        "name" => "АЛБАНИЯ",
+        "code" => "008"
+    ],
+    "DZ" => [
+        "name" => "АЛЖИР",
+        "code" => "012"
+    ],
+    "AS" => [
+        "name" => "АМЕРИКАНСКОЕ САМОА",
+        "code" => "016"
+    ],
+    "AI" => [
+        "name" => "АНГИЛЬЯ",
+        "code" => "660"
+    ],
+    "AO" => [
+        "name" => "АНГОЛА",
+        "code" => "024"
+    ],
+    "AD" => [
+        "name" => "АНДОРРА",
+        "code" => "020"
+    ],
+    "AQ" => [
+        "name" => "АНТАРКТИДА",
+        "code" => "010"
+    ],
+    "AG" => [
+        "name" => "АНТИГУА И БАРБУДА",
+        "code" => "028"
+    ],
+    "AR" => [
+        "name" => "АРГЕНТИНА",
+        "code" => "032"
+    ],
+    "AM" => [
+        "name" => "АРМЕНИЯ",
+        "code" => "051"
+    ],
+    "AW" => [
+        "name" => "АРУБА",
+        "code" => "533"
+    ],
+    "AF" => [
+        "name" => "АФГАНИСТАН",
+        "code" => "004"
+    ],
+    "BS" => [
+        "name" => "БАГАМЫ",
+        "code" => "044"
+    ],
+    "BD" => [
+        "name" => "БАНГЛАДЕШ",
+        "code" => "050"
+    ],
+    "BB" => [
+        "name" => "БАРБАДОС",
+        "code" => "052"
+    ],
+    "BH" => [
+        "name" => "БАХРЕЙН",
+        "code" => "048"
+    ],
+    "BY" => [
+        "name" => "БЕЛАРУСЬ",
+        "code" => "112"
+    ],
+    "BZ" => [
+        "name" => "БЕЛИЗ",
+        "code" => "084"
+    ],
+    "BE" => [
+        "name" => "БЕЛЬГИЯ",
+        "code" => "056"
+    ],
+    "BJ" => [
+        "name" => "БЕНИН",
+        "code" => "204"
+    ],
+    "BM" => [
+        "name" => "БЕРМУДЫ",
+        "code" => "060"
+    ],
+    "BG" => [
+        "name" => "БОЛГАРИЯ",
+        "code" => "100"
+    ],
+    "BO" => [
+        "name" => "БОЛИВИЯ, МНОГОНАЦИОНАЛЬНОЕ ГОСУДАРСТВО",
+        "code" => "068"
+    ],
+    "BQ" => [
+        "name" => "БОНЭЙР, СИНТ-ЭСТАТИУС И САБА",
+        "code" => "535"
+    ],
+    "BA" => [
+        "name" => "БОСНИЯ И ГЕРЦЕГОВИНА",
+        "code" => "070"
+    ],
+    "BW" => [
+        "name" => "БОТСВАНА",
+        "code" => "072"
+    ],
+    "BR" => [
+        "name" => "БРАЗИЛИЯ",
+        "code" => "076"
+    ],
+    "IO" => [
+        "name" => "БРИТАНСКАЯ ТЕРРИТОРИЯ В ИНДИЙСКОМ ОКЕАНЕ",
+        "code" => "086"
+    ],
+    "BN" => [
+        "name" => "БРУНЕЙ-ДАРУССАЛАМ",
+        "code" => "096"
+    ],
+    "BF" => [
+        "name" => "БУРКИНА-ФАСО",
+        "code" => "854"
+    ],
+    "BI" => [
+        "name" => "БУРУНДИ",
+        "code" => "108"
+    ],
+    "BT" => [
+        "name" => "БУТАН",
+        "code" => "064"
+    ],
+    "VU" => [
+        "name" => "ВАНУАТУ",
+        "code" => "548"
+    ],
+    "HU" => [
+        "name" => "ВЕНГРИЯ",
+        "code" => "348"
+    ],
+    "VE" => [
+        "name" => "ВЕНЕСУЭЛА БОЛИВАРИАНСКАЯ РЕСПУБЛИКА",
+        "code" => "862"
+    ],
+    "VG" => [
+        "name" => "ВИРГИНСКИЕ ОСТРОВА (БРИТАНСКИЕ)",
+        "code" => "092"
+    ],
+    "VI" => [
+        "name" => "ВИРГИНСКИЕ ОСТРОВА (США)",
+        "code" => "850"
+    ],
+    "TL" => [
+        "name" => "ТИМОР-ЛЕСТЕ",
+        "code" => "626"
+    ],
+    "VN" => [
+        "name" => "ВЬЕТНАМ",
+        "code" => "704"
+    ],
+    "GA" => [
+        "name" => "ГАБОН",
+        "code" => "266"
+    ],
+    "HT" => [
+        "name" => "ГАИТИ",
+        "code" => "332"
+    ],
+    "GY" => [
+        "name" => "ГАЙАНА",
+        "code" => "328"
+    ],
+    "GM" => [
+        "name" => "ГАМБИЯ",
+        "code" => "270"
+    ],
+    "GH" => [
+        "name" => "ГАНА",
+        "code" => "288"
+    ],
+    "GP" => [
+        "name" => "ГВАДЕЛУПА",
+        "code" => "312"
+    ],
+    "GT" => [
+        "name" => "ГВАТЕМАЛА",
+        "code" => "320"
+    ],
+    "GN" => [
+        "name" => "ГВИНЕЯ",
+        "code" => "324"
+    ],
+    "GW" => [
+        "name" => "ГВИНЕЯ-БИСАУ",
+        "code" => "624"
+    ],
+    "DE" => [
+        "name" => "ГЕРМАНИЯ",
+        "code" => "276"
+    ],
+    "GG" => [
+        "name" => "ГЕРНСИ",
+        "code" => "831"
+    ],
+    "GI" => [
+        "name" => "ГИБРАЛТАР",
+        "code" => "292"
+    ],
+    "HN" => [
+        "name" => "ГОНДУРАС",
+        "code" => "340"
+    ],
+    "HK" => [
+        "name" => "ГОНКОНГ",
+        "code" => "344"
+    ],
+    "GD" => [
+        "name" => "ГРЕНАДА",
+        "code" => "308"
+    ],
+    "GL" => [
+        "name" => "ГРЕНЛАНДИЯ",
+        "code" => "304"
+    ],
+    "GR" => [
+        "name" => "ГРЕЦИЯ",
+        "code" => "300"
+    ],
+    "GE" => [
+        "name" => "ГРУЗИЯ",
+        "code" => "268"
+    ],
+    "GU" => [
+        "name" => "ГУАМ",
+        "code" => "316"
+    ],
+    "DK" => [
+        "name" => "ДАНИЯ",
+        "code" => "208"
+    ],
+    "JE" => [
+        "name" => "ДЖЕРСИ",
+        "code" => "832"
+    ],
+    "DJ" => [
+        "name" => "ДЖИБУТИ",
+        "code" => "262"
+    ],
+    "DM" => [
+        "name" => "ДОМИНИКА",
+        "code" => "212"
+    ],
+    "DO" => [
+        "name" => "ДОМИНИКАНСКАЯ РЕСПУБЛИКА",
+        "code" => "214"
+    ],
+    "EG" => [
+        "name" => "ЕГИПЕТ",
+        "code" => "818"
+    ],
+    "ZM" => [
+        "name" => "ЗАМБИЯ",
+        "code" => "894"
+    ],
+    "EH" => [
+        "name" => "ЗАПАДНАЯ САХАРА",
+        "code" => "732"
+    ],
+    "ZW" => [
+        "name" => "ЗИМБАБВЕ",
+        "code" => "716"
+    ],
+    "IL" => [
+        "name" => "ИЗРАИЛЬ",
+        "code" => "376"
+    ],
+    "IN" => [
+        "name" => "ИНДИЯ",
+        "code" => "356"
+    ],
+    "ID" => [
+        "name" => "ИНДОНЕЗИЯ",
+        "code" => "360"
+    ],
+    "JO" => [
+        "name" => "ИОРДАНИЯ",
+        "code" => "400"
+    ],
+    "IQ" => [
+        "name" => "ИРАК",
+        "code" => "368"
+    ],
+    "IR" => [
+        "name" => "ИРАН (ИСЛАМСКАЯ РЕСПУБЛИКА)",
+        "code" => "364"
+    ],
+    "IE" => [
+        "name" => "ИРЛАНДИЯ",
+        "code" => "372"
+    ],
+    "IS" => [
+        "name" => "ИСЛАНДИЯ",
+        "code" => "352"
+    ],
+    "ES" => [
+        "name" => "ИСПАНИЯ",
+        "code" => "724"
+    ],
+    "IT" => [
+        "name" => "ИТАЛИЯ",
+        "code" => "380"
+    ],
+    "YE" => [
+        "name" => "ЙЕМЕН",
+        "code" => "887"
+    ],
+    "CV" => [
+        "name" => "КАБО-ВЕРДЕ",
+        "code" => "132"
+    ],
+    "KZ" => [
+        "name" => "КАЗАХСТАН",
+        "code" => "398"
+    ],
+    "KH" => [
+        "name" => "КАМБОДЖА",
+        "code" => "116"
+    ],
+    "CM" => [
+        "name" => "КАМЕРУН",
+        "code" => "120"
+    ],
+    "CA" => [
+        "name" => "КАНАДА",
+        "code" => "124"
+    ],
+    "QA" => [
+        "name" => "КАТАР",
+        "code" => "634"
+    ],
+    "KE" => [
+        "name" => "КЕНИЯ",
+        "code" => "404"
+    ],
+    "CY" => [
+        "name" => "КИПР",
+        "code" => "196"
+    ],
+    "KG" => [
+        "name" => "КИРГИЗИЯ",
+        "code" => "417"
+    ],
+    "KI" => [
+        "name" => "КИРИБАТИ",
+        "code" => "296"
+    ],
+    "CN" => [
+        "name" => "КИТАЙ",
+        "code" => "156"
+    ],
+    "CC" => [
+        "name" => "КОКОСОВЫЕ (КИЛИНГ) ОСТРОВА",
+        "code" => "166"
+    ],
+    "CO" => [
+        "name" => "КОЛУМБИЯ",
+        "code" => "170"
+    ],
+    "KM" => [
+        "name" => "КОМОРЫ",
+        "code" => "174"
+    ],
+    "CG" => [
+        "name" => "КОНГО",
+        "code" => "178"
+    ],
+    "CD" => [
+        "name" => "КОНГО, ДЕМОКРАТИЧЕСКАЯ РЕСПУБЛИКА",
+        "code" => "180"
+    ],
+    "KP" => [
+        "name" => "КОРЕЯ, НАРОДНО-ДЕМОКРАТИЧЕСКАЯ РЕСПУБЛИКА",
+        "code" => "408"
+    ],
+    "KR" => [
+        "name" => "КОРЕЯ, РЕСПУБЛИКА",
+        "code" => "410"
+    ],
+    "CR" => [
+        "name" => "КОСТА-РИКА",
+        "code" => "188"
+    ],
+    "CI" => [
+        "name" => "КОТ Д'ИВУАР",
+        "code" => "384"
+    ],
+    "CU" => [
+        "name" => "КУБА",
+        "code" => "192"
+    ],
+    "KW" => [
+        "name" => "КУВЕЙТ",
+        "code" => "414"
+    ],
+    "CW" => [
+        "name" => "КЮРАСАО",
+        "code" => "531"
+    ],
+    "LA" => [
+        "name" => "ЛАОССКАЯ НАРОДНО-ДЕМОКРАТИЧЕСКАЯ РЕСПУБЛИКА",
+        "code" => "418"
+    ],
+    "LV" => [
+        "name" => "ЛАТВИЯ",
+        "code" => "428"
+    ],
+    "LS" => [
+        "name" => "ЛЕСОТО",
+        "code" => "426"
+    ],
+    "LR" => [
+        "name" => "ЛИБЕРИЯ",
+        "code" => "430"
+    ],
+    "LB" => [
+        "name" => "ЛИВАН",
+        "code" => "422"
+    ],
+    "LY" => [
+        "name" => "ЛИВИЯ",
+        "code" => "434"
+    ],
+    "LT" => [
+        "name" => "ЛИТВА",
+        "code" => "440"
+    ],
+    "LI" => [
+        "name" => "ЛИХТЕНШТЕЙН",
+        "code" => "438"
+    ],
+    "LU" => [
+        "name" => "ЛЮКСЕМБУРГ",
+        "code" => "442"
+    ],
+    "MU" => [
+        "name" => "МАВРИКИЙ",
+        "code" => "480"
+    ],
+    "MR" => [
+        "name" => "МАВРИТАНИЯ",
+        "code" => "478"
+    ],
+    "MG" => [
+        "name" => "МАДАГАСКАР",
+        "code" => "450"
+    ],
+    "YT" => [
+        "name" => "МАЙОТТА",
+        "code" => "175"
+    ],
+    "MO" => [
+        "name" => "МАКАО",
+        "code" => "446"
+    ],
+    "MK" => [
+        "name" => "СЕВЕРНАЯ МАКЕДОНИЯ",
+        "code" => "807"
+    ],
+    "MW" => [
+        "name" => "МАЛАВИ",
+        "code" => "454"
+    ],
+    "MY" => [
+        "name" => "МАЛАЙЗИЯ",
+        "code" => "458"
+    ],
+    "ML" => [
+        "name" => "МАЛИ",
+        "code" => "466"
+    ],
+    "UM" => [
+        "name" => "МАЛЫЕ ТИХООКЕАНСКИЕ ОТДАЛЕННЫЕ ОСТРОВА СОЕДИНЕННЫХ ШТАТОВ",
+        "code" => "581"
+    ],
+    "MV" => [
+        "name" => "МАЛЬДИВЫ",
+        "code" => "462"
+    ],
+    "MT" => [
+        "name" => "МАЛЬТА",
+        "code" => "470"
+    ],
+    "MA" => [
+        "name" => "МАРОККО",
+        "code" => "504"
+    ],
+    "MQ" => [
+        "name" => "МАРТИНИКА",
+        "code" => "474"
+    ],
+    "MH" => [
+        "name" => "МАРШАЛЛОВЫ ОСТРОВА",
+        "code" => "584"
+    ],
+    "MX" => [
+        "name" => "МЕКСИКА",
+        "code" => "484"
+    ],
+    "FM" => [
+        "name" => "МИКРОНЕЗИЯ, ФЕДЕРАТИВНЫЕ ШТАТЫ",
+        "code" => "583"
+    ],
+    "MZ" => [
+        "name" => "МОЗАМБИК",
+        "code" => "508"
+    ],
+    "MD" => [
+        "name" => "МОЛДОВА, РЕСПУБЛИКА",
+        "code" => "498"
+    ],
+    "MC" => [
+        "name" => "МОНАКО",
+        "code" => "492"
+    ],
+    "MN" => [
+        "name" => "МОНГОЛИЯ",
+        "code" => "496"
+    ],
+    "MS" => [
+        "name" => "МОНТСЕРРАТ",
+        "code" => "500"
+    ],
+    "MM" => [
+        "name" => "МЬЯНМА",
+        "code" => "104"
+    ],
+    "NA" => [
+        "name" => "НАМИБИЯ",
+        "code" => "516"
+    ],
+    "NR" => [
+        "name" => "НАУРУ",
+        "code" => "520"
+    ],
+    "NP" => [
+        "name" => "НЕПАЛ",
+        "code" => "524"
+    ],
+    "NE" => [
+        "name" => "НИГЕР",
+        "code" => "562"
+    ],
+    "NG" => [
+        "name" => "НИГЕРИЯ",
+        "code" => "566"
+    ],
+    "NL" => [
+        "name" => "НИДЕРЛАНДЫ",
+        "code" => "528"
+    ],
+    "NI" => [
+        "name" => "НИКАРАГУА",
+        "code" => "558"
+    ],
+    "NU" => [
+        "name" => "НИУЭ",
+        "code" => "570"
+    ],
+    "NZ" => [
+        "name" => "НОВАЯ ЗЕЛАНДИЯ",
+        "code" => "554"
+    ],
+    "NC" => [
+        "name" => "НОВАЯ КАЛЕДОНИЯ",
+        "code" => "540"
+    ],
+    "NO" => [
+        "name" => "НОРВЕГИЯ",
+        "code" => "578"
+    ],
+    "AE" => [
+        "name" => "ОБЪЕДИНЕННЫЕ АРАБСКИЕ ЭМИРАТЫ",
+        "code" => "784"
+    ],
+    "OM" => [
+        "name" => "ОМАН",
+        "code" => "512"
+    ],
+    "KY" => [
+        "name" => "ОСТРОВА КАЙМАН",
+        "code" => "136"
+    ],
+    "CK" => [
+        "name" => "ОСТРОВА КУКА",
+        "code" => "184"
+    ],
+    "TC" => [
+        "name" => "ОСТРОВА ТЕРКС И КАЙКОС",
+        "code" => "796"
+    ],
+    "BV" => [
+        "name" => "ОСТРОВ БУВЕ",
+        "code" => "074"
+    ],
+    "IM" => [
+        "name" => "ОСТРОВ МЭН",
+        "code" => "833"
+    ],
+    "NF" => [
+        "name" => "ОСТРОВ НОРФОЛК",
+        "code" => "574"
+    ],
+    "CX" => [
+        "name" => "ОСТРОВ РОЖДЕСТВА",
+        "code" => "162"
+    ],
+    "HM" => [
+        "name" => "ОСТРОВ ХЕРД И ОСТРОВА МАКДОНАЛЬД",
+        "code" => "334"
+    ],
+    "PK" => [
+        "name" => "ПАКИСТАН",
+        "code" => "586"
+    ],
+    "PW" => [
+        "name" => "ПАЛАУ",
+        "code" => "585"
+    ],
+    "PS" => [
+        "name" => "ПАЛЕСТИНА, ГОСУДАРСТВО",
+        "code" => "275"
+    ],
+    "PA" => [
+        "name" => "ПАНАМА",
+        "code" => "591"
+    ],
+    "VA" => [
+        "name" => "ПАПСКИЙ ПРЕСТОЛ (ГОСУДАРСТВО - ГОРОД ВАТИКАН)",
+        "code" => "336"
+    ],
+    "PG" => [
+        "name" => "ПАПУА НОВАЯ ГВИНЕЯ",
+        "code" => "598"
+    ],
+    "PY" => [
+        "name" => "ПАРАГВАЙ",
+        "code" => "600"
+    ],
+    "PE" => [
+        "name" => "ПЕРУ",
+        "code" => "604"
+    ],
+    "PN" => [
+        "name" => "ПИТКЕРН",
+        "code" => "612"
+    ],
+    "PL" => [
+        "name" => "ПОЛЬША",
+        "code" => "616"
+    ],
+    "PT" => [
+        "name" => "ПОРТУГАЛИЯ",
+        "code" => "620"
+    ],
+    "PR" => [
+        "name" => "ПУЭРТО-РИКО",
+        "code" => "630"
+    ],
+    "RE" => [
+        "name" => "РЕЮНЬОН",
+        "code" => "638"
+    ],
+    "RU" => [
+        "name" => "РОССИЯ",
+        "code" => "643"
+    ],
+    "RW" => [
+        "name" => "РУАНДА",
+        "code" => "646"
+    ],
+    "RO" => [
+        "name" => "РУМЫНИЯ",
+        "code" => "642"
+    ],
+    "WS" => [
+        "name" => "САМОА",
+        "code" => "882"
+    ],
+    "SM" => [
+        "name" => "САН-МАРИНО",
+        "code" => "674"
+    ],
+    "ST" => [
+        "name" => "САН-ТОМЕ И ПРИНСИПИ",
+        "code" => "678"
+    ],
+    "SA" => [
+        "name" => "САУДОВСКАЯ АРАВИЯ",
+        "code" => "682"
+    ],
+    "SZ" => [
+        "name" => "ЭСВАТИНИ",
+        "code" => "748"
+    ],
+    "SH" => [
+        "name" => "СВЯТАЯ ЕЛЕНА, ОСТРОВ ВОЗНЕСЕНИЯ, ТРИСТАН-ДА-КУНЬЯ",
+        "code" => "654"
+    ],
+    "MP" => [
+        "name" => "СЕВЕРНЫЕ МАРИАНСКИЕ ОСТРОВА",
+        "code" => "580"
+    ],
+    "SC" => [
+        "name" => "СЕЙШЕЛЫ",
+        "code" => "690"
+    ],
+    "BL" => [
+        "name" => "СЕН-БАРТЕЛЕМИ",
+        "code" => "652"
+    ],
+    "MF" => [
+        "name" => "СЕН-МАРТЕН",
+        "code" => "663"
+    ],
+    "SX" => [
+        "name" => "СЕН-МАРТЕН (нидерландская часть)",
+        "code" => "534"
+    ],
+    "SN" => [
+        "name" => "СЕНЕГАЛ",
+        "code" => "686"
+    ],
+    "VC" => [
+        "name" => "СЕНТ-ВИНСЕНТ И ГРЕНАДИНЫ",
+        "code" => "670"
+    ],
+    "KN" => [
+        "name" => "СЕНТ-КИТС И НЕВИС",
+        "code" => "659"
+    ],
+    "LC" => [
+        "name" => "СЕНТ-ЛЮСИЯ",
+        "code" => "662"
+    ],
+    "PM" => [
+        "name" => "СЕНТ-ПЬЕР И МИКЕЛОН",
+        "code" => "666"
+    ],
+    "RS" => [
+        "name" => "СЕРБИЯ",
+        "code" => "688"
+    ],
+    "SG" => [
+        "name" => "СИНГАПУР",
+        "code" => "702"
+    ],
+    "SY" => [
+        "name" => "СИРИЙСКАЯ АРАБСКАЯ РЕСПУБЛИКА",
+        "code" => "760"
+    ],
+    "SK" => [
+        "name" => "СЛОВАКИЯ",
+        "code" => "703"
+    ],
+    "SI" => [
+        "name" => "СЛОВЕНИЯ",
+        "code" => "705"
+    ],
+    "GB" => [
+        "name" => "СОЕДИНЕННОЕ КОРОЛЕВСТВО",
+        "code" => "826"
+    ],
+    "US" => [
+        "name" => "СОЕДИНЕННЫЕ ШТАТЫ",
+        "code" => "840"
+    ],
+    "SB" => [
+        "name" => "СОЛОМОНОВЫ ОСТРОВА",
+        "code" => "090"
+    ],
+    "SO" => [
+        "name" => "СОМАЛИ",
+        "code" => "706"
+    ],
+    "SD" => [
+        "name" => "СУДАН",
+        "code" => "729"
+    ],
+    "SR" => [
+        "name" => "СУРИНАМ",
+        "code" => "740"
+    ],
+    "SL" => [
+        "name" => "СЬЕРРА-ЛЕОНЕ",
+        "code" => "694"
+    ],
+    "TJ" => [
+        "name" => "ТАДЖИКИСТАН",
+        "code" => "762"
+    ],
+    "TH" => [
+        "name" => "ТАИЛАНД",
+        "code" => "764"
+    ],
+    "TW" => [
+        "name" => "ТАЙВАНЬ (КИТАЙ)",
+        "code" => "158"
+    ],
+    "TZ" => [
+        "name" => "ТАНЗАНИЯ, ОБЪЕДИНЕННАЯ РЕСПУБЛИКА",
+        "code" => "834"
+    ],
+    "TG" => [
+        "name" => "ТОГО",
+        "code" => "768"
+    ],
+    "TK" => [
+        "name" => "ТОКЕЛАУ",
+        "code" => "772"
+    ],
+    "TO" => [
+        "name" => "ТОНГА",
+        "code" => "776"
+    ],
+    "TT" => [
+        "name" => "ТРИНИДАД И ТОБАГО",
+        "code" => "780"
+    ],
+    "TV" => [
+        "name" => "ТУВАЛУ",
+        "code" => "798"
+    ],
+    "TN" => [
+        "name" => "ТУНИС",
+        "code" => "788"
+    ],
+    "TM" => [
+        "name" => "ТУРКМЕНИСТАН",
+        "code" => "795"
+    ],
+    "TR" => [
+        "name" => "ТУРЦИЯ",
+        "code" => "792"
+    ],
+    "UG" => [
+        "name" => "УГАНДА",
+        "code" => "800"
+    ],
+    "UZ" => [
+        "name" => "УЗБЕКИСТАН",
+        "code" => "860"
+    ],
+    "UA" => [
+        "name" => "УКРАИНА",
+        "code" => "804"
+    ],
+    "WF" => [
+        "name" => "УОЛЛИС И ФУТУНА",
+        "code" => "876"
+    ],
+    "UY" => [
+        "name" => "УРУГВАЙ",
+        "code" => "858"
+    ],
+    "FO" => [
+        "name" => "ФАРЕРСКИЕ ОСТРОВА",
+        "code" => "234"
+    ],
+    "FJ" => [
+        "name" => "ФИДЖИ",
+        "code" => "242"
+    ],
+    "PH" => [
+        "name" => "ФИЛИППИНЫ",
+        "code" => "608"
+    ],
+    "FI" => [
+        "name" => "ФИНЛЯНДИЯ",
+        "code" => "246"
+    ],
+    "FK" => [
+        "name" => "ФОЛКЛЕНДСКИЕ ОСТРОВА (МАЛЬВИНСКИЕ)",
+        "code" => "238"
+    ],
+    "FR" => [
+        "name" => "ФРАНЦИЯ",
+        "code" => "250"
+    ],
+    "GF" => [
+        "name" => "ФРАНЦУЗСКАЯ ГВИАНА",
+        "code" => "254"
+    ],
+    "PF" => [
+        "name" => "ФРАНЦУЗСКАЯ ПОЛИНЕЗИЯ",
+        "code" => "258"
+    ],
+    "TF" => [
+        "name" => "ФРАНЦУЗСКИЕ ЮЖНЫЕ ТЕРРИТОРИИ",
+        "code" => "260"
+    ],
+    "HR" => [
+        "name" => "ХОРВАТИЯ",
+        "code" => "191"
+    ],
+    "CF" => [
+        "name" => "ЦЕНТРАЛЬНО-АФРИКАНСКАЯ РЕСПУБЛИКА",
+        "code" => "140"
+    ],
+    "TD" => [
+        "name" => "ЧАД",
+        "code" => "148"
+    ],
+    "ME" => [
+        "name" => "ЧЕРНОГОРИЯ",
+        "code" => "499"
+    ],
+    "CZ" => [
+        "name" => "ЧЕХИЯ",
+        "code" => "203"
+    ],
+    "CL" => [
+        "name" => "ЧИЛИ",
+        "code" => "152"
+    ],
+    "CH" => [
+        "name" => "ШВЕЙЦАРИЯ",
+        "code" => "756"
+    ],
+    "SE" => [
+        "name" => "ШВЕЦИЯ",
+        "code" => "752"
+    ],
+    "SJ" => [
+        "name" => "ШПИЦБЕРГЕН И ЯН МАЙЕН",
+        "code" => "744"
+    ],
+    "LK" => [
+        "name" => "ШРИ-ЛАНКА",
+        "code" => "144"
+    ],
+    "EC" => [
+        "name" => "ЭКВАДОР",
+        "code" => "218"
+    ],
+    "GQ" => [
+        "name" => "ЭКВАТОРИАЛЬНАЯ ГВИНЕЯ",
+        "code" => "226"
+    ],
+    "АХ" => [
+        "name" => "ЭЛАНДСКИЕ ОСТРОВА",
+        "code" => "248"
+    ],
+    "SV" => [
+        "name" => "ЭЛЬ-САЛЬВАДОР",
+        "code" => "222"
+    ],
+    "ER" => [
+        "name" => "ЭРИТРЕЯ",
+        "code" => "232"
+    ],
+    "EE" => [
+        "name" => "ЭСТОНИЯ",
+        "code" => "233"
+    ],
+    "ET" => [
+        "name" => "ЭФИОПИЯ",
+        "code" => "231"
+    ],
+    "ZA" => [
+        "name" => "ЮЖНАЯ АФРИКА",
+        "code" => "710"
+    ],
+    "GS" => [
+        "name" => "ЮЖНАЯ ДЖОРДЖИЯ И ЮЖНЫЕ САНДВИЧЕВЫ ОСТРОВА",
+        "code" => "239"
+    ],
+    "OS" => [
+        "name" => "ЮЖНАЯ ОСЕТИЯ",
+        "code" => "896"
+    ],
+    "SS" => [
+        "name" => "ЮЖНЫЙ СУДАН",
+        "code" => "728"
+    ],
+    "JM" => [
+        "name" => "ЯМАЙКА",
+        "code" => "388"
+    ],
+    "JP" => [
+        "name" => "ЯПОНИЯ",
+        "code" => "392"
+    ]
 ];
+
