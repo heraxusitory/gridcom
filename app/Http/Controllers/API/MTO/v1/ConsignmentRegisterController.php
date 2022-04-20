@@ -36,12 +36,12 @@ class ConsignmentRegisterController
             'consignment_registers.*.customer_sub_object_id' => 'required|uuid',
             'consignment_registers.*.work_agreement_id' => 'required|uuid',
 
-            'consignment_registers.*.responsible_full_name' => 'required|string|max:255',
-            'consignment_registers.*.responsible_phone' => 'required|string|max:255',
-            'consignment_registers.*.comment' => 'required|string',
+            'consignment_registers.*.responsible_full_name' => 'nullable|string|max:255',
+            'consignment_registers.*.responsible_phone' => 'nullable|string|max:255',
+            'consignment_registers.*.comment' => 'nullable|string',
             'consignment_registers.*.date' => 'required|date_format:d.m.Y',
 
-            'consignment_registers.*.positions' => 'required|array',
+            'consignment_registers.*.positions' => 'nullable|array',
             'consignment_registers.*.positions.*.id' => 'required|uuid',
             'consignment_registers.*.positions.*.consignment_id' => 'required|uuid|exists:consignments,uuid',
             'consignment_registers.*.positions.*.nomenclature_id' => 'required|uuid',
