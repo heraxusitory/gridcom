@@ -18,9 +18,9 @@ class CreatePaymentRegisterPositions extends Migration
             $table->uuid('position_id');
             $table->unsignedBigInteger('payment_register_id');
             $table->unsignedBigInteger('order_id');
-            $table->string('payment_order_number');
-            $table->timestamp('payment_order_date');
-            $table->unsignedDouble('amount_payment');
+            $table->string('payment_order_number')->nullable();
+            $table->timestamp('payment_order_date')->nullable();
+            $table->unsignedDouble('amount_payment')->nullable();
             $table->enum('payment_type', ['Аванс', 'Постоплата']);
             $table->timestamps();
         });
