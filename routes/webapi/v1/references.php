@@ -14,5 +14,5 @@ Route::group(['prefix' => 'references', 'middleware' => 'role:provider,contracto
     Route::get('provider_contracts', [ReferenceController::class, 'getProviderContracts'])->can('view,' . ProviderContractDocument::class);
     Route::get('objects', [ReferenceController::class, 'getObjects'])->can('view,' . CustomerObject::class);
     Route::get('contr_agents', [ReferenceController::class, 'getContrAgents'])->can('view,' . ContrAgent::class);
-    Route::get('nomenclature', [ReferenceController::class, 'getNomenclature'])->can('view,' . Nomenclature::class);
+    Route::get('nomenclature', [ReferenceController::class, 'getNomenclature'])->can('view,' . Nomenclature::class)->middleware('throttle:80,1');
 });
