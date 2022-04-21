@@ -21,6 +21,6 @@ class Nomenclature extends Model
 
     public function units()
     {
-        return $this->belongsToMany(NomenclatureUnit::class, 'nomenclature_to_unit', 'unit_id', 'nomenclature_id');
+        return $this->belongsToMany(NomenclatureUnit::class, 'nomenclature_to_unit', 'nomenclature_id', 'unit_id');
     }
 }
