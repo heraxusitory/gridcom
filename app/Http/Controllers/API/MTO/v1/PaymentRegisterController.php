@@ -45,59 +45,59 @@ class PaymentRegisterController extends Controller
             ]
         );
 
-//        try {
-        $data = $request->all()['payment_registers'];
-        foreach ($data as $item) {
-            DB::transaction(function () use ($item) {
-                $position_data = $item['positions'] ?? [];
+        try {
+            $data = $request->all()['payment_registers'];
+            foreach ($data as $item) {
+                DB::transaction(function () use ($item) {
+                    $position_data = $item['positions'] ?? [];
 
-                $provider_contr_agent = ContrAgent::query()->firstOrCreate([
-                    'uuid' => $item['provider_contr_agent_id'],
-                ]);
-                $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
-                    'uuid' => $item['contractor_contr_agent_id'],
-                ]);
-                $provider_contract = ProviderContractDocument::query()->firstOrCreate([
-                    'uuid' => $item['provider_contract_id'],
-                ]);
-
-                $payment_register = PaymentRegister::query()->updateOrCreate([
-                    'uuid' => $item['id']
-                ], [
-                    'number' => $item['number'],
-                    'customer_status' => $item['customer_status'],
-                    'provider_status' => $item['provider_status'],
-                    'provider_contr_agent_id' => $provider_contr_agent->id,
-                    'provider_contract_id' => $provider_contract->id,
-                    'contractor_contr_agent_id' => $contractor_contr_agent->id,
-                    'responsible_full_name' => $item['responsible_full_name'],
-                    'responsible_phone' => $item['responsible_phone'],
-                    'comment' => $item['comment'],
-                    'date' => (new Carbon($item['date']))->format('d.m.Y'),
-                ]);
-
-                $position_ids = [];
-                foreach ($position_data as $position) {
-                    $order = Order::query()->where('uuid', $position['order_id'])->firstOrFail();
-
-                    $position = $payment_register->positions()->updateOrCreate([
-                        'position_id' => $position['position_id'],
-                    ], [
-                        'payment_order_number' => $position['payment_order_number'] ?? null,
-                        'order_id' => $order->id,
-                        'payment_order_date' => $position['payment_order_date'] ?? null,
-                        'amount_payment' => $position['amount_payment'] ?? null,
-                        'payment_type' => $position['payment_type'],
+                    $provider_contr_agent = ContrAgent::query()->firstOrCreate([
+                        'uuid' => $item['provider_contr_agent_id'],
                     ]);
-                    $position_ids[] = $position->id;
-                }
-                $payment_register->positions()->whereNotIn('id', $position_ids)->delete();
-            });
+                    $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
+                        'uuid' => $item['contractor_contr_agent_id'],
+                    ]);
+                    $provider_contract = ProviderContractDocument::query()->firstOrCreate([
+                        'uuid' => $item['provider_contract_id'],
+                    ]);
+
+                    $payment_register = PaymentRegister::query()->updateOrCreate([
+                        'uuid' => $item['id']
+                    ], [
+                        'number' => $item['number'],
+                        'customer_status' => $item['customer_status'],
+                        'provider_status' => $item['provider_status'],
+                        'provider_contr_agent_id' => $provider_contr_agent->id,
+                        'provider_contract_id' => $provider_contract->id,
+                        'contractor_contr_agent_id' => $contractor_contr_agent->id,
+                        'responsible_full_name' => $item['responsible_full_name'],
+                        'responsible_phone' => $item['responsible_phone'],
+                        'comment' => $item['comment'],
+                        'date' => (new Carbon($item['date']))->format('d.m.Y'),
+                    ]);
+
+                    $position_ids = [];
+                    foreach ($position_data as $position) {
+                        $order = Order::query()->where('uuid', $position['order_id'])->firstOrFail();
+
+                        $position = $payment_register->positions()->updateOrCreate([
+                            'position_id' => $position['position_id'],
+                        ], [
+                            'payment_order_number' => $position['payment_order_number'] ?? null,
+                            'order_id' => $order->id,
+                            'payment_order_date' => $position['payment_order_date'] ?? null,
+                            'amount_payment' => $position['amount_payment'] ?? null,
+                            'payment_type' => $position['payment_type'],
+                        ]);
+                        $position_ids[] = $position->id;
+                    }
+                    $payment_register->positions()->whereNotIn('id', $position_ids)->delete();
+                });
+            }
+            return response()->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
         }
-        return response()->json();
-//        } catch (\Exception $e) {
-//            Log::error($e->getMessage(), $e->getTrace());
-//            return response()->json(['message' => 'System error'], 500);
-//        }
     }
 }
