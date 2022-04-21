@@ -61,7 +61,7 @@ class ConsignmentController extends Controller
 
             foreach ($data as $item) {
                 DB::transaction(function () use ($item) {
-                    $position_data = $item['positions'];
+                    $position_data = $item['positions'] ?? [];
 
                     $organization = Organization::query()->firstOrCreate(['uuid' => $item['organization_id']]);
                     $provider_contr_agent = ContrAgent::query()->firstOrCreate(['uuid' => $item['provider_contr_agent_id']]);

@@ -22,10 +22,10 @@ class CreatePaymentRegisters extends Migration
             $table->unsignedBigInteger('provider_contr_agent_id');
             $table->unsignedBigInteger('contractor_contr_agent_id');
             $table->unsignedBigInteger('provider_contract_id');
-            $table->string('responsible_full_name');
-            $table->string('responsible_phone');
-            $table->string('comment');
-            $table->timestamp('date');
+            $table->string('responsible_full_name')->nullable();
+            $table->string('responsible_phone')->nullable();
+            $table->string('comment')->nullable();
+            $table->timestamp('date')->nullable();
             $table->timestamps();
         });
     }

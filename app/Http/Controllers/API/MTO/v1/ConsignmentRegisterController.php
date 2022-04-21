@@ -26,8 +26,8 @@ class ConsignmentRegisterController
             'consignment_registers' => 'required|array',
             'consignment_registers.*.id' => 'required|uuid',
             'consignment_registers.*.number' => 'required|string|max:255',
-            'consignment_registers.*.customer_status' => Rule::in(ConsignmentRegister::getCustomerStatuses()),
-            'consignment_registers.*.contr_agent_status' => Rule::in(ConsignmentRegister::getContrAgentStatuses()),
+            'consignment_registers.*.customer_status' => ['required', Rule::in(ConsignmentRegister::getCustomerStatuses())],
+            'consignment_registers.*.contr_agent_status' => ['required', Rule::in(ConsignmentRegister::getContrAgentStatuses())],
 
             'consignment_registers.*.organization_id' => 'required|uuid',
             'consignment_registers.*.contractor_contr_agent_id' => 'required|uuid',
@@ -55,7 +55,7 @@ class ConsignmentRegisterController
 
             foreach ($data as $item) {
                 DB::transaction(function () use ($item) {
-                    $position_data = $item['positions'];
+                    $position_data = $item['positions'] ?? [];
                     $organization = Organization::query()->firstOrCreate([
                         'uuid' => $item['organization_id'],
                     ]);
