@@ -34,7 +34,7 @@ class CreateOrganizationNotificationFormRequest extends FormRequest
             'action' => ['required', Rule::in(Notification::getActions())],
             'organization_id' => 'required|exists:organizations,id',
             'contract_number' => 'required|string|exists:provider_orders,contract_number',
-            'contract_date' => 'required|date_format:d.m.Y|exists:provider_orders,contract_date',
+            'contract_date' => 'required|date_format:Y-m-d|exists:provider_orders,contract_date',
             'provider_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])], #TODO заглушка, поменять когда будут сущности ролей и пользователей для поставщика
             'contract_stage' => ['required', Rule::in(ProviderOrder::STAGES())]
         ]);
@@ -62,7 +62,7 @@ class CreateOrganizationNotificationFormRequest extends FormRequest
             'contract_number' => ['required', Rule::in($contract_numbers)],
             'contract_date' => ['required', Rule::in($contract_dates)],
             'provider_contr_agent_id' => 'required|exists:contr_agents,id', #TODO заглушка, поменять когда будут сущности ролей и пользователей для поставщика
-            'date_fact_delivery' => ['required', 'date_format:d.m.Y'],
+            'date_fact_delivery' => ['required', 'date_format:Y-m-d'],
             'delivery_address' => ['required', 'string', 'max:255'],
             'car_info' => ['required', 'string', 'max:255'],
             'driver_phone' => ['required', 'string', 'max:255'],

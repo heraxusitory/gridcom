@@ -46,7 +46,7 @@ class UpdateContractorNotificationFormRequest extends FormRequest
 
         Validator::validate($data, [
             'provider_contract_id' => ['required', Rule::in($provider_contract_ids)],
-            'date_fact_delivery' => ['required', 'date_format:d.m.Y'],
+            'date_fact_delivery' => ['required', 'date_format:Y-m-d'],
             'delivery_address' => ['required', 'string', 'max:255'],
             'car_info' => ['required', 'string', 'max:255'],
             'driver_phone' => ['required', 'string', 'max:255'],

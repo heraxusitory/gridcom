@@ -28,18 +28,17 @@ class CreateFormRequest extends FormRequest
         return [
 //            'number' => ,
             'action' => ['required', Rule::in(['draft', 'approve'])],
-            'order_date' => 'date_format:d.m.Y',
-            'deadline_date' => 'required|date_format:d.m.Y',
+            'order_date' => 'date_format:Y-m-d',
+            'deadline_date' => 'required|date_format:Y-m-d',
 //            'customer_status',
 //            'provider_status',
             'customer.organization_id' => 'required|string|exists:organizations,id',
             'customer.work_agreement_id' => 'required|string|exists:work_agreements,id',
-//            'customer.work_agreement.date' => 'required|date_format:d:m:Y',
             'customer.work_type' => ['required', Rule::in(['Строительство', 'Разработка', 'Интеграция'])],
             'customer.object_id' => 'required|exists:customer_objects,id',
             'customer.sub_object_id' => 'required|exists:customer_sub_objects,id',
-            'customer.work_start_date' => 'required|date_format:d.m.Y',
-            'customer.work_end_date' => 'required|date_format:d.m.Y',
+            'customer.work_start_date' => 'required|date_format:Y-m-d',
+            'customer.work_end_date' => 'required|date_format:Y-m-d',
 
             'provider.contr_agent_id' => 'required|exists:contr_agents,id',
             'provider.contract_id' => 'required|exists:provider_contracts,id',
@@ -62,7 +61,7 @@ class CreateFormRequest extends FormRequest
             'positions.*.nomenclature_id' => 'required|exists:nomenclature,id',
             'positions.*.count' => 'required|integer',
 //            'positions.*.price_without_vat' => 'required|numeric',
-            'positions.*.delivery_time' => 'required|date_format:d.m.Y',
+            'positions.*.delivery_time' => 'required|date_format:Y-m-d',
             'positions.*.delivery_address' => 'required|string',
         ];
     }

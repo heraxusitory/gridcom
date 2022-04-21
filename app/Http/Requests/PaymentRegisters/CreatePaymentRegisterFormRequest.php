@@ -54,7 +54,7 @@ class CreatePaymentRegisterFormRequest extends FormRequest
             'positions' => 'required_if:action,approve|array',
             'positions.*.order_id' => ['required', Rule::in($available_order_ids)],
             'positions.*.payment_order_number' => ['required', 'string'],
-            'positions.*.payment_order_date' => ['required', 'date_format:d.m.Y'],
+            'positions.*.payment_order_date' => ['required', 'date_format:Y-m-d'],
             'positions.*.amount_payment' => ['required', 'numeric'],
             'positions.*.payment_type' => ['required', 'string', Rule::in(PaymentRegisterPosition::getPaymentTypes())],
         ];
