@@ -19,6 +19,10 @@ class Nomenclature extends Model
         'is_visible_to_client',
     ];
 
+    protected $casts = [
+        'price' => 'float',
+    ];
+
     public function units()
     {
         return $this->belongsToMany(NomenclatureUnit::class, 'nomenclature_to_unit', 'nomenclature_id', 'unit_id');
