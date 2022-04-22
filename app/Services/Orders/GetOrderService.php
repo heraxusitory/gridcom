@@ -26,8 +26,8 @@ class GetOrderService implements IService
                 'provider.contract',
                 'contractor',
                 'positions',
-                'positions.nomenclature',
-                'positions.unit'
+                'positions.nomenclature.units',
+//                'positions.unit'
             ])
             ->findOrFail($this->order_id);
 
