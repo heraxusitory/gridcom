@@ -28,6 +28,14 @@ class RequirementCorrectionPosition extends Model
     private const STATUS_AGREED = 'Согласовано';
     private const STATUS_REJECTED = 'Отклонено';
 
+    public static function getStatuses()
+    {
+        return [
+            self::STATUS_AGREED(),
+            self::STATUS_REJECTED(),
+        ];
+    }
+
     public static function STATUS_REJECTED()
     {
         return self::STATUS_REJECTED;
