@@ -36,7 +36,7 @@ class CreateFormRequest extends FormRequest
             'customer.work_agreement_id' => 'required|exists:work_agreements,id',
             'customer.work_type' => ['required', Rule::in(['Строительство', 'Разработка', 'Интеграция'])],
             'customer.object_id' => 'required|exists:customer_objects,id',
-            'customer.sub_object_id' => 'required|exists:customer_sub_objects,id',
+            'customer.sub_object_id' => 'nullable|exists:customer_sub_objects,id',
             'customer.work_start_date' => 'required|date_format:Y-m-d',
             'customer.work_end_date' => 'required|date_format:Y-m-d',
 

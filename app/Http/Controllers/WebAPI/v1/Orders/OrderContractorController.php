@@ -71,7 +71,7 @@ class OrderContractorController extends OrderController
 //            'customer.work_agreement.date' => 'required|date_format:d:m:Y',
             'customer.work_type' => ['required', Rule::in(['Строительство', 'Разработка', 'Интеграция'])],
             'customer.object_id' => 'required|exists:customer_objects,id',
-            'customer.sub_object_id' => 'required|exists:customer_sub_objects,id',
+            'customer.sub_object_id' => 'nullable|exists:customer_sub_objects,id',
 
             'provider.contr_agent_id' => 'required|exists:contr_agents,id',
 //            'provider.contract.number' => 'required|exists:provider_contracts,number',

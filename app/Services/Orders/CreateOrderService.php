@@ -68,14 +68,14 @@ class CreateOrderService implements IService
                 ->findOrFail($work_agreement_id);
 
             $customer_object = CustomerObject::query()->findOrFail($customer_object_id);
-            $customer_sub_object = $customer_object->subObjects()->findOrFail($customer_sub_object_id);
+            $customer_sub_object = $customer_object->subObjects()->find($customer_sub_object_id);
 
             $customer = Customer::create([
                 'organization_id' => $organization_id,
                 'work_agreement_id' => $work_agreement->id,
                 'work_type' => $customer_data['work_type'],
                 'object_id' => $customer_object->id,
-                'sub_object_id' => $customer_sub_object->id,
+                'sub_object_id' => $customer_sub_object->id ?? null,
                 'work_start_date' => $customer_data['work_start_date'],
                 'work_end_date' => $customer_data['work_end_date'],
             ]);

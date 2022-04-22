@@ -51,6 +51,14 @@ class Order extends Model
     const PROVIDER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const PROVIDER_STATUS_CANCELED = 'Аннулировано';
 
+    public static function getActions()
+    {
+        return [
+            self::ACTION_APPROVE,
+            self::ACTION_DRAFT,
+        ];
+    }
+
     public static function getCustomerStatuses(): array
     {
         return [
