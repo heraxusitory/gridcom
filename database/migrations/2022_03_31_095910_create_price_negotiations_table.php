@@ -17,13 +17,13 @@ class CreatePriceNegotiationsTable extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->enum('type', ['contract_work', 'contract_home_method']);
-            $table->string('number');
-            $table->timestamp('date');
+            $table->string('number')->nullable();
+            $table->timestamp('date')->nullable();
             $table->string('organization_status');
             $table->unsignedBigInteger('order_id');
-            $table->string('responsible_full_name');
-            $table->string('responsible_phone');
-            $table->text('comment');
+            $table->string('responsible_full_name')->nullable();
+            $table->string('responsible_phone')->nullable();
+            $table->text('comment')->nullable();
             $table->string('file_url')->nullable();
             $table->timestamps();
         });

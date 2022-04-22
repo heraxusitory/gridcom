@@ -9,4 +9,5 @@ Route::group(['middleware' => 'auth.basic'], function () {
     require 'consignment_registers.php';
     require 'consignments.php';
     require 'payment_registers.php';
+    require 'provider_orders.php';
 });

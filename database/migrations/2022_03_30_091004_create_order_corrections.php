@@ -17,8 +17,8 @@ class CreateOrderCorrections extends Migration
             $table->id();
             $table->uuid('correction_id')->unique();
             $table->unsignedBigInteger('provider_order_id');
-            $table->timestamp('date');
-            $table->string('number');
+            $table->timestamp('date')->nullable();
+            $table->string('number')->nullable();
             $table->timestamps();
         });
     }

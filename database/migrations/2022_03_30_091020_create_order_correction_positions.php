@@ -18,12 +18,12 @@ class CreateOrderCorrectionPositions extends Migration
             $table->uuid('position_id')->unique();
             $table->unsignedBigInteger('order_correction_id');
             $table->unsignedBigInteger('nomenclature_id');
-            $table->unsignedDouble('count');
-            $table->unsignedDouble('amount_without_vat');
-            $table->unsignedDouble('vat_rate');
-            $table->unsignedDouble('amount_with_vat');
-            $table->timestamp('delivery_time');
-            $table->string('delivery_address');
+            $table->unsignedDouble('count')->nullable();
+            $table->unsignedDouble('amount_without_vat')->nullable();
+            $table->unsignedDouble('vat_rate')->nullable();
+            $table->unsignedDouble('amount_with_vat')->nullable();
+            $table->timestamp('delivery_time')->nullable();
+            $table->string('delivery_address')->nullable();
             $table->timestamps();
         });
     }

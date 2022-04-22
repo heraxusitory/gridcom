@@ -18,7 +18,7 @@ class CreatePriceNegotiationPositionsTable extends Migration
             $table->uuid('position_id')->unique();
             $table->unsignedBigInteger('price_negotiation_id');
             $table->unsignedBigInteger('nomenclature_id');
-            $table->unsignedDouble('new_price_without_vat');
+            $table->unsignedDouble('new_price_without_vat')->nullable();
             $table->unsignedDouble('agreed_price')->nullable();
             $table->timestamps();
         });

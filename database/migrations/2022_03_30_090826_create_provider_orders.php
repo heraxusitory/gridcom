@@ -16,15 +16,15 @@ class CreateProviderOrders extends Migration
         Schema::create('provider_orders', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('number');
-            $table->timestamp('order_date');
-            $table->string('contract_number');
-            $table->timestamp('contract_date');
+            $table->string('number')->nullable();
+            $table->timestamp('order_date')->nullable();
+            $table->string('contract_number')->nullable();
+            $table->timestamp('contract_date')->nullable();
             $table->enum('contract_stage', [1, 2, 3, 4, 5, 6, 7]);
             $table->unsignedBigInteger('provider_contr_agent_id');
             $table->unsignedBigInteger('organization_id');
-            $table->string('responsible_full_name');
-            $table->string('responsible_phone');
+            $table->string('responsible_full_name')->nullable();
+            $table->string('responsible_phone')->nullable();
             $table->string('organization_comment')->nullable();
             $table->timestamps();
         });
