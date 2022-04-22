@@ -200,7 +200,7 @@ class ReferenceController extends Controller
                         'price' => $item['price'],
                         'is_visible_to_client' => true,
                     ]);
-                    $nomenclature->units()->attach($nomenclature_unit->id);
+                    $nomenclature->units()->sync([$nomenclature_unit->id]);
                 });
             }
             return response()->json();
