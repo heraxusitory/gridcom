@@ -1,11 +1,10 @@
 <?php
 
 
-namespace App\Http\Controllers\API\MTO\v1;
+namespace App\Http\Controllers\API\MTO\v1\ProviderOrders;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Provider;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\ContrAgent;
 use App\Models\References\Nomenclature;
