@@ -32,6 +32,14 @@ class OrderPosition extends Model
         'delivery_address',
     ];
 
+    protected $casts = [
+        'order_id' => 'integer',
+        'nomenclature_id' => 'integer',
+        'count' => 'float',
+        'price_without_vat' => 'float',
+        'amount_without_vat' => 'float',
+    ];
+
     const STATUS_AGREED = 'Согласовано';
 //    const STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const STATUS_REJECTED = 'Отклонено';

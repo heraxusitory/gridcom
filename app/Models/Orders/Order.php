@@ -35,6 +35,12 @@ class Order extends Model
         'uuid',
     ];
 
+    protected $casts = [
+        'customer_id' => 'integer',
+        'provider_id' => 'integer',
+        'contractor_id' => 'integer',
+    ];
+
     const ACTION_DRAFT = 'draft';
     const ACTION_APPROVE = 'approve';
 
