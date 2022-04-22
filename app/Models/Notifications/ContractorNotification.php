@@ -35,6 +35,17 @@ class ContractorNotification extends Notification
     const CONTRACTOR_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const CONTRACTOR_STATUS_CANCELED = 'Аннулировано';
 
+    public static function getContractorStatuses()
+    {
+        return [
+            self::CONTRACTOR_STATUS_DRAFT,
+            self::CONTRACTOR_STATUS_UNDER_CONSIDERATION,
+            self::CONTRACTOR_STATUS_AGREED,
+            self::CONTRACTOR_STATUS_CANCELED,
+            self::CONTRACTOR_STATUS_NOT_AGREED
+        ];
+    }
+
     public function positions()
     {
         return $this->hasMany(ContractorNotificationPosition::class, 'contractor_notification_id', 'id');

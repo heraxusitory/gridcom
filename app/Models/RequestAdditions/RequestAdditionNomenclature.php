@@ -43,6 +43,17 @@ class RequestAdditionNomenclature extends Model
     const ORGANIZATION_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const ORGANIZATION_STATUS_CANCELED = 'Аннулировано';
 
+    public static function getOrganizationStatuses()
+    {
+        return [
+            self::ORGANIZATION_STATUS_DRAFT,
+            self::ORGANIZATION_STATUS_AGREED,
+            self::ORGANIZATION_STATUS_CANCELED,
+            self::ORGANIZATION_STATUS_NOT_AGREED,
+            self::ORGANIZATION_STATUS_UNDER_CONSIDERATION,
+        ];
+    }
+
     public static function getActions(): array
     {
         return [

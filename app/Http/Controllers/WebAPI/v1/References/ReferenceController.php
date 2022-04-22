@@ -5,12 +5,26 @@ namespace App\Http\Controllers\WebAPI\v1\References;
 
 
 use App\Http\Controllers\Controller;
+use App\Models\ConsignmentRegisters\ConsignmentRegister;
+use App\Models\Notifications\ContractorNotification;
+use App\Models\Notifications\Notification;
+use App\Models\Notifications\OrganizationNotification;
+use App\Models\Orders\Order;
+use App\Models\Orders\OrderPositions\OrderPosition;
+use App\Models\PaymentRegisters\PaymentRegister;
+use App\Models\PaymentRegisters\PaymentRegisterPosition;
+use App\Models\PriceNegotiations\PriceNegotiation;
+use App\Models\ProviderOrders\Corrections\RequirementCorrection;
+use App\Models\ProviderOrders\Corrections\RequirementCorrectionPosition;
+use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
+use App\Models\RequestAdditions\RequestAdditionNomenclature;
+use App\Models\RequestAdditions\RequestAdditionObject;
 use Illuminate\Http\Request;
 
 class ReferenceController extends Controller
@@ -71,5 +85,72 @@ class ReferenceController extends Controller
             $nomenclature = $nomenclature_query->paginate($request->per_page);
             return response()->json(['data' => $nomenclature]);
         }
+    }
+
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function glossary(Request $request)
+    {
+        $data = [];
+
+        $data['work_types'] = [
+            'Строительство', 'Разработка', 'Интеграция',
+        ];
+        $data['vat_rates'] = config('vat_rates');
+        $data['countries'] = config('countries');
+
+        $data['actions'] = Order::getActions();
+        $data['orders'] = [
+            'customer_statuses' => Order::getCustomerStatuses(),
+            'provider_statuses' => Order::getProviderStatuses(),
+            'positions' => [
+                'statuses' => OrderPosition::getStatuses()
+            ]
+
+        ];
+
+        $data['consignment_registers'] = [
+            'customer_statuses' => ConsignmentRegister::getCustomerStatuses(),
+            'provider_statuses' => ConsignmentRegister::getProviderStatuses(),
+            'contr_agent_statuses' => ConsignmentRegister::getContrAgentStatuses(),
+        ];
+
+        $data['payment_registers'] = [
+            'customer_statuses' => PaymentRegister::getCustomerStatuses(),
+            'provider_statuses' => PaymentRegister::getProviderStatuses(),
+            'positions' => [
+                'payment_types' => PaymentRegisterPosition::getPaymentTypes(),
+            ]
+        ];
+
+        $data['price_negotiations'] = [
+            'types' => PriceNegotiation::HUMAN_READABLE_TYPES(),
+        ];
+
+        $data['provider_orders'] = [
+            'stages' => ProviderOrder::HUMAN_READABLE_STAGES(),
+        ];
+        $data['requirement_corrections'] = [
+            'provider_statuses' => RequirementCorrection::getProviderStatuses(),
+            'positions' => [
+                'statuses' => [RequirementCorrectionPosition::STATUS_AGREED(), RequirementCorrectionPosition::STATUS_REJECTED()]
+            ]
+        ];
+
+        $data['request_addition_nomenclature'] = [
+            'organization_statuses' => RequestAdditionNomenclature::getOrganizationStatuses(),
+        ];
+        $data['request_addition_objects'] = [
+            'organization_statuses' => RequestAdditionObject::getOrganizationStatuses(),
+        ];
+        $data['notifications'] = [
+            'targets' => Notification::targets(),
+            'contractor_notification_statuses' => ContractorNotification:: getContractorStatuses(),
+            'organization_notification_statuses' => OrganizationNotification::getOrganizationStatuses(),
+        ];
+
+        return response()->json(['data' => $data]);
     }
 }

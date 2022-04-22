@@ -43,6 +43,16 @@ class RequirementCorrection extends Model
         return self::PROVIDER_STATUS_PARTIALLY_AGREED;
     }
 
+    public static function getProviderStatuses()
+    {
+        return [
+            self::PROVIDER_STATUS_NOT_AGREED(),
+            self::PROVIDER_STATUS_UNDER_CONSIDERATION(),
+            self::PROVIDER_STATUS_AGREED(),
+            self::PROVIDER_STATUS_PARTIALLY_AGREED()
+        ];
+    }
+
     public static function STATUS_REJECTED()
     {
 
