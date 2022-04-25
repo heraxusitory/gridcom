@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\PaymentRegisters;
 
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\PaymentRegisters\PaymentRegister;
 use App\Models\PaymentRegisters\PaymentRegisterPosition;
 use Illuminate\Foundation\Http\FormRequest;
