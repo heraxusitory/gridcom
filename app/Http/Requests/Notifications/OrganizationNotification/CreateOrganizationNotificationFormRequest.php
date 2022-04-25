@@ -36,7 +36,7 @@ class CreateOrganizationNotificationFormRequest extends FormRequest
             'contract_number' => 'required|string|exists:provider_orders,contract_number',
             'contract_date' => 'required|date_format:Y-m-d|exists:provider_orders,contract_date',
             'provider_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])], #TODO заглушка, поменять когда будут сущности ролей и пользователей для поставщика
-            'contract_stage' => ['required', Rule::in(ProviderOrder::STAGES())]
+            'contract_stage' => ['required', /*Rule::in(ProviderOrder::STAGES())*/]
         ]);
 
         $order_query = ProviderOrder::query()

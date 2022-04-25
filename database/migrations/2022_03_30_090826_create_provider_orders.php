@@ -20,7 +20,7 @@ class CreateProviderOrders extends Migration
             $table->timestamp('order_date')->nullable();
             $table->string('contract_number')->nullable();
             $table->timestamp('contract_date')->nullable();
-            $table->enum('contract_stage', [1, 2, 3, 4, 5, 6, 7]);
+            $table->string('contract_stage')->nullable();
             $table->unsignedBigInteger('provider_contr_agent_id')->nullable();
             $table->unsignedBigInteger('organization_id')->nullable();
             $table->string('responsible_full_name')->nullable();

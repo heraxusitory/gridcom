@@ -25,7 +25,7 @@ class ProviderOrderController extends Controller
             'payment_orders.*.order_date' => 'nullable|date_format:d.m.Y',
             'payment_orders.*.contract_number' => 'nullable|string|max:255',
             'payment_orders.*.contract_date' => 'nullable|string|max:255',
-            'payment_orders.*.contract_stage' => ['nullable', Rule::in(ProviderOrder::STAGES())],
+            'payment_orders.*.contract_stage' => ['nullable', 'string', /*Rule::in(ProviderOrder::STAGES())*/],
             'payment_orders.*.provider_contr_agent_id' => ['required', 'uuid'],
             'payment_orders.*.organization_id' => ['required', 'uuid'],
             'payment_orders.*.responsible_full_name' => ['nullable', 'string', 'max:255'],
