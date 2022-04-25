@@ -31,6 +31,13 @@ class GetOrderService implements IService
             ])
             ->findOrFail($this->order_id);
 
+//        $order->map(function ($item) {
+//            return $item->provider->contact = [
+//                'full_name' => $item->provider->full_name,
+//                'email' => $item->provider->email,
+//                'phone' => $item->provider->phone,
+//            ];
+//        });
         $order->amount_total = $order->positions->sum('amount_without_vat');
         return $order;
     }

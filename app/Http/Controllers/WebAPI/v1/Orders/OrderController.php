@@ -9,6 +9,7 @@ use App\Models\Orders\Order;
 use App\Services\Orders\GetOrderService;
 use App\Services\Orders\GetOrdersService;
 use App\Services\Orders\Reports\GetReportService;
+use App\Transformers\OrderTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -51,7 +52,7 @@ class OrderController extends Controller
             }
             $order->findOrFail($order_id);
             $order = (new GetOrderService($request->all(), $order_id))->run();
-            return response()->json(['data' => $order]);
+            return fractal()->item($order)->transformWith(OrderTransformer::class)/*response()->json(['data' => $order])*/;
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {
