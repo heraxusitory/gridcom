@@ -101,8 +101,8 @@ class ProviderOrderController extends Controller
                             'amount_without_vat' => $base_position['amount_without_vat'] ?? null,
                             'vat_rate' => $base_position['vat_rate'] ?? null,
                             'delivery_time' => $base_position['delivery_time'] ?? null,
-                            'delivery_address' => optional($base_position['delivery_address']),
-                            'organization_comment' => optional($base_position['organization_comment']),
+                            'delivery_address' => $base_position['delivery_address'] ?? null,
+                            'organization_comment' => $base_position['organization_comment'] ?? null,
                         ]);
                         $base_position_ids[] = $base_position->id;
                     }
