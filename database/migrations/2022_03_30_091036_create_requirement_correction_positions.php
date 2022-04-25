@@ -17,7 +17,7 @@ class CreateRequirementCorrectionPositions extends Migration
             $table->id();
             $table->uuid('position_id');
             $table->unsignedBigInteger('requirement_correction_id');
-            $table->string('status');
+            $table->string('status')->nullable();
             $table->unsignedBigInteger('nomenclature_id');
             $table->unsignedDouble('count')->nullable();
             $table->unsignedDouble('amount_without_vat')->nullable();
