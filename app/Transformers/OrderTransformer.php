@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\Models\Orders\Order;
 use League\Fractal\TransformerAbstract;
 
 class OrderTransformer extends TransformerAbstract
@@ -29,7 +30,7 @@ class OrderTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($order)
+    public function transform(Order $order)
     {
         return [
             'deadline_date' => optional($order)->deadline_date,
@@ -44,7 +45,7 @@ class OrderTransformer extends TransformerAbstract
             ],
             'provider' => [
                 'contr_agent_id' => optional($order->provider)->contr_agent_id,
-                'contract_id' => optional($order->provider)->contract_id,
+                'contract_id' => optional($order->provider->contract)->contract_id,
                 'contact' => [
                     'full_name' => optional($order->provider)->full_name,
                     'email' => optional($order->provider)->email,
