@@ -49,7 +49,7 @@ class OrderTransformer extends TransformerAbstract
             ],
             'provider' => [
                 'contr_agent_id' => optional($order->provider)->contr_agent_id,
-                'contract_id' => optional($order->provider->contract)->contract_id,
+                'contract_id' => optional($order->provider->contract)->id,
                 'contact' => [
                     'full_name' => optional($order->provider)->full_name,
                     'email' => optional($order->provider)->email,
@@ -58,7 +58,7 @@ class OrderTransformer extends TransformerAbstract
             ],
             'contractor' => [
                 'contact' => ['contr_agent_id' => optional($order->contractor)->contr_agent_id,
-                    'contact' => optional($order->contractor)->full_name,
+                    'full_name' => optional($order->contractor)->full_name,
                     'email' => optional($order->contractor)->email,
                     'phone' => optional($order->contractor)->phone,
                 ],
