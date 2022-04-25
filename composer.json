@@ -27,6 +27,7 @@
         "facade/ignition": "^2.5",
         "laravel/breeze": "^1.8",
         "laravel/sail": "^1.0.1",
+        "laravel/telescope": "^4.8",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
         "phpunit/phpunit": "^9.5.10"
@@ -60,7 +61,9 @@
     },
     "extra": {
         "laravel": {
-            "dont-discover": []
+            "dont-discover": [
+                "laravel/telescope"
+            ]
         }
     },
     "config": {
