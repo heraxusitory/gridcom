@@ -126,7 +126,7 @@ class GetReportService implements IService
                 }
             }
             if (!isset($order_position->delivery_fact_count)) {
-                $order_position->delivert_fact_count = 0;
+                $order_position->delivery_fact_count = 0;
                 $order_position->delivery_fact_time = null;
                 $order_positions[$i] = $order_position;
             }
