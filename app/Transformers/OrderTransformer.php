@@ -33,6 +33,10 @@ class OrderTransformer extends TransformerAbstract
     public function transform(Order $order)
     {
         return [
+            'number' => optional($order)->number,
+            'order_date' => optional($order)->order_date,
+            'customer_status' => optional($order)->customer_status,
+            'provider_status' => optional($order)->provider_status,
             'deadline_date' => optional($order)->deadline_date,
             'customer' => [
                 'organization_id' => optional($order->customer)->organization_id,
