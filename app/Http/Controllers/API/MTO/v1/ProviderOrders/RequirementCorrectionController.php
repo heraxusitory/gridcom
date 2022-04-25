@@ -50,6 +50,7 @@ class RequirementCorrectionController extends Controller
                         'uuid' => $item['provider_order_id'],
                     ]);
 
+                    /** @var RequirementCorrection $requirement_correction */
                     $requirement_correction = RequirementCorrection::query()->updateOrCreate([
                         'correction_id' => $item['id'],
                     ], [
@@ -69,7 +70,7 @@ class RequirementCorrectionController extends Controller
                             'position_id' => $position['position_id'],
                         ], [
                             'nomenclature_id' => $nomenclature->id,
-                            'status' => $position['status'],
+                            'status' => $position['status'] ?? null,
                             'count' => $position['count'] ?? null,
                             'amount_without_vat' => $position['amount_without_vat'] ?? null,
                             'amount_with_vat' => $position['amount_with_vat'] ?? null,
