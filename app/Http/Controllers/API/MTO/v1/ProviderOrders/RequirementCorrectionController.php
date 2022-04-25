@@ -28,7 +28,7 @@ class RequirementCorrectionController extends Controller
 
             'requirement_corrections.*.positions' => 'nullable|array',
             'requirement_corrections.*.positions.*.position_id' => 'required|uuid',
-            'requirement_corrections.*.positions.*.status' => ['required', Rule::in(RequirementCorrectionPosition::getStatuses())],
+            'requirement_corrections.*.positions.*.status' => ['nullable', Rule::in(RequirementCorrectionPosition::getStatuses())],
             'requirement_corrections.*.positions.*.nomenclature_id' => ['required', 'uuid'],
             'requirement_corrections.*.positions.*.count' => ['nullable', 'numeric'],
             'requirement_corrections.*.positions.*.amount_without_vat' => ['nullable', 'numeric'],
