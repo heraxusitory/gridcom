@@ -57,7 +57,8 @@ class OrderTransformer extends TransformerAbstract
                 ]
             ],
             'contractor' => [
-                'contact' => ['contr_agent_id' => optional($order->contractor)->contr_agent_id,
+                'contr_agent_id' => optional($order->contractor)->contr_agent_id,
+                'contact' => [
                     'full_name' => optional($order->contractor)->full_name,
                     'email' => optional($order->contractor)->email,
                     'phone' => optional($order->contractor)->phone,
