@@ -10,6 +10,7 @@ use App\Models\References\Organization;
 use App\Models\References\WorkAgreementDocument;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Support\Carbon;
 
 class Customer extends Model
 {
@@ -43,5 +44,16 @@ class Customer extends Model
     public function subObject(): hasOne
     {
         return $this->hasOne(CustomerSubObject::class, 'id', 'sub_object_id');
+    }
+
+
+    public function getWorkStartDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
+    }
+
+    public function getWorkEndDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

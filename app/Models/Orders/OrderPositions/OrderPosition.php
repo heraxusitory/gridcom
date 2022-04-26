@@ -8,6 +8,7 @@ use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Carbon;
 
 class OrderPosition extends Model
 {
@@ -67,4 +68,15 @@ class OrderPosition extends Model
 //    {
 //        return $this->belongsToMany(Comment::class, 'mtr_positions_to_comments', 'mtr_position_id', 'comment_id');
 //    }
+
+
+    public function getDeliveryTimeAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
+    }
+
+    public function getDeliveryPlanTimeAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
+    }
 }

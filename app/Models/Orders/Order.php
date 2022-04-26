@@ -12,6 +12,7 @@ use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Order extends Model
 {
@@ -106,5 +107,15 @@ class Order extends Model
     public function contractor()
     {
         return $this->belongsTo(Contractor::class, 'contractor_id', 'id');
+    }
+
+    public function getOrderDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
+    }
+
+    public function getDeadlineDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }
