@@ -35,7 +35,7 @@ class OrderPositionTransformer extends TransformerAbstract
         return [
             'position_id' => $order_position?->position_id,
             'status' => $order_position?->status,
-            'nomenclature_id' => $order_position?->nomenclature_id,
+            'nomenclature_id' => optional($order_position->nomenclature)->uuid,
             'count' => $order_position?->count,
             'price_without_vat' => $order_position?->price_without_vat,
             'amount_without_vat' => $order_position?->amount_without_vat,

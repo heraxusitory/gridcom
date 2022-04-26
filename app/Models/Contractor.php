@@ -5,6 +5,7 @@ namespace App\Models;
 
 
 use App\Models\References\ContactPerson;
+use App\Models\References\ContrAgent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -26,5 +27,10 @@ class Contractor extends Model
     public function contact(): hasOne
     {
         return $this->hasOne(ContactPerson::class, 'id', 'contact_id');
+    }
+
+    public function contr_agent()
+    {
+        return $this->hasOne(ContrAgent::class, 'id', 'contr_agent_id');
     }
 }
