@@ -5,6 +5,7 @@ namespace App\Models\ProviderOrders\Corrections;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class OrderCorrectionPosition extends Model
 {
@@ -21,4 +22,9 @@ class OrderCorrectionPosition extends Model
         'delivery_time',
         'delivery_address',
     ];
+
+    public function getDeliveryTimeAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Models\ProviderOrders\Corrections;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class RequirementCorrection extends Model
 {
@@ -61,5 +62,10 @@ class RequirementCorrection extends Model
     public function positions()
     {
         return $this->hasMany(RequirementCorrectionPosition::class, 'requirement_correction_id', 'id');
+    }
+
+    public function getDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

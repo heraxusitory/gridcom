@@ -5,6 +5,7 @@ namespace App\Models\ProviderOrders\Corrections;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class RequirementCorrectionPosition extends Model
 {
@@ -44,5 +45,10 @@ class RequirementCorrectionPosition extends Model
     public static function STATUS_AGREED()
     {
         return self::STATUS_AGREED;
+    }
+
+    public function getDeliveryTimeAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

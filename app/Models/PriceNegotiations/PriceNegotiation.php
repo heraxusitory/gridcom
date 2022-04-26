@@ -7,6 +7,7 @@ use App\Models\ProviderOrders\ProviderOrder;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class PriceNegotiation extends Model
 {
@@ -112,5 +113,10 @@ class PriceNegotiation extends Model
             self::TYPE_CONTRACT_HOME_METHOD => ProviderOrder::class,
         };
         return $this->hasOne($order_model, 'id', 'order_id');
+    }
+
+    public function getDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

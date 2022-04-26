@@ -6,6 +6,7 @@ namespace App\Models\PaymentRegisters;
 
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class PaymentRegister extends Model
 {
@@ -75,5 +76,10 @@ class PaymentRegister extends Model
             self::PROVIDER_STATUS_UNDER_CONSIDERATION,
             self::PROVIDER_STATUS_CANCELED,
         ];
+    }
+
+    public function getDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

@@ -9,6 +9,7 @@ use App\Models\References\WorkAgreementDocument;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class RequestAdditionObject extends Model
 {
@@ -89,5 +90,10 @@ class RequestAdditionObject extends Model
     public function object()
     {
         return $this->hasOne(CustomerObject::class, 'id', 'object_id');
+    }
+
+    public function getDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

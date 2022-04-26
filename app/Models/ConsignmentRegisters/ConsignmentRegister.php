@@ -2,7 +2,6 @@
 
 namespace App\Models\ConsignmentRegisters;
 
-use App\Traits\UsesConsignmentRegisterNumber;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

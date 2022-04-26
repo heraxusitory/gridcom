@@ -5,6 +5,7 @@ namespace App\Models\PaymentRegisters;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class PaymentRegisterPosition extends Model
 {
@@ -29,5 +30,10 @@ class PaymentRegisterPosition extends Model
             self::PAYMENT_TYPE_PREPAID_EXPENSE,
             self::PAYMENT_TYPE_POSTPAID,
         ];
+    }
+
+    public function getPaymentOrderDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

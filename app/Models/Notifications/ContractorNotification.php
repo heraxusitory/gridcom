@@ -6,6 +6,7 @@ namespace App\Models\Notifications;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class ContractorNotification extends Notification
 {
@@ -49,6 +50,16 @@ class ContractorNotification extends Notification
     public function positions()
     {
         return $this->hasMany(ContractorNotificationPosition::class, 'contractor_notification_id', 'id');
+    }
+
+    public function getDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
+    }
+
+    public function getDateFactDeliveryAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 
 }

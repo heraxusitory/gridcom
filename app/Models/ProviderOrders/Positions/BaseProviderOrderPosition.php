@@ -5,6 +5,7 @@ namespace App\Models\ProviderOrders\Positions;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class BaseProviderOrderPosition extends Model
 {
@@ -23,4 +24,9 @@ class BaseProviderOrderPosition extends Model
         'delivery_address',
         'organization_comment',
     ];
+
+    public function getDeliveryTimeAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
+    }
 }

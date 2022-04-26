@@ -9,6 +9,7 @@ use App\Models\References\WorkAgreementDocument;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class RequestAdditionNomenclature extends Model
 {
@@ -90,5 +91,10 @@ class RequestAdditionNomenclature extends Model
     public function nomenclature()
     {
         return $this->hasOne(Nomenclature::class, 'id', 'nomenclature_id');
+    }
+
+    public function getDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

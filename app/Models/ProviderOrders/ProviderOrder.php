@@ -9,6 +9,7 @@ use App\Models\ProviderOrders\Corrections\RequirementCorrection;
 use App\Models\ProviderOrders\Positions\ActualProviderOrderPosition;
 use App\Models\ProviderOrders\Positions\BaseProviderOrderPosition;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class ProviderOrder extends Model
 {
@@ -88,5 +89,10 @@ class ProviderOrder extends Model
     public function order_corrections()
     {
         return $this->hasMany(OrderCorrection::class, 'provider_order_id', 'id');
+    }
+
+    public function getOrderDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

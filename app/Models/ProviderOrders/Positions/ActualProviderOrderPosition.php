@@ -6,6 +6,7 @@ namespace App\Models\ProviderOrders\Positions;
 
 use App\Models\References\Nomenclature;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class ActualProviderOrderPosition extends Model
 {
@@ -28,5 +29,10 @@ class ActualProviderOrderPosition extends Model
     public function nomenclature()
     {
         return $this->hasOne(Nomenclature::class, 'id', 'nomenclature_id');
+    }
+
+    public function getDeliveryTimeAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

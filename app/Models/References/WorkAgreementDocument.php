@@ -5,6 +5,7 @@ namespace App\Models\References;
 
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class WorkAgreementDocument extends Model
 {
@@ -16,4 +17,9 @@ class WorkAgreementDocument extends Model
         'date',
         'is_visible_to_client',
     ];
+
+    public function getDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
+    }
 }
