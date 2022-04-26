@@ -63,8 +63,8 @@ class OrderTransformer extends TransformerAbstract
                     'email' => optional($order->contractor)->email,
                     'phone' => optional($order->contractor)->phone,
                 ],
-                'responsible_full_name' => optional($order->contractor)->responsible_full_name,
-                'responsible_phone' => optional($order->contractor)->responsible_phone,
+                'responsible_full_name' => optional($order->contractor)->contractor_responsible_full_name,
+                'responsible_phone' => optional($order->contractor)->contractor_responsible_phone,
             ],
 
             'positions' => optional($order)->positions,
