@@ -27,7 +27,7 @@ class GetReportService implements IService
 
 
         $consignment_last_date = Consignment::query()
-            ->whereHas('positions',function ($q) {
+            ->whereHas('positions', function ($q) {
                 $q->where('order_id', $this->order->id);
             })
             ->orderByDesc('date')
@@ -61,7 +61,7 @@ class GetReportService implements IService
         $this->top_report['shipment_fact_data'] = $consignment_positions_for_top_report;
         $this->top_report['balance'] = abs($this->top_report['payment_fact'] - $this->top_report['shipment_fact']);
 
-        $order_positions = $this->order->positions()
+        $order_positions = $this->order->positions()->with(['nomenclature.units'])
             ->selectRaw("
                 nomenclature.id as nomenclature_id,
                 nomenclature.mnemocode as nomenclature_mnemocode,
@@ -135,7 +135,10 @@ class GetReportService implements IService
         $order_positions->map(function ($position) {
             $position->remainder = abs($position->delivery_plan_count - $position->delivery_fact_count);
             $position->fact_amount_without_vat = round($position->delivery_fact_count * $position->price_without_vat, 2);
-            unset($position->price_without_vat);
+            unset($position->price_without_vat,
+                $position->nomenclature_id,
+                $position->nomenclature_mnemocode,
+                $position->nomenclature_unit);
             return $position;
         });
 

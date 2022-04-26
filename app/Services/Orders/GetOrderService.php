@@ -20,6 +20,7 @@ class GetOrderService implements IService
 
     public function run()
     {
+        /** @var Order $order */
         $order = Order::query()
             ->with([
                 'customer.contract',
@@ -31,6 +32,7 @@ class GetOrderService implements IService
             ])
             ->findOrFail($this->order_id);
 
+//        dd($order->provider->contract);
 //        $order->map(function ($item) {
 //            return $item->provider->contact = [
 //                'full_name' => $item->provider->full_name,
