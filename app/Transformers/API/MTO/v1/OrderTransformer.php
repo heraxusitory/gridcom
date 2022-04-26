@@ -78,6 +78,8 @@ class OrderTransformer extends TransformerAbstract
 
     public function includePositions(Order $order)
     {
-        return $this->collection(optional($order)->positions, new OrderPositionTransformer());
+        if (optional($order)->positions)
+            return $this->collection($order->positions, new OrderPositionTransformer());
+        return $this->null();
     }
 }

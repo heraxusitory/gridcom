@@ -4,6 +4,7 @@
 namespace App\Models\Consignments;
 
 
+use App\Models\Orders\Order;
 use App\Models\References\Nomenclature;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,5 +34,10 @@ class ConsignmentPosition extends Model
     public function nomenclature()
     {
         return $this->belongsTo(Nomenclature::class, 'nomenclature_id', 'id');
+    }
+
+    public function order()
+    {
+        return $this->hasOne(Order::class, 'id', 'order_id');
     }
 }

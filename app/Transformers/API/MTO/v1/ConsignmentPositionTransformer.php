@@ -33,7 +33,8 @@ class ConsignmentPositionTransformer extends TransformerAbstract
     public function transform(ConsignmentPosition $consignment_position)
     {
         return [
-            'id' => $consignment_position?->position_id,
+            'position_id' => $consignment_position?->position_id,
+            'order_id' => optional($consignment_position->order)->uuid,
             'nomenclature_id' => optional($consignment_position->nomenclature)->uuid,
             'count' => $consignment_position?->count,
             'price_without_vat' => $consignment_position?->price_without_vat,

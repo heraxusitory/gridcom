@@ -205,7 +205,7 @@ class OrderController extends Controller
 
     public function synchronize(Request $request)
     {
-//        try {
+        try {
             return DB::transaction(function () {
                 $orders = Order::query()
                     ->with(['customer.subObject', 'customer.object'])
@@ -214,9 +214,9 @@ class OrderController extends Controller
 //                Order::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем
                 return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
             });
-//        } catch (\Exception $e) {
-//            Log::error($e->getMessage(), $e->getTrace());
-//            return response()->json(['message' => 'System error'], 500);
-//        }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
     }
 }
