@@ -32,7 +32,7 @@ class GetReportService implements IService
             })
             ->orderByDesc('date')
             ->first()?->date;
-        $this->top_report['payment_period'] = isset($consignment_last_date) ? (new Carbon($consignment_last_date))->format('d.m.Y') . ' - ' . (new Carbon($consignment_last_date))->addMonth()->format('d.m.Y') : null;
+        $this->top_report['payment_period'] = isset($consignment_last_date) ? (new Carbon($consignment_last_date))->format('Y-m-d') . ' - ' . (new Carbon($consignment_last_date))->addMonth()->format('d.m.Y') : null;
         $this->top_report['deadline_date'] = $this->order->deadline_date;
 
         $payment_positions = PaymentRegisterPosition::query()

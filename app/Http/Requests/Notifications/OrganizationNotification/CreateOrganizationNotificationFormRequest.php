@@ -49,7 +49,7 @@ class CreateOrganizationNotificationFormRequest extends FormRequest
 
         $contract_numbers = $orders->pluck('contract_number');
         $contract_dates = $orders->pluck('contract_date')->map(function ($date) {
-            return (new Carbon($date))->format('d.m.Y');
+            return (new Carbon($date))->format('Y-m-d');
         });
 
         $orders = $order_query->where('contract_stage', $data['contract_stage'])->get();

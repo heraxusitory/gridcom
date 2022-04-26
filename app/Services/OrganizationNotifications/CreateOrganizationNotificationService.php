@@ -37,7 +37,7 @@ class CreateOrganizationNotificationService implements IService
             /** @var OrganizationNotification $organization_notification */
             $organization_notification = OrganizationNotification::query()->create([
                 'uuid' => Str::uuid(),
-                'date' => Carbon::today()->format('d.m.Y'),
+                'date' => Carbon::today()->format('Y-m-d'),
                 'status' => $organization_status,
                 'organization_id' => $data['organization_id'],
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],

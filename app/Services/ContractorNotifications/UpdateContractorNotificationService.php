@@ -34,7 +34,7 @@ class UpdateContractorNotificationService implements IService
 
         return DB::transaction(function () use ($data, $contractor_status) {
             $this->contractor_notification->update([
-                'date' => Carbon::today()->format('d.m.Y'),
+                'date' => Carbon::today()->format('Y-m-d'),
                 'status' => $contractor_status,
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],

@@ -31,7 +31,7 @@ class UpdateConsignmentService implements IService
 
         return DB::transaction(function () use ($data) {
             $this->consignment->update([
-                'date' => Carbon::today()->format('d.m.Y'),
+                'date' => Carbon::today()->format('Y-m-d'),
 //                'order_id' => $data['order_id'],
                 'organization_id' => $data['organization_id'],
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],

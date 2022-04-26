@@ -64,8 +64,8 @@ class OrderContractorController extends OrderController
 
         Validator::make($request->all(), [
             'action' => ['required', Rule::in(['draft', 'approve'])],
-            'order_date' => 'date_format:d.m.Y',
-            'deadline_date' => 'date_format:d.m.Y',
+            'order_date' => 'date_format:Y-m-d',
+            'deadline_date' => 'date_format:Y-m-d',
             'customer.organization_id' => 'required|string|exists:organizations,id',
             'customer.work_agreement_id' => 'required|string|exists:work_agreements,id',
 //            'customer.work_agreement.date' => 'required|date_format:d:m:Y',
@@ -93,7 +93,7 @@ class OrderContractorController extends OrderController
             'positions.*.nomenclature_id' => 'required|exists:nomenclature,id',
             'positions.*.count' => 'required|integer',
 //            'positions.*.price_without_vat' => 'required|numeric',
-            'positions.*.delivery_time' => 'required|date_format:d.m.Y',
+            'positions.*.delivery_time' => 'required|date_format:Y-m-d',
             'positions.*.delivery_address' => 'required|string',
         ])->validate();
 

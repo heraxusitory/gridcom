@@ -37,7 +37,7 @@ class CreateConsignmentRegisterService implements IService
         return DB::transaction(function () use ($data, $customer_status, $provider_status) {
             $consignment_register = ConsignmentRegister::query()->create([
                 'uuid' => Str::uuid(),
-                'date' => Carbon::today()->format('d.m.Y'),
+                'date' => Carbon::today()->format('Y-m-d'),
                 'customer_status' => $customer_status,
                 'contr_agent_status' => $provider_status,
                 'organization_id' => $data['organization_id'],

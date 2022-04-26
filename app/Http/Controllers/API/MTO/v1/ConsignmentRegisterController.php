@@ -39,7 +39,7 @@ class ConsignmentRegisterController
             'consignment_registers.*.responsible_full_name' => 'nullable|string|max:255',
             'consignment_registers.*.responsible_phone' => 'nullable|string|max:255',
             'consignment_registers.*.comment' => 'nullable|string',
-            'consignment_registers.*.date' => 'required|date_format:d.m.Y',
+            'consignment_registers.*.date' => 'required|date_format:Y-m-d',
 
             'consignment_registers.*.positions' => 'nullable|array',
             'consignment_registers.*.positions.*.id' => 'required|uuid',

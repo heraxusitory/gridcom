@@ -7,6 +7,7 @@ namespace App\Models\Consignments;
 use App\Models\References\Nomenclature;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class ConsignmentPosition extends Model
 {

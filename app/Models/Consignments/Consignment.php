@@ -4,12 +4,17 @@
 namespace App\Models\Consignments;
 
 
+use App\Models\Orders\Order;
 use App\Models\References\ContrAgent;
+use App\Models\References\CustomerObject;
+use App\Models\References\CustomerSubObject;
+use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Consignment extends Model
 {
@@ -51,6 +56,16 @@ class Consignment extends Model
 //        return $this->hasOne(Order::class, 'id', 'order_id');
 //    }
 
+    public function order()
+    {
+        return $this->hasOne(Order::class, 'id', 'order_id');
+    }
+
+    public function organization()
+    {
+        return $this->hasOne(Organization::class, 'id', 'organization_id');
+    }
+
     public function provider()
     {
         return $this->hasOne(ContrAgent::class, 'id', 'provider_contr_agent_id');
@@ -71,8 +86,23 @@ class Consignment extends Model
         return $this->hasOne(ProviderContractDocument::class, 'id', 'provider_contract_id');
     }
 
+    public function object()
+    {
+        return $this->hasOne(CustomerObject::class, 'id', 'customer_object_id');
+    }
+
+    public function subObject()
+    {
+        return $this->hasOne(CustomerSubObject::class, 'id', 'customer_sub_object_id');
+    }
+
     public function positions()
     {
         return $this->hasMany(ConsignmentPosition::class, 'consignment_id', 'id');
+    }
+
+    public function getDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

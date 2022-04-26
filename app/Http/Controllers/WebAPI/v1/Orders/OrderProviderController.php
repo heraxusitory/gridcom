@@ -150,7 +150,7 @@ class OrderProviderController extends OrderController
     public function changePosition(Request $request, $order_id, $order_position_id)
     {
         Validator::make($request->all(), [
-            'delivery_plan_time' => 'nullable|date_format:d.m.Y',
+            'delivery_plan_time' => 'nullable|date_format:Y-m-d',
             'comment' => 'nullable|string',
         ])->validate();
 

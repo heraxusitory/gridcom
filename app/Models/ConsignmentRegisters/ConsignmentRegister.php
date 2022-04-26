@@ -6,6 +6,7 @@ use App\Traits\UsesConsignmentRegisterNumber;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class ConsignmentRegister extends Model
 {
@@ -97,5 +98,10 @@ class ConsignmentRegister extends Model
         return $this->hasMany(
             ConsignmentRegisterPositions::class,
             'consignment_register_id', 'id');
+    }
+
+    public function getDateAttribute($value)
+    {
+        return (new Carbon($value))->format('Y-m-d');
     }
 }

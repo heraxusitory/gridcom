@@ -9,11 +9,12 @@ use App\Models\Consignments\Consignment;
 use App\Models\Orders\Order;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
-use App\Models\References\CustomerSubObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
+use App\Serializers\CustomerSerializer;
+use App\Transformers\API\MTO\v1\ConsignmentTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,7 +30,7 @@ class ConsignmentController extends Controller
             'consignments' => 'required|array',
             'consignments.*.id' => 'required|uuid',
             'consignments.*.number' => 'required|string|max:255',
-            'consignments.*.date' => 'required|date_format:d.m.Y',
+            'consignments.*.date' => 'required|date_format:Y-m-d',
             'consignments.*.organization_id' => ['required', 'uuid',],
             'consignments.*.provider_contr_agent_id' => 'required|uuid',
             'consignments.*.provider_contract_id' => 'required|uuid',
@@ -116,6 +117,23 @@ class ConsignmentController extends Controller
                 });
             }
             return response()->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
+    }
+
+    public function synchronize(Request $request)
+    {
+        try {
+            return DB::transaction(function () {
+                $consignments = Consignment::query()
+                    ->with(['positions'])
+                    /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
+                    ->get();
+//                Consignment::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем
+                return fractal()->collection($consignments)->transformWith(ConsignmentTransformer::class)->serializeWith(CustomerSerializer::class);
+            });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
             return response()->json(['message' => 'System error'], 500);

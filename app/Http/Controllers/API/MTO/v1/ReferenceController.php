@@ -249,7 +249,7 @@ class ReferenceController extends Controller
             'provider_contracts' => 'required|array',
             'provider_contracts.*.id' => 'required|uuid',
             'provider_contracts.*.number' => 'required|string|max:255',
-            'provider_contracts.*.date' => 'required|date_format:d.m.Y',
+            'provider_contracts.*.date' => 'required|date_format:Y-m-d',
         ])->validate();
         $contracts = $request->provider_contracts;
 
@@ -280,7 +280,7 @@ class ReferenceController extends Controller
             'work_agreements' => 'required|array',
             'work_agreements.*.id' => 'required|uuid',
             'work_agreements.*.number' => 'required|string|max:255',
-            'work_agreements.*.date' => 'required|date_format:d.m.Y',
+            'work_agreements.*.date' => 'required|date_format:Y-m-d',
         ])->validate();
         $contracts = $request->work_agreements;
 

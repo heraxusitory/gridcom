@@ -34,7 +34,7 @@ class OrderController extends Controller
             'orders' => 'required|array',
             'orders.*.id' => 'required|uuid',
             'orders.*.number' => 'nullable|string|max:255',
-            'orders.*.deadline_date' => 'nullable|date_format:d.m.Y',
+            'orders.*.deadline_date' => 'nullable|date_format:Y-m-d',
             'orders.*.customer_status' => [Rule::in(Order::getCustomerStatuses())],
             'orders.*.provider_status' => [Rule::in(Order::getProviderStatuses())],
 
@@ -43,8 +43,8 @@ class OrderController extends Controller
             'orders.*.order_customer.work_type' => 'required|string|max:255',
             'orders.*.order_customer.object_id' => 'required|uuid',
             'orders.*.order_customer.sub_object_id' => 'required|uuid',
-            'orders.*.order_customer.work_start_date' => 'required|date_format:d.m.Y',
-            'orders.*.order_customer.work_end_date' => 'required|date_format:d.m.Y',
+            'orders.*.order_customer.work_start_date' => 'required|date_format:Y-m-d',
+            'orders.*.order_customer.work_end_date' => 'required|date_format:Y-m-d',
 
             'orders.*.order_provider.provider_contract_id' => 'nullable|required_without:orders.*.order_provider.provider_contract_name|uuid',
             'orders.*.order_provider.provider_contract_name' => 'nullable|required_without:orders.*.order_provider.provider_contract_id|string|max:255',
@@ -71,7 +71,7 @@ class OrderController extends Controller
             'orders.*.order_positions.*.count' => 'nullable|numeric',
             'orders.*.order_positions.*.price_without_vat' => 'nullable|numeric',
             'orders.*.order_positions.*.amount_without_vat' => 'nullable|numeric',
-            'orders.*.order_positions.*.delivery_time' => 'nullable|date_format:d.m.Y',
+            'orders.*.order_positions.*.delivery_time' => 'nullable|date_format:Y-m-d',
             'orders.*.order_positions.*.delivery_address' => 'nullable|string|max:255',
         ])->validate();
 

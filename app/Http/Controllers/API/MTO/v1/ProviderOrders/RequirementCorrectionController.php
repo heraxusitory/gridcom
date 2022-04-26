@@ -22,7 +22,7 @@ class RequirementCorrectionController extends Controller
             'requirement_corrections' => 'required|array',
             'requirement_corrections.*.id' => 'required|uuid',
             'requirement_corrections.*.provider_order_id' => 'required|uuid',
-            'requirement_corrections.*.date' => 'nullable|date_format:d.m.Y',
+            'requirement_corrections.*.date' => 'nullable|date_format:Y-m-d',
             'requirement_corrections.*.number' => 'nullable|string|max:255',
             'requirement_corrections.*.provider_status' => ['required', 'string', Rule::in(RequirementCorrection::getProviderStatuses())],
 
@@ -34,7 +34,7 @@ class RequirementCorrectionController extends Controller
             'requirement_corrections.*.positions.*.amount_without_vat' => ['nullable', 'numeric'],
             'requirement_corrections.*.positions.*.amount_with_vat' => ['nullable', 'numeric'],
             'requirement_corrections.*.positions.*.vat_rate' => ['nullable', Rule::in(array_keys(config('vat_rates')))],
-            'requirement_corrections.*.positions.*.delivery_time' => ['nullable', 'date_format:d.m.Y'],
+            'requirement_corrections.*.positions.*.delivery_time' => ['nullable', 'date_format:Y-m-d'],
             'requirement_corrections.*.positions.*.delivery_address' => ['nullable', 'string', 'max:255'],
             'requirement_corrections.*.positions.*.organization_comment' => ['nullable', 'string'],
         ]);

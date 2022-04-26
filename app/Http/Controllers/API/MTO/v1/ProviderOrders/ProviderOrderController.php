@@ -22,7 +22,7 @@ class ProviderOrderController extends Controller
             'provider_orders' => 'required|array',
             'provider_orders.*.id' => 'required|uuid',
             'payment_orders.*.number' => 'required|string|max:255',
-            'payment_orders.*.order_date' => 'nullable|date_format:d.m.Y',
+            'payment_orders.*.order_date' => 'nullable|date_format:Y-m-d',
             'payment_orders.*.contract_number' => 'nullable|string|max:255',
             'payment_orders.*.contract_date' => 'nullable|string|max:255',
             'payment_orders.*.contract_stage' => ['nullable', 'string', /*Rule::in(ProviderOrder::STAGES())*/],
@@ -40,7 +40,7 @@ class ProviderOrderController extends Controller
             'payment_orders.*.base_positions.*.amount_without_vat' => ['nullable', 'numeric'],
             'payment_orders.*.base_positions.*.amount_with_vat' => ['nullable', 'numeric'],
             'payment_orders.*.base_positions.*.vat_rate' => ['nullable', Rule::in(array_keys(config('vat_rates')))],
-            'payment_orders.*.base_positions.*.delivery_time' => ['nullable', 'date_format:d.m.Y'],
+            'payment_orders.*.base_positions.*.delivery_time' => ['nullable', 'date_format:Y-m-d'],
             'payment_orders.*.base_positions.*.delivery_address' => ['nullable', 'string', 'max:255'],
             'payment_orders.*.base_positions.*.organization_comment' => ['nullable', 'string'],
 
@@ -52,7 +52,7 @@ class ProviderOrderController extends Controller
             'payment_orders.*.actual_positions.*.amount_with_vat' => ['nullable', 'numeric',],
             'payment_orders.*.actual_positions.*.amount_without_vat' => ['nullable', 'numeric',],
             'payment_orders.*.actual_positions.*.vat_rate' => ['nullable', Rule::in(array_keys(config('vat_rates')))],
-            'payment_orders.*.actual_positions.*.delivery_time' => ['nullable', 'date_format:d.m.Y'],
+            'payment_orders.*.actual_positions.*.delivery_time' => ['nullable', 'date_format:Y-m-d'],
             'payment_orders.*.actual_positions.*.delivery_address' => ['nullable', 'string', 'max:255'],
             'payment_orders.*.actual_positions.*.organization_comment' => ['nullable', 'string'],
         ]);

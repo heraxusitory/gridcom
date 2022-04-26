@@ -121,7 +121,7 @@ class CreateOrderService implements IService
 
             $order = Order::query()->create([
                 'uuid' => Str::uuid(),
-                'order_date' => Carbon::today()->format('d.m.Y'),
+                'order_date' => Carbon::today()->format('Y-m-d'),
                 'deadline_date' => $payload['deadline_date'],
                 'customer_status' => $customer_status,
                 'provider_status' => $provider_status,

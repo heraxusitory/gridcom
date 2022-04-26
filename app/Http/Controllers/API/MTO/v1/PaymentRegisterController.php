@@ -33,13 +33,13 @@ class PaymentRegisterController extends Controller
                 'payment_registers.*.responsible_full_name' => ['nullable', 'string', 'max:255'],
                 'payment_registers.*.responsible_phone' => ['nullable', 'string', 'max:255'],
                 'payment_registers.*.comment' => ['nullable', 'string'],
-                'payment_registers.*.date' => ['required', 'date_format:d.m.Y'],
+                'payment_registers.*.date' => ['required', 'date_format:Y-m-d'],
 
                 'payment_registers.*.positions' => ['nullable', 'array'],
                 'payment_registers.*.positions.*.position_id' => ['required', 'uuid'],
                 'payment_registers.*.positions.*.order_id' => ['required', 'uuid', 'exists:orders,uuid'],
                 'payment_registers.*.positions.*.payment_order_number' => ['nullable', 'string', 'max:255'],
-                'payment_registers.*.positions.*.payment_order_date' => ['nullable', 'date_format:d.m.Y'],
+                'payment_registers.*.positions.*.payment_order_date' => ['nullable', 'date_format:Y-m-d'],
                 'payment_registers.*.positions.*.amount_payment' => ['nullable', 'numeric'],
                 'payment_registers.*.positions.*.payment_type' => ['required', Rule::in(PaymentRegisterPosition::getPaymentTypes())],
             ]

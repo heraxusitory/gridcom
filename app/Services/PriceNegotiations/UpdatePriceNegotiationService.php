@@ -36,7 +36,7 @@ class UpdatePriceNegotiationService implements IService
                 'responsible_full_name' => $data['responsible_full_name'],
                 'responsible_phone' => $data['responsible_phone'],
                 'comment' => $data['comment'],
-                'date' => Carbon::today()->format('d.m.Y'),
+                'date' => Carbon::today()->format('Y-m-d'),
             ]);
 
             $position_ids = [];

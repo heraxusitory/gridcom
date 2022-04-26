@@ -35,7 +35,7 @@ class CreateRequestAdditionNomenclatureService implements IService
         return DB::transaction(function () use ($data, $organization_status) {
             $ra_nomenclature = RequestAdditionNomenclature::query()->create([
                 'uuid' => Str::uuid(),
-                'date' => Carbon::today()->format('d.m.Y'),
+                'date' => Carbon::today()->format('Y-m-d'),
                 'file_url' => $file_link ?? null,
                 'contr_agent_id' => $this->user->contr_agent_id(),
                 'work_agreement_id' => $data['work_agreement_id'] ?? null,

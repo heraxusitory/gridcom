@@ -28,9 +28,9 @@ class ProviderOrderSeeder extends Seeder
                 $provider_order = ProviderOrder::query()->create([
                     'uuid' => Str::uuid(),
                     'number' => $faker->numberBetween(432432423, 554546563),
-                    'order_date' => $faker->date('d.m.Y'),
+                    'order_date' => $faker->date('Y-m-d'),
                     'contract_number' => 'Д-' . $faker->numberBetween(34454543, 2444332222),
-                    'contract_date' => $faker->date('d.m.Y'),
+                    'contract_date' => $faker->date('Y-m-d'),
                     'contract_stage' => $faker->numberBetween(1, 7),
                     'provider_contr_agent_id' => $faker->numberBetween(1, 4),
                     'organization_id' => $organization_ids->random(),
@@ -47,7 +47,7 @@ class ProviderOrderSeeder extends Seeder
                     'amount_without_vat' => $faker->randomFloat(),
                     'amount_with_vat' => $faker->randomFloat(),
                     'vat_rate' => $faker->randomFloat(null, 1, 2),
-                    'delivery_time' => $faker->date('d.m.Y'),
+                    'delivery_time' => $faker->date('Y-m-d'),
                     'delivery_address' => $faker->address,
                     'organization_comment' => $faker->realText(233),
                 ]);
@@ -60,14 +60,14 @@ class ProviderOrderSeeder extends Seeder
                     'vat_rate' => $faker->randomFloat(null, 1, 2),
                     'amount_with_vat' => $faker->randomFloat(),
                     'amount_without_vat' => $faker->randomFloat(),
-                    'delivery_time' => $faker->date('d.m.Y'),
+                    'delivery_time' => $faker->date('Y-m-d'),
                     'delivery_address' => $faker->address,
                     'organization_comment' => $faker->realText(233),
                 ]);
 
                 $requirement_correction = $provider_order->requirement_corrections()->create([
                     'correction_id' => Str::uuid(),
-                    'date' => $faker->date('d.m.Y'),
+                    'date' => $faker->date('Y-m-d'),
                     'number' => 'К-' . $faker->numberBetween(1, 20),
                     'provider_status' => 'На рассмотрении',
                 ]);
@@ -80,14 +80,14 @@ class ProviderOrderSeeder extends Seeder
                     'amount_without_vat' => $faker->randomFloat(),
                     'vat_rate' => $faker->randomFloat(null, 1, 2),
                     'amount_with_vat' => $faker->randomFloat(),
-                    'delivery_time' => $faker->date('d.m.Y'),
+                    'delivery_time' => $faker->date('Y-m-d'),
                     'delivery_address' => $faker->address,
                     'organization_comment' => $faker->realText(200),
                 ]);
 
                 $order_correction = $provider_order->order_corrections()->create([
                     'correction_id' => Str::uuid(),
-                    'date' => $faker->date('d.m.Y'),
+                    'date' => $faker->date('Y-m-d'),
                     'number' => 'К-' . $faker->numberBetween(1, 20),
                 ]);
 
@@ -98,7 +98,7 @@ class ProviderOrderSeeder extends Seeder
                     'amount_without_vat' => $faker->randomFloat(),
                     'vat_rate' => $faker->randomFloat(null, 1, 2),
                     'amount_with_vat' => $faker->randomFloat(),
-                    'delivery_time' => $faker->date('d.m.Y'),
+                    'delivery_time' => $faker->date('Y-m-d'),
                     'delivery_address' => $faker->address,
                 ]);
             }

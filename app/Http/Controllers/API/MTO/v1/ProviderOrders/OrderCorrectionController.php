@@ -21,7 +21,7 @@ class OrderCorrectionController extends Controller
             'order_corrections' => 'required|array',
             'order_corrections.*.id' => 'required|uuid',
             'order_corrections.*.provider_order_id' => 'required|uuid',
-            'order_corrections.*.date' => 'nullable|date_format:d.m.Y',
+            'order_corrections.*.date' => 'nullable|date_format:Y-m-d',
             'order_corrections.*.number' => 'nullable|string|max:255',
 
             'order_corrections.*.positions' => 'nullable|array',
@@ -31,7 +31,7 @@ class OrderCorrectionController extends Controller
             'order_corrections.*.positions.*.amount_without_vat' => 'nullable|numeric',
             'order_corrections.*.positions.*.vat_rate' => ['nullable', 'numeric', Rule::in(array_keys(config('vat_rates')))],
             'order_corrections.*.positions.*.amount_with_vat' => 'nullable|numeric',
-            'order_corrections.*.positions.*.delivery_time' => 'nullable|date_format:d.m.Y',
+            'order_corrections.*.positions.*.delivery_time' => 'nullable|date_format:Y-m-d',
             'order_corrections.*.positions.*.delivery_address' => 'nullable|string|max:255',
         ]);
 

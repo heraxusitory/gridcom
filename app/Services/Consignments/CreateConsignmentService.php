@@ -24,7 +24,7 @@ class CreateConsignmentService implements IService
             /** @var Consignment $consignment */
             $consignment = Consignment::query()->create([
                 'uuid' => Str::uuid(),
-                'date' => Carbon::today()->format('d.m.Y'),
+                'date' => Carbon::today()->format('Y-m-d'),
                 'organization_id' => $data['organization_id'],
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
                 'provider_contract_id' => $data['provider_contract_id'],

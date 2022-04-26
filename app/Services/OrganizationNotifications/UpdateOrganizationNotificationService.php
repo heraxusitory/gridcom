@@ -34,7 +34,7 @@ class UpdateOrganizationNotificationService implements IService
 
         return DB::transaction(function () use ($data, $organization_status) {
             $this->organization_notification->update([
-                'date' => Carbon::today()->format('d.m.Y'),
+                'date' => Carbon::today()->format('Y-m-d'),
                 'status' => $organization_status,
                 'organization_id' => $data['organization_id'],
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
