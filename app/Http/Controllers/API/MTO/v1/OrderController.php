@@ -208,9 +208,9 @@ class OrderController extends Controller
         try {
             return DB::transaction(function () {
                 $orders = Order::query()
-                    ->where('sync_required', true)
+                    /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
                     ->get();
-                Order::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);
+//                Order::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем
                 return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
             });
         } catch (\Exception $e) {
