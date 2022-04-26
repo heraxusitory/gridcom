@@ -16,6 +16,8 @@ use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
+use App\Serializers\CustomerSerializer;
+use App\Transformers\API\MTO\v1\OrderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -195,6 +197,22 @@ class OrderController extends Controller
                 });
             }
             return response()->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
+    }
+
+    public function synchronize(Request $request)
+    {
+        try {
+            return DB::transaction(function () {
+                $orders = Order::query()
+                    ->where('sync_required', true)
+                    ->get();
+                Order::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);
+                return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
+            });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
             return response()->json(['message' => 'System error'], 500);
