@@ -56,6 +56,8 @@ class OrderTransformer extends TransformerAbstract
             'full_name' => optional($order->provider)->full_name,
             'email' => optional($order->provider)->email,
             'phone' => optional($order->provider)->phone,
+            'agreed_comment' => optional($order->provider)->agreed_comment,
+            'rejected_comment' => optional($order->provider)->rejected_comment,
         ];
 
         $contractor = [
@@ -65,6 +67,7 @@ class OrderTransformer extends TransformerAbstract
             'phone' => optional($order->contractor)->phone,
             'contractor_responsible_full_name' => optional($order->contractor)->contractor_responsible_full_name,
             'contractor_responsible_phone' => optional($order->contractor)->contractor_responsible_phone,
+            'comment' => optional($order->contractor)->comment,
         ];
 
         $data['order_customer'] = $customer;
