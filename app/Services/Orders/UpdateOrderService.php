@@ -129,7 +129,7 @@ class UpdateOrderService implements IService
                     'position_id' => $position['position_id'] ?? Str::uuid(),
                     'status' => OrderPosition::STATUS_AGREED,
                     'nomenclature_id' => $position['nomenclature_id'],
-                    'unit_id' => $position['unit_id'],
+//                    'unit_id' => $position['unit_id'],
                     'count' => $position['count'],
                     'price_without_vat' => $nomenclature->price,
                     'amount_without_vat' => round($position['count'] * $nomenclature->price, 2),
