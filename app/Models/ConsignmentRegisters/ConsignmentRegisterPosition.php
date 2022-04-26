@@ -4,11 +4,12 @@
 namespace App\Models\ConsignmentRegisters;
 
 
+use App\Models\Consignments\Consignment;
 use App\Models\References\Nomenclature;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ConsignmentRegisterPositions extends Model
+class ConsignmentRegisterPosition extends Model
 {
     use HasFactory;
 
@@ -27,5 +28,10 @@ class ConsignmentRegisterPositions extends Model
     public function nomenclature()
     {
         return $this->hasOne(Nomenclature::class, 'id', 'nomenclature_id');
+    }
+
+    public function consignment()
+    {
+        return $this->hasOne(Consignment::class, 'id', 'consignment_id');
     }
 }

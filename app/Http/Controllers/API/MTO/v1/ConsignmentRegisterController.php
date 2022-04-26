@@ -11,6 +11,8 @@ use App\Models\References\CustomerObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\WorkAgreementDocument;
+use App\Serializers\CustomerSerializer;
+use App\Transformers\API\MTO\v1\ConsignmentRegisterTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -115,6 +117,22 @@ class ConsignmentRegisterController
                 });
             }
             return response()->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
+    }
+
+    public function synchronize(Request $request)
+    {
+        try {
+            return DB::transaction(function () {
+                $consignment_registers = ConsignmentRegister::query()
+                    /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
+                    ->get();
+//                Consignment::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем
+                return fractal()->collection($consignment_registers)->transformWith(ConsignmentRegisterTransformer::class)->serializeWith(CustomerSerializer::class);
+            });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
             return response()->json(['message' => 'System error'], 500);
