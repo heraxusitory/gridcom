@@ -41,6 +41,8 @@ class OrderPositionTransformer extends TransformerAbstract
             'amount_without_vat' => $order_position?->amount_without_vat,
             'delivery_time' => $order_position?->delivery_time,
             'delivery_address' => $order_position?->delivery_address,
+            'customer_comment' => $order_position?->customer_comment,
+            'provider_comment' => $order_position?->provider_comment,
         ];
     }
 }
