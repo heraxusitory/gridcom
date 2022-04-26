@@ -25,7 +25,9 @@ use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
 use App\Models\RequestAdditions\RequestAdditionNomenclature;
 use App\Models\RequestAdditions\RequestAdditionObject;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ReferenceController extends Controller
 {
@@ -73,17 +75,33 @@ class ReferenceController extends Controller
         return response()->json(['data' => $contr_agents]);
     }
 
-    public function getNomenclature(Request $request)
+    public function getNomenclature(Request $request, $nomenclature_id = null)
     {
-        $nomenclature_query = Nomenclature::query()->with('units')->orderByDesc('created_at');
-        if (isset($request->name))
-            $nomenclature_query->where('name', 'ILIKE', "%{$request->name}%");
-        if (data_get($request, 'pagination', null) === 'off') {
-            $nomenclature = $nomenclature_query->get();
-            return response()->json(['data' => $nomenclature]);
-        } else {
-            $nomenclature = $nomenclature_query->paginate($request->per_page);
-            return response()->json(['data' => $nomenclature]);
+        try {
+            $nomenclature_query = Nomenclature::query()->with('units')->orderByDesc('created_at');
+            if ($nomenclature_id) {
+                $nomenclature = $nomenclature_query->findOrFail($nomenclature_id);
+                return response()->json(['data' => $nomenclature]);
+            }
+            if (isset($request->name))
+                $nomenclature_query->where('name', 'ILIKE', "%{$request->name}%");
+            if (data_get($request, 'pagination', null) === 'off') {
+                $nomenclature = $nomenclature_query->get();
+                return response()->json(['data' => $nomenclature]);
+            } else {
+                $nomenclature = $nomenclature_query->paginate($request->per_page);
+                return response()->json(['data' => $nomenclature]);
+            }
+        } catch
+        (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
         }
     }
 
