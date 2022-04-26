@@ -9,7 +9,7 @@ use App\Models\Orders\Order;
 use App\Services\Orders\GetOrderService;
 use App\Services\Orders\GetOrdersService;
 use App\Services\Orders\Reports\GetReportService;
-use App\Transformers\OrderTransformer;
+use App\Transformers\WebAPI\v1\OrderTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
