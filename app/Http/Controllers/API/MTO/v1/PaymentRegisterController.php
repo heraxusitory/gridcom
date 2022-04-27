@@ -109,6 +109,10 @@ class PaymentRegisterController extends Controller
             return DB::transaction(function () {
                 $payment_registers = PaymentRegister::query()
                     ->with([
+                        'provider', 'contractor', 'provider_contract',
+                        'positions.order.customer.object',
+                        'positions.order.customer.organization',
+                        'positions.order.customer.contract',
                     ])
                     /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
                     ->get();
