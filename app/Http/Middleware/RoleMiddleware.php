@@ -21,7 +21,7 @@ class RoleMiddleware
         return response([
             'error' => [
                 'code' => 403,
-                'message' => 'Отказано в доступе'
+                'message' => 'Вы не имеете разрешения на совершение данного действия'
             ]
         ], 403);
 
