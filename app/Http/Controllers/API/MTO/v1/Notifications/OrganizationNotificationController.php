@@ -19,6 +19,8 @@ class OrganizationNotificationController extends Controller
             return DB::transaction(function () {
                 $notifications = OrganizationNotification::query()
                     ->with([
+                        'organization', 'provider',
+                        'positions.order', 'positions.nomenclature',
                     ])
                     /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
                     ->get();

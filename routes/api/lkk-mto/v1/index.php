@@ -13,4 +13,5 @@ Route::group(['middleware' => 'auth.basic'], function () {
     require 'requirement_corrections.php';
     require 'order_corrections.php';
     require 'organization_notifications.php';
+    require 'request_additions.php';
 });

@@ -86,6 +86,7 @@ class CreateRolesPermissionsTable extends Migration
             Permission::RESOURCE_CONTRACTOR_NOTIFICATIONS . '.' . Permission::ACTION_UPDATE,
 
             Permission::RESOURCE_ORGANIZATION_NOTIFICATIONS . '.' . Permission::ACTION_VIEW,
+            Permission::RESOURCE_ORGANIZATION_NOTIFICATIONS . '.' . Permission::ACTION_CREATE,
             Permission::RESOURCE_ORGANIZATION_NOTIFICATIONS . '.' . Permission::ACTION_UPDATE,
 
             Permission::RESOURCE_PRICE_NEGOTIATIONS . '.' . Permission::ACTION_VIEW,
