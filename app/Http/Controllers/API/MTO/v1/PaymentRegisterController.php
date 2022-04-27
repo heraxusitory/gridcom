@@ -10,6 +10,8 @@ use App\Models\PaymentRegisters\PaymentRegister;
 use App\Models\PaymentRegisters\PaymentRegisterPosition;
 use App\Models\References\ContrAgent;
 use App\Models\References\ProviderContractDocument;
+use App\Serializers\CustomerSerializer;
+use App\Transformers\API\MTO\v1\PaymentRegisterTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -95,6 +97,24 @@ class PaymentRegisterController extends Controller
                 });
             }
             return response()->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
+    }
+
+    public function synchronize(Request $request)
+    {
+        try {
+            return DB::transaction(function () {
+                $payment_registers = PaymentRegister::query()
+                    ->with([
+                    ])
+                    /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
+                    ->get();
+//                PaymentRegister::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем
+                return fractal()->collection($payment_registers)->transformWith(PaymentRegisterTransformer::class)->serializeWith(CustomerSerializer::class);
+            });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
             return response()->json(['message' => 'System error'], 500);

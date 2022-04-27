@@ -4,6 +4,9 @@
 namespace App\Models\PaymentRegisters;
 
 
+use App\Models\Orders\Order;
+use App\Models\References\ContrAgent;
+use App\Models\References\ProviderContractDocument;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -81,5 +84,20 @@ class PaymentRegister extends Model
     public function getDateAttribute($value)
     {
         return (new Carbon($value))->format('Y-m-d');
+    }
+
+    public function provider()
+    {
+        return $this->hasOne(ContrAgent::class, 'id', 'provider_contr_agent_id');
+    }
+
+    public function contractor()
+    {
+        return $this->hasOne(ContrAgent::class, 'id', 'contractor_contr_agent_id');
+    }
+
+    public function provider_contract()
+    {
+        return $this->hasOne(ProviderContractDocument::class, 'id', 'provider_contract_id');
     }
 }

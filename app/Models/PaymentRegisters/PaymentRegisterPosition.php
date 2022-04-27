@@ -4,6 +4,7 @@
 namespace App\Models\PaymentRegisters;
 
 
+use App\Models\Orders\Order;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -35,5 +36,11 @@ class PaymentRegisterPosition extends Model
     public function getPaymentOrderDateAttribute($value)
     {
         return (new Carbon($value))->format('Y-m-d');
+    }
+
+
+    public function order()
+    {
+        return $this->hasOne(Order::class, 'id', 'order_id');
     }
 }
