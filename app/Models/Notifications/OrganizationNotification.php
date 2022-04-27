@@ -4,6 +4,8 @@
 namespace App\Models\Notifications;
 
 
+use App\Models\References\ContrAgent;
+use App\Models\References\Organization;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -62,6 +64,16 @@ class OrganizationNotification extends Notification
     public function getDateFactDeliveryAttribute($value)
     {
         return (new Carbon($value))->format('Y-m-d');
+    }
+
+    public function organization()
+    {
+        return $this->hasOne(Organization::class, 'id', 'organization_id');
+    }
+
+    public function provider()
+    {
+        return $this->hasOne(ContrAgent::class, 'id', 'provider_contr_agent_id');
     }
 
 }
