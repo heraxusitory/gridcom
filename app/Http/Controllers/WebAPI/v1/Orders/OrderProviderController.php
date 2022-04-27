@@ -131,7 +131,7 @@ class OrderProviderController extends OrderController
             throw_if($order->provider_status === Order::PROVIDER_STATUS_NOT_AGREED
                 , new BadRequestException('Заказ уже отказан поставщиком', 400));
 
-            throw_if($order->positions()->where('status', OrderPosition::STATUS_REJECTED)->exists(), new BadRequestException('Отказанные позиции уже существуют', 400));
+//            throw_if($order->positions()->where('status', OrderPosition::STATUS_REJECTED)->exists(), new BadRequestException('Отказанные позиции уже существуют', 400));
             $order->positions()->whereIn('id', $request->rejected_position_ids)->update(['status' => OrderPosition::STATUS_REJECTED]);
             return $order;
         } catch
