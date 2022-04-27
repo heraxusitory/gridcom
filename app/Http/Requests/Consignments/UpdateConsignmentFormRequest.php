@@ -37,7 +37,7 @@ class UpdateConsignmentFormRequest extends FormRequest
             'contractor_contr_agent_id' => 'required|exists:contr_agents,id',
             'work_agreement_id' => 'required|exists:work_agreements,id',
             'customer_object_id' => 'required|exists:customer_objects,id',
-            'customer_sub_object_id' => 'required|exists:customer_sub_objects,id',
+            'customer_sub_object_id' => 'nullable|exists:customer_sub_objects,id',
 //            'contr_agent' => ['required', 'exists:organizations,id'],
             'responsible_full_name' => 'required|string|max:255',
             'responsible_phone' => 'required|string|max:255',
@@ -51,7 +51,7 @@ class UpdateConsignmentFormRequest extends FormRequest
         $orders_query = Order::query()
             ->whereRelation('customer', 'organization_id', $data['organization_id'])
             ->whereRelation('customer', 'object_id', $data['customer_object_id'])
-            ->whereRelation('customer', 'sub_object_id', $data['customer_sub_object_id'])
+            ->whereRelation('customer', 'sub_object_id', $data['customer_sub_object_id'] ?? null)
             ->whereRelation('customer', 'work_agreement_id', $data['work_agreement_id'])
             ->whereRelation('provider', 'contr_agent_id', $data['provider_contr_agent_id'])
             ->whereRelation('provider', 'provider_contract_id', $data['provider_contract_id'])

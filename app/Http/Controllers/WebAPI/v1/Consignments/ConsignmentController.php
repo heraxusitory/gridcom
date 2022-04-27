@@ -137,6 +137,8 @@ class ConsignmentController extends Controller
             'provider_contract_id' => 'required|exists:provider_contracts,id',
             'work_agreement_id' => 'required|exists:work_agreements,id',
             'contractor_contr_agent_id' => 'required|exists:contr_agents,id',
+            'customer_object_id' => 'required|exists:customer_objects,id',
+            'customer_sub_object_id' => 'nullable|exists:customer_sub_objects,id',
         ])->validate();
 
         try {
@@ -158,6 +160,8 @@ class ConsignmentController extends Controller
             $orders = Order::query()
                 ->whereRelation('customer', 'organization_id', $request->organization_id)
                 ->whereRelation('customer', 'work_agreement_id', $request->work_agreement_id)
+                ->whereRelation('customer', 'object_id', $request->customer_object_id)
+                ->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id?? null)
                 ->whereRelation('provider', 'contr_agent_id', $request->provider_contr_agent_id)
                 ->whereRelation('provider', 'provider_contract_id', $request->provider_contract_id)
                 ->whereRelation('contractor', 'contr_agent_id', $request->contractor_contr_agent_id)

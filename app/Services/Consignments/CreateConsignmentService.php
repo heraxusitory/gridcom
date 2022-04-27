@@ -31,7 +31,7 @@ class CreateConsignmentService implements IService
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
                 'work_agreement_id' => $data['work_agreement_id'],
                 'customer_object_id' => $data['customer_object_id'],
-                'customer_sub_object_id' => $data['customer_sub_object_id'],
+                'customer_sub_object_id' => $data['customer_sub_object_id'] ?? null,
 //                'order_id' => $data['order_id'],
                 'responsible_full_name' => $data['responsible_full_name'],
                 'responsible_phone' => $data['responsible_phone'],
