@@ -128,6 +128,11 @@ class ConsignmentRegisterController
         try {
             return DB::transaction(function () {
                 $consignment_registers = ConsignmentRegister::query()
+                    ->with([
+                        'organization', 'contractor', 'provider',
+                        'object', 'subObject', 'work_agreement',
+                        'positions.consignment', 'positions.nomenclature',
+                    ])
                     /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
                     ->get();
 //                Consignment::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем

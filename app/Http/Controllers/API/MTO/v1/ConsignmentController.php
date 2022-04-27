@@ -128,7 +128,10 @@ class ConsignmentController extends Controller
         try {
             return DB::transaction(function () {
                 $consignments = Consignment::query()
-                    ->with(['positions'])
+                    ->with([
+                        'organization', 'provider', 'provider_contract',
+                        'contractor', 'work_agreement', 'object', 'subObject',
+                        'positions.nomenclature'])
                     /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
                     ->get();
 //                Consignment::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем

@@ -208,7 +208,12 @@ class OrderController extends Controller
         try {
             return DB::transaction(function () {
                 $orders = Order::query()
-                    ->with(['customer.subObject', 'customer.object'])
+                    ->with([
+                        'customer.subObject', 'customer.object',
+                        'provider.contract', 'provider.contr_agent',
+                        'contractor.contr_agent',
+                        'positions.nomenclature',
+                    ])
                     /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
                     ->get();
 //                Order::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем

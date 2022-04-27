@@ -38,7 +38,7 @@ class ConsignmentRegisterTransformer extends TransformerAbstract
             'number' => $consignment_register?->number,
             'customer_status' => $consignment_register?->customer_status,
             'contr_agent_status' => $consignment_register?->contr_agent_status,
-            'organization_id' => $consignment_register->organization->uuid,
+            'organization_id' => optional($consignment_register->organization)->uuid,
             'contractor_contr_agent_id' => optional($consignment_register->contractor)->uuid,
             'provider_contr_agent_id' => optional($consignment_register->provider)->uuid,
             'customer_object_id' => optional($consignment_register->object)->uuid,
