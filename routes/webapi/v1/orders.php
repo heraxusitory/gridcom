@@ -3,7 +3,7 @@
 use App\Http\Controllers\WebAPI\v1\Orders\OrderContractorController;
 use App\Http\Controllers\WebAPI\v1\Orders\OrderController;
 use App\Http\Controllers\WebAPI\v1\Orders\OrderProviderController;
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 
 Route::group(['prefix' => 'orders'], function () {
     Route::get('', [OrderController::class, 'index'])->middleware('role:provider,contractor')->can('view,' . Order::class);
