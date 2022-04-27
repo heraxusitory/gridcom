@@ -18,7 +18,12 @@ class RoleMiddleware
                 return $next($request);
             }
         }
-        abort(403);
+        return response([
+            'error' => [
+                'code' => 403,
+                'message' => 'Отказано в доступе'
+            ]
+        ], 403);
 
 //        if ($permission !== null && !auth()->user()->can($permission)) {
 //            abort(404);
