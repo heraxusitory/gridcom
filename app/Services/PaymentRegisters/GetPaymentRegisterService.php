@@ -20,7 +20,7 @@ class GetPaymentRegisterService implements IService
     public function run()
     {
         $payment_register = PaymentRegister::query()->with([
-            'positions'
+            'positions.order'
         ]);
         if ($this->user->isProvider()) {
             $payment_register->where('provider_contr_agent_id', $this->user->contr_agent_id());

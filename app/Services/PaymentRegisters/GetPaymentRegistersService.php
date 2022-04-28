@@ -28,6 +28,6 @@ class GetPaymentRegistersService implements IService
         } elseif ($this->user->isContractor()) {
             $payment_registers->where('contractor_contr_agent_id', $this->user->contr_agent_id());
         }
-        return $payment_registers->paginate();
+        return $payment_registers->get();
     }
 }
