@@ -38,7 +38,7 @@ class GetConsignmentsService implements IService
         } elseif ($this->user->isContractor()) {
             $consignments->where('contractor_contr_agent_id', $this->user->contr_agent_id());
         }
-        return $consignments->paginate();
+        return $consignments->get();
     }
 
 }

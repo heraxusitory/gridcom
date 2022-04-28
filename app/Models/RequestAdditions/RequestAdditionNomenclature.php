@@ -2,6 +2,7 @@
 
 namespace App\Models\RequestAdditions;
 
+use App\Models\References\ContrAgent;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
@@ -96,5 +97,10 @@ class RequestAdditionNomenclature extends Model
     public function getDateAttribute($value)
     {
         return (new Carbon($value))->format('Y-m-d');
+    }
+
+    public function contr_agent()
+    {
+        return $this->hasOne(ContrAgent::class, 'id', 'contr_agent_id');
     }
 }
