@@ -28,7 +28,7 @@ class GetConsignmentRegistersService implements IService
             $consignment_registers->where('contractor_contr_agent_id', $this->user->contr_agent_id());
         }
 
-        $consignment_registers->get()->map(function ($consignment_register) {
+        return  $consignment_registers->get()->map(function ($consignment_register) {
             return $consignment_register->positions->map(function ($position) {
                 $position->amount_without_vat =
                     round($position->count * $position->nomenclature->price, 2);
@@ -36,6 +36,6 @@ class GetConsignmentRegistersService implements IService
             });
         });
 
-        return (new Paginator($consignment_registers, 15));
+//        return (new Paginator($consignment_registers, 15));
     }
 }

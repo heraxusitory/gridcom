@@ -93,7 +93,7 @@ class ConsignmentRegisterController extends Controller
     public function index(Request $request)
     {
         try {
-            return response()->json((new GetConsignmentRegistersService())->run());
+            return response()->json(['data' => (new GetConsignmentRegistersService())->run()]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {
