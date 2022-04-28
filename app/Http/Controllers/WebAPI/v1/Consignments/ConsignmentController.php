@@ -9,10 +9,12 @@ use App\Http\Requests\Consignments\CreateConsignmentFormRequest;
 use App\Http\Requests\Consignments\UpdateConsignmentFormRequest;
 use App\Models\Consignments\Consignment;
 use App\Models\Orders\Order;
+use App\Serializers\CustomerSerializer;
 use App\Services\Consignments\CreateConsignmentService;
 use App\Services\Consignments\GetConsignmentService;
 use App\Services\Consignments\GetConsignmentsService;
 use App\Services\Consignments\UpdateConsignmentService;
+use App\Transformers\WebAPI\v1\ConsignmentTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -33,7 +35,8 @@ class ConsignmentController extends Controller
     {
         try {
             $consignments = (new GetConsignmentsService($request->all()))->run();
-            return response()->json($consignments);
+            return fractal()->collection($consignments)->transformWith(ConsignmentTransformer::class)/*->serializeWith(CustomerSerializer::class)*/ ;
+//            return response()->json($consignments);
         } catch (\Exception $e) {
             if ($e->getCode() >= 400 && $e->getCode() < 500)
                 return response()->json(['message' => $e->getMessage()], $e->getCode());
@@ -161,7 +164,7 @@ class ConsignmentController extends Controller
                 ->whereRelation('customer', 'organization_id', $request->organization_id)
                 ->whereRelation('customer', 'work_agreement_id', $request->work_agreement_id)
                 ->whereRelation('customer', 'object_id', $request->customer_object_id)
-                ->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id?? null)
+                ->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id ?? null)
                 ->whereRelation('provider', 'contr_agent_id', $request->provider_contr_agent_id)
                 ->whereRelation('provider', 'provider_contract_id', $request->provider_contract_id)
                 ->whereRelation('contractor', 'contr_agent_id', $request->contractor_contr_agent_id)
