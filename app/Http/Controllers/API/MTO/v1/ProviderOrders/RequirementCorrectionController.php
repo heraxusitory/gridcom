@@ -121,7 +121,7 @@ class RequirementCorrectionController extends Controller
         try {
             return DB::transaction(function () use ($request) {
                 $count = RequirementCorrection::query()
-                    ->whereIn('uuid', $request->ids)
+                    ->whereIn('correction_id', $request->ids)
                     ->update(['sync_required' => true]);
                 return response()->json('В очередь поставлено ' . $count . ' корректировок потребности');
             });
