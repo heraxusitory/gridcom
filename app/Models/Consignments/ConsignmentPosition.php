@@ -31,6 +31,14 @@ class ConsignmentPosition extends Model
         'declaration',
     ];
 
+    protected $casts = [
+        'count' => 'float',
+        'price_without_vat' => 'float',
+        'amount_without_vat' => 'float',
+        'vat_rate' => 'float',
+        'amount_with_vat' => 'float'
+    ];
+
     public function nomenclature()
     {
         return $this->belongsTo(Nomenclature::class, 'nomenclature_id', 'id');
