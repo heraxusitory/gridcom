@@ -15,14 +15,14 @@ class GetConsignmentService implements IService
 
     public function run()
     {
-        $consignment = $this->consignment->newQuery()
-            ->with([
+        $consignment = $this->consignment
+            ->load([
                 'positions',
                 'provider',
                 'contractor',
                 'work_agreement',
                 'provider_contract',
-            ])->first();
+            ]);
 
         return $consignment;
     }
