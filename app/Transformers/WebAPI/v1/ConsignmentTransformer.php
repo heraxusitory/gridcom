@@ -36,6 +36,7 @@ class ConsignmentTransformer extends TransformerAbstract
         if ($provider)
             $provider->contract = $consignment?->provider_contract;
         return [
+            'id' => $consignment?->id,
             'number' => $consignment?->number,
             'organization_id' => $consignment?->organization_id,
             'provider_contr_agent_id' => $consignment?->provider_contr_agent_id,
