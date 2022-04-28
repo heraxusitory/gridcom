@@ -17,7 +17,8 @@ class GetConsignmentService implements IService
     {
         $consignment = $this->consignment
             ->load([
-                'positions',
+                'positions.order',
+                'positions.nomenclature',
                 'provider',
                 'contractor',
                 'work_agreement',
