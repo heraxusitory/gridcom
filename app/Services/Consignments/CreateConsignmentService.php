@@ -38,7 +38,7 @@ class CreateConsignmentService implements IService
                 'comment' => $data['comment'],
             ]);
 
-            foreach ($data['positions'] as $position) {
+            foreach ($data['positions'] ?? [] as $position) {
                 $nomenclature = Nomenclature::query()->findOrFail($position['nomenclature_id']);
                 $amount_without_vat = round($nomenclature->price * $position['count'], 2);
                 $amount_with_vat = round($amount_without_vat * $position['vat_rate'], 2);

@@ -51,6 +51,11 @@ class Consignment extends Model
         ];
     }
 
+    public static function ACTION_APPROVE()
+    {
+        return self::ACTION_APPROVE;
+    }
+
 //    public function order(): hasOne
 //    {
 //        return $this->hasOne(Order::class, 'id', 'order_id');

@@ -66,14 +66,14 @@ class UpdateConsignmentFormRequest extends FormRequest
 
 
         $validator = Validator::make($data, [
-            'positions' => 'required|array',
+            'positions' => [Rule::requiredIf(fn() => $data['action'] === Consignment::ACTION_APPROVE()), 'array'],
             'positions.*' => 'required',
             'positions.*.order_id' => ['required', 'integer', 'exists:orders,id'],
             'positions.*.nomenclature_id' => ['required', 'integer', 'exists:nomenclature,id'/*, Rule::in($nomenclature_ids)*/],
         ]);
 
         $validator->after(function ($validator) use ($data, $orders) {
-            foreach ($data['positions'] as $key => $position) {
+            foreach ($data['positions'] ?? [] as $key => $position) {
                 if (!in_array($position['order_id'], $orders->pluck('id')->toArray())) {
 
                     $validator->errors()->add('positions.' . $key . '.order_id', 'The positions.' . $key . '.order_id is invalid');
