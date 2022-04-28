@@ -109,7 +109,9 @@ class ConsignmentRegisterController extends Controller
     public function getConsignmentRegister(Request $request, $consignment_register_id)
     {
         try {
-            $consignment_register = ConsignmentRegister::query();
+            $consignment_register = ConsignmentRegister::query()->with([
+                'positions.consignment'
+            ]);
             if ($this->user->isProvider()) {
                 $consignment_register->where('provider_contr_agent_id', $this->user->contr_agent_id());
             } elseif ($this->user->isContractor()) {
