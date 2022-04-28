@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\PriceNegotiations;
 
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\CustomerObject;

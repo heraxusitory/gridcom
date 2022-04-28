@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests\RequestAdditionNomenclatures;
 
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\RequestAdditions\RequestAdditionNomenclature;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;

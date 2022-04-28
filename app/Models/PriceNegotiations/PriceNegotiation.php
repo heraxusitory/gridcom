@@ -2,7 +2,7 @@
 
 namespace App\Models\PriceNegotiations;
 
-use App\Models\Orders\LKK\Order;
+use App\Models\Orders\Order;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;

@@ -212,7 +212,7 @@ class OrderController extends Controller
                         'customer.subObject', 'customer.object',
                         'provider.contract', 'provider.contr_agent',
                         'contractor.contr_agent',
-                        'positions.nomenclature',
+                        'positions.nomenclature.units',
                     ])
                     /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
                     ->get();
