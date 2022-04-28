@@ -51,7 +51,7 @@ class CreatePriceNegotiationService implements IService
             }
             if (isset($data['file'])) {
                 $file_link = Storage::disk('public')->putFile('price-negotiations/' . $price_negotiation->id, $data['file']);
-                $price_negotiation->file_url = Storage::disk('public')->url($file_link);
+                $price_negotiation->file_url = /*Storage::disk('public')->*//*url*/$file_link;
                 $price_negotiation->save();
             }
             return $price_negotiation;

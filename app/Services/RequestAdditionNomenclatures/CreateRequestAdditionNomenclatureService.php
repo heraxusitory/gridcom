@@ -51,7 +51,7 @@ class CreateRequestAdditionNomenclatureService implements IService
 
             if (isset($data['file'])) {
                 $file_link = Storage::disk('public')->putFile('request-addition-nomenclature/' . $ra_nomenclature->id, $data['file']);
-                $ra_nomenclature->file_url = Storage::disk('public')->url($file_link);
+                $ra_nomenclature->file_url = /*Storage::disk('public')->url(*/$file_link/*)*/;
                 $ra_nomenclature->save();
             }
             return $ra_nomenclature;

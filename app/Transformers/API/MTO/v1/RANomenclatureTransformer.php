@@ -3,6 +3,7 @@
 namespace App\Transformers\API\MTO\v1;
 
 use App\Models\RequestAdditions\RequestAdditionNomenclature;
+use Illuminate\Support\Facades\Storage;
 use League\Fractal\TransformerAbstract;
 
 class RANomenclatureTransformer extends TransformerAbstract
@@ -46,7 +47,7 @@ class RANomenclatureTransformer extends TransformerAbstract
             'responsible_full_name' => $ra_nomenclature?->responsible_full_name,
             'contr_agent_comment' => $ra_nomenclature?->contr_agent_comment,
             'organization_comment' => $ra_nomenclature?->organization_comment,
-            'file_url' => $ra_nomenclature?->file_url,
+            'file_url' => $ra_nomenclature?->file_url ? Storage::disk('public')->url($ra_nomenclature->file_url) : $ra_nomenclature?->file_url
         ];
     }
 }

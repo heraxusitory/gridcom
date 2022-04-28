@@ -4,6 +4,7 @@
 namespace App\Models\PriceNegotiations;
 
 
+use App\Models\References\Nomenclature;
 use Illuminate\Database\Eloquent\Model;
 
 class PriceNegotiationPosition extends Model
@@ -17,4 +18,9 @@ class PriceNegotiationPosition extends Model
         'new_price_without_vat',
         'agreed_price',
     ];
+
+    public function nomenclature()
+    {
+        return $this->hasOne(Nomenclature::class, 'id', 'nomenclature_id');
+    }
 }

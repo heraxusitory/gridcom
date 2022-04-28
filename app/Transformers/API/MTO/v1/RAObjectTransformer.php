@@ -3,6 +3,7 @@
 namespace App\Transformers\API\MTO\v1;
 
 use App\Models\RequestAdditions\RequestAdditionObject;
+use Illuminate\Support\Facades\Storage;
 use League\Fractal\TransformerAbstract;
 
 class RAObjectTransformer extends TransformerAbstract
@@ -46,7 +47,7 @@ class RAObjectTransformer extends TransformerAbstract
             'responsible_full_name' => $object?->responsible_full_name,
             'contr_agent_comment' => $object?->contr_agent_comment,
             'organization_comment' => $object?->organization_comment,
-            'file_url' => $object?->file_url,
+            'file_url' => $object?->file_url ? Storage::disk('public')->url($object->file_url) : $object?->file_url,
         ];
     }
 }
