@@ -17,20 +17,12 @@ class GetConsignmentService implements IService
     {
         $consignment = $this->consignment->newQuery()
             ->with([
+                'positions',
                 'provider',
                 'contractor',
                 'work_agreement',
                 'provider_contract',
-            ])/*->with([
-            'order',
-            'order.customer.contract',
-            'order.customer.organization',
-            'order.customer.object',
-            'order.customer.subObject',
-            'order.provider.contact.contrAgentName',
-            'order.provider.contract',
-            'order.contractor.contact.contrAgentName',
-        ])*/ ->first();
+            ])->first();
 
         return $consignment;
     }
