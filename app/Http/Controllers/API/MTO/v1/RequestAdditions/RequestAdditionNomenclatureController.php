@@ -31,4 +31,23 @@ class RequestAdditionNomenclatureController extends Controller
             return response()->json(['message' => 'System error'], 500);
         }
     }
+
+    public function putInQueue(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'required|uuid',
+        ]);
+        try {
+            return DB::transaction(function () use ($request) {
+                $count = RequestAdditionNomenclature::query()
+                    ->whereIn('uuid', $request->ids)
+                    ->update(['sync_required' => true]);
+                return response()->json('В очередь поставлено ' . $count . ' НСИ (номеклатура)');
+            });
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
+    }
 }

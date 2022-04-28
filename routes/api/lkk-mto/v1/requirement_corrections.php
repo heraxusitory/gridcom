@@ -5,4 +5,5 @@ use App\Http\Controllers\API\MTO\v1\ProviderOrders\RequirementCorrectionControll
 Route::group(['prefix' => 'requirement_corrections'], function () {
     Route::post('sync', [RequirementCorrectionController::class, 'sync']);
     Route::post('synchronize', [RequirementCorrectionController::class, 'synchronize']);
+    Route::post('put_in_queue', [RequirementCorrectionController::class, 'putInQueue']);
 });

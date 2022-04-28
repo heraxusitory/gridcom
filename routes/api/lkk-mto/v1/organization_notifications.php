@@ -4,4 +4,6 @@ use App\Http\Controllers\API\MTO\v1\Notifications\OrganizationNotificationContro
 
 Route::group(['prefix' => 'organization_notifications'], function () {
     Route::post('synchronize', [OrganizationNotificationController::class, 'synchronize']);
+    Route::post('put_in_queue', [OrganizationNotificationController::class, 'putInQueue']);
+
 });

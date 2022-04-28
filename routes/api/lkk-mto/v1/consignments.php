@@ -5,4 +5,6 @@ use App\Http\Controllers\API\MTO\v1\ConsignmentController;
 Route::group(['prefix' => 'consignments'], function () {
     Route::post('sync', [ConsignmentController::class, 'sync']);
     Route::post('synchronize', [ConsignmentController::class, 'synchronize']);
+    Route::post('put_in_queue', [ConsignmentController::class, 'putInQueue']);
+
 });
