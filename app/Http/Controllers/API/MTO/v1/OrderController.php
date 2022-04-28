@@ -233,9 +233,11 @@ class OrderController extends Controller
         ]);
         try {
             return DB::transaction(function () use ($request) {
-                $count = Order::query()
-                    ->whereIn('uuid', $request->ids)
-                    ->update(['sync_required' => true]);
+                $count = Order::withoutEvents(function () use ($request) {
+                    return Order::query()
+                        ->whereIn('uuid', $request->ids)
+                        ->update(['sync_required' => true]);
+                });
                 return response()->json('В очередь поставлено ' . $count . ' заказов на поставку ПО');
             });
         } catch (\Exception $e) {

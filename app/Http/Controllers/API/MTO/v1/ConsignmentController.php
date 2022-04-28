@@ -64,30 +64,32 @@ class ConsignmentController extends Controller
                 DB::transaction(function () use ($item) {
                     $position_data = $item['positions'] ?? [];
 
-                    $organization = Organization::query()->firstOrCreate(['uuid' => $item['organization_id']]);
-                    $provider_contr_agent = ContrAgent::query()->firstOrCreate(['uuid' => $item['provider_contr_agent_id']]);
-                    $provider_contract = ProviderContractDocument::query()->firstOrCreate(['uuid' => $item['provider_contract_id']]);
-                    $contractor_contr_agent = ContrAgent::query()->firstOrCreate(['uuid' => $item['contractor_contr_agent_id']]);
-                    $work_agreement = WorkAgreementDocument::query()->firstOrCreate(['uuid' => $item['work_agreement_id']]);
-                    $object = CustomerObject::query()->firstOrCreate(['uuid' => $item['customer_object_id']]);
-                    $sub_object = $object->subObjects()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
+                    $consignment = Consignment::withoutEvents(function () use ($item) {
+                        $organization = Organization::query()->firstOrCreate(['uuid' => $item['organization_id']]);
+                        $provider_contr_agent = ContrAgent::query()->firstOrCreate(['uuid' => $item['provider_contr_agent_id']]);
+                        $provider_contract = ProviderContractDocument::query()->firstOrCreate(['uuid' => $item['provider_contract_id']]);
+                        $contractor_contr_agent = ContrAgent::query()->firstOrCreate(['uuid' => $item['contractor_contr_agent_id']]);
+                        $work_agreement = WorkAgreementDocument::query()->firstOrCreate(['uuid' => $item['work_agreement_id']]);
+                        $object = CustomerObject::query()->firstOrCreate(['uuid' => $item['customer_object_id']]);
+                        $sub_object = $object->subObjects()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
 
-                    $consignment = Consignment::query()->updateOrCreate([
-                        'uuid' => $item['id'],
-                    ], [
-                        'number' => $item['number'],
-                        'date' => (new Carbon($item['date']))->format('d.m.Y'),
-                        'organization_id' => $organization->id,
-                        'provider_contr_agent_id' => $provider_contr_agent->id,
-                        'provider_contract_id' => $provider_contract->id,
-                        'contractor_contr_agent_id' => $contractor_contr_agent->id,
-                        'work_agreement_id' => $work_agreement->id,
-                        'customer_object_id' => $object->id,
-                        'customer_sub_object_id' => $sub_object->id,
-                        'responsible_full_name' => $item['responsible_full_name'] ?? null,
-                        'responsible_phone' => $item['responsible_phone'] ?? null,
-                        'comment' => $item['comment'] ?? null,
-                    ]);
+                        return Consignment::query()->updateOrCreate([
+                            'uuid' => $item['id'],
+                        ], [
+                            'number' => $item['number'],
+                            'date' => (new Carbon($item['date']))->format('d.m.Y'),
+                            'organization_id' => $organization->id,
+                            'provider_contr_agent_id' => $provider_contr_agent->id,
+                            'provider_contract_id' => $provider_contract->id,
+                            'contractor_contr_agent_id' => $contractor_contr_agent->id,
+                            'work_agreement_id' => $work_agreement->id,
+                            'customer_object_id' => $object->id,
+                            'customer_sub_object_id' => $sub_object->id,
+                            'responsible_full_name' => $item['responsible_full_name'] ?? null,
+                            'responsible_phone' => $item['responsible_phone'] ?? null,
+                            'comment' => $item['comment'] ?? null,
+                        ]);
+                    });
 
                     $position_ids = [];
                     foreach ($position_data as $position) {
@@ -151,9 +153,11 @@ class ConsignmentController extends Controller
         ]);
         try {
             return DB::transaction(function () use ($request) {
-                $count = Consignment::query()
-                    ->whereIn('uuid', $request->ids)
-                    ->update(['sync_required' => true]);
+                $count = Consignment::withoutEvents(function () use ($request) {
+                    return Consignment::query()
+                        ->whereIn('uuid', $request->ids)
+                        ->update(['sync_required' => true]);
+                });
                 return response()->json('В очередь поставлено ' . $count . ' накладных');
             });
         } catch (\Exception $e) {

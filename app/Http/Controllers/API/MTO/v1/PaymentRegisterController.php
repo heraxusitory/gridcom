@@ -53,30 +53,32 @@ class PaymentRegisterController extends Controller
                 DB::transaction(function () use ($item) {
                     $position_data = $item['positions'] ?? [];
 
-                    $provider_contr_agent = ContrAgent::query()->firstOrCreate([
-                        'uuid' => $item['provider_contr_agent_id'],
-                    ]);
-                    $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
-                        'uuid' => $item['contractor_contr_agent_id'],
-                    ]);
-                    $provider_contract = ProviderContractDocument::query()->firstOrCreate([
-                        'uuid' => $item['provider_contract_id'],
-                    ]);
+                    $payment_register = PaymentRegister::withoutEvents(function () use ($item) {
+                        $provider_contr_agent = ContrAgent::query()->firstOrCreate([
+                            'uuid' => $item['provider_contr_agent_id'],
+                        ]);
+                        $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
+                            'uuid' => $item['contractor_contr_agent_id'],
+                        ]);
+                        $provider_contract = ProviderContractDocument::query()->firstOrCreate([
+                            'uuid' => $item['provider_contract_id'],
+                        ]);
 
-                    $payment_register = PaymentRegister::query()->updateOrCreate([
-                        'uuid' => $item['id']
-                    ], [
-                        'number' => $item['number'],
-                        'customer_status' => $item['customer_status'],
-                        'provider_status' => $item['provider_status'],
-                        'provider_contr_agent_id' => $provider_contr_agent->id,
-                        'provider_contract_id' => $provider_contract->id,
-                        'contractor_contr_agent_id' => $contractor_contr_agent->id,
-                        'responsible_full_name' => $item['responsible_full_name'],
-                        'responsible_phone' => $item['responsible_phone'],
-                        'comment' => $item['comment'],
-                        'date' => (new Carbon($item['date']))->format('d.m.Y'),
-                    ]);
+                        return PaymentRegister::query()->updateOrCreate([
+                            'uuid' => $item['id']
+                        ], [
+                            'number' => $item['number'],
+                            'customer_status' => $item['customer_status'],
+                            'provider_status' => $item['provider_status'],
+                            'provider_contr_agent_id' => $provider_contr_agent->id,
+                            'provider_contract_id' => $provider_contract->id,
+                            'contractor_contr_agent_id' => $contractor_contr_agent->id,
+                            'responsible_full_name' => $item['responsible_full_name'],
+                            'responsible_phone' => $item['responsible_phone'],
+                            'comment' => $item['comment'],
+                            'date' => (new Carbon($item['date']))->format('d.m.Y'),
+                        ]);
+                    });
 
                     $position_ids = [];
                     foreach ($position_data as $position) {
@@ -133,9 +135,11 @@ class PaymentRegisterController extends Controller
         ]);
         try {
             return DB::transaction(function () use ($request) {
-                $count = PaymentRegister::query()
-                    ->whereIn('uuid', $request->ids)
-                    ->update(['sync_required' => true]);
+                $count = PaymentRegister::withoutEvents(function () use ($request) {
+                    return PaymentRegister::query()
+                        ->whereIn('uuid', $request->ids)
+                        ->update(['sync_required' => true]);
+                });
                 return response()->json('В очередь поставлено ' . $count . ' реестров платежей');
             });
         } catch (\Exception $e) {
