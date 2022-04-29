@@ -146,14 +146,14 @@ class PaymentRegisterController extends Controller
 
 
     /*provider's route*/
-    public function reject(Request $request, $order_id)
+    public function reject(Request $request, $payment_register_id)
     {
         try {
             $payment_register = PaymentRegister::query();
             if ($this->user->isProvider()) {
                 $payment_register->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
             }
-            $payment_register = $payment_register->findOrFail($order_id);
+            $payment_register = $payment_register->findOrFail($payment_register_id);
 
             throw_if($payment_register->provider_status === PaymentRegister::PROVIDER_STATUS_AGREED /*||
                 $order->provider_status === Order::PROVIDER_STATUS_PARTIALLY_AGREED*/
