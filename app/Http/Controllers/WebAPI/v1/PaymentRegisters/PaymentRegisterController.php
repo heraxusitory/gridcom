@@ -28,7 +28,7 @@ class PaymentRegisterController extends Controller
     {
         try {
             $register_payments = (new GetPaymentRegistersService())->run();
-            return response()->json($register_payments);
+            return response()->json(['data' => $register_payments]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch
@@ -84,13 +84,92 @@ class PaymentRegisterController extends Controller
         try {
             /* @var PaymentRegister $payment_register */
             $payment_register = PaymentRegister::query()->findOrFail($payment_register_id);
-            throw_if($payment_register->customer_status !== PaymentRegister::CUSTOMER_STATUS_DRAFT &&
+            throw_if(/*$payment_register->customer_status !== PaymentRegister::CUSTOMER_STATUS_DRAFT &&*/
                 $payment_register->provider_status !== PaymentRegister::PROVIDER_STATUS_DRAFT,
                 new BadRequestException('Невозможно редактировать реестр платежей. Реестр платежей отправлен на согласование', 400));
 
             $payment_register = (new UpdatePaymentRegisterService($request->all(), $payment_register))->run();
             return response()->json(['data' => $payment_register]);
         } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    /*роут поставщика*/
+    public function approve(Request $request, $payment_register_id)
+    {
+        try {
+            $payment_register = PaymentRegister::query();
+            if ($this->user->isProvider()) {
+                $payment_register->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
+            }
+            $payment_register = $payment_register->findOrFail($payment_register_id);
+
+            throw_if($payment_register->provider_status === PaymentRegister::PROVIDER_STATUS_AGREED
+                /*$order->provider_status === Order::PROVIDER_STATUS_PARTIALLY_AGREED*/
+                , new BadRequestException('Реестр платежей уже согласован поставщиком', 400));
+            throw_if($payment_register->provider_status === PaymentRegister::PROVIDER_STATUS_NOT_AGREED
+                , new BadRequestException('Реестр платежей уже отказан поставщиком', 400));
+
+//            $order->positions()->where('status', '!=', OrderPosition::STATUS_REJECTED)->update(['status' => OrderPosition::STATUS_AGREED]);
+//
+//            if ($order->positions()->where('status', OrderPosition::STATUS_REJECTED)->count())
+//                $order->provider_status = Order::PROVIDER_STATUS_PARTIALLY_AGREED;
+//            else
+//                $order->provider_status = Order::PROVIDER_STATUS_AGREED;
+            $payment_register->provider_status = PaymentRegister::PROVIDER_STATUS_AGREED;
+//            $order_provider = $order->provider()->firstOrFail();
+//            $order_provider->agreed_comment = $request->comment;
+            $payment_register->save();
+//            $order->save();
+
+            return $payment_register;
+        } catch
+        (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+
+    /*provider's route*/
+    public function reject(Request $request, $order_id)
+    {
+        try {
+            $payment_register = PaymentRegister::query();
+            if ($this->user->isProvider()) {
+                $payment_register->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
+            }
+            $payment_register = $payment_register->findOrFail($order_id);
+
+            throw_if($payment_register->provider_status === PaymentRegister::PROVIDER_STATUS_AGREED /*||
+                $order->provider_status === Order::PROVIDER_STATUS_PARTIALLY_AGREED*/
+                , new BadRequestException('Реестр платежей уже согласован поставщиком', 400));
+            throw_if($payment_register->provider_status === PaymentRegister::PROVIDER_STATUS_NOT_AGREED
+                , new BadRequestException('Реестр платежей уже отказан поставщиком', 400));
+
+//            $order->positions()->update(['status' => OrderPosition::STATUS_REJECTED]);
+            $payment_register->provider_status = PaymentRegister::PROVIDER_STATUS_NOT_AGREED;
+//            $order_provider = $order->provider()->firstOrFail();
+//            $order_provider->rejected_comment = $request->comment;
+//            $order_provider->save();
+            $payment_register->save();
+            return $payment_register;
+        } catch
+        (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {
             if ($e->getCode() >= 400 && $e->getCode() < 500)
@@ -127,7 +206,7 @@ class PaymentRegisterController extends Controller
     {
         Validator::make($request->all(), [
             'provider_contr_agent_id' => 'required|exists:contr_agents,id',
-            'contractor_contr_agent_id' => ['required','exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
+            'contractor_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
         ])->validate();
 
 
@@ -160,7 +239,7 @@ class PaymentRegisterController extends Controller
     {
         Validator::make($request->all(), [
             'provider_contr_agent_id' => 'required|exists:contr_agents,id',
-            'contractor_contr_agent_id' => ['required','exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
+            'contractor_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
             'provider_contract_id' => 'required|exists:provider_contracts,id',
         ])->validate();
 

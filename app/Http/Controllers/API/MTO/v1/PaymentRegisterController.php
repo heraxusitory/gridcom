@@ -27,7 +27,7 @@ class PaymentRegisterController extends Controller
                 'payment_registers' => 'required|array',
                 'payment_registers.*.id' => 'required|uuid',
                 'payment_registers.*.number' => 'required|string|max:255',
-                'payment_registers.*.customer_status' => ['required', Rule::in(PaymentRegister::getCustomerStatuses())],
+//                'payment_registers.*.customer_status' => ['required', Rule::in(PaymentRegister::getCustomerStatuses())],
                 'payment_registers.*.provider_status' => ['required', Rule::in(PaymentRegister::getProviderStatuses())],
                 'payment_registers.*.provider_contr_agent_id' => ['required', 'uuid'],
                 'payment_registers.*.contractor_contr_agent_id' => ['required', 'uuid'],
@@ -68,7 +68,7 @@ class PaymentRegisterController extends Controller
                             'uuid' => $item['id']
                         ], [
                             'number' => $item['number'],
-                            'customer_status' => $item['customer_status'],
+//                            'customer_status' => $item['customer_status'],
                             'provider_status' => $item['provider_status'],
                             'provider_contr_agent_id' => $provider_contr_agent->id,
                             'provider_contract_id' => $provider_contract->id,

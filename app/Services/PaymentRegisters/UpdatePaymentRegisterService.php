@@ -23,20 +23,20 @@ class UpdatePaymentRegisterService implements IService
 
         switch ($data['action']) {
             case PaymentRegister::ACTION_DRAFT:
-                $customer_status = PaymentRegister::CUSTOMER_STATUS_DRAFT;
+//                $customer_status = PaymentRegister::CUSTOMER_STATUS_DRAFT;
                 $provider_status = PaymentRegister::PROVIDER_STATUS_DRAFT;
                 break;
             case PaymentRegister::ACTION_APPROVE:
-                $customer_status = PaymentRegister::CUSTOMER_STATUS_UNDER_CONSIDERATION;
+//                $customer_status = PaymentRegister::CUSTOMER_STATUS_UNDER_CONSIDERATION;
                 $provider_status = PaymentRegister::PROVIDER_STATUS_UNDER_CONSIDERATION;
                 break;
             default:
                 throw new BadRequestException('Action is required', 400);
         }
 
-        return DB::transaction(function () use ($data, $customer_status, $provider_status) {
+        return DB::transaction(function () use ($data,/* $customer_status,*/ $provider_status) {
             $this->payment_register->update([
-                'customer_status' => $customer_status,
+//                'customer_status' => $customer_status,
                 'provider_status' => $provider_status,
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],

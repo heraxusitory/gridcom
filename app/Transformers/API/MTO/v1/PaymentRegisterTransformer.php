@@ -36,7 +36,7 @@ class PaymentRegisterTransformer extends TransformerAbstract
         return [
             'id' => $payment_register?->uuid,
             'number' => $payment_register?->number,
-            'customer_status' => $payment_register?->customer_status,
+//            'customer_status' => $payment_register?->customer_status,
             'provider_status' => $payment_register?->provider_status,
             'provider_contr_agent_id' => optional($payment_register->provider)->uuid,
             'contractor_contr_agent_id' => optional($payment_register->contractor)->uuid,
