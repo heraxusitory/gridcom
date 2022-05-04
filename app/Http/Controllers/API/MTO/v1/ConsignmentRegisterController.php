@@ -45,7 +45,7 @@ class ConsignmentRegisterController
 
             'consignment_registers.*.positions' => 'nullable|array',
             'consignment_registers.*.positions.*.id' => 'required|uuid',
-            'consignment_registers.*.positions.*.consignment_id' => 'required|uuid|exists:consignments,uuid',
+            'consignment_registers.*.positions.*.consignment_id' => 'required|uuid',
             'consignment_registers.*.positions.*.nomenclature_id' => 'required|uuid',
             'consignment_registers.*.positions.*.count' => 'required|numeric',
             'consignment_registers.*.positions.*.vat_rate' => 'required|numeric',
@@ -100,7 +100,9 @@ class ConsignmentRegisterController
 
                     $position_ids = [];
                     foreach ($position_data as $position) {
-                        $consignment = Consignment::query()->where('uuid', $position['consignment_id'])->firstOrFail();
+                        $consignment = Consignment::query()->firstOrCreate([
+                            'uuid' => $position['consignment_id']
+                        ]);
                         $nomenclature = Nomenclature::query()->firstOrCreate([
                             'uuid' => $position['nomenclature_id'],
                         ]);

@@ -45,7 +45,7 @@ class ConsignmentController extends Controller
 
             'consignments.*.positions' => 'nullable|array',
             'consignments.*.positions.*.id' => 'required|uuid',
-            'consignments.*.positions.*.order_id' => 'required|uuid|exists:orders,uuid',
+            'consignments.*.positions.*.order_id' => 'required|uuid',
             'consignments.*.positions.*.nomenclature_id' => 'required|uuid',
             'consignments.*.positions.*.count' => 'required|numeric',
             'consignments.*.positions.*.price_without_vat' => 'required|numeric',
@@ -96,7 +96,9 @@ class ConsignmentController extends Controller
                         $nomenclature = Nomenclature::query()->firstOrCreate([
                             'uuid' => $position['nomenclature_id'],
                         ]);
-                        $order = Order::query()->where('uuid', $position['order_id'])->firstOrFail();
+                        $order = Order::query()->firstOrCreate([
+                            'uuid' => $position['order_id']
+                        ]);
 
                         $position = $consignment->positions()->updateOrCreate([
                             'position_id' => $position['id'],
