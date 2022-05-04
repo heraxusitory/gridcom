@@ -10,6 +10,7 @@ use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class CreateConsignmentService implements IService
 {
@@ -20,7 +21,14 @@ class CreateConsignmentService implements IService
     public function run()
     {
         $data = $this->payload;
-        return DB::transaction(function () use ($data) {
+
+        $is_approved = match ($data['action']) {
+            Consignment::ACTION_DRAFT() => false,
+            Consignment::ACTION_APPROVE() => true,
+            default => throw new BadRequestException('Action is required', 400),
+        };
+
+        return DB::transaction(function () use ($data, $is_approved) {
             /** @var Consignment $consignment */
             $consignment = Consignment::query()->create([
                 'uuid' => Str::uuid(),
@@ -32,6 +40,7 @@ class CreateConsignmentService implements IService
                 'work_agreement_id' => $data['work_agreement_id'],
                 'customer_object_id' => $data['customer_object_id'],
                 'customer_sub_object_id' => $data['customer_sub_object_id'] ?? null,
+                'is_approved' => $is_approved,
 //                'order_id' => $data['order_id'],
                 'responsible_full_name' => $data['responsible_full_name'],
                 'responsible_phone' => $data['responsible_phone'],

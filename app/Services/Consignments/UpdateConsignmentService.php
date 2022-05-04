@@ -24,8 +24,8 @@ class UpdateConsignmentService implements IService
         $data = $this->payload;
 
         $this->consignment->is_approved = match ($data['action']) {
-            PaymentRegister::ACTION_DRAFT => false,
-            PaymentRegister::ACTION_APPROVE => true,
+            Consignment::ACTION_DRAFT() => false,
+            Consignment::ACTION_APPROVE() => true,
             default => throw new BadRequestException('Action is required', 400),
         };
 
