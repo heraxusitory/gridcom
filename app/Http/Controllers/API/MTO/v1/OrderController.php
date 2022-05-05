@@ -75,6 +75,7 @@ class OrderController extends Controller
             'orders.*.order_positions.*.amount_without_vat' => 'nullable|numeric',
             'orders.*.order_positions.*.delivery_time' => 'nullable|date_format:Y-m-d',
             'orders.*.order_positions.*.delivery_address' => 'nullable|string|max:255',
+            'orders.*.order_positions.*.customer_comment' => 'nullable|string|max:255',
         ])->validate();
 
         $data = $request->all()['orders'];
@@ -199,6 +200,7 @@ class OrderController extends Controller
                             'amount_without_vat' => $position['amount_without_vat'] ?? null,
                             'delivery_time' => $position['delivery_time'] ?? null,
                             'delivery_address' => $position['delivery_address'] ?? null,
+                            'customer_comment' => $position['customer_comment'] ?? null,
                         ]);
                         $position_ids[] = $position->id;
                     }
