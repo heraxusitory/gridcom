@@ -39,13 +39,13 @@ class ConsignmentRegisterController extends Controller
             'provider_contr_agent_id' => 'required|integer|exists:contr_agents,id',
             'contractor_contr_agent_id' => 'required|integer|exists:contr_agents,id',
             'customer_object_id' => 'required|integer|exists:customer_objects,id',
-            'customer_sub_object_id' => 'required|integer|exists:customer_sub_objects,id',
+            'customer_sub_object_id' => 'nullable|integer|exists:customer_sub_objects,id',
         ])->validate();
 
         $orders = Order::query()
             ->whereRelation('customer', 'organization_id', $request->organization_id)
             ->whereRelation('customer', 'object_id', $request->customer_object_id)
-            ->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id)
+            ->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id ?? null)
             ->whereRelation('provider', 'contr_agent_id', $request->provider_contr_agent_id)
             ->whereRelation('contractor', 'contr_agent_id', $request->contractor_contr_agent_id)
             ->with('customer.contract')
