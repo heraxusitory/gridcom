@@ -39,7 +39,8 @@ class OrderProviderController extends OrderController
             throw_if($order->provider_status === Order::PROVIDER_STATUS_NOT_AGREED
                 , new BadRequestException('Заказ уже отказан поставщиком', 400));
 
-            $order->positions()->where('status', '!=', OrderPosition::STATUS_REJECTED)->update(['status' => OrderPosition::STATUS_AGREED]);
+//            $order->positions()->where('status', '!=', OrderPosition::STATUS_REJECTED)->update(['status' => OrderPosition::STATUS_AGREED]);
+            $order->positions()->whereNotIn('status', [ OrderPosition::STATUS_REJECTED])->update(['status' => OrderPosition::STATUS_AGREED]);
 
             if ($order->positions()->where('status', OrderPosition::STATUS_REJECTED)->count())
                 $order->provider_status = Order::PROVIDER_STATUS_PARTIALLY_AGREED;
