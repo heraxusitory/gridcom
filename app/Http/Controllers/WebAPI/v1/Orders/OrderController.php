@@ -46,13 +46,14 @@ class OrderController extends Controller
         try {
             $order = Order::query();
             if ($this->user->isProvider()) {
-                $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
+                $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id())
+                    ->whereRelation('provider', 'provider_status', '<>', Order::PROVIDER_STATUS_DRAFT);
             } elseif ($this->user->isContractor()) {
                 $order->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id());
             }
             $order->findOrFail($order_id);
             $order = (new GetOrderService($request->all(), $order_id))->run();
-            return fractal()->item($order)->transformWith(OrderTransformer::class)/*response()->json(['data' => $order])*/;
+            return fractal()->item($order)->transformWith(OrderTransformer::class)/*response()->json(['data' => $order])*/ ;
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {
@@ -68,15 +69,15 @@ class OrderController extends Controller
     public function getReport(Request $request, $order_id)
     {
 //        try {
-            $order = Order::query();
-            if ($this->user->isProvider()) {
-                $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
-            } elseif ($this->user->isContractor()) {
-                $order->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id());
-            }
-            /** @var Order $order */
-            $order = $order->findOrFail($order_id);
-            return response()->json(['data' => (new GetReportService($order))->run()]);
+        $order = Order::query();
+        if ($this->user->isProvider()) {
+            $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
+        } elseif ($this->user->isContractor()) {
+            $order->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id());
+        }
+        /** @var Order $order */
+        $order = $order->findOrFail($order_id);
+        return response()->json(['data' => (new GetReportService($order))->run()]);
 //        } catch (ModelNotFoundException $e) {
 //            return response()->json(['message' => $e->getMessage()], 404);
 //        } catch (\Exception $e) {
