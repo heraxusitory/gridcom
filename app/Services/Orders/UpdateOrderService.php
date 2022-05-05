@@ -127,7 +127,7 @@ class UpdateOrderService implements IService
                 $position = $this->order->positions()->updateOrCreate(['position_id' => $position['position_id'] ?? null], [
 //                    'order_id' => $order->id,
                     'position_id' => $position['position_id'] ?? Str::uuid(),
-                    'status' => OrderPosition::STATUS_AGREED,
+                    'status' => OrderPosition::STATUS_UNDER_CONSIDERATION,
                     'nomenclature_id' => $position['nomenclature_id'],
 //                    'unit_id' => $position['unit_id'],
                     'count' => $position['count'],

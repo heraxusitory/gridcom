@@ -136,7 +136,7 @@ class CreateOrderService implements IService
                 $order->positions()->create([
 //                    'order_id' => $order->id,
                     'position_id' => Str::uuid(),
-                    'status' => OrderPosition::STATUS_AGREED,
+                    'status' => OrderPosition::STATUS_UNDER_CONSIDERATION,
                     'nomenclature_id' => $position['nomenclature_id'],
                     'unit_id' => $position['unit_id'],
                     'count' => $position['count'],
