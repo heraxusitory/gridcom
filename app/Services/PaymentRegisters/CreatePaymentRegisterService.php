@@ -37,7 +37,7 @@ class CreatePaymentRegisterService implements IService
         return DB::transaction(function () use ($data, $customer_status, $provider_status) {
             $payment_register = PaymentRegister::query()->create([
                 'uuid' => Str::uuid(),
-                'customer_status' => $customer_status,
+//                'customer_status' => $customer_status,
                 'provider_status' => $provider_status,
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
