@@ -33,7 +33,10 @@ class ReferenceController extends Controller
 {
     public function getOrganizations()
     {
-        $organizations = Organization::query()->orderByDesc('created_at')->get();
+        $organizations = Organization::query()
+            ->orderByDesc('created_at')
+            ->where('is_visible_to_client', true)
+            ->get();
         return response()->json(['data' => $organizations]);
     }
 
@@ -42,7 +45,10 @@ class ReferenceController extends Controller
         $work_agreements_query = WorkAgreementDocument::query();
 //        if (isset($request->name))
 //            $work_agreements_query->where('name', 'ILIKE', "%{$request->name}%");
-        $work_agreements = $work_agreements_query->orderByDesc('created_at')->get();
+        $work_agreements = $work_agreements_query
+            ->where('is_visible_to_client', true)
+            ->orderByDesc('created_at')
+            ->get();
         return response()->json(['data' => $work_agreements]);
     }
 
@@ -51,7 +57,10 @@ class ReferenceController extends Controller
         $provider_contracts_query = ProviderContractDocument::query();
 //        if (isset($request->name))
 //            $provider_contracts_query->where('name', 'ILIKE', "%{$request->name}%");
-        $provider_contracts = $provider_contracts_query->orderByDesc('created_at')->get();
+        $provider_contracts = $provider_contracts_query
+            ->orderByDesc('created_at')
+            ->where('is_visible_to_client', true)
+            ->get();
         return response()->json(['data' => $provider_contracts]);
     }
 
@@ -61,7 +70,10 @@ class ReferenceController extends Controller
 //        if (isset($request->name))
 //            $objects_query->where('name', 'ILIKE', "%{$request->name}%");
 
-        $objects = $objects_query->orderByDesc('created_at')->get();
+        $objects = $objects_query
+            ->orderByDesc('created_at')
+            ->where('is_visible_to_client', true)
+            ->get();
         return response()->json(['data' => $objects]);
     }
 
@@ -71,14 +83,20 @@ class ReferenceController extends Controller
 //        if (isset($request->name))
 //            $contr_agents_query->where('name', 'ILIKE', "%{$request->name}%");
 
-        $contr_agents = $contr_agents_query->orderByDesc('created_at')->get();
+        $contr_agents = $contr_agents_query
+            ->orderByDesc('created_at')
+            ->where('is_visible_to_client', true)
+            ->get();
         return response()->json(['data' => $contr_agents]);
     }
 
     public function getNomenclature(Request $request, $nomenclature_id = null)
     {
         try {
-            $nomenclature_query = Nomenclature::query()->with('units')->orderByDesc('created_at');
+            $nomenclature_query = Nomenclature::query()->with('units')
+                ->where('is_visible_to_client', true)
+                ->orderByDesc('created_at');
+
             if ($nomenclature_id) {
                 $nomenclature = $nomenclature_query->findOrFail($nomenclature_id);
                 return response()->json(['data' => $nomenclature]);
