@@ -44,6 +44,10 @@ return [
             'driver' => 'keycloak',
             'provider' => 'users',
         ],
+        'api' => [
+            'driver' => 'session',
+            'provider' => 'integration_users',
+        ],
     ],
 
     /*
@@ -67,6 +71,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'integration_users' => [
+            'driver' => 'eloquent',
+            'model' => \App\Models\IntegrationUser::class,
         ],
 
         // 'users' => [
@@ -94,6 +102,12 @@ return [
         'users' => [
             'provider' => 'users',
             'table' => 'password_resets',
+            'expire' => 60,
+            'throttle' => 60,
+        ],
+        'integration_users' => [
+            'provider' => 'integration_users',
+            'table' => 'integration_password_resets',
             'expire' => 60,
             'throttle' => 60,
         ],

@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\ContrAgentRoleMiddleware;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -71,5 +72,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'get_per_page_number' => \App\Http\Middleware\GetPerPageNumberMiddleware::class,
+        'contr_agent_role' => ContrAgentRoleMiddleware::class,
     ];
 }

@@ -35,6 +35,7 @@ class OrderController extends Controller
             'orders.*.id' => 'required|uuid',
             'orders.*.number' => 'nullable|string|max:255',
             'orders.*.deadline_date' => 'nullable|date_format:Y-m-d',
+            'orders.*.order_date' => 'nullable|date_format:Y-m-d',
             'orders.*.customer_status' => [Rule::in(Order::getCustomerStatuses())],
             'orders.*.provider_status' => [Rule::in(Order::getProviderStatuses())],
 
@@ -150,7 +151,7 @@ class OrderController extends Controller
                                     [
                                         'uuid' => $item['id'],
                                         'number' => $item['number'] ?? null,
-                                        'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
+                                        'order_date' => isset($item['order_date']) ? (new Carbon($item['order_date']))->format('d.m.Y') : null,
                                         'deadline_date' => $item['deadline_date'] ?? null,
                                         'customer_status' => $item['customer_status'],
                                         'provider_status' => $item['provider_status'],

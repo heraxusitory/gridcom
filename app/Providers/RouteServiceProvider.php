@@ -44,6 +44,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api/lkk-mto/v1/index.php'));
 
+            Route::prefix('api/integrations/contr_agents')
+                ->middleware('api')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/api/contr_agents/v1/index.php'));
+
             Route::prefix('webapi')
                 ->middleware('webapi')
                 ->namespace($this->namespace)
