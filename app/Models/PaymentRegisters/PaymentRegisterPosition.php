@@ -22,6 +22,10 @@ class PaymentRegisterPosition extends Model
         'payment_type',
     ];
 
+    protected $casts = [
+        'amount_payment' => 'float',
+    ];
+
     private const PAYMENT_TYPE_PREPAID_EXPENSE = 'Аванс';
     private const PAYMENT_TYPE_POSTPAID = 'Постоплата';
 
