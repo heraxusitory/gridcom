@@ -44,7 +44,7 @@ class OrderController extends Controller
             'orders.*.order_customer.work_agreement_id' => 'required|uuid',
             'orders.*.order_customer.work_type' => 'required|string|max:255',
             'orders.*.order_customer.object_id' => 'required|uuid',
-            'orders.*.order_customer.sub_object_id' => 'required|uuid',
+            'orders.*.order_customer.sub_object_id' => 'nullable|uuid',
             'orders.*.order_customer.work_start_date' => 'required|date_format:Y-m-d',
             'orders.*.order_customer.work_end_date' => 'required|date_format:Y-m-d',
 
@@ -96,18 +96,20 @@ class OrderController extends Controller
                     $customer_object = CustomerObject::query()->firstOrCreate([
                         'uuid' => $customer_data['object_id'],
                     ]);
-                    $customer_sub_object = CustomerSubObject::query()->firstOrCreate([
-                        'uuid' => $customer_data['sub_object_id'],
-                    ]);
-                    $customer_sub_object->customer_object_id = $customer_object->id;
-                    $customer_sub_object->save();
+                    if (isset($customer_data['sub_object_id'])) {
+                        $customer_sub_object = CustomerSubObject::query()->firstOrCreate([
+                            'uuid' => $customer_data['sub_object_id'],
+                        ]);
+                        $customer_sub_object->customer_object_id = $customer_object->id;
+                        $customer_sub_object->save();
+                    }
 //                    $customer_sub_object = $customer_object->subObjects()->firstOrCreate([
 //                        'uuid' => $customer_data['sub_object_id'],
 //                    ]);
                     $customer_data['organization_id'] = $organization->id;
                     $customer_data['work_agreement_id'] = $work_agreement->id;
                     $customer_data['object_id'] = $customer_object->id;
-                    $customer_data['sub_object_id'] = $customer_sub_object->id;
+                    $customer_data['sub_object_id'] = isset($customer_sub_object) ? $customer_sub_object->id : null;
 
                     if (isset($provider_data['contr_agent_id'])) {
                         $provider_contr_agent = ContrAgent::query()->firstOrCreate([
@@ -133,8 +135,8 @@ class OrderController extends Controller
                         ]);
                     }
 
-                    $provider_data['contr_agent_id'] = $provider_contr_agent->id;
-                    $provider_data['provider_contract_id'] = $provider_contract->id;
+                    $provider_data['contr_agent_id'] = isset($provider_contr_agent) ? $provider_contr_agent->id : null;
+                    $provider_data['provider_contract_id'] = isset($provider_contract) ? $provider_contract->id : null;
 
                     $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
                         'uuid' => $contractor_data['contr_agent_id'],
