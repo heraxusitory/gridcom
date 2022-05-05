@@ -248,9 +248,9 @@ class PaymentRegisterController extends Controller
                 ->whereRelation('provider', 'contr_agent_id', $request->provider_contr_agent_id)
                 ->whereRelation('provider', 'provider_contract_id', $request->provider_contract_id)
                 ->whereRelation('contractor', 'contr_agent_id', $request->contractor_contr_agent_id)
-                ->paginate();
+                ->get();
 
-            return response()->json($orders);
+            return response()->json(['data' => $orders]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {
