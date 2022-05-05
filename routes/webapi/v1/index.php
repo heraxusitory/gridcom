@@ -3,25 +3,7 @@
 use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-
-//Route::group([
-//    'middleware' => 'auth:api'
-//], function () {
-//    Route::get('/', function () {
-//        return 1;
-//    });
-//});
-//Route::group([
-//    'middleware' => ['auth:webapi', 'role:contractor'],
-////    'prefix' => 'auth'
-//], function () {
-//    Route::get('login', [AuthController::class, 'login']);
-//    Route::post('logout', [AuthController::class, 'logout']);
-//    Route::post('refresh', [AuthController::class, 'refresh']);
-//    Route::post('me', [AuthController::class, 'me']);
-//
-//});
-
+require 'admin.php';
 Route::group(['middleware' => ['auth:webapi', 'get_per_page_number']], function () {
 
     Route::get('me', [AuthController::class, 'me']);
