@@ -73,7 +73,7 @@ class ConsignmentController extends Controller
                         $work_agreement = WorkAgreementDocument::query()->firstOrCreate(['uuid' => $item['work_agreement_id']]);
                         $object = CustomerObject::query()->firstOrCreate(['uuid' => $item['customer_object_id']]);
 //                        $sub_object = $object->subObjects()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
-                        $sub_object = CustomerSubObject::query()->firstOrCreate([['uuid' => $item['customer_sub_object_id']]]);
+                        $sub_object = CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
                         $sub_object->customer_object_id = $object->id;
                         $sub_object->save();
 
