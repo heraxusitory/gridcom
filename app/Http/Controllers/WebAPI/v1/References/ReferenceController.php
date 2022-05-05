@@ -103,6 +103,8 @@ class ReferenceController extends Controller
             }
             if (isset($request->name))
                 $nomenclature_query->where('name', 'ILIKE', "%{$request->name}%");
+            if (isset($request->mnemocode))
+                $nomenclature_query->where('mnemocode', 'ILIKE', "%{$request->mnemocode}%");
             if (data_get($request, 'pagination', null) === 'off') {
                 $nomenclature = $nomenclature_query->get();
                 return response()->json(['data' => $nomenclature]);
