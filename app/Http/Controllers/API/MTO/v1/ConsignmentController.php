@@ -9,6 +9,7 @@ use App\Models\Consignments\Consignment;
 use App\Models\Orders\Order;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
+use App\Models\References\CustomerSubObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
@@ -71,7 +72,10 @@ class ConsignmentController extends Controller
                         $contractor_contr_agent = ContrAgent::query()->firstOrCreate(['uuid' => $item['contractor_contr_agent_id']]);
                         $work_agreement = WorkAgreementDocument::query()->firstOrCreate(['uuid' => $item['work_agreement_id']]);
                         $object = CustomerObject::query()->firstOrCreate(['uuid' => $item['customer_object_id']]);
-                        $sub_object = $object->subObjects()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
+//                        $sub_object = $object->subObjects()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
+                        $sub_object = CustomerSubObject::query()->firstOrCreate([['uuid' => $item['customer_sub_object_id']]]);
+                        $sub_object->customer_object_id = $object->id;
+                        $sub_object->save();
 
                         return Consignment::query()->updateOrCreate([
                             'uuid' => $item['id'],

@@ -8,6 +8,7 @@ use App\Models\ConsignmentRegisters\ConsignmentRegister;
 use App\Models\Consignments\Consignment;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
+use App\Models\References\CustomerSubObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\WorkAgreementDocument;
@@ -72,9 +73,13 @@ class ConsignmentRegisterController
                         $customer_object = CustomerObject::query()->firstOrCreate([
                             'uuid' => $item['customer_object_id'],
                         ]);
-                        $customer_sub_object = $customer_object->subObjects()->firstOrCreate([
+                        $customer_sub_object = /*$customer_object->subObjects()->firstOrCreate([
                             'uuid' => $item['customer_sub_object_id'],
-                        ]);
+                        ]);*/
+                            CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
+                        $customer_sub_object->customer_object_id = $customer_object->id;
+                        $customer_sub_object->save();
+
                         $work_agreement = WorkAgreementDocument::query()->firstOrCreate([
                             'uuid' => $item['work_agreement_id'],
                         ]);

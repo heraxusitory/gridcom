@@ -12,6 +12,7 @@ use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
+use App\Models\References\CustomerSubObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
@@ -95,9 +96,14 @@ class OrderController extends Controller
                     $customer_object = CustomerObject::query()->firstOrCreate([
                         'uuid' => $customer_data['object_id'],
                     ]);
-                    $customer_sub_object = $customer_object->subObjects()->firstOrCreate([
+                    $customer_sub_object = CustomerSubObject::query()->firstOrCreate([
                         'uuid' => $customer_data['sub_object_id'],
                     ]);
+                    $customer_sub_object->customer_object_id = $customer_object->id;
+                    $customer_sub_object->save();
+//                    $customer_sub_object = $customer_object->subObjects()->firstOrCreate([
+//                        'uuid' => $customer_data['sub_object_id'],
+//                    ]);
                     $customer_data['organization_id'] = $organization->id;
                     $customer_data['work_agreement_id'] = $work_agreement->id;
                     $customer_data['object_id'] = $customer_object->id;
