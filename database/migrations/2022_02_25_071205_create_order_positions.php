@@ -18,7 +18,7 @@ class CreateOrderPositions extends Migration
             $table->uuid('position_id'); //TODO спорный вопрос делать ли это поле и тем более уникальным для обеих сторон
             $table->unsignedBigInteger('order_id');
 //            $table->unique(['position_id', 'order_id'], 'op_position_id_order_id_unique');
-            $table->enum('status', [/*'На рассмотрении',*/ 'Согласовано', 'Отклонено']);
+            $table->string('status');
             $table->unsignedBigInteger('nomenclature_id');
 //            $table->unsignedBigInteger('unit_id');
             $table->unsignedDouble('count');
