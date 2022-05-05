@@ -106,8 +106,9 @@ class PaymentRegisterController extends Controller
     public function approve(Request $request, $payment_register_id)
     {
         try {
+            $user = auth('webapi')->user();
             $payment_register = PaymentRegister::query();
-            if ($this->user->isProvider()) {
+            if ($user->isProvider()) {
                 $payment_register->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
             }
             $payment_register = $payment_register->findOrFail($payment_register_id);
@@ -149,8 +150,9 @@ class PaymentRegisterController extends Controller
     public function reject(Request $request, $payment_register_id)
     {
         try {
+            $user = auth('webapi')->user();
             $payment_register = PaymentRegister::query();
-            if ($this->user->isProvider()) {
+            if ($user->isProvider()) {
                 $payment_register->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
             }
             $payment_register = $payment_register->findOrFail($payment_register_id);
