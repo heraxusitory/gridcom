@@ -109,7 +109,7 @@ class PaymentRegisterController extends Controller
             $user = auth('webapi')->user();
             $payment_register = PaymentRegister::query();
             if ($user->isProvider()) {
-                $payment_register->whereRelation('provider', 'contr_agent_id', $user->contr_agent_id());
+                $payment_register->whereRelation('provider', 'id', $user->contr_agent_id());
             }
             $payment_register = $payment_register->findOrFail($payment_register_id);
 
@@ -153,7 +153,7 @@ class PaymentRegisterController extends Controller
             $user = auth('webapi')->user();
             $payment_register = PaymentRegister::query();
             if ($user->isProvider()) {
-                $payment_register->whereRelation('provider', 'contr_agent_id', $user->contr_agent_id());
+                $payment_register->whereRelation('provider', 'id', $user->contr_agent_id());
             }
             $payment_register = $payment_register->findOrFail($payment_register_id);
 
