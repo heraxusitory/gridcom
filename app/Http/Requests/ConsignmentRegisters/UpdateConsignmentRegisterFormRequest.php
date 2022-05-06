@@ -26,7 +26,7 @@ class UpdateConsignmentRegisterFormRequest extends FormRequest
         $data = request()->all();
         Validator::make(request()->all(), [
             'action' => ['required', Rule::in(ConsignmentRegister::getActions())],
-            'organization_id' => 'required|exists:contr_agents,id',
+            'organization_id' => 'required|exists:organizations,id',
             'contractor_contr_agent_id' => 'required|exists:contr_agents,id',
             'provider_contr_agent_id' => 'required|exists:contr_agents,id',
             'customer_object_id' => 'required|exists:customer_objects,id',
