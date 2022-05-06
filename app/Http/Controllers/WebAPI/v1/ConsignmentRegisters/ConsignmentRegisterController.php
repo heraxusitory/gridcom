@@ -64,7 +64,7 @@ class ConsignmentRegisterController extends Controller
             'provider_contr_agent_id' => 'required|integer|exists:contr_agents,id',
             'contractor_contr_agent_id' => 'required|integer|exists:contr_agents,id',
             'customer_object_id' => 'required|integer|exists:customer_objects,id',
-            'customer_sub_object_id' => 'required|integer|exists:customer_sub_objects,id',
+            'customer_sub_object_id' => 'nullable|integer|exists:customer_sub_objects,id',
             'work_agreement_id' => 'required|integer|exists:work_agreements,id',
         ])->validate();
 
@@ -74,7 +74,7 @@ class ConsignmentRegisterController extends Controller
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
                 'customer_object_id' => $data['customer_object_id'],
-                'customer_sub_object_id' => $data['customer_sub_object_id'],
+                'customer_sub_object_id' => $data['customer_sub_object_id'] ?? null,
                 'work_agreement_id' => $data['work_agreement_id'],
             ])
             ->with('positions.nomenclature')
