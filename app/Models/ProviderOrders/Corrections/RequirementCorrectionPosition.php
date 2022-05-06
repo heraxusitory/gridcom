@@ -27,13 +27,15 @@ class RequirementCorrectionPosition extends Model
     ];
 
     private const STATUS_AGREED = 'Согласовано';
-    private const STATUS_REJECTED = 'Отклонено';
+    private const STATUS_REJECTED = 'Не согласовано';
+    private const STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
 
     public static function getStatuses()
     {
         return [
             self::STATUS_AGREED(),
             self::STATUS_REJECTED(),
+            self::STATUS_UNDER_CONSIDERATION(),
         ];
     }
 
@@ -45,6 +47,11 @@ class RequirementCorrectionPosition extends Model
     public static function STATUS_AGREED()
     {
         return self::STATUS_AGREED;
+    }
+
+    public static function STATUS_UNDER_CONSIDERATION()
+    {
+        return self::STATUS_UNDER_CONSIDERATION;
     }
 
     public function getDeliveryTimeAttribute($value)
