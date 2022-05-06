@@ -44,7 +44,7 @@ class CreateConsignmentRegisterService implements IService
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
                 'customer_object_id' => $data['customer_object_id'],
-                'customer_sub_object_id' => $data['customer_sub_object_id'],
+                'customer_sub_object_id' => $data['customer_sub_object_id'] ?? null,
                 'work_agreement_id' => $data['work_agreement_id'],
                 'responsible_full_name' => $data['responsible_full_name'],
                 'responsible_phone' => $data['responsible_phone'],
