@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\API\MTO\v1;
 
 
+use App\Events\OrderSyncProcessed;
 use App\Http\Controllers\Controller;
 use App\Models\Contractor;
 use App\Models\Customer;
@@ -17,6 +18,7 @@ use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
+use App\Models\SyncStacks\ContractorSyncStack;
 use App\Serializers\CustomerSerializer;
 use App\Transformers\API\MTO\v1\OrderTransformer;
 use Carbon\Carbon;
@@ -100,9 +102,9 @@ class OrderController extends Controller
                     if (isset($customer_data['sub_object_id'])) {
                         $customer_sub_object = CustomerSubObject::query()->firstOrCreate([
                             'uuid' => $customer_data['sub_object_id'],
+                        ], [
+                            'customer_object_id' => $customer_object->id
                         ]);
-                        $customer_sub_object->customer_object_id = $customer_object->id;
-                        $customer_sub_object->save();
                     }
 //                    $customer_sub_object = $customer_object->subObjects()->firstOrCreate([
 //                        'uuid' => $customer_data['sub_object_id'],
@@ -139,6 +141,7 @@ class OrderController extends Controller
                     $provider_data['contr_agent_id'] = isset($provider_contr_agent) ? $provider_contr_agent->id : null;
                     $provider_data['provider_contract_id'] = isset($provider_contract) ? $provider_contract->id : null;
 
+                    /** @var ContrAgent $contractor_contr_agent */
                     $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
                         'uuid' => $contractor_data['contr_agent_id'],
                     ]);
@@ -205,6 +208,8 @@ class OrderController extends Controller
                         $position_ids[] = $position->id;
                     }
                     $order->positions()->whereNotIn('id', $position_ids)->delete();
+
+//                event(new OrderSyncProcessed($order, new ContractorSyncStack($contractor_contr_agent)));
                 });
             }
             return response()->json();
