@@ -5,13 +5,12 @@ namespace App\Models\SyncStacks;
 use App\Interfaces\SyncStackable;
 use App\Models\References\ContrAgent;
 use App\Traits\UsesUuid;
-use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ContractorSyncStack extends Model implements SyncStackable
 {
-    use HasFactory, HasAttributes, UsesUuid;
+    use HasFactory, UsesUuid;
 
     protected $table = 'contractor_sync_stacks';
 
