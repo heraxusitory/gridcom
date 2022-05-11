@@ -77,7 +77,7 @@ class OrderController extends Controller
 //        }
     }
 
-    public function syncronize(Request $request)
+    public function synchronize(Request $request)
     {
         /** @var IntegrationUser $user */
         $user = Auth::guard('api')->user();
