@@ -7,6 +7,7 @@ use App\Models\Orders\Order;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Str;
 
 class StackListener
 {
@@ -34,6 +35,8 @@ class StackListener
         foreach ($stacks as $stack) {
             $stack->model = $model_object::class;
             $stack->entity_id = $model_object->id;
+            if (isset($stack->contr_agent_id) && !Str::isUuid($stack->contr_agent_id))
+                continue;
             $stack->save();
         }
     }
