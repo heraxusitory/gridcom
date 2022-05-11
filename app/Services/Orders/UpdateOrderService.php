@@ -16,6 +16,7 @@ use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
 use App\Models\SyncStacks\ContractorSyncStack;
 use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -146,7 +147,8 @@ class UpdateOrderService implements IService
             $this->order->positions()->whereNotIn('id', $position_ids)->delete();
 
             if ($this->order->provider_status === Order::PROVIDER_STATUS_UNDER_CONSIDERATION) {
-                event(new NewStack($this->order, new ContractorSyncStack($contractor_contr_agent), new MTOSyncStack()));
+                event(new NewStack($this->order, new ContractorSyncStack($contractor_contr_agent),
+                    new ProviderSyncStack($this->order->provider->contr_agent), new MTOSyncStack()));
             }
 
             return $this->order;

@@ -17,6 +17,7 @@ use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
 use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -119,7 +120,6 @@ class CreateOrUpdateOrderService implements IService
                             'contractor_id' => $contractor->id,
                         ]);
 
-                        //TODO проверить number
                         return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor, $order_data) {
                             return Order::query()->create(
                                 $order_data->toArray()
@@ -167,13 +167,12 @@ class CreateOrUpdateOrderService implements IService
                         'delivery_address' => $position['delivery_address'] ?? null,
                         'customer_comment' => $position['customer_comment'] ?? null,
                     ]);
-//                        $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $position['unit_id'])->firstOrFail();
                     $position = $order->positions()->updateOrCreate(['position_id' => $position['position_id']], $position->toArray());
                     $position_ids[] = $position->id;
                 }
                 $order->positions()->whereNotIn('id', $position_ids)->delete();
 
-                event(new NewStack($order, new ContractorSyncStack($contractor_contr_agent)));
+                event(new NewStack($order, new ContractorSyncStack($contractor_contr_agent), new ProviderSyncStack($order->provider->contr_agent)));
             });
         }
     }

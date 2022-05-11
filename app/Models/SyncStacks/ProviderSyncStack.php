@@ -2,12 +2,13 @@
 
 namespace App\Models\SyncStacks;
 
+use App\Interfaces\SyncStackable;
 use App\Models\References\ContrAgent;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ProviderSyncStack extends Model
+class ProviderSyncStack extends Model implements SyncStackable
 {
     use HasFactory, UsesUuid;
 

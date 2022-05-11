@@ -19,6 +19,7 @@ use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
 use App\Models\SyncStacks\ContractorSyncStack;
 use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -144,7 +145,8 @@ class CreateOrderService implements IService
                 ]);
             }
             if ($order->provider_status === Order::PROVIDER_STATUS_UNDER_CONSIDERATION) {
-                event(new NewStack($order, new ContractorSyncStack($contractor_contr_agent), new MTOSyncStack()));
+                event(new NewStack($order, new ContractorSyncStack($contractor_contr_agent),
+                    new ProviderSyncStack($order->provider->contr_agent), new MTOSyncStack()));
             }
             return $order;
         });
