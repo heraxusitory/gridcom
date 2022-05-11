@@ -64,12 +64,15 @@ class CreateOrUpdateOrderService implements IService
                 $customer['work_agreement_id'] = $work_agreement->id;
                 $customer['object_id'] = $customer_object->id;
                 $customer['sub_object_id'] = isset($customer_sub_object) ? $customer_sub_object->id : null;
+                $customer['work_type'] = $customer_data['work_type'];
 
                 if (isset($provider_data['contr_agent_id'])) {
+                    /** @var ContrAgent $provider_contr_agent */
                     $provider_contr_agent = ContrAgent::query()->firstOrCreate([
                         'uuid' => $provider_data['contr_agent_id'],
                     ]);
                 } elseif (isset($provider_data['contr_agent_name'])) {
+                    /** @var ContrAgent $provider_contr_agent */
                     $provider_contr_agent = ContrAgent::query()->firstOrCreate([
                         'name' => $provider_data['contr_agent_name'],
                     ], [
@@ -172,7 +175,7 @@ class CreateOrUpdateOrderService implements IService
                 }
                 $order->positions()->whereNotIn('id', $position_ids)->delete();
 
-                event(new NewStack($order, new ContractorSyncStack($contractor_contr_agent), new ProviderSyncStack($order->provider->contr_agent)));
+                event(new NewStack($order, new ContractorSyncStack($contractor_contr_agent), new ProviderSyncStack($provider_contr_agent)));
             });
         }
     }

@@ -84,13 +84,13 @@ class OrderController extends Controller
 
         $data = $request->all()['orders'];
 
-        try {
+//        try {
             (new CreateOrUpdateOrderService($data))->run();
             return response()->json();
-        } catch (\Exception $e) {
-            Log::error($e->getMessage(), $e->getTrace());
-            return response()->json(['message' => 'System error'], 500);
-        }
+//        } catch (\Exception $e) {
+//            Log::error($e->getMessage(), $e->getTrace());
+//            return response()->json(['message' => 'System error'], 500);
+//        }
     }
 
     public function synchronize(Request $request)
