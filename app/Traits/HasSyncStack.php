@@ -8,6 +8,6 @@ trait HasSyncStack
 {
     public function entity()
     {
-        return hasOne($this->model, 'entity_id', 'id');
+        return $this->hasOne(self::$model_class, 'id', 'entity_id');
     }
 }

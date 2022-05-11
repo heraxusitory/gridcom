@@ -2,14 +2,16 @@
 
 namespace App\Models\SyncStacks;
 
+use App\Interfaces\SyncStackable;
 use App\Models\References\ContrAgent;
 use App\Traits\UsesUuid;
+use Illuminate\Database\Eloquent\Concerns\HasAttributes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ContractorSyncStack extends Model implements \App\Interfaces\SyncStackable
+class ContractorSyncStack extends Model implements SyncStackable
 {
-    use HasFactory, UsesUuid;
+    use HasFactory, HasAttributes, UsesUuid;
 
     protected $table = 'contractor_sync_stacks';
 
@@ -19,9 +21,9 @@ class ContractorSyncStack extends Model implements \App\Interfaces\SyncStackable
         'entity_id',
     ];
 
-    public function __construct(ContrAgent $contr_agent)
+    public function __construct(ContrAgent $contr_agent = null)
     {
         parent::__construct();
-        $this->contr_agent_id = $contr_agent->uuid;
+        $this->contr_agent_id = $contr_agent?->uuid;
     }
 }

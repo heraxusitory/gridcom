@@ -4,8 +4,11 @@
 namespace App\Http\Controllers\WebAPI\v1\Orders;
 
 
+use App\Events\NewStack;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderPositions\OrderPosition;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -31,6 +34,7 @@ class OrderProviderController extends OrderController
             if ($this->user->isProvider()) {
                 $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
             }
+            /** @var Order $order */
             $order = $order->findOrFail($order_id);
 
             throw_if($order->provider_status === Order::PROVIDER_STATUS_AGREED ||
@@ -40,7 +44,7 @@ class OrderProviderController extends OrderController
                 , new BadRequestException('Заказ уже отказан поставщиком', 400));
 
 //            $order->positions()->where('status', '!=', OrderPosition::STATUS_REJECTED)->update(['status' => OrderPosition::STATUS_AGREED]);
-            $order->positions()->whereNotIn('status', [ OrderPosition::STATUS_REJECTED])->update(['status' => OrderPosition::STATUS_AGREED]);
+            $order->positions()->whereNotIn('status', [OrderPosition::STATUS_REJECTED])->update(['status' => OrderPosition::STATUS_AGREED]);
 
             if ($order->positions()->where('status', OrderPosition::STATUS_REJECTED)->count())
                 $order->provider_status = Order::PROVIDER_STATUS_PARTIALLY_AGREED;
@@ -50,6 +54,8 @@ class OrderProviderController extends OrderController
             $order_provider->agreed_comment = $request->comment;
             $order_provider->save();
             $order->save();
+
+            event(new NewStack($order, new ContractorSyncStack($order->contractor->contr_agent), new MTOSyncStack()));
 
             return $order;
         } catch
@@ -76,6 +82,7 @@ class OrderProviderController extends OrderController
             if ($this->user->isProvider()) {
                 $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
             }
+            /** @var Order $order */
             $order = $order->findOrFail($order_id);
 
             throw_if($order->provider_status === Order::PROVIDER_STATUS_AGREED ||
@@ -90,6 +97,10 @@ class OrderProviderController extends OrderController
             $order_provider->rejected_comment = $request->comment;
             $order_provider->save();
             $order->save();
+
+            event(new NewStack($order, new ContractorSyncStack($order->contractor->contr_agent), new MTOSyncStack()));
+
+
             return $order;
         } catch
         (ModelNotFoundException $e) {
@@ -111,6 +122,7 @@ class OrderProviderController extends OrderController
             if ($this->user->isProvider()) {
                 $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
             }
+            /** @var Order $order */
             $order = $order->findOrFail($order_id);
             $order_positions_ids = $order->positions()->pluck('id');
         } catch (ModelNotFoundException $e) {
@@ -134,6 +146,9 @@ class OrderProviderController extends OrderController
 
 //            throw_if($order->positions()->where('status', OrderPosition::STATUS_REJECTED)->exists(), new BadRequestException('Отказанные позиции уже существуют', 400));
             $order->positions()->whereIn('id', $request->rejected_position_ids)->update(['status' => OrderPosition::STATUS_REJECTED]);
+
+            event(new NewStack($order, new ContractorSyncStack($order->contractor->contr_agent), new MTOSyncStack()));
+
             return $order;
         } catch
         (ModelNotFoundException $e) {
@@ -160,11 +175,14 @@ class OrderProviderController extends OrderController
             if ($this->user->isProvider()) {
                 $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
             }
+            /** @var Order $order */
             $order = $order->findOrFail($order_id);
             $position = $order->positions()->findOrFail($order_position_id);
             $position->delivery_plan_time = $request->delivery_plan_time;
             $position->provider_comment = $request->comment;
             $position->save();
+
+            event(new NewStack($order, new ContractorSyncStack($order->contractor->contr_agent), new MTOSyncStack()));
 
             return response()->json(['data' => $position]);
         } catch

@@ -84,26 +84,20 @@ class OrderController extends Controller
 
         $data = $request->all()['orders'];
 
-//        try {
-        (new CreateOrUpdateOrderService($data))->run();
-        return response()->json();
-//        } catch (\Exception $e) {
-//            Log::error($e->getMessage(), $e->getTrace());
-//            return response()->json(['message' => 'System error'], 500);
-//        }
+        try {
+            (new CreateOrUpdateOrderService($data))->run();
+            return response()->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
     }
 
     public function synchronize(Request $request)
     {
-        try {
+//        try {
             return DB::transaction(function () {
-                $orders = MTOSyncStack::query()
-                    ->where('model', Order::class)
-                    ->with('entity as order')->get()
-                    ->map(function ($stack) {
-                        $stack->order->stack_id = $stack->id;
-                        return $stack->order;
-                    });
+                $orders = MTOSyncStack::getModelEntities(Order::class);
 //                $orders = Order::query()
                 /*->with([
                     'customer.subObject', 'customer.object',
@@ -116,10 +110,10 @@ class OrderController extends Controller
 //                Order::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем
                 return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
             });
-        } catch (\Exception $e) {
-            Log::error($e->getMessage(), $e->getTrace());
-            return response()->json(['message' => 'System error'], 500);
-        }
+//        } catch (\Exception $e) {
+//            Log::error($e->getMessage(), $e->getTrace());
+//            return response()->json(['message' => 'System error'], 500);
+//        }
     }
 
     public function removeFromStack(Request $request)

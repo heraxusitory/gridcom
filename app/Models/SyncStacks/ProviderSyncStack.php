@@ -19,9 +19,9 @@ class ProviderSyncStack extends Model
         'entity_id',
     ];
 
-    public function __construct(ContrAgent $contr_agent)
+    public function __construct(ContrAgent $contr_agent = null)
     {
         parent::__construct();
-        $this->contr_agent_id = $contr_agent->uuid;
+        $this->contr_agent_id = $contr_agent?->uuid;
     }
 }

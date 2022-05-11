@@ -15,7 +15,7 @@ use Illuminate\Queue\SerializesModels;
 
 class NewStack
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+//    use Dispatchable, InteractsWithSockets, SerializesModels;
 
     /**
      * @var SyncStackable
@@ -26,20 +26,24 @@ class NewStack
      */
     public Order $order;
     /**
-     * @var SyncStackable
+     * @var SyncStackable[]
      */
-    public SyncStackable $stack;
+    public array $stacks;
+    /**
+     * @var Syncable
+     */
+    public Syncable $model_object;
 
     /**
      * Create a new event instance.
      *
      * @param Syncable $model_object
-     * @param SyncStackable $stack
+     * @param SyncStackable ...$stacks
      */
-    public function __construct(Syncable $model_object, SyncStackable $stack)
+    public function __construct(Syncable $model_object, SyncStackable ...$stacks)
     {
         $this->model_object = $model_object;
-        $this->stack = $stack;
+        $this->stacks = $stacks;
     }
 
     /**

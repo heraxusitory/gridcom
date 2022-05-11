@@ -43,6 +43,13 @@ class Order extends Model implements Syncable
         'contractor_id' => 'integer',
     ];
 
+    protected $with = [
+        'customer.subObject', 'customer.object',
+        'provider.contract', 'provider.contr_agent',
+        'contractor.contr_agent',
+        'positions.nomenclature.units',
+    ];
+
     const ACTION_DRAFT = 'draft';
     const ACTION_APPROVE = 'approve';
 

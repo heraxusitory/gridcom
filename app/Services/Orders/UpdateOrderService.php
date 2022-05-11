@@ -4,6 +4,7 @@
 namespace App\Services\Orders;
 
 
+use App\Events\NewStack;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\References\ContactPerson;
@@ -13,6 +14,8 @@ use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -95,6 +98,7 @@ class UpdateOrderService implements IService
             //contractor
 
             $contractor_id = $contractor_data['contr_agent_id'];
+            /** @var ContrAgent $contractor_contr_agent */
             $contractor_contr_agent = ContrAgent::query()->findOrFail($contractor_id);
 //            $contractor_contact_data = array_merge($contractor_data['contact'], ['contr_agent_id' => $contractor_contr_agent->id]);
 //            $contractor_contact = ContactPerson::query()
@@ -140,6 +144,10 @@ class UpdateOrderService implements IService
                 $position_ids[] = $position->id;
             }
             $this->order->positions()->whereNotIn('id', $position_ids)->delete();
+
+            if ($this->order->provider_status === Order::PROVIDER_STATUS_UNDER_CONSIDERATION) {
+                event(new NewStack($this->order, new ContractorSyncStack($contractor_contr_agent), new MTOSyncStack()));
+            }
 
             return $this->order;
         });

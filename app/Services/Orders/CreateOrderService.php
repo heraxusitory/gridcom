@@ -4,6 +4,7 @@
 namespace App\Services\Orders;
 
 
+use App\Events\NewStack;
 use App\Models\Contractor;
 use App\Models\Customer;
 use App\Models\Orders\Order;
@@ -16,6 +17,8 @@ use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -88,10 +91,6 @@ class CreateOrderService implements IService
             $provider_contract = ProviderContractDocument::query()
                 ->findOrFail($provider_contract_id);
 
-//            $provider_contact_data = array_merge($provider_data['contact'], ['contr_agent_id' => $provider_contr_agent->id]);
-//            $provider_contact = ContactPerson::query()
-//                ->findOrFail($provider_data['contact_id']);
-
             $provider = Provider::query()->create([
                 'provider_contract_id' => $provider_contract->id,
 //                'contact_id' => $provider_contact->id,
@@ -104,10 +103,8 @@ class CreateOrderService implements IService
             //contractor
 
             $contractor_id = $contractor_data['contr_agent_id'];
+            /** @var ContrAgent $contractor_contr_agent */
             $contractor_contr_agent = ContrAgent::query()->findOrFail($contractor_id);
-//            $contractor_contact_data = array_merge($contractor_data['contact'], ['contr_agent_id' => $contractor_contr_agent->id]);
-//            $contractor_contact = ContactPerson::query()
-//                ->findOrFail($contractor_data['contact_id']);
 
             $contractor = Contractor::query()->create([
 //                'contact_id' => $contractor_contact->id,
@@ -119,6 +116,7 @@ class CreateOrderService implements IService
                 'contractor_responsible_phone' => $contractor_data['responsible_phone'],
             ]);
 
+            /** @var Order $order */
             $order = Order::query()->create([
                 'uuid' => Str::uuid(),
                 'order_date' => Carbon::today()->format('Y-m-d'),
@@ -134,7 +132,6 @@ class CreateOrderService implements IService
             foreach ($positions_data as $position) {
                 $nomenclature = Nomenclature::query()->findOrFail($position['nomenclature_id']);
                 $order->positions()->create([
-//                    'order_id' => $order->id,
                     'position_id' => Str::uuid(),
                     'status' => OrderPosition::STATUS_UNDER_CONSIDERATION,
                     'nomenclature_id' => $position['nomenclature_id'],
@@ -142,12 +139,13 @@ class CreateOrderService implements IService
                     'count' => $position['count'],
                     'price_without_vat' => $nomenclature->price,
                     'amount_without_vat' => round($position['count'] * $nomenclature->price, 2),
-//                    'total_amount',
                     'delivery_time' => $position['delivery_time'],
                     'delivery_address' => $position['delivery_address'],
                 ]);
             }
-
+            if ($order->provider_status === Order::PROVIDER_STATUS_UNDER_CONSIDERATION) {
+                event(new NewStack($order, new ContractorSyncStack($contractor_contr_agent), new MTOSyncStack()));
+            }
             return $order;
         });
     }

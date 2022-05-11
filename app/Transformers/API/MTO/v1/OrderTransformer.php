@@ -32,6 +32,7 @@ class OrderTransformer extends TransformerAbstract
     public function transform(Order $order)
     {
         $data = [
+            'stack_id' => $order->stack_id,
             'id' => $order->uuid,
             'number' => optional($order)->number,
             'order_date' => optional($order)->order_date,

@@ -30,9 +30,11 @@ class StackListener
     public function handle(NewStack $event)
     {
         $model_object = $event->model_object;
-        $stack = $event->stack;
-        $stack->model = $model_object::class;
-        $stack->entity_id = $model_object->id;
-        $stack->push();
+        $stacks = $event->stacks;
+        foreach ($stacks as $stack) {
+            $stack->model = $model_object::class;
+            $stack->entity_id = $model_object->id;
+            $stack->save();
+        }
     }
 }
