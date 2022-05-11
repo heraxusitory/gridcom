@@ -2,13 +2,14 @@
 
 namespace App\Models;
 
+use App\Interfaces\SyncStackable;
 use App\Models\References\ContrAgent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Sanctum\HasApiTokens;
 
-class IntegrationUser extends Authenticatable
+class IntegrationUser extends Authenticatable implements SyncStackable
 {
     use HasApiTokens, HasFactory;
 

@@ -4,7 +4,7 @@
 namespace App\Http\Controllers\API\MTO\v1;
 
 
-use App\Events\OrderSyncProcessed;
+use App\Events\NewStack;
 use App\Http\Controllers\Controller;
 use App\Models\Contractor;
 use App\Models\Customer;
@@ -19,7 +19,9 @@ use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
 use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
 use App\Serializers\CustomerSerializer;
+use App\Services\API\MTO\v1\CreateOrUpdateOrderService;
 use App\Transformers\API\MTO\v1\OrderTransformer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -47,8 +49,8 @@ class OrderController extends Controller
             'orders.*.order_customer.work_type' => 'required|string|max:255',
             'orders.*.order_customer.object_id' => 'required|uuid',
             'orders.*.order_customer.sub_object_id' => 'nullable|uuid',
-            'orders.*.order_customer.work_start_date' => 'required|date_format:Y-m-d',
-            'orders.*.order_customer.work_end_date' => 'required|date_format:Y-m-d',
+            'orders.*.order_customer.work_start_date' => 'nullable|date_format:Y-m-d',
+            'orders.*.order_customer.work_end_date' => 'nullable|date_format:Y-m-d',
 
             'orders.*.order_provider.provider_contract_id' => 'nullable|required_without:orders.*.order_provider.provider_contract_name|uuid',
             'orders.*.order_provider.provider_contract_name' => 'nullable|required_without:orders.*.order_provider.provider_contract_id|string|max:255',
@@ -82,156 +84,35 @@ class OrderController extends Controller
 
         $data = $request->all()['orders'];
 
-        try {
-            foreach ($data as $item) {
-                DB::transaction(function () use ($item) {
-                    $customer_data = $item['order_customer'] ?? [];
-                    $provider_data = $item['order_provider'] ?? [];
-                    $contractor_data = $item['order_contractor'] ?? [];
-                    $position_data = $item['order_positions'] ?? [];
-
-                    $organization = Organization::query()->firstOrCreate([
-                        'uuid' => $customer_data['organization_id'],
-                    ]);
-                    $work_agreement = WorkAgreementDocument::query()->firstOrCreate([
-                        'uuid' => $customer_data['work_agreement_id'],
-                    ]);
-                    $customer_object = CustomerObject::query()->firstOrCreate([
-                        'uuid' => $customer_data['object_id'],
-                    ]);
-                    if (isset($customer_data['sub_object_id'])) {
-                        $customer_sub_object = CustomerSubObject::query()->firstOrCreate([
-                            'uuid' => $customer_data['sub_object_id'],
-                        ], [
-                            'customer_object_id' => $customer_object->id
-                        ]);
-                    }
-//                    $customer_sub_object = $customer_object->subObjects()->firstOrCreate([
-//                        'uuid' => $customer_data['sub_object_id'],
-//                    ]);
-                    $customer_data['organization_id'] = $organization->id;
-                    $customer_data['work_agreement_id'] = $work_agreement->id;
-                    $customer_data['object_id'] = $customer_object->id;
-                    $customer_data['sub_object_id'] = isset($customer_sub_object) ? $customer_sub_object->id : null;
-
-                    if (isset($provider_data['contr_agent_id'])) {
-                        $provider_contr_agent = ContrAgent::query()->firstOrCreate([
-                            'uuid' => $provider_data['contr_agent_id'],
-                        ]);
-                    } elseif (isset($provider_data['contr_agent_name'])) {
-                        $provider_contr_agent = ContrAgent::query()->firstOrCreate([
-                            'name' => $provider_data['contr_agent_name'],
-                        ], [
-                            'uuid' => Str::uuid(),
-                        ]);
-                    }
-
-                    if (isset($provider_data['provider_contract_id'])) {
-                        $provider_contract = ProviderContractDocument::query()->firstOrCreate([
-                            'uuid' => $provider_data['provider_contract_id'],
-                        ]);
-                    } elseif (isset($provider_data['provider_contract_name'])) {
-                        $provider_contract = ProviderContractDocument::query()->firstOrCreate([
-                            'number' => $provider_data['provider_contract_name'],
-                        ], [
-                            'uuid' => Str::uuid(),
-                        ]);
-                    }
-
-                    $provider_data['contr_agent_id'] = isset($provider_contr_agent) ? $provider_contr_agent->id : null;
-                    $provider_data['provider_contract_id'] = isset($provider_contract) ? $provider_contract->id : null;
-
-                    /** @var ContrAgent $contractor_contr_agent */
-                    $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
-                        'uuid' => $contractor_data['contr_agent_id'],
-                    ]);
-                    $contractor_data['contr_agent_id'] = $contractor_contr_agent->id;
-
-                    unset($provider_data['contr_agent_name']);
-                    unset($provider_data['provider_contract_name']);
-
-                    $order = Order::query()->where('uuid', $item['id'])->firstOr(
-                    //Если обьект новый и его нужно создать
-                        function () use ($item, $customer_data, $provider_data, $contractor_data) {
-                            $customer = Customer::query()->create($customer_data);
-                            $provider = Provider::query()->create($provider_data);
-                            $contractor = Contractor::query()->create($contractor_data);
-
-                            //TODO проверить number
-                            return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor) {
-                                return Order::query()->create(
-                                    [
-                                        'uuid' => $item['id'],
-                                        'number' => $item['number'] ?? null,
-                                        'order_date' => isset($item['order_date']) ? (new Carbon($item['order_date']))->format('d.m.Y') : null,
-                                        'deadline_date' => $item['deadline_date'] ?? null,
-                                        'customer_status' => $item['customer_status'],
-                                        'provider_status' => $item['provider_status'],
-                                        'customer_id' => $customer->id,
-                                        'provider_id' => $provider->id,
-                                        'contractor_id' => $contractor->id,
-                                    ]);
-                            });
-                        });
-
-                    //Если обьект существует и его нужно обновить
-                    if (!$order->wasRecentlyCreated) {
-                        $order->customer()->update($customer_data);
-                        $order->provider()->update($provider_data);
-                        $order->contractor()->update($contractor_data);
-                        $order->update([
-                            'number' => $item['number'] ?? null,
-                            'order_date' => (new Carbon($item['order_date']))->format('d.m.Y'),
-                            'deadline_date' => $item['deadline_date'] ?? null,
-                            'customer_status' => $item['customer_status'],
-                            'provider_status' => $item['provider_status'],
-                        ]);
-                    }
-
-                    $position_ids = [];
-                    foreach ($position_data as $position) {
-                        $nomenclature = Nomenclature::query()->firstOrCreate([
-                            'uuid' => $position['nomenclature_id'],
-                        ]);
-//                        $nomenclature_unit = NomenclatureUnit::query()->where('uuid', $position['unit_id'])->firstOrFail();
-                        $position = $order->positions()->updateOrCreate(['position_id' => $position['position_id']], [
-                            'status' => $position['status'] ?? null,
-                            'nomenclature_id' => $nomenclature->id,
-                            #'unit_id' => $nomenclature_unit->id,
-                            'count' => $position['count'] ?? null,
-                            'price_without_vat' => $position['price_without_vat'] ?? null,
-                            'amount_without_vat' => $position['amount_without_vat'] ?? null,
-                            'delivery_time' => $position['delivery_time'] ?? null,
-                            'delivery_address' => $position['delivery_address'] ?? null,
-                            'customer_comment' => $position['customer_comment'] ?? null,
-                        ]);
-                        $position_ids[] = $position->id;
-                    }
-                    $order->positions()->whereNotIn('id', $position_ids)->delete();
-
-//                event(new OrderSyncProcessed($order, new ContractorSyncStack($contractor_contr_agent)));
-                });
-            }
-            return response()->json();
-        } catch (\Exception $e) {
-            Log::error($e->getMessage(), $e->getTrace());
-            return response()->json(['message' => 'System error'], 500);
-        }
+//        try {
+        (new CreateOrUpdateOrderService($data))->run();
+        return response()->json();
+//        } catch (\Exception $e) {
+//            Log::error($e->getMessage(), $e->getTrace());
+//            return response()->json(['message' => 'System error'], 500);
+//        }
     }
 
     public function synchronize(Request $request)
     {
         try {
             return DB::transaction(function () {
-                $orders = Order::query()
-                    ->with([
-                        'customer.subObject', 'customer.object',
-                        'provider.contract', 'provider.contr_agent',
-                        'contractor.contr_agent',
-                        'positions.nomenclature.units',
-                    ])
-                    /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
-                    ->get();
+                $orders = MTOSyncStack::query()
+                    ->where('model', Order::class)
+                    ->with('entity as order')->get()
+                    ->map(function ($stack) {
+                        $stack->order->stack_id = $stack->id;
+                        return $stack->order;
+                    });
+//                $orders = Order::query()
+                /*->with([
+                    'customer.subObject', 'customer.object',
+                    'provider.contract', 'provider.contr_agent',
+                    'contractor.contr_agent',
+                    'positions.nomenclature.units',
+                ])*/
+                /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
+//                    ->get();
 //                Order::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем
                 return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
             });
@@ -241,20 +122,21 @@ class OrderController extends Controller
         }
     }
 
-    public function putInQueue(Request $request)
+    public function removeFromStack(Request $request)
     {
         $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'required|uuid',
+            'stack_ids' => 'required|array',
+            'stack_ids.*' => 'required|uuid',
         ]);
         try {
             return DB::transaction(function () use ($request) {
-                $count = Order::withoutEvents(function () use ($request) {
-                    return Order::query()
-                        ->whereIn('uuid', $request->ids)
-                        ->update(['sync_required' => true]);
-                });
-                return response()->json('В очередь поставлено ' . $count . ' заказов на поставку ПО');
+                $count = MTOSyncStack::destroy($request->stack_ids);
+//                $count = Order::withoutEvents(function () use ($request) {
+//                    return Order::query()
+//                        ->whereIn('uuid', $request->ids)
+//                        ->update(['sync_required' => true]);
+//                });
+                return response()->json('Из стека удалено ' . $count . ' заказов на поставку ПО');
             });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());

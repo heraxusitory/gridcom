@@ -4,6 +4,7 @@
 namespace App\Models\Orders;
 
 
+use App\Interfaces\Syncable;
 use App\Models\Contractor;
 use App\Models\Customer;
 use App\Models\Orders\OrderPositions\OrderPosition;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
 
-class Order extends Model
+class Order extends Model implements Syncable
 {
     use HasFactory, UsesNumberLKK;
 

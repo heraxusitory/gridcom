@@ -2,12 +2,13 @@
 
 namespace App\Providers;
 
+use App\Events\NewStack;
+use App\Listeners\StackListener;
 use App\Models\Orders\Order;
 use App\Observers\OrderObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Event;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -20,6 +21,9 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        NewStack::class => [
+            StackListener::class,
+        ]
     ];
 
     /**
