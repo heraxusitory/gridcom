@@ -4,6 +4,7 @@ namespace App\Listeners;
 
 use App\Events\NewStack;
 use App\Models\Orders\Order;
+use App\Models\SyncStacks\MTOSyncStack;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
@@ -35,7 +36,7 @@ class StackListener
         foreach ($stacks as $stack) {
             $stack->model = $model_object::class;
             $stack->entity_id = $model_object->id;
-            if (isset($stack->contr_agent_id) && !Str::isUuid($stack->contr_agent_id))
+            if (!($stack instanceof MTOSyncStack) && !Str::isUuid($stack->contr_agent_id))
                 continue;
             $stack->save();
         }

@@ -25,4 +25,18 @@ class ProviderSyncStack extends Model implements SyncStackable
         parent::__construct();
         $this->contr_agent_id = $contr_agent?->uuid;
     }
+
+    public static function getModelEntities(string $model_class, ContrAgent $contr_agent)
+    {
+        self::$model_class = $model_class;
+        return self::query()
+            ->where('contr_agent_id', $contr_agent->uuid)
+            ->where('model', $model_class)
+            ->with('entity')
+            ->get()
+            ->map(function ($stack) {
+                $stack->entity->stack_id = $stack->id;
+                return $stack->entity;
+            });
+    }
 }

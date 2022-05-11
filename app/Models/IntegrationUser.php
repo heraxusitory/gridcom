@@ -20,6 +20,7 @@ class IntegrationUser extends Authenticatable implements SyncStackable
         'email',
         'password',
         'role',
+        'contr_agent_id',
     ];
 
     protected $hidden = [
@@ -40,5 +41,15 @@ class IntegrationUser extends Authenticatable implements SyncStackable
     public function hasContrAgent()
     {
         return (bool)$this->contr_agent()->first();
+    }
+
+    public function isProvider()
+    {
+        return $this->contr_agent()->first()?->role === 'provider';
+    }
+
+    public function isContractor()
+    {
+        return $this->contr_agent()->first()->role === 'contractor';
     }
 }

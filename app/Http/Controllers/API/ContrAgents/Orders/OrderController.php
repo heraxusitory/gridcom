@@ -5,19 +5,14 @@ namespace App\Http\Controllers\API\ContrAgents\Orders;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Contractor;
-use App\Models\Customer;
+use App\Models\IntegrationUser;
 use App\Models\Orders\Order;
 use App\Models\Orders\OrderPositions\OrderPosition;
-use App\Models\Provider;
-use App\Models\References\ContrAgent;
-use App\Models\References\CustomerObject;
-use App\Models\References\Nomenclature;
-use App\Models\References\Organization;
-use App\Models\References\ProviderContractDocument;
-use App\Models\References\WorkAgreementDocument;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
+use App\Serializers\CustomerSerializer;
 use App\Services\API\ContrAgents\v1\CreateOrUpdateOrderService;
-use Carbon\Carbon;
+use App\Transformers\API\ContrAgents\v1\OrderTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -73,9 +68,51 @@ class OrderController extends Controller
 
         $data = $request->all()['orders'];
 
-        try {
+//        try {
             (new CreateOrUpdateOrderService($data, $user))->run();
             return response()->json();
+//        } catch (\Exception $e) {
+//            Log::error($e->getMessage(), $e->getTrace());
+//            return response()->json(['message' => 'System error'], 500);
+//        }
+    }
+
+    public function syncronize(Request $request)
+    {
+        /** @var IntegrationUser $user */
+        $user = Auth::guard('api')->user();
+        try {
+            return DB::transaction(function () use ($user) {
+                if ($user->isProvider())
+                    $orders = ProviderSyncStack::getModelEntities(Order::class, $user->contr_agent);
+                elseif ($user->isContractor())
+                    $orders = ContractorSyncStack::getModelEntities(Order::class, $user->contr_agent);
+                else $orders = [];
+                return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
+            });
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
+    }
+
+    public function removeFromStack(Request $request)
+    {
+        /** @var IntegrationUser $user */
+        $user = Auth::guard('api')->user();
+        $request->validate([
+            'stack_ids' => 'required|array',
+            'stack_ids.*' => 'required|uuid',
+        ]);
+        try {
+            return DB::transaction(function () use ($request, $user) {
+                $count = 0;
+                if ($user->isProvider())
+                    $count = ProviderSyncStack::destroy($request->stack_ids);
+                elseif ($user->isContractor())
+                    $count = ContractorSyncStack::destroy($request->stack_ids);
+                return response()->json('Из стека удалено ' . $count . ' заказов на поставку ПО');
+            });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
             return response()->json(['message' => 'System error'], 500);

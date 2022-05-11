@@ -54,7 +54,9 @@ class CreateOrUpdateOrderService implements IService
                 $customer['work_agreement_id'] = $work_agreement?->id;
                 $customer['object_id'] = $customer_object?->id;
                 $customer['sub_object_id'] = $customer_sub_object?->id;
+                $customer['work_type'] = $customer_data['work_type'];
 
+                /** @var ContrAgent $provider_contr_agent */
                 $provider_contr_agent = ContrAgent::query()
                     ->where(['name' => $provider_data['contr_agent']['name']])
                     ->first();
@@ -146,7 +148,7 @@ class CreateOrUpdateOrderService implements IService
                 }
                 $order->positions()->whereNotIn('id', $position_ids)->delete();
 
-                event(new NewStack($order, new ProviderSyncStack($order->provider->contr_agent), new MTOSyncStack()));
+                event(new NewStack($order, new ProviderSyncStack($provider_contr_agent), new MTOSyncStack()));
 
             });
         }
