@@ -76,9 +76,9 @@ class ConsignmentRegisterController
                         $customer_sub_object = /*$customer_object->subObjects()->firstOrCreate([
                             'uuid' => $item['customer_sub_object_id'],
                         ]);*/
-                            CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
-                        $customer_sub_object->customer_object_id = $customer_object->id;
-                        $customer_sub_object->save();
+                            CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']], ['customer_object_id' => $customer_object->id]);
+//                        $customer_sub_object->customer_object_id = $customer_object->id;
+//                        $customer_sub_object->save();
 
                         $work_agreement = WorkAgreementDocument::query()->firstOrCreate([
                             'uuid' => $item['work_agreement_id'],
