@@ -105,11 +105,11 @@ class CreateOrUpdateOrderService implements IService
                     'uuid' => $contractor_data['contr_agent_id'],
                 ]);
                 $contractor['contr_agent_id'] = $contractor_contr_agent->id;
-                $contractor['full_name'] = $contractor['full_name'] ?? null;
-                $contractor['email'] = $contractor['email'] ?? null;
-                $contractor['phone'] = $contractor['phone'] ?? null;
-                $contractor['contractor_responsible_full_name'] = $contractor['contractor_responsible_full_name'] ?? null;
-                $contractor['contractor_responsible_phone'] = $contractor['contractor_responsible_phone'] ?? null;
+                $contractor['full_name'] = $contractor_data['full_name'] ?? null;
+                $contractor['email'] = $contractor_data['email'] ?? null;
+                $contractor['phone'] = $contractor_data['phone'] ?? null;
+                $contractor['contractor_responsible_full_name'] = $contractor_data['contractor_responsible_full_name'] ?? null;
+                $contractor['contractor_responsible_phone'] = $contractor_data['contractor_responsible_phone'] ?? null;
 
                 $order_data = collect([
                     'uuid' => $item['id'],
