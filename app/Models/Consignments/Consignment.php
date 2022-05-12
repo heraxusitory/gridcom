@@ -40,6 +40,12 @@ class Consignment extends Model
         'comment',
     ];
 
+    protected $with = [
+        'organization', 'provider', 'provider_contract',
+        'contractor', 'work_agreement', 'object', 'subObject',
+        'positions.nomenclature'
+    ];
+
     private const ACTION_DRAFT = 'draft';
     private const ACTION_APPROVE = 'approve';
 

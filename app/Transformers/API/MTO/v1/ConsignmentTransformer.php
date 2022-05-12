@@ -33,6 +33,7 @@ class ConsignmentTransformer extends TransformerAbstract
     public function transform(Consignment $consignment)
     {
         return [
+            'stack_id' => $consignment->stack_id,
             'id' => $consignment?->uuid,
             'number' => $consignment?->number,
             'date' => $consignment?->date,

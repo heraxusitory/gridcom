@@ -14,6 +14,7 @@ use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
+use App\Models\SyncStacks\MTOSyncStack;
 use App\Serializers\CustomerSerializer;
 use App\Transformers\API\MTO\v1\ConsignmentTransformer;
 use Carbon\Carbon;
@@ -73,13 +74,13 @@ class ConsignmentController extends Controller
                         $work_agreement = WorkAgreementDocument::query()->firstOrCreate(['uuid' => $item['work_agreement_id']]);
                         $object = CustomerObject::query()->firstOrCreate(['uuid' => $item['customer_object_id']]);
 //                        $sub_object = $object->subObjects()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
-                        $sub_object = CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']]);
-                        $sub_object->customer_object_id = $object->id;
-                        $sub_object->save();
+                        $sub_object = CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']],
+                            ['customer_object_id' => $object->id]);
+//                        $sub_object->customer_object_id = $object->id;
+//                        $sub_object->save();
 
-                        return Consignment::query()->updateOrCreate([
+                        $consignment = collect([
                             'uuid' => $item['id'],
-                        ], [
                             'number' => $item['number'],
                             'date' => (new Carbon($item['date']))->format('d.m.Y'),
                             'organization_id' => $organization->id,
@@ -93,6 +94,9 @@ class ConsignmentController extends Controller
                             'responsible_phone' => $item['responsible_phone'] ?? null,
                             'comment' => $item['comment'] ?? null,
                         ]);
+                        return Consignment::query()->updateOrCreate([
+                            'uuid' => $consignment['uuid'],
+                        ], $consignment->toArray());
                     });
 
                     $position_ids = [];
@@ -104,21 +108,22 @@ class ConsignmentController extends Controller
                             'uuid' => $position['order_id']
                         ]);
 
-                        $position = $consignment->positions()->updateOrCreate([
+                        $position = collect([
                             'position_id' => $position['id'],
-                        ],
-                            [
-                                'order_id' => $order->id,
-                                'nomenclature_id' => $nomenclature->id,
-                                'count' => $position['count'],
-                                'price_without_vat' => $position['price_without_vat'],
-                                'amount_without_vat' => $position['amount_without_vat'],
-                                'vat_rate' => $position['vat_rate'],
-                                'amount_with_vat' => $position['amount_with_vat'],
-                                'country' => $position['country'],
-                                'cargo_custom_declaration' => $position['cargo_custom_declaration'],
-                                'declaration' => $position['declaration'],
-                            ]);
+                            'order_id' => $order->id,
+                            'nomenclature_id' => $nomenclature->id,
+                            'count' => $position['count'],
+                            'price_without_vat' => $position['price_without_vat'],
+                            'amount_without_vat' => $position['amount_without_vat'],
+                            'vat_rate' => $position['vat_rate'],
+                            'amount_with_vat' => $position['amount_with_vat'],
+                            'country' => $position['country'],
+                            'cargo_custom_declaration' => $position['cargo_custom_declaration'],
+                            'declaration' => $position['declaration'],
+                        ]);
+                        $position = $consignment->positions()->updateOrCreate([
+                            'position_id' => $position['position_id']
+                        ], $position->toArray());
                         $position_ids[] = $position->id;
                     }
                     $consignment->positions()->whereNotIn('id', $position_ids)->delete();
@@ -135,14 +140,7 @@ class ConsignmentController extends Controller
     {
         try {
             return DB::transaction(function () {
-                $consignments = Consignment::query()
-                    ->with([
-                        'organization', 'provider', 'provider_contract',
-                        'contractor', 'work_agreement', 'object', 'subObject',
-                        'positions.nomenclature'])
-                    /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
-                    ->get();
-//                Consignment::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем
+                $consignments = MTOSyncStack::getModelEntities(Consignment::class);
                 return fractal()->collection($consignments)->transformWith(ConsignmentTransformer::class)->serializeWith(CustomerSerializer::class);
             });
         } catch (\Exception $e) {
@@ -151,20 +149,16 @@ class ConsignmentController extends Controller
         }
     }
 
-    public function putInQueue(Request $request)
+    public function removeFromStack(Request $request)
     {
         $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'required|uuid',
+            'stack_ids' => 'required|array',
+            'stack_ids.*' => 'required|uuid',
         ]);
         try {
             return DB::transaction(function () use ($request) {
-                $count = Consignment::withoutEvents(function () use ($request) {
-                    return Consignment::query()
-                        ->whereIn('uuid', $request->ids)
-                        ->update(['sync_required' => true]);
-                });
-                return response()->json('В очередь поставлено ' . $count . ' накладных');
+                $count = MTOSyncStack::destroy($request->stack_ids);
+                return response()->json('Из стека удалено ' . $count . ' накладных');
             });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
