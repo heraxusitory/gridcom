@@ -49,7 +49,7 @@ class OrderPosition extends Model
     {
         return [
             self::STATUS_AGREED,
-//            self::STATUS_UNDER_CONSIDERATION,
+            self::STATUS_UNDER_CONSIDERATION,
             self::STATUS_REJECTED,
         ];
     }
