@@ -55,8 +55,8 @@ class ConsignmentController extends Controller
             'consignments.*.positions.*.vat_rate' => 'required|numeric',
             'consignments.*.positions.*.amount_with_vat' => 'required|numeric',
             'consignments.*.positions.*.country' => ['required', 'string', Rule::in(array_keys(config('countries')))],
-            'consignments.*.positions.*.cargo_custom_declaration' => 'required|string',
-            'consignments.*.positions.*.declaration' => 'required|string',
+            'consignments.*.positions.*.cargo_custom_declaration' => 'nullable|string',
+            'consignments.*.positions.*.declaration' => 'nullable|string',
         ]);
 
         try {
@@ -118,8 +118,8 @@ class ConsignmentController extends Controller
                             'vat_rate' => $position['vat_rate'],
                             'amount_with_vat' => $position['amount_with_vat'],
                             'country' => $position['country'],
-                            'cargo_custom_declaration' => $position['cargo_custom_declaration'],
-                            'declaration' => $position['declaration'],
+                            'cargo_custom_declaration' => $position['cargo_custom_declaration'] ?? null,
+                            'declaration' => $position['declaration'] ?? null,
                         ]);
                         $position = $consignment->positions()->updateOrCreate([
                             'position_id' => $position['position_id']
