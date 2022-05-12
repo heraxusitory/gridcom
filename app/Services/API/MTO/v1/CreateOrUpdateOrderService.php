@@ -96,12 +96,20 @@ class CreateOrUpdateOrderService implements IService
 
                 $provider['contr_agent_id'] = isset($provider_contr_agent) ? $provider_contr_agent->id : null;
                 $provider['provider_contract_id'] = isset($provider_contract) ? $provider_contract->id : null;
+                $provider['full_name'] = $provider_data['full_name'] ?? null;
+                $provider['email'] = $provider_data['email'] ?? null;
+                $provider['phone'] = $provider_data['phone'] ?? null;
 
                 /** @var ContrAgent $contractor_contr_agent */
                 $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
                     'uuid' => $contractor_data['contr_agent_id'],
                 ]);
                 $contractor['contr_agent_id'] = $contractor_contr_agent->id;
+                $contractor['full_name'] = $contractor['full_name'] ?? null;
+                $contractor['email'] = $contractor['email'] ?? null;
+                $contractor['phone'] = $contractor['phone'] ?? null;
+                $contractor['contractor_responsible_full_name'] = $contractor['contractor_responsible_full_name'] ?? null;
+                $contractor['contractor_responsible_phone'] = $contractor['contractor_responsible_phone'] ?? null;
 
                 $order_data = collect([
                     'uuid' => $item['id'],
