@@ -192,4 +192,84 @@ class ConsignmentRegisterController extends Controller
             }
         }
     }
+
+    /*роут поставщика*/
+    public function approve(Request $request, $consignment_register_id)
+    {
+        try {
+            $user = auth('webapi')->user();
+            $consignment_register = ConsignmentRegister::query();
+            if ($user->isProvider()) {
+                $consignment_register->where('provider_contr_agent_id', $user->contr_agent_id());
+            }
+            $consignment_register = $consignment_register->findOrFail($consignment_register_id);
+
+            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::PROVIDER_STATUS_AGREED
+                /*$order->provider_status === Order::PROVIDER_STATUS_PARTIALLY_AGREED*/
+                , new BadRequestException('Реестр ТН уже согласован поставщиком', 400));
+            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::PROVIDER_STATUS_NOT_AGREED
+                , new BadRequestException('Реестр ТН уже отказан поставщиком', 400));
+
+//            $order->positions()->where('status', '!=', OrderPosition::STATUS_REJECTED)->update(['status' => OrderPosition::STATUS_AGREED]);
+//
+//            if ($order->positions()->where('status', OrderPosition::STATUS_REJECTED)->count())
+//                $order->provider_status = Order::PROVIDER_STATUS_PARTIALLY_AGREED;
+//            else
+//                $order->provider_status = Order::PROVIDER_STATUS_AGREED;
+            $consignment_register->contr_agent_status = ConsignmentRegister::PROVIDER_STATUS_AGREED;
+//            $order_provider = $order->provider()->firstOrFail();
+//            $order_provider->agreed_comment = $request->comment;
+            $consignment_register->save();
+//            $order->save();
+
+            return $consignment_register;
+        } catch
+        (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    /*provider's route*/
+    public function reject(Request $request, $consignment_register_id)
+    {
+        try {
+            $user = auth('webapi')->user();
+            $consignment_register = ConsignmentRegister::query();
+            if ($user->isProvider()) {
+                $consignment_register->where('provider_contr_agent_id', $user->contr_agent_id());
+            }
+            $consignment_register = $consignment_register->findOrFail($consignment_register_id);
+
+            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::PROVIDER_STATUS_AGREED /*||
+                $order->provider_status === Order::PROVIDER_STATUS_PARTIALLY_AGREED*/
+                , new BadRequestException('Реестр ТН уже согласован поставщиком', 400));
+            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::PROVIDER_STATUS_NOT_AGREED
+                , new BadRequestException('Реестр ТН уже отказан поставщиком', 400));
+
+//            $order->positions()->update(['status' => OrderPosition::STATUS_REJECTED]);
+            $consignment_register->contr_agent_status = ConsignmentRegister::PROVIDER_STATUS_NOT_AGREED;
+//            $order_provider = $order->provider()->firstOrFail();
+//            $order_provider->rejected_comment = $request->comment;
+//            $order_provider->save();
+            $consignment_register->save();
+            return $consignment_register;
+        } catch
+        (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
 }

@@ -5,6 +5,7 @@ namespace App\Services\ConsignmentRegisters;
 
 
 use App\Models\ConsignmentRegisters\ConsignmentRegister;
+use App\Models\User;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -20,26 +21,28 @@ class CreateConsignmentRegisterService implements IService
     public function run()
     {
         $data = $this->payload;
+        /** @var User $user */
+        $user = auth('webapi')->user();
 
         switch ($data['action']) {
             case ConsignmentRegister::ACTION_DRAFT:
                 $customer_status = ConsignmentRegister::CUSTOMER_STATUS_DRAFT;
-                $provider_status = ConsignmentRegister::PROVIDER_STATUS_DRAFT;
+                $contr_agent_status = ConsignmentRegister::PROVIDER_STATUS_DRAFT;
                 break;
             case ConsignmentRegister::ACTION_APPROVE:
                 $customer_status = ConsignmentRegister::CUSTOMER_STATUS_UNDER_CONSIDERATION;
-                $provider_status = ConsignmentRegister::PROVIDER_STATUS_UNDER_CONSIDERATION;
+                $contr_agent_status = $user->isProvider() ? ConsignmentRegister::PROVIDER_STATUS_UNDER_CONSIDERATION : ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE;
                 break;
             default:
                 throw new BadRequestException('Action is required', 400);
         }
 
-        return DB::transaction(function () use ($data, $customer_status, $provider_status) {
+        return DB::transaction(function () use ($data, $customer_status, $contr_agent_status) {
             $consignment_register = ConsignmentRegister::query()->create([
                 'uuid' => Str::uuid(),
                 'date' => Carbon::today()->format('Y-m-d'),
                 'customer_status' => $customer_status,
-                'contr_agent_status' => $provider_status,
+                'contr_agent_status' => $contr_agent_status,
                 'organization_id' => $data['organization_id'],
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
