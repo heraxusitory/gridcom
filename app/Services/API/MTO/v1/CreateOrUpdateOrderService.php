@@ -65,6 +65,8 @@ class CreateOrUpdateOrderService implements IService
                 $customer['object_id'] = $customer_object->id;
                 $customer['sub_object_id'] = isset($customer_sub_object) ? $customer_sub_object->id : null;
                 $customer['work_type'] = $customer_data['work_type'];
+                $customer['work_start_date'] = $customer_data['work_start_date'] ?? null;
+                $customer['work_end_date'] = $customer_data['work_end_date'] ?? null;
 
                 if (isset($provider_data['contr_agent_id'])) {
                     /** @var ContrAgent $provider_contr_agent */
