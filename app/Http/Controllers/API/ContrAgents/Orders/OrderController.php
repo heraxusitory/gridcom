@@ -89,9 +89,9 @@ class OrderController extends Controller
         try {
             return DB::transaction(function () use ($user) {
                 if ($user->isProvider())
-                    $orders = ProviderSyncStack::getModelEntities(Order::class, $user->contr_agent);
+                    $orders = ProviderSyncStack::getModelEntities(Order::class, $user->contr_agent()-first());
                 elseif ($user->isContractor())
-                    $orders = ContractorSyncStack::getModelEntities(Order::class, $user->contr_agent);
+                    $orders = ContractorSyncStack::getModelEntities(Order::class, $user->contr_agent()->first());
                 else $orders = [];
                 return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
             });
