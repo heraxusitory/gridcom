@@ -34,7 +34,7 @@ class IntegrationUser extends Authenticatable implements SyncStackable
 
     public function contr_agent()
     {
-        return $this->belongsTo(ContrAgent::class, 'contr_agent_id', 'id');
+        return $this->hasOne(ContrAgent::class, 'id', 'contr_agent_id');
     }
 
 
