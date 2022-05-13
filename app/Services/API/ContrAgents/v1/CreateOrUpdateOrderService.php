@@ -103,7 +103,7 @@ class CreateOrUpdateOrderService implements IService
                             $provider = Provider::query()->create($provider);
                             $contractor = Contractor::query()->create($contractor);
 
-                            $order_data->merge([
+                            $order_data = $order_data->merge([
                                 'customer_id' => $customer->id,
                                 'provider_id' => $provider->id,
                                 'contractor_id' => $contractor->id,
