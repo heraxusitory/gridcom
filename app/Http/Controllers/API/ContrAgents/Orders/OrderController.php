@@ -86,10 +86,6 @@ class OrderController extends Controller
     {
         /** @var IntegrationUser $user */
         $user = Auth::guard('api')->user();
-        Log::debug('ds', [$user]);
-        Log::debug('ds', [$user->contr_agent]);
-        Log::debug('ds', [$user->contr_agent()]);
-        Log::debug('ds', [$user->contr_agent()->first()]);
         try {
             return DB::transaction(function () use ($user) {
                 if ($user->isProvider())
