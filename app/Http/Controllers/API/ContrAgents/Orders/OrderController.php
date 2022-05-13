@@ -59,6 +59,7 @@ class OrderController extends Controller
             'orders.*.order_positions.*.status' => ['nullable', Rule::in(OrderPosition::getStatuses())],
             'orders.*.order_positions.*.nomenclature.id' => 'required|uuid',
             'orders.*.order_positions.*.nomenclature.mnemocode' => 'required|string|max:255',
+            'orders.*.order_positions.*.nomenclature.name' => 'required|string|max:255',
             'orders.*.order_positions.*.count' => 'nullable|numeric',
             'orders.*.order_positions.*.price_without_vat' => 'nullable|numeric',
             'orders.*.order_positions.*.amount_without_vat' => 'nullable|numeric',

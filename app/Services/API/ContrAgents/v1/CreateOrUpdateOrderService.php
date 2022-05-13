@@ -130,12 +130,13 @@ class CreateOrUpdateOrderService implements IService
                     $nomenclature = Nomenclature::query()
                         ->where(['uuid' => $position['nomenclature']['id']])
                         ->orWhere(['mnemocode' => $position['nomenclature']['mnemocode']])
+                        ->orWhere(['name' => $position['nomenclature']['name']])
                         ->first();
 
                     $position = collect([
                         'position_id' => $position['position_id'],
                         'status' => $position['status'] ?? null,
-                        'nomenclature_id' => $nomenclature->id,
+                        'nomenclature_id' => $nomenclature?->id,
                         'count' => $position['count'] ?? null,
                         'price_without_vat' => $position['price_without_vat'] ?? null,
                         'amount_without_vat' => $position['amount_without_vat'] ?? null,
