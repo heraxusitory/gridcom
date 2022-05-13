@@ -33,6 +33,6 @@ class GetOrdersService implements IService
             $orders->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id());
         }
         $orders->withSum('positions', 'amount_without_vat');
-        return $orders->get();
+        return $orders->get()->sort('number');
     }
 }
