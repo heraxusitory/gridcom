@@ -89,7 +89,7 @@ class OrderController extends Controller
         try {
             return DB::transaction(function () use ($user) {
                 if ($user->isProvider())
-                    $orders = ProviderSyncStack::getModelEntities(Order::class, $user->contr_agent()-first());
+                    $orders = ProviderSyncStack::getModelEntities(Order::class, $user->contr_agent()->first());
                 elseif ($user->isContractor())
                     $orders = ContractorSyncStack::getModelEntities(Order::class, $user->contr_agent()->first());
                 else $orders = [];
