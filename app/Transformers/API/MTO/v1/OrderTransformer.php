@@ -45,8 +45,8 @@ class OrderTransformer extends TransformerAbstract
             'organization_id' => optional($order->customer?->organization)->uuid,
             'work_agreement_id' => optional($order->customer?->contract)->uuid,
             'work_type' => optional($order->customer)->work_type,
-            'object_id' => optional($order->customer->object)->uuid,
-            'sub_object_id' => optional($order->customer->subObject)->uuid,
+            'object_id' => optional($order->customer?->object)->uuid,
+            'sub_object_id' => optional($order->customer?->subObject)->uuid,
             'work_start_date' => optional($order->customer)->work_start_date,
             'work_end_date' => optional($order->customer)->work_end_date,
         ];
