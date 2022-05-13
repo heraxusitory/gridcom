@@ -42,8 +42,8 @@ class OrderTransformer extends TransformerAbstract
         ];
 
         $customer = [
-            'organization_id' => optional($order->customer->organization)->uuid,
-            'work_agreement_id' => optional($order->customer->contract)->uuid,
+            'organization_id' => optional($order->customer?->organization)->uuid,
+            'work_agreement_id' => optional($order->customer?->contract)->uuid,
             'work_type' => optional($order->customer)->work_type,
             'object_id' => optional($order->customer->object)->uuid,
             'sub_object_id' => optional($order->customer->subObject)->uuid,
@@ -52,8 +52,8 @@ class OrderTransformer extends TransformerAbstract
         ];
 
         $provider = [
-            'contr_agent_id' => optional($order->provider->contr_agent)->uuid,
-            'provider_contract_id' => optional($order->provider->contract)->uuid,
+            'contr_agent_id' => optional($order->provider?->contr_agent)->uuid,
+            'provider_contract_id' => optional($order->provider?->contract)->uuid,
             'full_name' => optional($order->provider)->full_name,
             'email' => optional($order->provider)->email,
             'phone' => optional($order->provider)->phone,
@@ -62,7 +62,7 @@ class OrderTransformer extends TransformerAbstract
         ];
 
         $contractor = [
-            'contr_agent_id' => optional($order->contractor->contr_agent)->uuid,
+            'contr_agent_id' => optional($order->contractor?->contr_agent)->uuid,
             'full_name' => optional($order->contractor)->full_name,
             'email' => optional($order->contractor)->email,
             'phone' => optional($order->contractor)->phone,
