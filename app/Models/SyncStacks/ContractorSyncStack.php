@@ -4,13 +4,14 @@ namespace App\Models\SyncStacks;
 
 use App\Interfaces\SyncStackable;
 use App\Models\References\ContrAgent;
+use App\Traits\HasSyncStack;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ContractorSyncStack extends Model implements SyncStackable
 {
-    use HasFactory, UsesUuid;
+    use HasFactory, HasSyncStack, UsesUuid;
 
     /**
      * @var mixed|string
