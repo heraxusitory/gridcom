@@ -47,6 +47,10 @@ class OrderController extends Controller
             'orders.*.order_provider.email' => 'nullable|string|max:255',
             'orders.*.order_provider.phone' => 'nullable|string|max:255',
 
+            //для поставщика поля
+            'orders.*.order_provider.rejected_comment' => 'nullable|string',
+            'orders.*.order_provider.agreed_comment' => 'nullable|string',
+
 //            'orders.*.order_contractor.contr_agent.name' => 'required|string|max:255',
 //            'orders.*.order_contractor.full_name' => 'nullable|string|max:255',
             'orders.*.order_contractor.email' => 'nullable|string|max:255',
@@ -56,7 +60,7 @@ class OrderController extends Controller
 
             'orders.*.order_positions' => 'nullable|array',
             'orders.*.order_positions.*.position_id' => 'required|uuid',
-            'orders.*.order_positions.*.status' => ['nullable', Rule::in(OrderPosition::getStatuses())],
+            'orders.*.order_positions.*.status' => ['required', Rule::in(OrderPosition::getStatuses())],
             'orders.*.order_positions.*.nomenclature.id' => 'required|uuid',
             'orders.*.order_positions.*.nomenclature.mnemocode' => 'required|string|max:255',
             'orders.*.order_positions.*.nomenclature.name' => 'required|string|max:255',
@@ -70,8 +74,8 @@ class OrderController extends Controller
         $data = $request->all()['orders'];
 
 //        try {
-            (new CreateOrUpdateOrderService($data, $user))->run();
-            return response()->json();
+        (new CreateOrUpdateOrderService($data, $user))->run();
+        return response()->json();
 //        } catch (\Exception $e) {
 //            Log::error($e->getMessage(), $e->getTrace());
 //            return response()->json(['message' => 'System error'], 500);

@@ -2,7 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::group(['middleware' => 'auth.basic'], function () {
+Route::group(['middleware' => 'auth.basic:api'], function () {
 
     require 'orders.php';
     require 'references.php';
