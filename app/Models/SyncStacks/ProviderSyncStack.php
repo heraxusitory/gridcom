@@ -12,6 +12,10 @@ class ProviderSyncStack extends Model implements SyncStackable
 {
     use HasFactory, UsesUuid;
 
+    /**
+     * @var mixed|string
+     */
+    private static $model_class;
     protected $table = 'provider_sync_stacks';
 
     protected $fillable = [

@@ -12,6 +12,10 @@ class ContractorSyncStack extends Model implements SyncStackable
 {
     use HasFactory, UsesUuid;
 
+    /**
+     * @var mixed|string
+     */
+    private static $model_class;
     protected $table = 'contractor_sync_stacks';
 
     protected $fillable = [
