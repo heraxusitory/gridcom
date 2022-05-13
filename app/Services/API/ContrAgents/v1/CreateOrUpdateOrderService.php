@@ -52,7 +52,7 @@ class CreateOrUpdateOrderService implements IService
                         ->where(['name' => $customer_data['object']['name']])
                         ->first();
                     $customer_sub_object = $customer_object?->subObjects()
-                        ->where(['uuid' => $customer_data['sub_object_id']])
+                        ->where(['name' => $customer_data['sub_object']['name']])
                         ->first();
                     $customer['organization_id'] = $organization?->id;
                     $customer['work_agreement_id'] = $work_agreement?->id;
