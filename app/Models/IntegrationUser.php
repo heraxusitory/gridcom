@@ -45,11 +45,11 @@ class IntegrationUser extends Authenticatable implements SyncStackable
 
     public function isProvider()
     {
-        return $this->contr_agent()->first()?->role === 'provider';
+        return $this->role === 'provider';
     }
 
     public function isContractor()
     {
-        return $this->contr_agent()->first()->role === 'contractor';
+        return $this->role === 'contractor';
     }
 }
