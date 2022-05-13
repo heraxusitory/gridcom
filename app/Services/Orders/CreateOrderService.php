@@ -145,8 +145,11 @@ class CreateOrderService implements IService
                 ]);
             }
             if ($order->provider_status === Order::PROVIDER_STATUS_UNDER_CONSIDERATION) {
-                event(new NewStack($order, new ContractorSyncStack($contractor_contr_agent),
-                    new ProviderSyncStack($order->provider->contr_agent), new MTOSyncStack()));
+                event(new NewStack($order,
+                        (new ContractorSyncStack())->setContractor($contractor_contr_agent),
+                        (new ProviderSyncStack())->setProvider($order->provider->contr_agent),
+                        new MTOSyncStack())
+                );
             }
             return $order;
         });

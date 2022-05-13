@@ -55,7 +55,10 @@ class OrderProviderController extends OrderController
             $order_provider->save();
             $order->save();
 
-            event(new NewStack($order, new ContractorSyncStack($order->contractor->contr_agent), new MTOSyncStack()));
+            event(new NewStack($order,
+                    (new ContractorSyncStack())->setContractor($order->contractor->contr_agent),
+                    new MTOSyncStack())
+            );
 
             return $order;
         } catch
@@ -98,7 +101,10 @@ class OrderProviderController extends OrderController
             $order_provider->save();
             $order->save();
 
-            event(new NewStack($order, new ContractorSyncStack($order->contractor->contr_agent), new MTOSyncStack()));
+            event(new NewStack($order,
+                    (new ContractorSyncStack())->setContractor($order->contractor->contr_agent),
+                    new MTOSyncStack())
+            );
 
 
             return $order;
@@ -150,7 +156,10 @@ class OrderProviderController extends OrderController
             $order->positions()->whereIn('id', $request->rejected_position_ids)->update(['status' => OrderPosition::STATUS_REJECTED]);
             $order->push();
 
-            event(new NewStack($order, new ContractorSyncStack($order->contractor->contr_agent), new MTOSyncStack()));
+            event(new NewStack($order,
+                    (new ContractorSyncStack())->setContractor($order->contractor->contr_agent),
+                    new MTOSyncStack())
+            );
 
             return $order;
         } catch
@@ -185,7 +194,10 @@ class OrderProviderController extends OrderController
             $position->provider_comment = $request->comment;
             $position->save();
 
-            event(new NewStack($order, new ContractorSyncStack($order->contractor->contr_agent), new MTOSyncStack()));
+            event(new NewStack($order,
+                    (new ContractorSyncStack())->setContractor($order->contractor->contr_agent),
+                    new MTOSyncStack())
+            );
 
             return response()->json(['data' => $position]);
         } catch

@@ -25,10 +25,16 @@ class ContractorSyncStack extends Model implements SyncStackable
         'entity_id',
     ];
 
-    public function __construct(?ContrAgent $contr_agent = [])
+//    public function __construct(?ContrAgent $contr_agent = [])
+//    {
+//        parent::__construct();
+//        $this->contr_agent_id = $contr_agent?->uuid;
+//    }
+
+    public function setContractor(?ContrAgent $contr_agent = null)
     {
-        parent::__construct();
         $this->contr_agent_id = $contr_agent?->uuid;
+        return $this;
     }
 
     public static function getModelEntities(string $model_class, ContrAgent $contr_agent)

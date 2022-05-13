@@ -185,7 +185,10 @@ class CreateOrUpdateOrderService implements IService
                 }
                 $order->positions()->whereNotIn('id', $position_ids)->delete();
 
-                event(new NewStack($order, new ContractorSyncStack($contractor_contr_agent), new ProviderSyncStack($provider_contr_agent)));
+                event(new NewStack($order,
+                        (new ContractorSyncStack())->setContractor($contractor_contr_agent),
+                        (new ProviderSyncStack())->setProvider($provider_contr_agent))
+                );
             });
         }
     }

@@ -147,8 +147,11 @@ class UpdateOrderService implements IService
             $this->order->positions()->whereNotIn('id', $position_ids)->delete();
 
             if ($this->order->provider_status === Order::PROVIDER_STATUS_UNDER_CONSIDERATION) {
-                event(new NewStack($this->order, new ContractorSyncStack($contractor_contr_agent),
-                    new ProviderSyncStack($this->order->provider->contr_agent), new MTOSyncStack()));
+                event(new NewStack($this->order,
+                        (new ContractorSyncStack())->setContractor($contractor_contr_agent),
+                        (new ProviderSyncStack())->setProvider($this->order->provider->contr_agent),
+                        new MTOSyncStack())
+                );
             }
 
             return $this->order;

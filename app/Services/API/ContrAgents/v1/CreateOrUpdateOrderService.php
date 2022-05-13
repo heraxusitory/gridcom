@@ -148,7 +148,10 @@ class CreateOrUpdateOrderService implements IService
                     }
                     $order->positions()->whereNotIn('id', $position_ids)->delete();
 
-                    event(new NewStack($order, new ProviderSyncStack($provider_contr_agent), new MTOSyncStack()));
+                    event(new NewStack($order,
+                            (new ProviderSyncStack())->setProvider($provider_contr_agent),
+                            new MTOSyncStack())
+                    );
                 }
 
                 if ($this->user->isProvider()) {
@@ -193,7 +196,10 @@ class CreateOrUpdateOrderService implements IService
                         $order->provider->agreed_comment = $provider_data['agreed_comment'] ?? null;
                         $order->push();
 
-                        event(new NewStack($order, new ContractorSyncStack($this->user->contr_agent), new MTOSyncStack()));
+                        event(new NewStack($order,
+                                (new ContractorSyncStack())->setContractor($this->user->contr_agent),
+                                new MTOSyncStack())
+                        );
                     }
                 }
             });
