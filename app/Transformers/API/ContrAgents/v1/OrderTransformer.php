@@ -42,7 +42,7 @@ class OrderTransformer extends TransformerAbstract
         ];
 
         $customer = [
-            'organization_id' => optional($order->customer->organization)->uuid,
+            'organization_id' => $order->customer?->organization?->uuid,
             'work_agreement_id' => optional($order->customer->contract)->uuid,
             'work_type' => optional($order->customer)->work_type,
             'object_id' => optional($order->customer->object)->uuid,
