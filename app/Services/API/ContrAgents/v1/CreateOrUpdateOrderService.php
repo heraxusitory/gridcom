@@ -193,7 +193,7 @@ class CreateOrUpdateOrderService implements IService
                         $order->provider->agreed_comment = $provider_data['agreed_comment'] ?? null;
                         $order->push();
 
-                        event(new NewStack($order, new ContractorSyncStack($provider_contr_agent), new MTOSyncStack()));
+                        event(new NewStack($order, new ContractorSyncStack($this->user->contr_agent), new MTOSyncStack()));
                     }
                 }
             });
