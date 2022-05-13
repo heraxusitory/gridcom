@@ -25,7 +25,7 @@ class ProviderSyncStack extends Model implements SyncStackable
         'entity_id',
     ];
 
-    public function __construct(?ContrAgent $contr_agent = null)
+    public function __construct(?ContrAgent $contr_agent = [])
     {
         parent::__construct();
         $this->contr_agent_id = $contr_agent?->uuid;
