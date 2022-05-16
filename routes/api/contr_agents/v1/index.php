@@ -3,6 +3,7 @@
 use App\Http\Controllers\API\ContrAgents\ConsignmentController;
 use App\Http\Controllers\API\ContrAgents\ConsignmentRegisterController;
 use App\Http\Controllers\API\ContrAgents\Orders\OrderController;
+use App\Http\Controllers\API\ContrAgents\PaymentRegisterController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth.basic:api']], function () {
@@ -21,6 +22,11 @@ Route::group(['middleware' => ['auth.basic:api']], function () {
         Route::post('sync', [ConsignmentRegisterController::class, 'sync']);
         Route::post('synchronize', [ConsignmentRegisterController::class, 'synchronize']);
         Route::post('remove_from_stack', [ConsignmentRegisterController::class, 'removeFromStack']);
+    });
+    Route::group(['prefix' => 'payment_registers', 'middleware' => 'contr_agent_role:contractor,provider'], function () {
+        Route::post('sync', [PaymentRegisterController::class, 'sync']);
+        Route::post('synchronize', [PaymentRegisterController::class, 'synchronize']);
+        Route::post('remove_from_stack', [PaymentRegisterController::class, 'removeFromStack']);
     });
 //    require 'references.php';
 //    require 'consignment_registers.php';
