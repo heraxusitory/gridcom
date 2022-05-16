@@ -39,9 +39,15 @@ class PaymentRegisterPositionTransformer extends TransformerAbstract
             'payment_order_number' => $payment_register_position?->payment_order_number,
             'amount_payment' => $payment_register_position?->amount_payment,
             'payment_type' => $payment_register_position?->payment_type,
-            'object_id' => optional($payment_register_position->order->customer->object)->uuid,
-            'organization_id' => optional($payment_register_position->order->customer->organization)->uuid,
-            'work_agreement_id' => optional($payment_register_position->order->customer->contract)->uuid,
+            'object' => [
+                'name' => optional($payment_register_position->order->customer->object)->name,
+            ],
+            'organization' => [
+                'name' => optional($payment_register_position->order->customer->organization)->name,
+            ],
+            'work_agreement' => [
+                'number' => optional($payment_register_position->order->customer->contract)->number,
+            ],
         ];
     }
 }

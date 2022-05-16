@@ -4,6 +4,7 @@
 namespace App\Models\PaymentRegisters;
 
 
+use App\Interfaces\Syncable;
 use App\Models\Orders\Order;
 use App\Models\References\ContrAgent;
 use App\Models\References\ProviderContractDocument;
@@ -11,7 +12,7 @@ use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-class PaymentRegister extends Model
+class PaymentRegister extends Model implements Syncable
 {
     use UsesNumberLKK;
 
@@ -29,6 +30,13 @@ class PaymentRegister extends Model
         'responsible_phone',
         'comment',
         'date',
+    ];
+
+    protected $with = [
+        'provider', 'contractor', 'provider_contract',
+        'positions.order.customer.object',
+        'positions.order.customer.organization',
+        'positions.order.customer.contract',
     ];
 
     public function positions()
