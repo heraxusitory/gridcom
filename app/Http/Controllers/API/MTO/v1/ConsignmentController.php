@@ -40,7 +40,6 @@ class ConsignmentController extends Controller
             'consignments.*.work_agreement_id' => 'required|uuid',
             'consignments.*.customer_object_id' => 'required|uuid',
             'consignments.*.customer_sub_object_id' => 'required|uuid',
-//            'consignments.*.order_id' => 'required|uuid|exists:orders,uuid',
             'consignments.*.responsible_full_name' => 'nullable|string|max:255',
             'consignments.*.responsible_phone' => 'nullable|string|max:255',
             'consignments.*.comment' => 'nullable|string',

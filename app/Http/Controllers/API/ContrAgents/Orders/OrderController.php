@@ -73,13 +73,13 @@ class OrderController extends Controller
 
         $data = $request->all()['orders'];
 
-//        try {
-        (new CreateOrUpdateOrderService($data, $user))->run();
-        return response()->json();
-//        } catch (\Exception $e) {
-//            Log::error($e->getMessage(), $e->getTrace());
-//            return response()->json(['message' => 'System error'], 500);
-//        }
+        try {
+            (new CreateOrUpdateOrderService($data, $user))->run();
+            return response()->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
     }
 
     public function synchronize(Request $request)
@@ -92,8 +92,7 @@ class OrderController extends Controller
                     $orders = ProviderSyncStack::getModelEntities(Order::class, $user->contr_agent);
                 elseif ($user->isContractor()) {
                     $orders = ContractorSyncStack::getModelEntities(Order::class, $user->contr_agent);
-                }
-                else $orders = [];
+                } else $orders = [];
                 return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
             });
         } catch (\Exception $e) {
