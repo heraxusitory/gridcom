@@ -34,8 +34,11 @@ class ConsignmentRegisterPositionTransformer extends TransformerAbstract
     {
         return [
             'position_id' => $consignment_register_position?->position_id,
-            'consignment_id' => optional($consignment_register_position->consignment)->uuid,
-            'nomenclature_id' => optional($consignment_register_position->nomenclature)->uuid,
+            'consignment_id' => optional($consignment_register_position?->consignment)->uuid,
+            'nomenclature' => [
+                'name' => optional($consignment_register_position?->nomenclature)->name,
+                'mnemocode' => optional($consignment_register_position?->nomenclature)->mnemocode,
+            ],
             'count' => $consignment_register_position?->count,
             'vat_rate' => $consignment_register_position?->vat_rate,
             'result_status' => $consignment_register_position?->result_status,

@@ -40,15 +40,14 @@ class CreateOrUpdateConsignmentService implements IService
                 if ($this->user->isProvider())
                     /** @var ContrAgent $provider_contr_agent */ $provider_contr_agent = $this->user->contr_agent()->firstOrFail();
 
-                    /** @var Consignment $consignment */
+                /** @var Consignment $consignment */
                 $consignment = Consignment::withoutEvents(function () use ($contractor_contr_agent, $provider_contr_agent, $item) {
                     $organization = Organization::query()->where(['name' => $item['organization']['name']])->first();
                     $provider_contract = ProviderContractDocument::query()->where(['number' => $item['provider_contract']['number']])->first();
                     $work_agreement = WorkAgreementDocument::query()->where(['number' => $item['work_agreement']['number']])->first();
                     $object = CustomerObject::query()->where(['name' => $item['customer_object']['name']])->first();
-                    $sub_object = CustomerSubObject::query()
-                        ->where(['name' => $item['customer_sub_object']['name']],
-                            ['customer_object_id' => $object->id])
+                    $sub_object = $object?->subObjects()
+                        ->where(['name' => $item['customer_sub_object']['name']])
                         ->first();
 
                     $consignment = collect([
@@ -105,11 +104,11 @@ class CreateOrUpdateConsignmentService implements IService
 
                 if ($this->user->isContractor())
                     event(new NewStack($consignment,
-                            (new ContractorSyncStack())->setContractor($contractor_contr_agent))
+                            (new ProviderSyncStack())->setProvider($provider_contr_agent))
                     );
                 if ($this->user->isProvider())
                     event(new NewStack($consignment,
-                            (new ProviderSyncStack())->setProvider($provider_contr_agent))
+                            (new ContractorSyncStack())->setContractor($contractor_contr_agent))
                     );
             });
         }

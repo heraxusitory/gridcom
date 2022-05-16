@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\API\ContrAgents\ConsignmentController;
+use App\Http\Controllers\API\ContrAgents\ConsignmentRegisterController;
 use App\Http\Controllers\API\ContrAgents\Orders\OrderController;
 use Illuminate\Support\Facades\Route;
 
@@ -11,10 +12,15 @@ Route::group(['middleware' => ['auth.basic:api']], function () {
         Route::post('synchronize', [OrderController::class, 'synchronize'])->middleware('contr_agent_role:contractor,provider');
         Route::post('remove_from_stack', [OrderController::class, 'removeFromStack'])->middleware('contr_agent_role:contractor,provider');;
     });
-    Route::group(['prefix' => 'consignments'], function () {
-        Route::post('sync', [ConsignmentController::class, 'sync'])->middleware('contr_agent_role:contractor');
-        Route::post('synchronize', [ConsignmentController::class, 'synchronize'])->middleware('contr_agent_role:contractor,provider');
-        Route::post('remove_from_stack', [ConsignmentController::class, 'removeFromStack'])->middleware('contr_agent_role:contractor,provider');;
+    Route::group(['prefix' => 'consignments', 'middleware' => 'contr_agent_role:contractor,provider'], function () {
+        Route::post('sync', [ConsignmentController::class, 'sync']);
+        Route::post('synchronize', [ConsignmentController::class, 'synchronize']);
+        Route::post('remove_from_stack', [ConsignmentController::class, 'removeFromStack']);
+    });
+    Route::group(['prefix' => 'consignment_registers', 'middleware' => 'contr_agent_role:contractor,provider'], function () {
+        Route::post('sync', [ConsignmentRegisterController::class, 'sync']);
+        Route::post('synchronize', [ConsignmentRegisterController::class, 'synchronize']);
+        Route::post('remove_from_stack', [ConsignmentRegisterController::class, 'removeFromStack']);
     });
 //    require 'references.php';
 //    require 'consignment_registers.php';

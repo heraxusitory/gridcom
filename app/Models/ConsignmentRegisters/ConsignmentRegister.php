@@ -2,6 +2,7 @@
 
 namespace App\Models\ConsignmentRegisters;
 
+use App\Interfaces\Syncable;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
 use App\Models\References\CustomerSubObject;
@@ -12,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-class ConsignmentRegister extends Model
+class ConsignmentRegister extends Model implements Syncable
 {
     use HasFactory, UsesNumberLKK;
 

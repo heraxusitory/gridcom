@@ -38,12 +38,24 @@ class ConsignmentRegisterTransformer extends TransformerAbstract
             'number' => $consignment_register?->number,
             'customer_status' => $consignment_register?->customer_status,
             'contr_agent_status' => $consignment_register?->contr_agent_status,
-            'organization_id' => optional($consignment_register->organization)->uuid,
-            'contractor_contr_agent_id' => optional($consignment_register->contractor)->uuid,
-            'provider_contr_agent_id' => optional($consignment_register->provider)->uuid,
-            'customer_object_id' => optional($consignment_register->object)->uuid,
-            'customer_sub_object_id' => optional($consignment_register->subObject)->uuid,
-            'work_agreement_id' => optional($consignment_register->work_agreement)->uuid,
+            'organization' => [
+                'name' => optional($consignment_register?->organization)->name,
+            ],
+            'contractor_contr_agent' => [
+                'name' => optional($consignment_register?->contractor)->name,
+            ],
+            'provider_contr_agent' => [
+                'name' => optional($consignment_register?->provider)->name
+            ],
+            'customer_object' => [
+                'name' => optional($consignment_register?->object)->name
+            ],
+            'customer_sub_object' => [
+                'name' => optional($consignment_register?->subObject)->name
+            ],
+            'work_agreement' => [
+                'number' => optional($consignment_register?->work_agreement)->number
+            ],
             'responsible_full_name' => $consignment_register?->responsible_full_name,
             'responsible_phone' => $consignment_register?->responsible_phone,
             'comment' => $consignment_register?->comment,
