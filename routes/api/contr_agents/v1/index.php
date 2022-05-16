@@ -10,6 +10,11 @@ Route::group(['middleware' => ['auth.basic:api']], function () {
         Route::post('synchronize', [OrderController::class, 'synchronize'])->middleware('contr_agent_role:contractor,provider');
         Route::post('remove_from_stack', [OrderController::class, 'removeFromStack'])->middleware('contr_agent_role:contractor,provider');;
     });
+    Route::group(['prefix' => 'consignments'], function () {
+        Route::post('sync', [OrderController::class, 'sync'])->middleware('contr_agent_role:contractor');
+        Route::post('synchronize', [OrderController::class, 'synchronize'])->middleware('contr_agent_role:contractor,provider');
+        Route::post('remove_from_stack', [OrderController::class, 'removeFromStack'])->middleware('contr_agent_role:contractor,provider');;
+    });
 //    require 'references.php';
 //    require 'consignment_registers.php';
 //    require 'consignments.php';
