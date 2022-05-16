@@ -58,6 +58,7 @@ class Order extends Model implements Syncable
     const CUSTOMER_STATUS_DRAFT = 'Черновик';
     const CUSTOMER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const CUSTOMER_STATUS_CANCELED = 'Аннулировано';
+    const CUSTOMER_STATUS_CLOSED = 'Завершен';
 
     const PROVIDER_STATUS_NOT_AGREED = 'Не согласовано';
     const PROVIDER_STATUS_AGREED = 'Согласовано';
@@ -65,6 +66,7 @@ class Order extends Model implements Syncable
     const PROVIDER_STATUS_DRAFT = 'Черновик';
     const PROVIDER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const PROVIDER_STATUS_CANCELED = 'Аннулировано';
+    const PROVIDER_STATUS_CLOSED = 'Завершен';
 
     public static function getActions()
     {
