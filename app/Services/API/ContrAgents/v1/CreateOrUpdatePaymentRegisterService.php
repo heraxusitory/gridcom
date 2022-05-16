@@ -58,7 +58,7 @@ class CreateOrUpdatePaymentRegisterService implements IService
                             'date' => (new Carbon($item['date']))->format('d.m.Y'),
                         ]);
                         return PaymentRegister::query()->updateOrCreate([
-                            'uuid' => $item['uuid']
+                            'uuid' => $pr_data['uuid']
                         ], $pr_data->toArray());
                     });
 
