@@ -4,6 +4,7 @@
 namespace App\Models\Consignments;
 
 
+use App\Interfaces\Syncable;
 use App\Models\Orders\Order;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
@@ -16,7 +17,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-class Consignment extends Model
+class Consignment extends Model implements Syncable
 {
     use HasFactory, UsesNumberLKK;
 

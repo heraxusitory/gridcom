@@ -40,6 +40,7 @@ class CreateOrUpdateConsignmentService implements IService
                 if ($this->user->isProvider())
                     /** @var ContrAgent $provider_contr_agent */ $provider_contr_agent = $this->user->contr_agent()->firstOrFail();
 
+                    /** @var Consignment $consignment */
                 $consignment = Consignment::withoutEvents(function () use ($contractor_contr_agent, $provider_contr_agent, $item) {
                     $organization = Organization::query()->where(['name' => $item['organization']['name']])->first();
                     $provider_contract = ProviderContractDocument::query()->where(['number' => $item['provider_contract']['number']])->first();
