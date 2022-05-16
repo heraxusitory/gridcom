@@ -213,8 +213,34 @@ class OrderProviderController extends OrderController
         }
     }
 
-    public function close()
+    public function approveClosing(Request $request, $order_id)
     {
-
+        try {
+            $order = Order::query();
+            if ($this->user->isProvider()) {
+                $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
+            }
+            /** @var Order $order */
+            $order = $order->findOrFail($order_id);
+            throw_if($order->customer_status !== Order::CUSTOMER_STATUS_AGREED && $order->provider_status !== Order::PROVIDER_STATUS_AGREED,
+                new BadRequestException('Невозможно завершить заказ на поставку. Требуется согласованные статусы со стороны заказчика и поставщика.', 400));
+            throw_if(!$order->contractor_require_closure,
+                new BadRequestException('Невозможно подтвердить завершение заказа. Требуется сначала запрос на завершение заказа со стороны подрядчика.', 400));
+            $order->provider_closing_confirmation = true;
+            $order->customer_status = Order::CUSTOMER_STATUS_CLOSED;
+            $order->provider_status = Order::PROVIDER_STATUS_CLOSED;
+            $order->push();
+            return response()->json(['data' => $order]);
+        } catch
+        (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
     }
 }
