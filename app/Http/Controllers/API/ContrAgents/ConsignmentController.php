@@ -7,9 +7,7 @@ namespace App\Http\Controllers\API\ContrAgents;
 use App\Http\Controllers\Controller;
 use App\Models\Consignments\Consignment;
 use App\Models\IntegrationUser;
-use App\Models\Provider;
 use App\Models\SyncStacks\ContractorSyncStack;
-use App\Models\SyncStacks\MTOSyncStack;
 use App\Models\SyncStacks\ProviderSyncStack;
 use App\Serializers\CustomerSerializer;
 use App\Services\API\ContrAgents\v1\CreateOrUpdateConsignmentService;
@@ -36,7 +34,7 @@ class ConsignmentController extends Controller
             'consignments.*.provider_contract.number' => 'required|string|max:255',
             'consignments.*.contractor_contr_agent.name' => 'required|string|max:255',
             'consignments.*.work_agreement.number' => 'required|string|max:255',
-            'consignments.*.customer_object.name' => 'required|uuid',
+            'consignments.*.customer_object.name' => 'required|string|max:255',
             'consignments.*.customer_sub_object.name' => 'nullable|string|max:255',
 //            'consignments.*.order_id' => 'required|uuid|exists:orders,uuid',
             'consignments.*.responsible_full_name' => 'nullable|string|max:255',
