@@ -69,6 +69,9 @@ class OrderTransformer extends TransformerAbstract
                 'responsible_phone' => optional($order->contractor)->contractor_responsible_phone,
             ],
 
+            'contractor_require_closure' => $order->contractor_require_closure,
+            'provider_closing_confirmation' => $order->provider_closing_confirmation,
+
             'positions' => optional($order)->positions,
         ];
     }
