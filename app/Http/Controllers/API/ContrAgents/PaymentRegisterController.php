@@ -67,9 +67,9 @@ class PaymentRegisterController extends Controller
                 /** @var IntegrationUser $user */
                 $user = Auth::guard('api')->user();
                 if ($user->isContractor())
-                    $pr = ContractorSyncStack::getModelEntities(PaymentRegister::class, $this->contr_agent);
+                    $pr = ContractorSyncStack::getModelEntities(PaymentRegister::class, $user->contr_agent);
                 else if ($user->isProvider())
-                    $pr = ProviderSyncStack::getModelEntities(PaymentRegister::class, $this->contr_agent);
+                    $pr = ProviderSyncStack::getModelEntities(PaymentRegister::class, $user->contr_agent);
                 else $pr = [];
                 return fractal()->collection($pr)->transformWith(PaymentRegisterTransformer::class)->serializeWith(CustomerSerializer::class);
             });

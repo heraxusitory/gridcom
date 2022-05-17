@@ -71,9 +71,9 @@ class ConsignmentRegisterController extends Controller
                 /** @var IntegrationUser $user */
                 $user = Auth::guard('api')->user();
                 if ($user->isContractor())
-                    $cr = ContractorSyncStack::getModelEntities(ConsignmentRegister::class, $this->contr_agent);
+                    $cr = ContractorSyncStack::getModelEntities(ConsignmentRegister::class, $user->contr_agent);
                 else if ($user->isProvider())
-                    $cr = ProviderSyncStack::getModelEntities(ConsignmentRegister::class, $this->contr_agent);
+                    $cr = ProviderSyncStack::getModelEntities(ConsignmentRegister::class, $user->contr_agent);
                 else $cr = [];
                 return fractal()->collection($cr)->transformWith(ConsignmentRegisterTransformer::class)->serializeWith(CustomerSerializer::class);
             });
