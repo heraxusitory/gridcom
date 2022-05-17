@@ -15,7 +15,7 @@ Route::group(['prefix' => 'orders'], function () {
         Route::put('', [OrderContractorController::class, 'update'])->middleware('role:contractor')->can('update,' . Order::class);
         Route::delete('', [OrderContractorController::class, 'delete'])->middleware('role:contractor')->can('delete,' . Order::class);
         Route::put('close', [OrderContractorController::class, 'close'])->middleware('role:contractor');
-        Route::put('approve_closing', [OrderContractorController::class, 'approveClosing'])->middleware('role:provider');
+        Route::put('approve_closing', [OrderProviderController::class, 'approveClosing'])->middleware('role:provider');
 
         Route::group(['prefix' => 'positions'], function () {
             Route::group(['prefix' => '{order_position}'], function () {
