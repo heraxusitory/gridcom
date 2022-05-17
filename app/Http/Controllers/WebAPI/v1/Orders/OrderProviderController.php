@@ -222,7 +222,7 @@ class OrderProviderController extends OrderController
             }
             /** @var Order $order */
             $order = $order->findOrFail($order_id);
-            throw_if($order->customer_status !== Order::CUSTOMER_STATUS_AGREED && $order->provider_status !== Order::PROVIDER_STATUS_AGREED,
+            throw_if($order->customer_status !== Order::CUSTOMER_STATUS_AGREED && !in_array($order->provider_status, [Order::PROVIDER_STATUS_AGREED, Order::PROVIDER_STATUS_PARTIALLY_AGREED]),
                 new BadRequestException('Невозможно завершить заказ на поставку. Требуется согласованные статусы со стороны заказчика и поставщика.', 400));
             throw_if(!$order->contractor_require_closure,
                 new BadRequestException('Невозможно подтвердить завершение заказа. Требуется сначала запрос на завершение заказа со стороны подрядчика.', 400));
