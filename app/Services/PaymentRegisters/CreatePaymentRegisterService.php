@@ -4,7 +4,11 @@
 namespace App\Services\PaymentRegisters;
 
 
+use App\Events\NewStack;
 use App\Models\PaymentRegisters\PaymentRegister;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +39,7 @@ class CreatePaymentRegisterService implements IService
         }
 
         return DB::transaction(function () use ($data, $customer_status, $provider_status) {
+            /** @var PaymentRegister $payment_register */
             $payment_register = PaymentRegister::query()->create([
                 'uuid' => Str::uuid(),
 //                'customer_status' => $customer_status,
@@ -58,6 +63,12 @@ class CreatePaymentRegisterService implements IService
                     'payment_type' => $position['payment_type'],
                 ]);
             }
+
+            event(new NewStack($payment_register,
+                    (new ContractorSyncStack())->setContractor($payment_register->contractor),
+                    (new ProviderSyncStack())->setProvider($payment_register->provider),
+                    new MTOSyncStack())
+            );
 
             return $payment_register;
         });

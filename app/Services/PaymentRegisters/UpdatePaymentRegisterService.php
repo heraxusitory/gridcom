@@ -4,7 +4,11 @@
 namespace App\Services\PaymentRegisters;
 
 
+use App\Events\NewStack;
 use App\Models\PaymentRegisters\PaymentRegister;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -62,6 +66,12 @@ class UpdatePaymentRegisterService implements IService
                 $position_ids[] = $position->id;
             }
             $this->payment_register->positions()->whereNotIn('id', $position_ids)->delete();
+
+            event(new NewStack($this->payment_register,
+                    (new ContractorSyncStack())->setContractor($this->payment_register->contractor),
+                    (new ProviderSyncStack())->setProvider($this->payment_register->provider),
+                    new MTOSyncStack())
+            );
 
             return $this->payment_register;
         });
