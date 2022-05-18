@@ -84,26 +84,26 @@ class OrderController extends Controller
 
         $data = $request->all()['orders'];
 
-//        try {
+        try {
             (new CreateOrUpdateOrderService($data))->run();
             return response()->json();
-//        } catch (\Exception $e) {
-//            Log::error($e->getMessage(), $e->getTrace());
-//            return response()->json(['message' => 'System error'], 500);
-//        }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
     }
 
     public function synchronize(Request $request)
     {
-//        try {
+        try {
             return DB::transaction(function () {
                 $orders = MTOSyncStack::getModelEntities(Order::class);
                 return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
             });
-//        } catch (\Exception $e) {
-//            Log::error($e->getMessage(), $e->getTrace());
-//            return response()->json(['message' => 'System error'], 500);
-//        }
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
     }
 
     public function removeFromStack(Request $request)
@@ -115,11 +115,6 @@ class OrderController extends Controller
         try {
             return DB::transaction(function () use ($request) {
                 $count = MTOSyncStack::destroy($request->stack_ids);
-//                $count = Order::withoutEvents(function () use ($request) {
-//                    return Order::query()
-//                        ->whereIn('uuid', $request->ids)
-//                        ->update(['sync_required' => true]);
-//                });
                 return response()->json('Из стека удалено ' . $count . ' заказов на поставку ПО');
             });
         } catch (\Exception $e) {

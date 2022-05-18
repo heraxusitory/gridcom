@@ -38,6 +38,12 @@ class ConsignmentRegister extends Model implements Syncable
         'date',
     ];
 
+    protected $with = [
+        'organization', 'contractor', 'provider',
+        'object', 'subObject', 'work_agreement',
+        'positions.consignment', 'positions.nomenclature',
+    ];
+
     const ACTION_DRAFT = 'draft';
     const ACTION_APPROVE = 'approve';
 
