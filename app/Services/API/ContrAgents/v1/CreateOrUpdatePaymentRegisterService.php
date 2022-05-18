@@ -12,6 +12,7 @@ use App\Models\Provider;
 use App\Models\References\ContrAgent;
 use App\Models\References\ProviderContractDocument;
 use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
 use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
@@ -82,7 +83,8 @@ class CreateOrUpdatePaymentRegisterService implements IService
                     $payment_register->positions()->whereNotIn('id', $position_ids)->delete();
 
                     event(new NewStack($payment_register,
-                            (new ProviderSyncStack())->setProvider($provider_contr_agent))
+                            (new ProviderSyncStack())->setProvider($provider_contr_agent),
+                            (new MTOSyncStack()))
                     );
                 }
 
@@ -95,7 +97,8 @@ class CreateOrUpdatePaymentRegisterService implements IService
                         $payment_register->push();
 
                         event(new NewStack($payment_register,
-                                (new ContractorSyncStack())->setContractor($contractor_contr_agent))
+                            (new ContractorSyncStack())->setContractor($contractor_contr_agent),
+                            (new MTOSyncStack())),
                         );
                     }
                 }

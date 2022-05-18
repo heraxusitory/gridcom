@@ -105,8 +105,8 @@ class CreateOrUpdateConsignmentService implements IService
 
                 if ($this->user->isContractor())
                     event(new NewStack($consignment,
-                        (new ProviderSyncStack())->setProvider($provider_contr_agent)),
-                        (new MTOSyncStack())
+                            (new ProviderSyncStack())->setProvider($provider_contr_agent),
+                            (new MTOSyncStack()))
                     );
                 if ($this->user->isProvider())
                     event(new NewStack($consignment,
