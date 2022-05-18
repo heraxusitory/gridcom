@@ -131,6 +131,8 @@ class CreateOrUpdateOrderService implements IService
                             'customer_id' => $customer->id,
                             'provider_id' => $provider->id,
                             'contractor_id' => $contractor->id,
+                            'customer_status' => Order::CUSTOMER_STATUS_AGREED,
+                            'provider_status' => Order::PROVIDER_STATUS_UNDER_CONSIDERATION,
                         ]);
 
                         return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor, $order_data) {

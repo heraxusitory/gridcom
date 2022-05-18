@@ -98,16 +98,6 @@ class OrderController extends Controller
 //        try {
             return DB::transaction(function () {
                 $orders = MTOSyncStack::getModelEntities(Order::class);
-//                $orders = Order::query()
-                /*->with([
-                    'customer.subObject', 'customer.object',
-                    'provider.contract', 'provider.contr_agent',
-                    'contractor.contr_agent',
-                    'positions.nomenclature.units',
-                ])*/
-                /*->where('sync_required', true)*/ #todo: расскомментировать в будущем
-//                    ->get();
-//                Order::query()->whereIn('id', $orders->pluck('id'))->update(['sync_required' => false]);#todo: расскомментировать в будущем
                 return fractal()->collection($orders)->transformWith(OrderTransformer::class)->serializeWith(CustomerSerializer::class);
             });
 //        } catch (\Exception $e) {
