@@ -4,9 +4,13 @@
 namespace App\Services\Consignments;
 
 
+use App\Events\NewStack;
 use App\Models\Consignments\Consignment;
 use App\Models\PaymentRegisters\PaymentRegister;
 use App\Models\References\Nomenclature;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -15,8 +19,11 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class UpdateConsignmentService implements IService
 {
+    private $user;
+
     public function __construct(private $payload, private Consignment $consignment)
     {
+        $this->user = auth('webapi')->user();
     }
 
     public function run()
@@ -69,6 +76,17 @@ class UpdateConsignmentService implements IService
             }
 
             $this->consignment->positions()->whereNotIn('id', $position_ids)->delete();
+
+            if ($this->user->isContractor())
+                event(new NewStack($this->consignment,
+                        (new ProviderSyncStack())->setProvider($this->user->contr_agent),
+                        (new MTOSyncStack()))
+                );
+            if ($this->user->isProvider())
+                event(new NewStack($this->consignment,
+                        (new ContractorSyncStack())->setContractor($this->user->contr_agent),
+                        (new MTOSyncStack()))
+                );
 
             return $this->consignment;
         });

@@ -4,8 +4,12 @@
 namespace App\Services\Consignments;
 
 
+use App\Events\NewStack;
 use App\Models\Consignments\Consignment;
 use App\Models\References\Nomenclature;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -14,8 +18,11 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class CreateConsignmentService implements IService
 {
+    private ?\Illuminate\Contracts\Auth\Authenticatable $user;
+
     public function __construct(private $payload)
     {
+        $this->user = auth('webapi')->user();
     }
 
     public function run()
@@ -65,6 +72,17 @@ class CreateConsignmentService implements IService
                     'declaration' => $position['declaration'],
                 ]);
             }
+
+            if ($this->user->isContractor())
+                event(new NewStack($consignment,
+                    (new ProviderSyncStack())->setProvider($this->user->contr_agent)),
+                    (new MTOSyncStack())
+                );
+            if ($this->user->isProvider())
+                event(new NewStack($consignment,
+                    (new ContractorSyncStack())->setContractor($this->user->contr_agent)),
+                    (new MTOSyncStack())
+                );
             return $consignment;
         });
 
