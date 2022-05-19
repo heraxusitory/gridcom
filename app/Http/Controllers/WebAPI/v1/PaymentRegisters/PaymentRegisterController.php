@@ -185,7 +185,7 @@ class PaymentRegisterController extends Controller
             event(new NewStack($payment_register,
                     (new ProviderSyncStack())->setProvider($payment_register->provider),
                     (new ContractorSyncStack())->setContractor($payment_register->contractor),
-                    (new MTOSyncStack()))
+                    /*(new MTOSyncStack())*/)
             );
 
             return $payment_register;
