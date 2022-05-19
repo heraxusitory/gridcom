@@ -82,9 +82,11 @@ class CreateOrUpdateConsignmentRegisterService implements IService
 
                 $position_ids = [];
                 foreach ($position_data as $position) {
-                    $consignment = Consignment::query()->firstOrCreate([
-                        'uuid' => $position['consignment_id']
-                    ]);
+                    $consignment = Consignment::withoutEvents(function () use ($position) {
+                        return Consignment::query()->firstOrCreate([
+                            'uuid' => $position['consignment_id']
+                        ]);
+                    });
                     $nomenclature = Nomenclature::query()->where([
                         'name' => $position['nomenclature']['name'],
                         'mnemocode' => $position['nomenclature']['mnemocode'],
