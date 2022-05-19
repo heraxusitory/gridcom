@@ -14,6 +14,7 @@ use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\WorkAgreementDocument;
 use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
 use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
@@ -106,11 +107,13 @@ class CreateOrUpdateConsignmentRegisterService implements IService
 
                 if ($this->user->isContractor())
                     event(new NewStack($consignment_register,
-                            (new ProviderSyncStack())->setProvider($provider_contr_agent))
+                            (new ProviderSyncStack())->setProvider($provider_contr_agent),
+                            new MTOSyncStack())
                     );
                 if ($this->user->isProvider())
                     event(new NewStack($consignment_register,
-                            (new ContractorSyncStack())->setContractor($contractor_contr_agent))
+                            (new ContractorSyncStack())->setContractor($contractor_contr_agent),
+                            new MTOSyncStack())
                     );
             });
         }
