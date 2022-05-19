@@ -83,7 +83,7 @@ class CreateOrUpdatePaymentRegisterService implements IService
                     $payment_register->positions()->whereNotIn('id', $position_ids)->delete();
 
                     event(new NewStack($payment_register,
-                            (new ProviderSyncStack())->setProvider($provider_contr_agent),
+                            (new ProviderSyncStack())->setProvider($provider_contr_agent)
                         /*(new MTOSyncStack())*/)
                     );
                 }
