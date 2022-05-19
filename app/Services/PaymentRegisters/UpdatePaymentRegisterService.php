@@ -70,7 +70,7 @@ class UpdatePaymentRegisterService implements IService
             event(new NewStack($this->payment_register,
                     (new ContractorSyncStack())->setContractor($this->payment_register->contractor),
                     (new ProviderSyncStack())->setProvider($this->payment_register->provider),
-                    new MTOSyncStack())
+                    /*new MTOSyncStack()*/)
             );
 
             return $this->payment_register;

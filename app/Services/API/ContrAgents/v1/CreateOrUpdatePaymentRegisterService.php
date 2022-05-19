@@ -84,7 +84,7 @@ class CreateOrUpdatePaymentRegisterService implements IService
 
                     event(new NewStack($payment_register,
                             (new ProviderSyncStack())->setProvider($provider_contr_agent),
-                            (new MTOSyncStack()))
+                        /*(new MTOSyncStack())*/)
                     );
                 }
 
@@ -97,9 +97,14 @@ class CreateOrUpdatePaymentRegisterService implements IService
                         $payment_register->push();
 
                         event(new NewStack($payment_register,
-                            (new ContractorSyncStack())->setContractor($contractor_contr_agent),
-                            (new MTOSyncStack())),
+                            (new ContractorSyncStack())->setContractor($contractor_contr_agent)),
                         );
+
+                        if ($item['provider_status'] === PaymentRegister::PROVIDER_STATUS_AGREED) {
+                            event(new NewStack($payment_register,
+                                new MTOSyncStack()
+                            ));
+                        }
                     }
                 }
             });

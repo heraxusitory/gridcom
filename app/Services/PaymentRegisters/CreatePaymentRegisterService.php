@@ -67,7 +67,7 @@ class CreatePaymentRegisterService implements IService
             event(new NewStack($payment_register,
                     (new ContractorSyncStack())->setContractor($payment_register->contractor),
                     (new ProviderSyncStack())->setProvider($payment_register->provider),
-                    new MTOSyncStack())
+                   /* new MTOSyncStack()*/)
             );
 
             return $payment_register;
