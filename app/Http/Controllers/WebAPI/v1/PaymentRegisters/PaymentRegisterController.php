@@ -4,11 +4,15 @@
 namespace App\Http\Controllers\WebAPI\v1\PaymentRegisters;
 
 
+use App\Events\NewStack;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRegisters\CreatePaymentRegisterFormRequest;
 use App\Http\Requests\PaymentRegisters\UpdatePaymentRegisterFormRequest;
 use App\Models\Orders\Order;
 use App\Models\PaymentRegisters\PaymentRegister;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\PaymentRegisters\CreatePaymentRegisterService;
 use App\Services\PaymentRegisters\GetPaymentRegisterService;
 use App\Services\PaymentRegisters\GetPaymentRegistersService;
@@ -111,6 +115,7 @@ class PaymentRegisterController extends Controller
             if ($user->isProvider()) {
                 $payment_register->whereRelation('provider', 'id', $user->contr_agent_id());
             }
+            /** @var PaymentRegister $payment_register */
             $payment_register = $payment_register->findOrFail($payment_register_id);
 
             throw_if($payment_register->provider_status === PaymentRegister::PROVIDER_STATUS_AGREED
@@ -130,6 +135,12 @@ class PaymentRegisterController extends Controller
 //            $order_provider->agreed_comment = $request->comment;
             $payment_register->save();
 //            $order->save();
+
+            event(new NewStack($payment_register,
+                    (new ProviderSyncStack())->setProvider($payment_register->provider),
+                    (new ContractorSyncStack())->setContractor($payment_register->contractor),
+                    (new MTOSyncStack()))
+            );
 
             return $payment_register;
         } catch
@@ -155,6 +166,7 @@ class PaymentRegisterController extends Controller
             if ($user->isProvider()) {
                 $payment_register->whereRelation('provider', 'id', $user->contr_agent_id());
             }
+            /** @var PaymentRegister $payment_register */
             $payment_register = $payment_register->findOrFail($payment_register_id);
 
             throw_if($payment_register->provider_status === PaymentRegister::PROVIDER_STATUS_AGREED /*||
@@ -169,6 +181,13 @@ class PaymentRegisterController extends Controller
 //            $order_provider->rejected_comment = $request->comment;
 //            $order_provider->save();
             $payment_register->save();
+
+            event(new NewStack($payment_register,
+                    (new ProviderSyncStack())->setProvider($payment_register->provider),
+                    (new ContractorSyncStack())->setContractor($payment_register->contractor),
+                    (new MTOSyncStack()))
+            );
+
             return $payment_register;
         } catch
         (ModelNotFoundException $e) {
