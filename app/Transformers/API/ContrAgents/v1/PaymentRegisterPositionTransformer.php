@@ -40,13 +40,13 @@ class PaymentRegisterPositionTransformer extends TransformerAbstract
             'amount_payment' => $payment_register_position?->amount_payment,
             'payment_type' => $payment_register_position?->payment_type,
             'object' => [
-                'name' => optional($payment_register_position->order->customer->object)->name,
+                'name' => optional($payment_register_position?->order?->customer?->object)->name,
             ],
             'organization' => [
-                'name' => optional($payment_register_position->order->customer->organization)->name,
+                'name' => optional($payment_register_position?->order?->customer?->organization)->name,
             ],
             'work_agreement' => [
-                'number' => optional($payment_register_position->order->customer->contract)->number,
+                'number' => optional($payment_register_position?->order?->customer?->contract)->number,
             ],
         ];
     }
