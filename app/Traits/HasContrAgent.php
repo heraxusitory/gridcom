@@ -22,7 +22,7 @@ trait HasContrAgent
     /**
      * @return ContrAgent | null
      */
-    public function contr_agent()
+    public function contr_agent(): ?ContrAgent
     {
         if (isset($this->company_IN) && Str::isUuid($this->company_IN)) {
             return ContrAgent::where('uuid', $this->company_IN)->first();
