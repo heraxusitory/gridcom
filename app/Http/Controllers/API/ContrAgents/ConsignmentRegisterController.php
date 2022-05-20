@@ -49,8 +49,11 @@ class ConsignmentRegisterController extends Controller
             'consignment_registers.*.positions.*.consignment_id' => 'required|uuid',
             'consignment_registers.*.positions.*.nomenclature.name' => 'required|string|max:255',
             'consignment_registers.*.positions.*.nomenclature.mnemocode' => 'required|string|max:255',
+            'consignment_registers.*.positions.*.price_without_vat' => 'required|numeric',
+            'consignment_registers.*.positions.*.amount_without_vat' => 'required|numeric',
             'consignment_registers.*.positions.*.count' => 'required|numeric',
             'consignment_registers.*.positions.*.vat_rate' => 'required|numeric',
+            'consignment_registers.*.positions.*.amount_with_vat' => 'required|numeric',
             'consignment_registers.*.positions.*.result_status' => 'required|string|max:255',
         ])->validate();
 

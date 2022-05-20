@@ -50,8 +50,11 @@ class ConsignmentRegisterController
             'consignment_registers.*.positions.*.id' => 'required|uuid',
             'consignment_registers.*.positions.*.consignment_id' => 'required|uuid',
             'consignment_registers.*.positions.*.nomenclature_id' => 'required|uuid',
+            'consignment_registers.*.positions.*.price_without_vat' => 'required|numeric',
+            'consignment_registers.*.positions.*.amount_without_vat' => 'required|numeric',
             'consignment_registers.*.positions.*.count' => 'required|numeric',
             'consignment_registers.*.positions.*.vat_rate' => 'required|numeric',
+            'consignment_registers.*.positions.*.amount_with_vat' => 'required|numeric',
             'consignment_registers.*.positions.*.result_status' => 'required|string|max:255',
         ])->validate();
 
@@ -119,8 +122,11 @@ class ConsignmentRegisterController
                         ], [
                             'consignment_id' => $consignment->id,
                             'nomenclature_id' => $nomenclature->id,
+                            'price_without_vat' => $position['price_without_vat'],
+                            'amount_without_vat' => $position['amount_without_vat'],
                             'count' => $position['count'],
                             'vat_rate' => $position['vat_rate'],
+                            'amount_with_vat' => $position['amount_with_vat'],
                             'result_status' => $position['result_status'],
                         ]);
                         $position_ids[] = $position->id;

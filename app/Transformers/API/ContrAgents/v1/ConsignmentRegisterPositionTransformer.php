@@ -39,8 +39,11 @@ class ConsignmentRegisterPositionTransformer extends TransformerAbstract
                 'name' => optional($consignment_register_position?->nomenclature)->name,
                 'mnemocode' => optional($consignment_register_position?->nomenclature)->mnemocode,
             ],
+            'price_without_vat' => $consignment_register_position?->price_without_vat,
+            'amount_without_vat' => $consignment_register_position?->amount_without_vat,
             'count' => $consignment_register_position?->count,
             'vat_rate' => $consignment_register_position?->vat_rate,
+            'amount_with_vat' => $consignment_register_position?->amount_with_vat,
             'result_status' => $consignment_register_position?->result_status,
         ];
     }

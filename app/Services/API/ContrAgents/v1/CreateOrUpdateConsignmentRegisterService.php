@@ -96,8 +96,11 @@ class CreateOrUpdateConsignmentRegisterService implements IService
                         'position_id' => $position['id'],
                         'consignment_id' => $consignment->id,
                         'nomenclature_id' => $nomenclature?->id,
+                        'price_without_vat' => $position['price_without_vat'],
+                        'amount_without_vat' => $position['amount_without_vat'],
                         'count' => $position['count'],
                         'vat_rate' => $position['vat_rate'],
+                        'amount_with_vat' => $position['amount_with_vat'],
                         'result_status' => $position['result_status'],
                     ]);
                     $position = $consignment_register->positions()->updateOrCreate([
