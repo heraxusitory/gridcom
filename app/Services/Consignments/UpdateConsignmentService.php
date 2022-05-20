@@ -69,8 +69,8 @@ class UpdateConsignmentService implements IService
                     'vat_rate' => $position['vat_rate'],
                     'amount_with_vat' => $amount_with_vat,
                     'country' => $position['country'],
-                    'cargo_custom_declaration' => $position['cargo_custom_declaration'],
-                    'declaration' => $position['declaration'],
+                    'cargo_custom_declaration' => $position['cargo_custom_declaration'] ?? null,
+                    'declaration' => $position['declaration'] ?? null,
                 ]);
                 $position_ids[] = $position->id;
             }

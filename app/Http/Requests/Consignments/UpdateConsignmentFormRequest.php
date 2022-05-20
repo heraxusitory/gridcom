@@ -102,8 +102,8 @@ class UpdateConsignmentFormRequest extends FormRequest
             //TODO отрефакторить ставку НДС
             'positions.*.vat_rate' => ['required', Rule::in(array_keys(config('vat_rates')))],
             'positions.*.country' => ['required', 'string', Rule::in(array_keys(config('countries')))],
-            'positions.*.cargo_custom_declaration' => 'required|string',
-            'positions.*.declaration' => 'required|string',];
+            'positions.*.cargo_custom_declaration' => 'nullable|string',
+            'positions.*.declaration' => 'nullable|string',];
     }
 ////        return [
 ////            'action' => ['required', Rule::in(Consignment::getActions())],
