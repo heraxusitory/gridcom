@@ -58,6 +58,8 @@ class CreateOrUpdateConsignmentRegisterService implements IService
                         'number' => $item['work_agreement']['number'],
                     ])->first();
 
+//                    $item['contr_agent_status'] =  $this->user->isProvider() ? ConsignmentRegister::CONTRACTOR_STATUS_UNDER_CONSIDERATION : ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE;
+
                     $cr_data = collect([
                         'uuid' => $item['id'],
                         'number' => $item['number'],
@@ -75,9 +77,18 @@ class CreateOrUpdateConsignmentRegisterService implements IService
                         'date' => $item['date'],
                     ]);
 
-                    return ConsignmentRegister::query()->updateOrCreate([
+                    $cr = ConsignmentRegister::query()->updateOrCreate([
                         'uuid' => $cr_data['uuid'],
                     ], $cr_data->toArray());
+
+                    if ($cr->wasRecentlyCreated) {
+                        $item['contr_agent_status'] = $this->user->isProvider() ? ConsignmentRegister::CONTRACTOR_STATUS_UNDER_CONSIDERATION : ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE;
+                    } else {
+                        $item['contr_agent_status'] = $this->user->isContractor() ? ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE : $item['contr_agent_status'];
+                    }
+                    $cr->contr_agent_status = $item['contr_agent_status'];
+                    $cr->push();
+
                 });
 
                 $position_ids = [];
