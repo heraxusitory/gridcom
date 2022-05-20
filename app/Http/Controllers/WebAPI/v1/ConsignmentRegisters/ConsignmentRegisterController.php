@@ -205,7 +205,7 @@ class ConsignmentRegisterController extends Controller
             $user = auth('webapi')->user();
             $consignment_register = ConsignmentRegister::query();
             if ($user->isContractor()) {
-                $consignment_register->where('provider_contr_agent_id', $user->contr_agent_id());
+                $consignment_register->where('contractor_contr_agent_id', $user->contr_agent_id());
             }
             $consignment_register = $consignment_register->findOrFail($consignment_register_id);
 
@@ -248,7 +248,7 @@ class ConsignmentRegisterController extends Controller
             $user = auth('webapi')->user();
             $consignment_register = ConsignmentRegister::query();
             if ($user->isContractor()) {
-                $consignment_register->where('provider_contr_agent_id', $user->contr_agent_id());
+                $consignment_register->where('contractor_contr_agent_id', $user->contr_agent_id());
             }
             $consignment_register = $consignment_register->findOrFail($consignment_register_id);
 
