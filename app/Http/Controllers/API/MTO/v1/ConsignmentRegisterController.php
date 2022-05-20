@@ -38,7 +38,7 @@ class ConsignmentRegisterController
             'consignment_registers.*.contractor_contr_agent_id' => 'required|uuid',
             'consignment_registers.*.provider_contr_agent_id' => 'required|uuid',
             'consignment_registers.*.customer_object_id' => 'required|uuid',
-            'consignment_registers.*.customer_sub_object_id' => 'required|uuid',
+            'consignment_registers.*.customer_sub_object_id' => 'nullable|uuid',
             'consignment_registers.*.work_agreement_id' => 'required|uuid',
 
             'consignment_registers.*.responsible_full_name' => 'nullable|string|max:255',
@@ -78,12 +78,15 @@ class ConsignmentRegisterController
                         $customer_object = CustomerObject::query()->firstOrCreate([
                             'uuid' => $item['customer_object_id'],
                         ]);
-                        $customer_sub_object = /*$customer_object->subObjects()->firstOrCreate([
+
+                        if (!empty($item['customer_sub_object_id'])) {
+                            $customer_sub_object = /*$customer_object->subObjects()->firstOrCreate([
                             'uuid' => $item['customer_sub_object_id'],
                         ]);*/
-                            CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']], ['customer_object_id' => $customer_object->id]);
+                                CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']], ['customer_object_id' => $customer_object->id]);
 //                        $customer_sub_object->customer_object_id = $customer_object->id;
 //                        $customer_sub_object->save();
+                        }
 
                         $work_agreement = WorkAgreementDocument::query()->firstOrCreate([
                             'uuid' => $item['work_agreement_id'],
@@ -99,7 +102,7 @@ class ConsignmentRegisterController
                             'contractor_contr_agent_id' => $contractor_contr_agent->id,
                             'provider_contr_agent_id' => $provider_contr_agent->id,
                             'customer_object_id' => $customer_object->id,
-                            'customer_sub_object_id' => $customer_sub_object->id,
+                            'customer_sub_object_id' => isset($customer_sub_object) ? $customer_sub_object?->id : null,
                             'work_agreement_id' => $work_agreement->id,
                             'responsible_full_name' => $item['responsible_full_name'],
                             'responsible_phone' => $item['responsible_phone'],

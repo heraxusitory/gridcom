@@ -50,9 +50,9 @@ class CreateOrUpdateConsignmentRegisterService implements IService
                     $customer_object = CustomerObject::query()->where([
                         'name' => $item['customer_object']['name'],
                     ])->first();
-                    $customer_sub_object = $customer_object?->subObjects()
+                    $customer_sub_object = !empty($item['customer_sub_object']['name']) ? $customer_object?->subObjects()
                         ->where(['name' => $item['customer_sub_object']['name']])
-                        ->first();
+                        ->first() : null;
 
                     $work_agreement = WorkAgreementDocument::query()->where([
                         'number' => $item['work_agreement']['number'],

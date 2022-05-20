@@ -36,7 +36,7 @@ class ConsignmentRegisterController extends Controller
             'consignment_registers.*.contractor_contr_agent.name' => 'required|string|max:255',
             'consignment_registers.*.provider_contr_agent.name' => 'required|string|max:255',
             'consignment_registers.*.customer_object.name' => 'required|string|max:255',
-            'consignment_registers.*.customer_sub_object.name' => 'required|string|max:255',
+            'consignment_registers.*.customer_sub_object.name' => 'nullable|string|max:255',
             'consignment_registers.*.work_agreement.number' => 'required|string|max:255',
 
             'consignment_registers.*.responsible_full_name' => 'nullable|string|max:255',
