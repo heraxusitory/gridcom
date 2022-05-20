@@ -73,16 +73,25 @@ class CreateConsignmentService implements IService
                 ]);
             }
 
-            if ($this->user->isContractor())
-                event(new NewStack($consignment,
+//            if ($this->user->isContractor()) {
+            event(new NewStack($consignment,
+                    (new ProviderSyncStack())->setProvider($consignment->provider),
+                    (new ContractorSyncStack())->setContractor($consignment->contractor),
+                    (new MTOSyncStack()))
+            );
+            foreach ($consignment->positions as $position) {
+                event(new NewStack($position->order,
                         (new ProviderSyncStack())->setProvider($consignment->provider),
-                        (new MTOSyncStack()))
-                );
-            if ($this->user->isProvider())
-                event(new NewStack($consignment,
                         (new ContractorSyncStack())->setContractor($consignment->contractor),
-                        (new MTOSyncStack()))
+                        new MTOSyncStack())
                 );
+            }
+//            }
+//            if ($this->user->isProvider())
+//                event(new NewStack($consignment,
+//                        (new ContractorSyncStack())->setContractor($consignment->contractor),
+//                        (new MTOSyncStack()))
+//                );
             return $consignment;
         });
 

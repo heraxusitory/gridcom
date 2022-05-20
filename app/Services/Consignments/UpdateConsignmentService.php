@@ -77,16 +77,18 @@ class UpdateConsignmentService implements IService
 
             $this->consignment->positions()->whereNotIn('id', $position_ids)->delete();
 
-            if ($this->user->isContractor())
-                event(new NewStack($this->consignment,
-                        (new ProviderSyncStack())->setProvider($this->user->contr_agent),
-                        (new MTOSyncStack()))
+            event(new NewStack($this->consignment,
+                    (new ProviderSyncStack())->setProvider($this->consignment->provider),
+                    (new ContractorSyncStack())->setContractor($this->consignment->contractor),
+                    (new MTOSyncStack()))
+            );
+            foreach ($this->consignment->positions as $position) {
+                event(new NewStack($position->order,
+                        (new ProviderSyncStack())->setProvider($this->consignment->provider),
+                        (new ContractorSyncStack())->setContractor($this->consignment->contractor),
+                        new MTOSyncStack())
                 );
-            if ($this->user->isProvider())
-                event(new NewStack($this->consignment,
-                        (new ContractorSyncStack())->setContractor($this->user->contr_agent),
-                        (new MTOSyncStack()))
-                );
+            }
 
             return $this->consignment;
         });
