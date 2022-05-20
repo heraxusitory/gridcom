@@ -20,8 +20,11 @@ class ConsignmentRegisterPosition extends Model
         'consignment_register_id',
         'consignment_id',
         'nomenclature_id',
+        'price_without_vat',
+        'amount_without_vat',
         'count',
         'vat_rate',
+        'amount_with_vat',
         'result_status',
     ];
 

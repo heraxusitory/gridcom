@@ -59,8 +59,11 @@ class CreateConsignmentRegisterService implements IService
                     'position_id' => Str::uuid(),
                     'consignment_id' => $position['consignment_id'],
                     'nomenclature_id' => $position['nomenclature_id'],
+                    'price_without_vat' => $position['price_without_vat'],
+                    'amount_without_vat' => $position['amount_without_vat'],
                     'count' => $position['count'],
                     'vat_rate' => $position['vat_rate'],
+                    'amount_with_vat' => $position['amount_with_vat'],
                 ]);
             }
 
