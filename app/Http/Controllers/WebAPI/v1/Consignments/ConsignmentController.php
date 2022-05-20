@@ -164,14 +164,16 @@ class ConsignmentController extends Controller
                 ->whereRelation('customer', 'organization_id', $request->organization_id)
                 ->whereRelation('customer', 'work_agreement_id', $request->work_agreement_id)
                 ->whereRelation('customer', 'object_id', $request->customer_object_id)
-                ->whereRelation('customer', 'sub_object_id', ($request->customer_sub_object_id ?? null))
                 ->whereRelation('provider', 'contr_agent_id', $request->provider_contr_agent_id)
                 ->whereRelation('provider', 'provider_contract_id', $request->provider_contract_id)
                 ->whereRelation('contractor', 'contr_agent_id', $request->contractor_contr_agent_id)
-                ->with(['customer', 'provider', 'contractor', 'positions.nomenclature'])
-                ->get();
+                ->with(['customer', 'provider', 'contractor', 'positions.nomenclature']);
 
-            $orders->map(function ($order) {
+            if ($request->customer_sub_object_id ?? null) {
+                $orders = $orders->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id);
+            }
+
+            $orders->get()->map(function ($order) {
                 $nomenclatures = $order->positions->map(function ($position) {
                     return $position->nomenclature;
                 });
