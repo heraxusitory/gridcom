@@ -15,8 +15,8 @@ Route::group(['prefix' => 'consignment-registers', 'middleware' => 'role:provide
         Route::delete('', [ConsignmentRegisterController::class, 'delete'])->can('delete,' . ConsignmentRegister::class);
 
 
-        //роуты поставшика
-        Route::post('approve', [ConsignmentRegisterController::class, 'approve'])->can('update,' . ConsignmentRegister::class)->middleware('role:provider');
-        Route::post('reject', [ConsignmentRegisterController::class, 'reject'])->can('update,' . ConsignmentRegister::class)->middleware('role:provider');
+        //роуты подрядчика
+        Route::post('approve', [ConsignmentRegisterController::class, 'approve'])->can('update,' . ConsignmentRegister::class)->middleware('role:contractor');
+        Route::post('reject', [ConsignmentRegisterController::class, 'reject'])->can('update,' . ConsignmentRegister::class)->middleware('role:contractor');
     });
 });

@@ -198,22 +198,22 @@ class ConsignmentRegisterController extends Controller
         }
     }
 
-    /*роут поставщика*/
+    /*роут подрядчика*/
     public function approve(Request $request, $consignment_register_id)
     {
         try {
             $user = auth('webapi')->user();
             $consignment_register = ConsignmentRegister::query();
-            if ($user->isProvider()) {
+            if ($user->isContractor()) {
                 $consignment_register->where('provider_contr_agent_id', $user->contr_agent_id());
             }
             $consignment_register = $consignment_register->findOrFail($consignment_register_id);
 
-            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::PROVIDER_STATUS_AGREED
+            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::CONTRACTOR_STATUS_AGREED
                 /*$order->provider_status === Order::PROVIDER_STATUS_PARTIALLY_AGREED*/
-                , new BadRequestException('Реестр ТН уже согласован поставщиком', 400));
-            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::PROVIDER_STATUS_NOT_AGREED
-                , new BadRequestException('Реестр ТН уже отказан поставщиком', 400));
+                , new BadRequestException('Реестр ТН уже согласован подрядчиком', 400));
+            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::CONTRACTOR_STATUS_NOT_AGREED
+                , new BadRequestException('Реестр ТН уже отказан подрядчиком', 400));
 
 //            $order->positions()->where('status', '!=', OrderPosition::STATUS_REJECTED)->update(['status' => OrderPosition::STATUS_AGREED]);
 //
@@ -221,7 +221,7 @@ class ConsignmentRegisterController extends Controller
 //                $order->provider_status = Order::PROVIDER_STATUS_PARTIALLY_AGREED;
 //            else
 //                $order->provider_status = Order::PROVIDER_STATUS_AGREED;
-            $consignment_register->contr_agent_status = ConsignmentRegister::PROVIDER_STATUS_AGREED;
+            $consignment_register->contr_agent_status = ConsignmentRegister::CONTRACTOR_STATUS_AGREED;
 //            $order_provider = $order->provider()->firstOrFail();
 //            $order_provider->agreed_comment = $request->comment;
             $consignment_register->save();
@@ -241,25 +241,25 @@ class ConsignmentRegisterController extends Controller
         }
     }
 
-    /*provider's route*/
+    /*роут подрядчика*/
     public function reject(Request $request, $consignment_register_id)
     {
         try {
             $user = auth('webapi')->user();
             $consignment_register = ConsignmentRegister::query();
-            if ($user->isProvider()) {
+            if ($user->isContractor()) {
                 $consignment_register->where('provider_contr_agent_id', $user->contr_agent_id());
             }
             $consignment_register = $consignment_register->findOrFail($consignment_register_id);
 
-            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::PROVIDER_STATUS_AGREED /*||
+            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::CONTRACTOR_STATUS_AGREED /*||
                 $order->provider_status === Order::PROVIDER_STATUS_PARTIALLY_AGREED*/
-                , new BadRequestException('Реестр ТН уже согласован поставщиком', 400));
-            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::PROVIDER_STATUS_NOT_AGREED
-                , new BadRequestException('Реестр ТН уже отказан поставщиком', 400));
+                , new BadRequestException('Реестр ТН уже согласован подрядчиком', 400));
+            throw_if($consignment_register->contr_agent_status === ConsignmentRegister::CONTRACTOR_STATUS_NOT_AGREED
+                , new BadRequestException('Реестр ТН уже отказан подрядчиком', 400));
 
 //            $order->positions()->update(['status' => OrderPosition::STATUS_REJECTED]);
-            $consignment_register->contr_agent_status = ConsignmentRegister::PROVIDER_STATUS_NOT_AGREED;
+            $consignment_register->contr_agent_status = ConsignmentRegister::CONTRACTOR_STATUS_NOT_AGREED;
 //            $order_provider = $order->provider()->firstOrFail();
 //            $order_provider->rejected_comment = $request->comment;
 //            $order_provider->save();

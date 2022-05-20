@@ -53,11 +53,16 @@ class ConsignmentRegister extends Model implements Syncable
     const CUSTOMER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const CUSTOMER_STATUS_CANCELED = 'Аннулировано';
 
-    const PROVIDER_STATUS_NOT_AGREED = 'Не согласовано';
-    const PROVIDER_STATUS_AGREED = 'Согласовано';
-    const PROVIDER_STATUS_DRAFT = 'Черновик';
-    const PROVIDER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
-    const PROVIDER_STATUS_CANCELED = 'Аннулировано';
+//    const PROVIDER_STATUS_NOT_AGREED = 'Не согласовано';
+//    const PROVIDER_STATUS_AGREED = 'Согласовано';
+//    const PROVIDER_STATUS_DRAFT = 'Черновик';
+//    const PROVIDER_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
+//    const PROVIDER_STATUS_CANCELED = 'Аннулировано';
+
+    const CONTRACTOR_STATUS_NOT_AGREED = 'Не согласовано';
+    const CONTRACTOR_STATUS_AGREED = 'Согласовано';
+    const CONTRACTOR_STATUS_DRAFT = 'Черновик';
+    const CONTRACTOR_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
 
     const CONTRACTOR_STATUS_SELF_PURCHASE = 'Самозакуп';
 

@@ -27,11 +27,11 @@ class CreateConsignmentRegisterService implements IService
         switch ($data['action']) {
             case ConsignmentRegister::ACTION_DRAFT:
                 $customer_status = ConsignmentRegister::CUSTOMER_STATUS_DRAFT;
-                $contr_agent_status = ConsignmentRegister::PROVIDER_STATUS_DRAFT;
+                $contr_agent_status = ConsignmentRegister::CONTRACTOR_STATUS_DRAFT;
                 break;
             case ConsignmentRegister::ACTION_APPROVE:
                 $customer_status = ConsignmentRegister::CUSTOMER_STATUS_UNDER_CONSIDERATION;
-                $contr_agent_status = $user->isProvider() ? ConsignmentRegister::PROVIDER_STATUS_UNDER_CONSIDERATION : ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE;
+                $contr_agent_status = $user->isProvider() ? ConsignmentRegister::CONTRACTOR_STATUS_UNDER_CONSIDERATION : ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE;
                 break;
             default:
                 throw new BadRequestException('Action is required', 400);
