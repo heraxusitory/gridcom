@@ -172,8 +172,9 @@ class ConsignmentController extends Controller
             if ($request->customer_sub_object_id ?? null) {
                 $orders = $orders->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id);
             }
+            $orders = $orders->get();
 
-            $orders = $orders->get()->map(function ($order) {
+            $orders->map(function ($order) {
                 $nomenclatures = $order->positions->map(function ($position) {
                     return $position->nomenclature;
                 });
