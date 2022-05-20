@@ -14,10 +14,9 @@ class AddColumnsToConsignmentRegisterPositionsTable extends Migration
     public function up()
     {
         Schema::table('consignment_register_positions', function (Blueprint $table) {
-            $table->unsignedDouble('price_without_vat');
-            $table->unsignedDouble('amount_without_vat');
-            $table->unsignedDouble('amount_with_vat');
-
+            $table->unsignedDouble('price_without_vat')->default(0);
+            $table->unsignedDouble('amount_without_vat')->default(0);
+            $table->unsignedDouble('amount_with_vat')->default(0);
         });
     }
 
