@@ -45,11 +45,14 @@ class ConsignmentRegisterController extends Controller
         $orders = Order::query()
             ->whereRelation('customer', 'organization_id', $request->organization_id)
             ->whereRelation('customer', 'object_id', $request->customer_object_id)
-            ->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id ?? null)
             ->whereRelation('provider', 'contr_agent_id', $request->provider_contr_agent_id)
             ->whereRelation('contractor', 'contr_agent_id', $request->contractor_contr_agent_id)
-            ->with('customer.contract')
-            ->get();
+            ->with('customer.contract');
+
+        if ($request->customer_sub_object_id ?? null)
+            $orders = $orders->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id);
+
+        $orders = $orders->get();
 
         return response()->json(['data' => $orders]);
     }
@@ -74,13 +77,14 @@ class ConsignmentRegisterController extends Controller
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
                 'customer_object_id' => $data['customer_object_id'],
-                'customer_sub_object_id' => $data['customer_sub_object_id'] ?? null,
                 'work_agreement_id' => $data['work_agreement_id'],
             ])
-            ->with('positions.nomenclature')
-            ->get();
+            ->with('positions.nomenclature');
 
-        $consignments->map(function ($consignment) {
+        if ($data['customer_sub_object_id'] ?? null)
+            $consignments = $consignments->where('customer_sub_object_id', $data['customer_sub_object_id']);
+
+        $consignments->get()->map(function ($consignment) {
             $nomenclatures = $consignment->positions->map(function ($position) {
                 return $position->nomenclature;
             });

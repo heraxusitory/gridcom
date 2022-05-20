@@ -33,11 +33,14 @@ class CreateConsignmentRegisterFormRequest extends FormRequest
         $orders = Order::query()
             ->whereRelation('customer', 'organization_id', request()->organization_id)
             ->whereRelation('customer', 'object_id', request()->customer_object_id)
-            ->whereRelation('customer', 'sub_object_id', request()->customer_sub_object_id ?? null)
             ->whereRelation('provider', 'contr_agent_id', request()->provider_contr_agent_id)
             ->whereRelation('contractor', 'contr_agent_id', request()->contractor_contr_agent_id)
-            ->with('customer.contract')
-            ->get();
+            ->with('customer.contract');
+
+        if (request()->customer_sub_object_id ?? null)
+            $orders = $orders->whereRelation('customer', 'sub_object_id', request()->customer_sub_object_id);
+
+        $orders = $orders->get();
 
         $work_agreement_ids = $orders->map(function ($order) {
             return $order->customer->work_agreement_id;
