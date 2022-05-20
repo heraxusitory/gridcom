@@ -151,7 +151,7 @@ class ReferenceController extends Controller
 
         $data['consignment_registers'] = [
             'customer_statuses' => ConsignmentRegister::getCustomerStatuses(),
-            'provider_statuses' => ConsignmentRegister::getProviderStatuses(),
+            'contractor_statuses' => ConsignmentRegister::getContractorStatuses(),
             'contr_agent_statuses' => ConsignmentRegister::getContrAgentStatuses(),
         ];
 

@@ -86,25 +86,30 @@ class ConsignmentRegister extends Model implements Syncable
         ];
     }
 
-    public static function getProviderStatuses(): array
+    public static function getContractorStatuses(): array
     {
         return [
-            self::PROVIDER_STATUS_AGREED,
-            self::PROVIDER_STATUS_DRAFT,
-            self::PROVIDER_STATUS_UNDER_CONSIDERATION,
-            self::PROVIDER_STATUS_NOT_AGREED,
-            self::PROVIDER_STATUS_CANCELED
+            self::CONTRACTOR_STATUS_SELF_PURCHASE,
+            self::CONTRACTOR_STATUS_UNDER_CONSIDERATION,
+            self::CONTRACTOR_STATUS_DRAFT,
+            self::CONTRACTOR_STATUS_AGREED,
+            self::CONTRACTOR_STATUS_NOT_AGREED,
+//            self::PROVIDER_STATUS_AGREED,
+//            self::PROVIDER_STATUS_DRAFT,
+//            self::PROVIDER_STATUS_UNDER_CONSIDERATION,
+//            self::PROVIDER_STATUS_NOT_AGREED,
+//            self::PROVIDER_STATUS_CANCELED
         ];
     }
 
     public static function getContrAgentStatuses(): array
     {
         return [
-            self::PROVIDER_STATUS_AGREED,
-            self::PROVIDER_STATUS_DRAFT,
-            self::PROVIDER_STATUS_UNDER_CONSIDERATION,
-            self::PROVIDER_STATUS_NOT_AGREED,
-            self::PROVIDER_STATUS_CANCELED,
+            self::CONTRACTOR_STATUS_AGREED,
+            self::CONTRACTOR_STATUS_DRAFT,
+            self::CONTRACTOR_STATUS_UNDER_CONSIDERATION,
+            self::CONTRACTOR_STATUS_NOT_AGREED,
+//            self::CONTRACTOR_STATUS_CANCELED,
             self::CONTRACTOR_STATUS_SELF_PURCHASE,
         ];
     }
