@@ -16,11 +16,11 @@ class GetConsignmentRegisterService implements IService
 
     public function run()
     {
-        $this->consignment_register->positions->map(function ($position) {
-            $position->amount_without_vat =
-                round($position->count * $position->nomenclature->price, 2);
-            $position->amount_with_vat = round($position->amount_without_vat * $position->vat_rate);
-        });
+//        $this->consignment_register->positions->map(function ($position) {
+//            $position->amount_without_vat =
+//                round($position->count * $position->nomenclature->price, 2);
+//            $position->amount_with_vat = round($position->amount_without_vat * $position->vat_rate);
+//        });
 
         return $this->consignment_register;
     }
