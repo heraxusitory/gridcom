@@ -28,10 +28,10 @@ class ProviderOrderController extends Controller
     {
         try {
             $provider_orders = ProviderOrder::query()->with([
-                'base_positions.nomenclature',
-                'actual_positions.nomenclature',
-                'requirement_corrections.positions.nomenclature',
-                'order_corrections.positions.nomenclature',
+                'base_positions',
+                'actual_positions',
+                'requirement_corrections.positions',
+                'order_corrections.positions',
             ]);
             if ($this->user->isProvider()) {
                 $provider_orders->where('provider_contr_agent_id', $this->user->contr_agent_id());
@@ -54,10 +54,10 @@ class ProviderOrderController extends Controller
     {
         try {
             $provider_order = ProviderOrder::query()->with([
-                'base_positions',
-                'actual_positions',
-                'requirement_corrections.positions',
-                'order_corrections.positions',
+                'base_positions.nomenclature',
+                'actual_positions.nomenclature',
+                'requirement_corrections.positions.nomenclature',
+                'order_corrections.positions.nomenclature',
             ]);
             if ($this->user->isProvider()) {
                 $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
