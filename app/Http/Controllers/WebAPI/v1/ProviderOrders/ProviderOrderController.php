@@ -36,7 +36,7 @@ class ProviderOrderController extends Controller
             if ($this->user->isProvider()) {
                 $provider_orders->where('provider_contr_agent_id', $this->user->contr_agent_id());
             }
-            $provider_orders = $provider_orders->paginate();
+            $provider_orders = $provider_orders->get();
             return response()->json($provider_orders);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
