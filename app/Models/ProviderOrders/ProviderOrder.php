@@ -29,6 +29,13 @@ class ProviderOrder extends Model
         'organization_comment'
     ];
 
+    protected $with = [
+        'base_positions.nomenclature',
+        'actual_positions.nomenclature',
+        'requirement_corrections.positions.nomenclature',
+        'order_corrections.positions.nomenclature',
+    ];
+
     private const STAGE_ONE = 1;
     private const STAGE_TWO = 2;
     private const STAGE_THREE = 3;

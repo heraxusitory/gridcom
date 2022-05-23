@@ -53,12 +53,7 @@ class ProviderOrderController extends Controller
     public function getOrder(Request $request, $provider_order_id)
     {
         try {
-            $provider_order = ProviderOrder::query()->with([
-                'base_positions.nomenclature',
-                'actual_positions.nomenclature',
-                'requirement_corrections.positions.nomenclature',
-                'order_corrections.positions.nomenclature',
-            ]);
+            $provider_order = ProviderOrder::query();
             if ($this->user->isProvider()) {
                 $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
             }
