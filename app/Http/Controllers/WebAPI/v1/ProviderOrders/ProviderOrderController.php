@@ -71,6 +71,54 @@ class ProviderOrderController extends Controller
         }
     }
 
+    public function getRequirementCorrection(Request $request, $provider_order_id, $requirement_correction_id)
+    {
+        try {
+            /** @var ProviderOrder $provider_order */
+            $provider_order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $provider_order = $provider_order->findOrFail($provider_order_id);
+
+            $requirement_correction = $provider_order->requirement_corrections()->findOrFail($requirement_correction_id);
+            return response()->json(['data' => $requirement_correction]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getOrderCorrection(Request $request, $provider_order_id, $order_correction_id)
+    {
+        try {
+            /** @var ProviderOrder $provider_order */
+            $provider_order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $provider_order = $provider_order->findOrFail($provider_order_id);
+
+            $order_correction = $provider_order->order_corrections()->findOrFail($order_correction_id);
+            return response()->json(['data' => $order_correction]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
     public function reject(Request $request, $provider_order_id, $requirement_correction_id)
     {
         Validator::make($request->all(), [

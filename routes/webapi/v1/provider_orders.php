@@ -9,9 +9,15 @@ Route::group(['prefix' => 'provider-orders', 'middleware' => 'role:provider'], f
         Route::get('', [ProviderOrderController::class, 'getOrder'])->can('view,' . ProviderOrder::class);
         Route::group(['prefix' => 'requirement-corrections'], function () {
             Route::group(['prefix' => '{requirement_correction_id}'], function () {
+                Route::get('', [ProviderOrderController::class, 'getRequirementCorrection']);
                 Route::post('approve', [ProviderOrderController::class, 'approve'])->can('update,' . ProviderOrder::class);
                 Route::post('reject', [ProviderOrderController::class, 'reject'])->can('update,' . ProviderOrder::class);
                 Route::post('reject-positions', [ProviderOrderController::class, 'rejectPositions'])->can('update,' . ProviderOrder::class);
+            });
+        });
+        Route::group(['prefix' => 'order-corrections'], function () {
+            Route::group(['prefix' => '{order_correction_id}'], function () {
+                Route::get('', [ProviderOrderController::class, 'getOrderCorrection']);
             });
         });
     });
