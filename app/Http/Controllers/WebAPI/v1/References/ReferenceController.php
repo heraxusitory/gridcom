@@ -66,14 +66,15 @@ class ReferenceController extends Controller
 
     public function getObjects(Request $request)
     {
-        $objects_query = CustomerObject::query()->with('subObjects');
+        $objects_query = CustomerObject::query();
 //        if (isset($request->name))
 //            $objects_query->where('name', 'ILIKE', "%{$request->name}%");
 
         $objects = $objects_query
-            ->orderByDesc('created_at')
             ->whereRelation('subObjects', 'is_visible_to_client', true)
             ->where('is_visible_to_client', true)
+            ->with('subObjects')
+            ->orderByDesc('created_at')
             ->get();
         return response()->json(['data' => $objects]);
     }
