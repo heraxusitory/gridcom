@@ -4,7 +4,11 @@
 namespace App\Services\ConsignmentRegisters;
 
 
+use App\Events\NewStack;
 use App\Models\ConsignmentRegisters\ConsignmentRegister;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Models\User;
 use App\Services\IService;
 use Carbon\Carbon;
@@ -38,6 +42,7 @@ class CreateConsignmentRegisterService implements IService
         }
 
         return DB::transaction(function () use ($data, $customer_status, $contr_agent_status) {
+            /** @var ConsignmentRegister $consignment_register */
             $consignment_register = ConsignmentRegister::query()->create([
                 'uuid' => Str::uuid(),
                 'date' => Carbon::today()->format('Y-m-d'),
@@ -66,6 +71,12 @@ class CreateConsignmentRegisterService implements IService
                     'amount_with_vat' => $position['amount_with_vat'],
                 ]);
             }
+
+            event(new NewStack($consignment_register,
+                    (new ProviderSyncStack())->setProvider($consignment_register->provider),
+                    (new ContractorSyncStack())->setContractor($consignment_register->contractor),
+                    (new MTOSyncStack()))
+            );
 
             return $consignment_register;
         });

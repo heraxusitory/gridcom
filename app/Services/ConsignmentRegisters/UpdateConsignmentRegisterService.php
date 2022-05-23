@@ -4,7 +4,11 @@
 namespace App\Services\ConsignmentRegisters;
 
 
+use App\Events\NewStack;
 use App\Models\ConsignmentRegisters\ConsignmentRegister;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -80,6 +84,12 @@ class UpdateConsignmentRegisterService implements IService
             $this->consignment_register->positions()
                 ->whereNotIn('id', $position_ids)
                 ->delete();
+
+            event(new NewStack($this->consignment_register,
+                    (new ProviderSyncStack())->setProvider($this->consignment_register->provider),
+                    (new ContractorSyncStack())->setContractor($this->consignment_register->contractor),
+                    (new MTOSyncStack()))
+            );
 
             return $this->consignment_register;
         });
