@@ -72,6 +72,7 @@ class ReferenceController extends Controller
 
         $objects = $objects_query
             ->orderByDesc('created_at')
+            ->whereRelation('subObjects', 'is_visible_to_client', true)
             ->where('is_visible_to_client', true)
             ->get();
         return response()->json(['data' => $objects]);
