@@ -89,6 +89,7 @@ class CreateOrUpdateConsignmentRegisterService implements IService
                     $cr->contr_agent_status = $item['contr_agent_status'];
                     $cr->push();
 
+                    return $cr;
                 });
 
                 $position_ids = [];
