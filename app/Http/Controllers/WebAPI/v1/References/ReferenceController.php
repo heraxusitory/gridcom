@@ -72,11 +72,11 @@ class ReferenceController extends Controller
 
         $objects = $objects_query
             ->where('is_visible_to_client', true)
-            ->with(['subObjects'/* => function ($query) {
-                return $query->where('customer_sub_objects.is_visible_to_client', true);
-            }*/])
+            ->with(['subObjects' => function ($query) {
+                $query->where('customer_sub_objects.is_visible_to_client', true);
+            }])
             ->orderByDesc('created_at')
-            ->get()->filter;
+            ->get();
         return response()->json(['data' => $objects]);
     }
 
