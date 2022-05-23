@@ -42,63 +42,63 @@ class CreateOrUpdateConsignmentRegisterService implements IService
                 ])->first();
 
                 /** @var ConsignmentRegister $consignment_register */
-                $consignment_register = ConsignmentRegister::withoutEvents(function () use ($provider_contr_agent, $contractor_contr_agent, $item) {
-                    $organization = Organization::query()->where([
-                        'name' => $item['organization']['name'],
-                    ])->first();
+//                $consignment_register = ConsignmentRegister::withoutEvents(function () use ($provider_contr_agent, $contractor_contr_agent, $item) {
+                $organization = Organization::query()->where([
+                    'name' => $item['organization']['name'],
+                ])->first();
 
-                    $customer_object = CustomerObject::query()->where([
-                        'name' => $item['customer_object']['name'],
-                    ])->first();
-                    $customer_sub_object = !empty($item['customer_sub_object']['name']) ? $customer_object?->subObjects()
-                        ->where(['name' => $item['customer_sub_object']['name']])
-                        ->first() : null;
+                $customer_object = CustomerObject::query()->where([
+                    'name' => $item['customer_object']['name'],
+                ])->first();
+                $customer_sub_object = !empty($item['customer_sub_object']['name']) ? $customer_object?->subObjects()
+                    ->where(['name' => $item['customer_sub_object']['name']])
+                    ->first() : null;
 
-                    $work_agreement = WorkAgreementDocument::query()->where([
-                        'number' => $item['work_agreement']['number'],
-                    ])->first();
+                $work_agreement = WorkAgreementDocument::query()->where([
+                    'number' => $item['work_agreement']['number'],
+                ])->first();
 
 //                    $item['contr_agent_status'] =  $this->user->isProvider() ? ConsignmentRegister::CONTRACTOR_STATUS_UNDER_CONSIDERATION : ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE;
 
-                    $cr_data = collect([
-                        'uuid' => $item['id'],
-                        'number' => $item['number'],
-                        'customer_status' => $item['customer_status'],
-                        'contr_agent_status' => $item['contr_agent_status'],
-                        'organization_id' => $organization?->id,
-                        'contractor_contr_agent_id' => $contractor_contr_agent->id,
-                        'provider_contr_agent_id' => $provider_contr_agent->id,
-                        'customer_object_id' => $customer_object?->id,
-                        'customer_sub_object_id' => $customer_sub_object?->id,
-                        'work_agreement_id' => $work_agreement?->id,
-                        'responsible_full_name' => $item['responsible_full_name'],
-                        'responsible_phone' => $item['responsible_phone'],
-                        'comment' => $item['comment'],
-                        'date' => $item['date'],
-                    ]);
+                $cr_data = collect([
+                    'uuid' => $item['id'],
+                    'number' => $item['number'],
+                    'customer_status' => $item['customer_status'],
+                    'contr_agent_status' => $item['contr_agent_status'],
+                    'organization_id' => $organization?->id,
+                    'contractor_contr_agent_id' => $contractor_contr_agent->id,
+                    'provider_contr_agent_id' => $provider_contr_agent->id,
+                    'customer_object_id' => $customer_object?->id,
+                    'customer_sub_object_id' => $customer_sub_object?->id,
+                    'work_agreement_id' => $work_agreement?->id,
+                    'responsible_full_name' => $item['responsible_full_name'],
+                    'responsible_phone' => $item['responsible_phone'],
+                    'comment' => $item['comment'],
+                    'date' => $item['date'],
+                ]);
 
-                    $cr = ConsignmentRegister::query()->updateOrCreate([
-                        'uuid' => $cr_data['uuid'],
-                    ], $cr_data->toArray());
+                $cr = ConsignmentRegister::query()->updateOrCreate([
+                    'uuid' => $cr_data['uuid'],
+                ], $cr_data->toArray());
 
-                    if ($cr->wasRecentlyCreated) {
-                        $item['contr_agent_status'] = $this->user->isProvider() ? ConsignmentRegister::CONTRACTOR_STATUS_UNDER_CONSIDERATION : ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE;
-                    } else {
-                        $item['contr_agent_status'] = $this->user->isContractor() ? ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE : $item['contr_agent_status'];
-                    }
-                    $cr->contr_agent_status = $item['contr_agent_status'];
-                    $cr->push();
+                if ($cr->wasRecentlyCreated) {
+                    $item['contr_agent_status'] = $this->user->isProvider() ? ConsignmentRegister::CONTRACTOR_STATUS_UNDER_CONSIDERATION : ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE;
+                } else {
+                    $item['contr_agent_status'] = $this->user->isContractor() ? ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE : $item['contr_agent_status'];
+                }
+                $cr->contr_agent_status = $item['contr_agent_status'];
+                $cr->push();
 
-                    return $cr;
-                });
+                $consignment_register = $cr;
+//                });
 
                 $position_ids = [];
                 foreach ($position_data as $position) {
-                    $consignment = Consignment::withoutEvents(function () use ($position) {
-                        return Consignment::query()->firstOrCreate([
-                            'uuid' => $position['consignment_id']
-                        ]);
-                    });
+//                    $consignment = Consignment::withoutEvents(function () use ($position) {
+                    $consignment = Consignment::query()->firstOrCreate([
+                        'uuid' => $position['consignment_id']
+                    ]);
+//                    });
                     $nomenclature = Nomenclature::query()->where([
                         'name' => $position['nomenclature']['name'],
                         'mnemocode' => $position['nomenclature']['mnemocode'],

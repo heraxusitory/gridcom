@@ -135,21 +135,21 @@ class CreateOrUpdateOrderService implements IService
                             'provider_status' => Order::PROVIDER_STATUS_UNDER_CONSIDERATION,
                         ]);
 
-                        return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor, $order_data) {
-                            return Order::query()->create(
-                                $order_data->toArray()
-                            /*[
-                                'uuid' => $item['id'],
-                                'number' => $item['number'] ?? null,
-                                'order_date' => isset($item['order_date']) ? (new Carbon($item['order_date']))->format('d.m.Y') : null,
-                                'deadline_date' => $item['deadline_date'] ?? null,
-                                'customer_status' => $item['customer_status'],
-                                'provider_status' => $item['provider_status'],
-                                'customer_id' => $customer->id,
-                                'provider_id' => $provider->id,
-                                'contractor_id' => $contractor->id,
-                            ]*/);
-                        });
+//                        return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor, $order_data) {
+                        return Order::query()->create(
+                            $order_data->toArray()
+                        /*[
+                            'uuid' => $item['id'],
+                            'number' => $item['number'] ?? null,
+                            'order_date' => isset($item['order_date']) ? (new Carbon($item['order_date']))->format('d.m.Y') : null,
+                            'deadline_date' => $item['deadline_date'] ?? null,
+                            'customer_status' => $item['customer_status'],
+                            'provider_status' => $item['provider_status'],
+                            'customer_id' => $customer->id,
+                            'provider_id' => $provider->id,
+                            'contractor_id' => $contractor->id,
+                        ]*/);
+//                        });
                     });
 
                 //Если обьект существует и его нужно обновить

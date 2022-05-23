@@ -41,27 +41,27 @@ class CreateOrUpdatePaymentRegisterService implements IService
 
                 if ($this->user->isContractor()) {
                     /** @var PaymentRegister $payment_register */
-                    $payment_register = PaymentRegister::withoutEvents(function () use ($contractor_contr_agent, $provider_contr_agent, $item) {
-                        $provider_contract = ProviderContractDocument::query()->where([
-                            'number' => $item['provider_contract']['number'],
-                        ])->first();
+//                    $payment_register = PaymentRegister::withoutEvents(function () use ($contractor_contr_agent, $provider_contr_agent, $item) {
+                    $provider_contract = ProviderContractDocument::query()->where([
+                        'number' => $item['provider_contract']['number'],
+                    ])->first();
 
-                        $pr_data = collect([
-                            'uuid' => $item['id'],
-                            'number' => $item['number'],
-                            'provider_status' => $item['provider_status'],
-                            'provider_contr_agent_id' => $provider_contr_agent->id,
-                            'provider_contract_id' => $provider_contract->id,
-                            'contractor_contr_agent_id' => $contractor_contr_agent->id,
-                            'responsible_full_name' => $item['responsible_full_name'],
-                            'responsible_phone' => $item['responsible_phone'],
-                            'comment' => $item['comment'],
-                            'date' => (new Carbon($item['date']))->format('d.m.Y'),
-                        ]);
-                        return PaymentRegister::query()->updateOrCreate([
-                            'uuid' => $pr_data['uuid']
-                        ], $pr_data->toArray());
-                    });
+                    $pr_data = collect([
+                        'uuid' => $item['id'],
+                        'number' => $item['number'],
+                        'provider_status' => $item['provider_status'],
+                        'provider_contr_agent_id' => $provider_contr_agent->id,
+                        'provider_contract_id' => $provider_contract->id,
+                        'contractor_contr_agent_id' => $contractor_contr_agent->id,
+                        'responsible_full_name' => $item['responsible_full_name'],
+                        'responsible_phone' => $item['responsible_phone'],
+                        'comment' => $item['comment'],
+                        'date' => (new Carbon($item['date']))->format('d.m.Y'),
+                    ]);
+                    $payment_register = PaymentRegister::query()->updateOrCreate([
+                        'uuid' => $pr_data['uuid']
+                    ], $pr_data->toArray());
+//                    });
 
                     $position_ids = [];
                     foreach ($position_data as $position) {

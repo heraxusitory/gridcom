@@ -111,9 +111,9 @@ class CreateOrUpdateOrderService implements IService
                                 'provider_status' => Order::PROVIDER_STATUS_UNDER_CONSIDERATION,
                             ]);
 
-                            return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor, $order_data) {
-                                return Order::query()->create($order_data->toArray());
-                            });
+//                            return Order::withoutEvents(function () use ($item, $customer, $provider, $contractor, $order_data) {
+                            return Order::query()->create($order_data->toArray());
+//                            });
                         });
 
                     //Если обьект существует и его нужно обновить

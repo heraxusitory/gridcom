@@ -65,51 +65,51 @@ class ConsignmentRegisterController
                 DB::transaction(function () use ($item) {
                     $position_data = $item['positions'] ?? [];
 
-                    $consignment_register = ConsignmentRegister::withoutEvents(function () use ($item) {
-                        $organization = Organization::query()->firstOrCreate([
-                            'uuid' => $item['organization_id'],
-                        ]);
-                        $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
-                            'uuid' => $item['contractor_contr_agent_id'],
-                        ]);
-                        $provider_contr_agent = ContrAgent::query()->firstOrCreate([
-                            'uuid' => $item['provider_contr_agent_id'],
-                        ]);
-                        $customer_object = CustomerObject::query()->firstOrCreate([
-                            'uuid' => $item['customer_object_id'],
-                        ]);
+//                    $consignment_register = ConsignmentRegister::withoutEvents(function () use ($item) {
+                    $organization = Organization::query()->firstOrCreate([
+                        'uuid' => $item['organization_id'],
+                    ]);
+                    $contractor_contr_agent = ContrAgent::query()->firstOrCreate([
+                        'uuid' => $item['contractor_contr_agent_id'],
+                    ]);
+                    $provider_contr_agent = ContrAgent::query()->firstOrCreate([
+                        'uuid' => $item['provider_contr_agent_id'],
+                    ]);
+                    $customer_object = CustomerObject::query()->firstOrCreate([
+                        'uuid' => $item['customer_object_id'],
+                    ]);
 
-                        if (!empty($item['customer_sub_object_id'])) {
-                            $customer_sub_object = /*$customer_object->subObjects()->firstOrCreate([
+                    if (!empty($item['customer_sub_object_id'])) {
+                        $customer_sub_object = /*$customer_object->subObjects()->firstOrCreate([
                             'uuid' => $item['customer_sub_object_id'],
                         ]);*/
-                                CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']], ['customer_object_id' => $customer_object->id]);
+                            CustomerSubObject::query()->firstOrCreate(['uuid' => $item['customer_sub_object_id']], ['customer_object_id' => $customer_object->id]);
 //                        $customer_sub_object->customer_object_id = $customer_object->id;
 //                        $customer_sub_object->save();
-                        }
+                    }
 
-                        $work_agreement = WorkAgreementDocument::query()->firstOrCreate([
-                            'uuid' => $item['work_agreement_id'],
-                        ]);
+                    $work_agreement = WorkAgreementDocument::query()->firstOrCreate([
+                        'uuid' => $item['work_agreement_id'],
+                    ]);
 
-                        return ConsignmentRegister::query()->updateOrCreate([
-                            'uuid' => $item['id'],
-                        ], [
-                            'number' => $item['number'],
-                            'customer_status' => $item['customer_status'],
-                            'contr_agent_status' => $item['contr_agent_status'],
-                            'organization_id' => $organization->id,
-                            'contractor_contr_agent_id' => $contractor_contr_agent->id,
-                            'provider_contr_agent_id' => $provider_contr_agent->id,
-                            'customer_object_id' => $customer_object->id,
-                            'customer_sub_object_id' => isset($customer_sub_object) ? $customer_sub_object?->id : null,
-                            'work_agreement_id' => $work_agreement->id,
-                            'responsible_full_name' => $item['responsible_full_name'],
-                            'responsible_phone' => $item['responsible_phone'],
-                            'comment' => $item['comment'],
-                            'date' => (new Carbon($item['date']))->format('d.m.Y'),
-                        ]);
-                    });
+                    $consignment_register = ConsignmentRegister::query()->updateOrCreate([
+                        'uuid' => $item['id'],
+                    ], [
+                        'number' => $item['number'],
+                        'customer_status' => $item['customer_status'],
+                        'contr_agent_status' => $item['contr_agent_status'],
+                        'organization_id' => $organization->id,
+                        'contractor_contr_agent_id' => $contractor_contr_agent->id,
+                        'provider_contr_agent_id' => $provider_contr_agent->id,
+                        'customer_object_id' => $customer_object->id,
+                        'customer_sub_object_id' => isset($customer_sub_object) ? $customer_sub_object?->id : null,
+                        'work_agreement_id' => $work_agreement->id,
+                        'responsible_full_name' => $item['responsible_full_name'],
+                        'responsible_phone' => $item['responsible_phone'],
+                        'comment' => $item['comment'],
+                        'date' => (new Carbon($item['date']))->format('d.m.Y'),
+                    ]);
+//                    });
 
                     $position_ids = [];
                     foreach ($position_data as $position) {

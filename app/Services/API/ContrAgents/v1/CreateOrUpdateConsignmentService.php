@@ -42,34 +42,34 @@ class CreateOrUpdateConsignmentService implements IService
                     /** @var ContrAgent $provider_contr_agent */ $provider_contr_agent = $this->user->contr_agent()->firstOrFail();
 
                 /** @var Consignment $consignment */
-                $consignment = Consignment::withoutEvents(function () use ($contractor_contr_agent, $provider_contr_agent, $item) {
-                    $organization = Organization::query()->where(['name' => $item['organization']['name']])->first();
-                    $provider_contract = ProviderContractDocument::query()->where(['number' => $item['provider_contract']['number']])->first();
-                    $work_agreement = WorkAgreementDocument::query()->where(['number' => $item['work_agreement']['number']])->first();
-                    $object = CustomerObject::query()->where(['name' => $item['customer_object']['name']])->first();
-                    $sub_object = $object?->subObjects()
-                        ->where(['name' => $item['customer_sub_object']['name']])
-                        ->first();
+//                $consignment = Consignment::withoutEvents(function () use ($contractor_contr_agent, $provider_contr_agent, $item) {
+                $organization = Organization::query()->where(['name' => $item['organization']['name']])->first();
+                $provider_contract = ProviderContractDocument::query()->where(['number' => $item['provider_contract']['number']])->first();
+                $work_agreement = WorkAgreementDocument::query()->where(['number' => $item['work_agreement']['number']])->first();
+                $object = CustomerObject::query()->where(['name' => $item['customer_object']['name']])->first();
+                $sub_object = $object?->subObjects()
+                    ->where(['name' => $item['customer_sub_object']['name']])
+                    ->first();
 
-                    $consignment = collect([
-                        'uuid' => $item['id'],
-                        'number' => $item['number'],
-                        'date' => $item['date'],
-                        'organization_id' => $organization?->id,
-                        'provider_contr_agent_id' => $provider_contr_agent?->id,
-                        'provider_contract_id' => $provider_contract?->id,
-                        'contractor_contr_agent_id' => $contractor_contr_agent?->id,
-                        'work_agreement_id' => $work_agreement?->id,
-                        'customer_object_id' => $object?->id,
-                        'customer_sub_object_id' => $sub_object?->id,
-                        'responsible_full_name' => $item['responsible_full_name'] ?? null,
-                        'responsible_phone' => $item['responsible_phone'] ?? null,
-                        'comment' => $item['comment'] ?? null,
-                    ]);
-                    return Consignment::query()->updateOrCreate([
-                        'uuid' => $consignment['uuid'],
-                    ], $consignment->toArray());
-                });
+                $consignment = collect([
+                    'uuid' => $item['id'],
+                    'number' => $item['number'],
+                    'date' => $item['date'],
+                    'organization_id' => $organization?->id,
+                    'provider_contr_agent_id' => $provider_contr_agent?->id,
+                    'provider_contract_id' => $provider_contract?->id,
+                    'contractor_contr_agent_id' => $contractor_contr_agent?->id,
+                    'work_agreement_id' => $work_agreement?->id,
+                    'customer_object_id' => $object?->id,
+                    'customer_sub_object_id' => $sub_object?->id,
+                    'responsible_full_name' => $item['responsible_full_name'] ?? null,
+                    'responsible_phone' => $item['responsible_phone'] ?? null,
+                    'comment' => $item['comment'] ?? null,
+                ]);
+                $consignment = Consignment::query()->updateOrCreate([
+                    'uuid' => $consignment['uuid'],
+                ], $consignment->toArray());
+//                });
 
                 $position_ids = [];
                 foreach ($position_data as $position) {
