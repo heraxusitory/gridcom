@@ -71,7 +71,7 @@ class ReferenceController extends Controller
 //            $objects_query->where('name', 'ILIKE', "%{$request->name}%");
 
         $objects = $objects_query
-            ->whereRelation('subObjects', 'is_visible_to_client', true)
+            ->whereRelation('subObjects', 'is_visible_to_client', '=', true)
             ->where('is_visible_to_client', true)
             ->with('subObjects')
             ->orderByDesc('created_at')
