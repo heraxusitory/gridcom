@@ -81,7 +81,7 @@ class ProviderOrderController extends Controller
             }
             $provider_order = $provider_order->findOrFail($provider_order_id);
 
-            $requirement_correction = $provider_order->requirement_corrections()->with('positions.nomenclature')->findOrFail($requirement_correction_id);
+            $requirement_correction = $provider_order->requirement_corrections()->with(['positions.nomenclature', 'provider_order'])->findOrFail($requirement_correction_id);
             return response()->json(['data' => $requirement_correction]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
@@ -105,7 +105,7 @@ class ProviderOrderController extends Controller
             }
             $provider_order = $provider_order->findOrFail($provider_order_id);
 
-            $order_correction = $provider_order->order_corrections()->with('positions.nomenclature')->findOrFail($order_correction_id);
+            $order_correction = $provider_order->order_corrections()->with(['positions.nomenclature', 'provider_order'])->findOrFail($order_correction_id);
             return response()->json(['data' => $order_correction]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);

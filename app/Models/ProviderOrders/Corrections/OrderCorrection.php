@@ -4,6 +4,7 @@
 namespace App\Models\ProviderOrders\Corrections;
 
 
+use App\Models\ProviderOrders\ProviderOrder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -21,6 +22,11 @@ class OrderCorrection extends Model
     public function positions()
     {
         return $this->hasMany(OrderCorrectionPosition::class, 'order_correction_id', 'id');
+    }
+
+    public function provider_order()
+    {
+        return $this->belongsTo(ProviderOrder::class, 'provider_order_id', 'id');
     }
 
     public function getDateAttribute($value)

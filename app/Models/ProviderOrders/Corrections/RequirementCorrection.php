@@ -4,6 +4,7 @@
 namespace App\Models\ProviderOrders\Corrections;
 
 
+use App\Models\ProviderOrders\ProviderOrder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
@@ -62,6 +63,11 @@ class RequirementCorrection extends Model
     public function positions()
     {
         return $this->hasMany(RequirementCorrectionPosition::class, 'requirement_correction_id', 'id');
+    }
+
+    public function provider_order()
+    {
+        return $this->belongsTo(ProviderOrder::class, 'provider_order_id', 'id');
     }
 
     public function getDateAttribute($value)
