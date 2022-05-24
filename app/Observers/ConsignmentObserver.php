@@ -27,7 +27,9 @@ class ConsignmentObserver
             ])
         ];
 
-        if ($user = Auth::guard('webapi')->check()) {
+
+        if (Auth::guard('webapi')->check()) {
+            $user = Auth::guard('webapi')->user();
             $consignment->notifications()->insertOrIgnore(
                 array_merge($notification_data, [
                     'contr_agent_id' => $user->isProvider() ? $consignment->contractor?->uuid : ($user->isContractor() ? $consignment->provider?->uuid : null),
