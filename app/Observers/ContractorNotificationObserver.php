@@ -31,10 +31,7 @@ class ContractorNotificationObserver
         }
 
         if (Auth::guard('api')->check()) {
-//            $contractor_notification->notifications()->insertOrIgnore(
-//                array_merge($notification_data, [
-//                    'contr_agent_id' => $contractor_notification->provider?->uuid,
-//                ]));
+            $user = Auth::guard('api')->user();
             $contractor_notification->notifications()->insertOrIgnore(
                 array_merge($notification_data, [
                     'contr_agent_id' => $user->isProvider() ? $contractor_notification->contractor?->uuid : null,

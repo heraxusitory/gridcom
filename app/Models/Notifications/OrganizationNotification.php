@@ -6,13 +6,14 @@ namespace App\Models\Notifications;
 
 use App\Models\References\ContrAgent;
 use App\Models\References\Organization;
+use App\Traits\UseNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class OrganizationNotification extends Notification
 {
-    use HasFactory;
+    use HasFactory, UseNotification;
 
     protected $table = 'organization_notifications';
 
