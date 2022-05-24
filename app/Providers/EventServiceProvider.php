@@ -4,10 +4,12 @@ namespace App\Providers;
 
 use App\Events\NewStack;
 use App\Listeners\StackListener;
+use App\Models\ConsignmentRegisters\ConsignmentRegister;
 use App\Models\Consignments\Consignment;
 use App\Models\Notifications\ContractorNotification;
 use App\Models\Orders\Order;
 use App\Observers\ConsignmentObserver;
+use App\Observers\ConsignmentRegisterObserver;
 use App\Observers\ContractorNotificationObserver;
 use App\Observers\OrderObserver;
 use Illuminate\Auth\Events\Registered;
@@ -39,6 +41,7 @@ class EventServiceProvider extends ServiceProvider
     {
         Order::observe(OrderObserver::class);
         Consignment::observe(ConsignmentObserver::class);
+        ConsignmentRegister::observe(ConsignmentRegisterObserver::class);
         ContractorNotification::observe(ContractorNotificationObserver::class);
     }
 }
