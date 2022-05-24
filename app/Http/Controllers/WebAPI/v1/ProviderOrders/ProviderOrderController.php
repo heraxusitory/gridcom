@@ -126,6 +126,7 @@ class ProviderOrderController extends Controller
         ])->validate();
 
         try {
+            /** @var ProviderOrder $order */
             $order = ProviderOrder::query();
             if ($this->user->isProvider()) {
                 $order->where('provider_contr_agent_id', $this->user->contr_agent_id());
