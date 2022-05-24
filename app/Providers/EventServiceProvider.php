@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Events\CustomNotification;
 use App\Events\NewStack;
+use App\Listeners\GenerateCustomNotification;
 use App\Listeners\StackListener;
 use App\Models\Orders\Order;
 use App\Observers\OrderObserver;
@@ -33,6 +35,6 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//        Order::observe(OrderObserver::class);
+        Order::observe(OrderObserver::class);
     }
 }

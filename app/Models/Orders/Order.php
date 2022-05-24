@@ -9,6 +9,7 @@ use App\Models\Contractor;
 use App\Models\Customer;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
+use App\Traits\UseNotification;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -17,7 +18,7 @@ use Illuminate\Support\Carbon;
 
 class Order extends Model implements Syncable
 {
-    use HasFactory, UsesNumberLKK;
+    use HasFactory, UsesNumberLKK, UseNotification;
 
     protected $table = 'orders';
 
