@@ -17,4 +17,5 @@ Route::group(['middleware' => ['auth:webapi', 'get_per_page_number']], function 
     require 'organization_notifications.php';
     require 'price_negotiations.php';
     require 'request_additions.php';
+    require 'notifications.php';
 });
