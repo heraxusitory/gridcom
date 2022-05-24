@@ -9,11 +9,16 @@ use App\Models\Consignments\Consignment;
 use App\Models\Notifications\ContractorNotification;
 use App\Models\Orders\Order;
 use App\Models\PaymentRegisters\PaymentRegister;
+use App\Models\ProviderOrders\Corrections\RequirementCorrection;
+use App\Models\ProviderOrders\ProviderOrder;
 use App\Observers\ConsignmentObserver;
 use App\Observers\ConsignmentRegisterObserver;
 use App\Observers\ContractorNotificationObserver;
 use App\Observers\OrderObserver;
 use App\Observers\PaymentRegisterObserver;
+use App\Observers\ProviderOrderObserver;
+use App\Observers\RequirementCorrectionObserver;
+use App\Transformers\API\MTO\v1\RequirementCorrectionTransformer;
 use Faker\Provider\Payment;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -47,5 +52,7 @@ class EventServiceProvider extends ServiceProvider
         ConsignmentRegister::observe(ConsignmentRegisterObserver::class);
         ContractorNotification::observe(ContractorNotificationObserver::class);
         PaymentRegister::observe(PaymentRegisterObserver::class);
+        ProviderOrder::observe(ProviderOrderObserver::class);
+        RequirementCorrection::observe(RequirementCorrectionObserver::class);
     }
 }
