@@ -4,13 +4,14 @@
 namespace App\Models\Notifications;
 
 
+use App\Traits\UseNotification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class ContractorNotification extends Notification
 {
-    use HasFactory;
+    use HasFactory, UseNotification;
 
     protected $table = 'contractor_notifications';
 
