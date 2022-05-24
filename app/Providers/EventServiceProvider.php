@@ -8,10 +8,13 @@ use App\Models\ConsignmentRegisters\ConsignmentRegister;
 use App\Models\Consignments\Consignment;
 use App\Models\Notifications\ContractorNotification;
 use App\Models\Orders\Order;
+use App\Models\PaymentRegisters\PaymentRegister;
 use App\Observers\ConsignmentObserver;
 use App\Observers\ConsignmentRegisterObserver;
 use App\Observers\ContractorNotificationObserver;
 use App\Observers\OrderObserver;
+use App\Observers\PaymentRegisterObserver;
+use Faker\Provider\Payment;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -43,5 +46,6 @@ class EventServiceProvider extends ServiceProvider
         Consignment::observe(ConsignmentObserver::class);
         ConsignmentRegister::observe(ConsignmentRegisterObserver::class);
         ContractorNotification::observe(ContractorNotificationObserver::class);
+        PaymentRegister::observe(PaymentRegisterObserver::class);
     }
 }

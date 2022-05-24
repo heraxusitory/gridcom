@@ -8,13 +8,14 @@ use App\Interfaces\Syncable;
 use App\Models\Orders\Order;
 use App\Models\References\ContrAgent;
 use App\Models\References\ProviderContractDocument;
+use App\Traits\UseNotification;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class PaymentRegister extends Model implements Syncable
 {
-    use UsesNumberLKK;
+    use UsesNumberLKK, UseNotification;
 
     protected $table = 'payment_registers';
 
