@@ -240,7 +240,7 @@ class ProviderOrderController extends Controller
                 , new BadRequestException('Корректировка потребности уже отказана поставщиком', 400));
 
             throw_if($requirement_correction->positions()->where('status', RequirementCorrectionPosition::STATUS_REJECTED())->exists(), new BadRequestException('Отказанные позиции уже существуют', 400));
-            $order->positions()->whereIn('id', $request->rejected_position_ids)->update(['status' => RequirementCorrectionPosition::STATUS_REJECTED()]);
+            $requirement_correction->positions()->whereIn('id', $request->rejected_position_ids)->update(['status' => RequirementCorrectionPosition::STATUS_REJECTED()]);
             return $requirement_correction;
         } catch
         (ModelNotFoundException $e) {
