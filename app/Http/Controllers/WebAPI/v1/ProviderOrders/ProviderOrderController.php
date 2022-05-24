@@ -212,6 +212,7 @@ class ProviderOrderController extends Controller
     public function rejectPositions(Request $request, $provider_order_id, $requirement_correction_id)
     {
         try {
+            /** @var ProviderOrder $order */
             $order = ProviderOrder::query();
             if ($this->user->isProvider()) {
                 $order->where('provider_contr_agent_id', $this->user->contr_agent_id());
