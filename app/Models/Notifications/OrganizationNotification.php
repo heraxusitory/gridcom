@@ -37,7 +37,7 @@ class OrganizationNotification extends Notification implements Syncable
     ];
 
     protected $with = [
-        'positions',
+        'positions.nomenclature',
     ];
 
     const ORGANIZATION_STATUS_NOT_AGREED = 'Не согласовано';
