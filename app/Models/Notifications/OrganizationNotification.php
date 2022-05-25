@@ -37,6 +37,7 @@ class OrganizationNotification extends Notification implements Syncable
     ];
 
     protected $with = [
+        'positions.order',
         'positions.nomenclature',
     ];
 
