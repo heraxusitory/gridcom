@@ -14,7 +14,7 @@ class OrderObserver
 
         $header = 'Новый заказ';
         $notification_data = [
-            'body' => "Заказ напоставку № {$order?->number} от {$order?->order_date}",
+            'body' => "Заказ на поставку № {$order?->number} от {$order?->order_date}",
             'header' => $header,
             'notificationable_type' => Order::class,
             'notificationable_id' => $order->id,
@@ -51,7 +51,7 @@ class OrderObserver
         if ($order->wasChanged(['customer_status', 'provider_status'])) {
             $header = 'Новый статус';
             $notification_data = [
-                'body' => "Заказ напоставку № {$order?->number} от {$order?->order_date}",
+                'body' => "Заказ на поставку № {$order?->number} от {$order?->order_date}",
                 'header' => $header,
                 'notificationable_type' => Order::class,
                 'notificationable_id' => $order->id,
