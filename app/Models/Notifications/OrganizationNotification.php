@@ -4,6 +4,7 @@
 namespace App\Models\Notifications;
 
 
+use App\Interfaces\Syncable;
 use App\Models\References\ContrAgent;
 use App\Models\References\Organization;
 use App\Traits\UseNotification;
@@ -11,7 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-class OrganizationNotification extends Notification
+class OrganizationNotification extends Notification implements Syncable
 {
     use HasFactory, UseNotification;
 

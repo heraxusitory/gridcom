@@ -4,7 +4,10 @@
 namespace App\Services\OrganizationNotifications;
 
 
+use App\Events\NewStack;
 use App\Models\Notifications\OrganizationNotification;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -68,6 +71,11 @@ class UpdateOrganizationNotificationService implements IService
             $this->organization_notification->positions()
                 ->whereNotIn('id', $position_ids)
                 ->delete();
+
+            event(new NewStack($this->organization_notification,
+                    (new ProviderSyncStack())->setProvider($this->organization_notification->provider),
+                    (new MTOSyncStack()))
+            );
 
             return $this->organization_notification;
         });
