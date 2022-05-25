@@ -33,7 +33,7 @@ class OrganizationNotificationController extends Controller
             if ($this->user->isProvider()) {
                 $organization_notifications->where('provider_contr_agent_id', $this->user->contr_agent_id());
             }
-            $organization_notifications->paginate();
+            $organization_notifications = $organization_notifications->get();
             return response()->json($organization_notifications);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
