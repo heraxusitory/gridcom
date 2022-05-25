@@ -36,6 +36,10 @@ class OrganizationNotification extends Notification implements Syncable
         'organization_comment',
     ];
 
+    protected $with = [
+        'positions',
+    ];
+
     const ORGANIZATION_STATUS_NOT_AGREED = 'Не согласовано';
     const ORGANIZATION_STATUS_AGREED = 'Согласовано';
     const ORGANIZATION_STATUS_DRAFT = 'Черновик';
