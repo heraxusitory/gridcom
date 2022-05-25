@@ -7,6 +7,7 @@ use App\Models\References\CustomerObject;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
+use App\Traits\UseNotification;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Storage;
 
 class RequestAdditionObject extends Model
 {
-    use HasFactory, UsesNumberLKK;
+    use HasFactory, UsesNumberLKK, UseNotification;
 
     protected $table = 'request_addition_objects';
 

@@ -10,15 +10,21 @@ use App\Models\Notifications\ContractorNotification;
 use App\Models\Notifications\OrganizationNotification;
 use App\Models\Orders\Order;
 use App\Models\PaymentRegisters\PaymentRegister;
+use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Models\ProviderOrders\Corrections\RequirementCorrection;
 use App\Models\ProviderOrders\ProviderOrder;
+use App\Models\RequestAdditions\RequestAdditionNomenclature;
+use App\Models\RequestAdditions\RequestAdditionObject;
 use App\Observers\ConsignmentObserver;
 use App\Observers\ConsignmentRegisterObserver;
 use App\Observers\ContractorNotificationObserver;
 use App\Observers\OrderObserver;
 use App\Observers\OrganizationNotificationObserver;
 use App\Observers\PaymentRegisterObserver;
+use App\Observers\PriceNegotiationObserver;
 use App\Observers\ProviderOrderObserver;
+use App\Observers\RANomenclatureObserver;
+use App\Observers\RAObjectObserver;
 use App\Observers\RequirementCorrectionObserver;
 use App\Transformers\API\MTO\v1\RequirementCorrectionTransformer;
 use Faker\Provider\Payment;
@@ -49,13 +55,16 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-//        Order::observe(OrderObserver::class);
-//        Consignment::observe(ConsignmentObserver::class);
-//        ConsignmentRegister::observe(ConsignmentRegisterObserver::class);
-//        ContractorNotification::observe(ContractorNotificationObserver::class);
-//        OrganizationNotification::observe(OrganizationNotificationObserver::class);
-//        PaymentRegister::observe(PaymentRegisterObserver::class);
-//        ProviderOrder::observe(ProviderOrderObserver::class);
-//        RequirementCorrection::observe(RequirementCorrectionObserver::class);
+        Order::observe(OrderObserver::class);
+        Consignment::observe(ConsignmentObserver::class);
+        ConsignmentRegister::observe(ConsignmentRegisterObserver::class);
+        ContractorNotification::observe(ContractorNotificationObserver::class);
+        OrganizationNotification::observe(OrganizationNotificationObserver::class);
+        PaymentRegister::observe(PaymentRegisterObserver::class);
+        ProviderOrder::observe(ProviderOrderObserver::class);
+        RequirementCorrection::observe(RequirementCorrectionObserver::class);
+        PriceNegotiation::observe(PriceNegotiationObserver::class);
+        RequestAdditionNomenclature::observe(RANomenclatureObserver::class);
+        RequestAdditionObject::observe(RAObjectObserver::class);
     }
 }

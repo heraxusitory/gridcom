@@ -4,6 +4,7 @@ namespace App\Models\PriceNegotiations;
 
 use App\Models\Orders\Order;
 use App\Models\ProviderOrders\ProviderOrder;
+use App\Traits\UseNotification;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 
 class PriceNegotiation extends Model
 {
-    use HasFactory, UsesNumberLKK;
+    use HasFactory, UsesNumberLKK, UseNotification;
 
     protected $table = 'price_negotiations';
 
