@@ -52,6 +52,8 @@ class ConsignmentRegisterObserver
             $notification_data = [
                 'body' => "РТН № {$consignment_register?->number} от {$consignment_register?->date}",
                 'header' => $header,
+                'notificationable_type' => ConsignmentRegister::class,
+                'notificationable_id' => $consignment_register->id,
                 'config_data' => json_encode([
                     'entity' => 'consignment-register',
                     'ids' => [$consignment_register->id]
