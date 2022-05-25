@@ -18,7 +18,8 @@ class ContractorNotificationObserver
             'config_data' => json_encode([
                 'entity' => 'contractor_notification',
                 'ids' => [$contractor_notification->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 

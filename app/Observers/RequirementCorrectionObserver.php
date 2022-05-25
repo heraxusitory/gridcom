@@ -23,7 +23,8 @@ class RequirementCorrectionObserver
             'config_data' => json_encode([
                 'entity' => 'provider-order/requirement-corrections',
                 'ids' => [$provider_order->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
         if (Auth::guard('api')->check()) {
@@ -50,7 +51,8 @@ class RequirementCorrectionObserver
             'config_data' => json_encode([
                 'entity' => 'provider-order/requirement-corrections',
                 'ids' => [$provider_order->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
         if (Auth::guard('api')->check()) {

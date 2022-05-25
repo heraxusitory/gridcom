@@ -18,7 +18,8 @@ class RAObjectObserver
             'config_data' => json_encode([
                 'entity' => 'request-addition-object',
                 'ids' => [$ra_object->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 
@@ -50,7 +51,8 @@ class RAObjectObserver
             'config_data' => json_encode([
                 'entity' => 'request-addition-object',
                 'ids' => [$ra_object->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 

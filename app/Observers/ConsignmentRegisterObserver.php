@@ -18,7 +18,8 @@ class ConsignmentRegisterObserver
             'config_data' => json_encode([
                 'entity' => 'consignment-register',
                 'ids' => [$consignment_register->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 
@@ -57,7 +58,8 @@ class ConsignmentRegisterObserver
                 'config_data' => json_encode([
                     'entity' => 'consignment-register',
                     'ids' => [$consignment_register->id]
-                ])
+                ]),
+                'created_at' => now()
             ];
 
             if (Auth::guard('webapi')->check()) {

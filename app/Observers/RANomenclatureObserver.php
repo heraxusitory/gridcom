@@ -18,7 +18,8 @@ class RANomenclatureObserver
             'config_data' => json_encode([
                 'entity' => 'request-addition-nomenclature',
                 'ids' => [$ra_nomenclature->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 
@@ -50,7 +51,8 @@ class RANomenclatureObserver
             'config_data' => json_encode([
                 'entity' => 'request-addition-nomenclature',
                 'ids' => [$ra_nomenclature->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 

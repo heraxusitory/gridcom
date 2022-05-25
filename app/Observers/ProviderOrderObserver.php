@@ -18,7 +18,8 @@ class ProviderOrderObserver
             'config_data' => json_encode([
                 'entity' => 'provider-order',
                 'ids' => [$provider_order->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 
@@ -50,7 +51,8 @@ class ProviderOrderObserver
             'config_data' => json_encode([
                 'entity' => 'provider-order',
                 'ids' => [$provider_order->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 //            if (Auth::guard('webapi')->check()) {

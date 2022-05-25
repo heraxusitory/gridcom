@@ -19,7 +19,8 @@ class OrganizationNotificationObserver
             'config_data' => json_encode([
                 'entity' => 'organization_notification',
                 'ids' => [$organization_notification->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 
@@ -53,7 +54,8 @@ class OrganizationNotificationObserver
             'config_data' => json_encode([
                 'entity' => 'organization_notification',
                 'ids' => [$organization_notification->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 

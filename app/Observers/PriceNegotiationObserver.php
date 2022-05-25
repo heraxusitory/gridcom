@@ -18,7 +18,8 @@ class PriceNegotiationObserver
             'config_data' => json_encode([
                 'entity' => 'price-negotiation',
                 'ids' => [$price_negotiation->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 
@@ -61,7 +62,8 @@ class PriceNegotiationObserver
             'config_data' => json_encode([
                 'entity' => 'price-negotiation',
                 'ids' => [$price_negotiation->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 

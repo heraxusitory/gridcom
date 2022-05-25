@@ -24,7 +24,8 @@ class ConsignmentObserver
             'config_data' => json_encode([
                 'entity' => 'consignment',
                 'ids' => [$consignment->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 
