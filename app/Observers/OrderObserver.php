@@ -21,7 +21,8 @@ class OrderObserver
             'config_data' => json_encode([
                 'entity' => 'order',
                 'ids' => [$order->id]
-            ])
+            ]),
+            'created_at' => now(),
         ];
 
         if (Auth::guard('webapi')->check()) {
@@ -58,7 +59,8 @@ class OrderObserver
                 'config_data' => json_encode([
                     'entity' => 'order',
                     'ids' => [$order->id]
-                ])
+                ]),
+                'created_at' => now()
             ];
 
             if (Auth::guard('webapi')->check()) {

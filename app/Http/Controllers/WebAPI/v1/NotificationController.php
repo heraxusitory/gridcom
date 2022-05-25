@@ -21,7 +21,10 @@ class NotificationController extends Controller
     {
         $notifications = [];
         if ($this->user->hasCompany())
-            $notifications = Notification::query()->where('contr_agent_id', $this->user->contr_agent()->uuid)->get();
+            $notifications = Notification::query()
+                ->where('contr_agent_id', $this->user->contr_agent()->uuid)
+                ->orderByDesc('created_at')
+                ->get();
         return response()->json(['data' => $notifications]);
     }
 
