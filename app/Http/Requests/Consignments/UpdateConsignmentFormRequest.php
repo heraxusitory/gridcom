@@ -73,6 +73,7 @@ class UpdateConsignmentFormRequest extends FormRequest
             'positions.*' => 'required',
             'positions.*.order_id' => ['required', 'integer', 'exists:orders,id'],
             'positions.*.nomenclature_id' => ['required', 'integer', 'exists:nomenclature,id'/*, Rule::in($nomenclature_ids)*/],
+            'positions.*.price_without_vat' => 'required|numeric',
         ]);
 
         $validator->after(function ($validator) use ($data, $orders) {
@@ -90,7 +91,12 @@ class UpdateConsignmentFormRequest extends FormRequest
                     $validator->errors()->add('positions.' . $key . '.nomenclature_id', 'The positions.' . $key . '.nomenclature_id is invalid');
                     break;
                 }
-//                    new BadRequestException('The positions.' . $key . '.nomenclature_id is invalid', 422));
+                $price_without_vat_match = $orders->find($position['order_id'])->positions
+                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === $position['price_without_vat'];
+                if ($price_without_vat_match) {
+                    $validator->errors()->add('positions.' . $key . '.price_without_vat', 'The positions.' . $key . '.price_without_vat is invalid');
+                    break;
+                }
             }
 
         })->validate();

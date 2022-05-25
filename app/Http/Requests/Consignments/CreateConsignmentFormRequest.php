@@ -67,6 +67,7 @@ class CreateConsignmentFormRequest extends FormRequest
             'positions.*' => 'required',
             'positions.*.order_id' => ['required', 'integer', 'exists:orders,id'],
             'positions.*.nomenclature_id' => ['required', 'integer', 'exists:nomenclature,id'/*, Rule::in($nomenclature_ids)*/],
+            'positions.*.price_without_vat' => 'required|numeric',
         ]);
 
         $validator->after(function ($validator) use ($data, $orders) {
@@ -84,7 +85,12 @@ class CreateConsignmentFormRequest extends FormRequest
                     $validator->errors()->add('positions.' . $key . '.nomenclature_id', 'The positions.' . $key . '.nomenclature_id is invalid');
                     break;
                 }
-//                    new BadRequestException('The positions.' . $key . '.nomenclature_id is invalid', 422));
+                $price_without_vat_match = $orders->find($position['order_id'])->positions
+                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === $position['price_without_vat'];
+                if ($price_without_vat_match) {
+                    $validator->errors()->add('positions.' . $key . '.price_without_vat', 'The positions.' . $key . '.price_without_vat is invalid');
+                    break;
+                }
             }
 
         })->validate();
@@ -92,7 +98,6 @@ class CreateConsignmentFormRequest extends FormRequest
 
         return [//            'positions.*.unit_id' => 'required|integer|exists:nomenclature_units,id',
             'positions.*.count' => 'required|numeric',
-//            'positions.*.price_without_vat' => 'required|numeric',
             //TODO отрефакторить ставку НДС
             'positions.*.vat_rate' => ['required', Rule::in(array_keys(config('vat_rates')))],
             'positions.*.country' => ['required', 'string', Rule::in(array_keys(config('countries')))],

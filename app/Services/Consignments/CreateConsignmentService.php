@@ -63,7 +63,7 @@ class CreateConsignmentService implements IService
                     'order_id' => $position['order_id'],
                     'nomenclature_id' => $position['nomenclature_id'],
                     'count' => $position['count'],
-                    'price_without_vat' => $nomenclature->price,
+                    'price_without_vat' => $position['price_without_vat'],
                     'amount_without_vat' => $amount_without_vat,
                     'vat_rate' => $position['vat_rate'],
                     'amount_with_vat' => $amount_with_vat,
