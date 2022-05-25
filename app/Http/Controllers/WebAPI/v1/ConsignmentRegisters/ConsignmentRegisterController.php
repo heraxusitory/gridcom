@@ -83,15 +83,15 @@ class ConsignmentRegisterController extends Controller
 
         if ($data['customer_sub_object_id'] ?? null)
             $consignments = $consignments->where('customer_sub_object_id', $data['customer_sub_object_id']);
-        $consignments = $consignments->get();
+        $consignments = $consignments->with('positions')->get();
 
-        $consignments->map(function ($consignment) {
-            $nomenclatures = $consignment->positions->map(function ($position) {
-                return $position->nomenclature;
-            });
-            unset($consignment->positions);
-            return $consignment->nomenclatures = $nomenclatures->unique();
-        });
+//        $consignments->map(function ($consignment) {
+//            $nomenclatures = $consignment->positions->map(function ($position) {
+//                return $position->nomenclature;
+//            });
+//            unset($consignment->positions);
+//            return $consignment->nomenclatures = $nomenclatures->unique();
+//        });
         return response()->json(['data' => $consignments]);
     }
 

@@ -58,6 +58,7 @@ class UpdateConsignmentRegisterFormRequest extends FormRequest
             'positions.*' => 'required',
             'positions.*.consignment_id' => ['required', 'exists:consignments,id'],
             'positions.*.nomenclature_id' => ['required', 'integer', 'exists:nomenclature,id'],
+            'positions.*.price_without_vat' => 'required|numeric',
         ]);
 
         //todo
@@ -75,7 +76,6 @@ class UpdateConsignmentRegisterFormRequest extends FormRequest
             ->with('positions')
             ->get();
 
-        //TODO проверить еще раз работоспособность этой вещи, не уверен до конца что работает по замыслу
         $validator->after(function ($validator) use ($data, $consignments) {
             foreach ($data['positions'] as $key => $position) {
                 if (!in_array($position['consignment_id'], $consignments->pluck('id')->toArray())) {
@@ -87,6 +87,13 @@ class UpdateConsignmentRegisterFormRequest extends FormRequest
                 })->unique();
                 if (!in_array($position['nomenclature_id'], $nomenclature_ids->toArray())) {
                     $validator->errors()->add('positions.' . $key . '.nomenclature_id', 'The positions.' . $key . '.nomenclature_id is invalid');
+                    break;
+                }
+
+                $price_without_vat_match = $consignments->find($position['consignment_id'])->positions
+                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === $position['price_without_vat'];
+                if (!$price_without_vat_match) {
+                    $validator->errors()->add('positions.' . $key . '.price_without_vat', 'The positions.' . $key . '.price_without_vat is invalid');
                     break;
                 }
             }
@@ -103,7 +110,6 @@ class UpdateConsignmentRegisterFormRequest extends FormRequest
 
         return [
             'positions.*.count' => 'required|numeric',
-            'positions.*.price_without_vat' => 'required|numeric',
             'positions.*.amount_without_vat' => 'required|numeric',
             'positions.*.amount_with_vat' => 'required|numeric',
             //TODO отрефакторить ставку НДС
