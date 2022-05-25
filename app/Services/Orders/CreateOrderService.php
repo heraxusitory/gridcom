@@ -138,7 +138,7 @@ class CreateOrderService implements IService
                     'nomenclature_id' => $position['nomenclature_id'],
                     'unit_id' => $position['unit_id'],
                     'count' => $position['count'],
-                    'price_without_vat' => $nomenclature->price,
+                    'price_without_vat' => $position['price_without_vat'],
                     'amount_without_vat' => round($position['count'] * $nomenclature->price, 2),
                     'delivery_time' => $position['delivery_time'],
                     'delivery_address' => $position['delivery_address'],

@@ -60,7 +60,7 @@ class CreateFormRequest extends FormRequest
             'positions' => 'required_if:action,approve|array',
             'positions.*.nomenclature_id' => 'required|exists:nomenclature,id',
             'positions.*.count' => 'required|integer',
-//            'positions.*.price_without_vat' => 'required|numeric',
+            'positions.*.price_without_vat' => 'required|numeric',
             'positions.*.delivery_time' => 'required|date_format:Y-m-d',
             'positions.*.delivery_address' => 'required|string',
         ];
