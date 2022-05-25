@@ -12,9 +12,25 @@ use App\Transformers\API\MTO\v1\OrganizationNotificationTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class OrganizationNotificationController extends Controller
 {
+    public function sync(Request $request)
+    {
+        try {
+            $request->validate([
+                'id' => 'required|uuid',
+                'status' => ['required', Rule::in(OrganizationNotification::getOrganizationStatuses())]
+            ]);
+            OrganizationNotification::query()->where('uuid', $request->id)->update(['status', $request->status]);
+            return response()->json();
+        } catch (\Exception $e) {
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
+        }
+    }
+
     public function synchronize()
     {
         try {
@@ -29,18 +45,16 @@ class OrganizationNotificationController extends Controller
     }
 
 
-    public function putInQueue(Request $request)
+    public function removeFromStack(Request $request)
     {
         $request->validate([
-            'ids' => 'required|array',
-            'ids.*' => 'required|uuid',
+            'stack_ids' => 'required|array',
+            'stack_ids.*' => 'required|uuid',
         ]);
         try {
             return DB::transaction(function () use ($request) {
-                $count = OrganizationNotification::query()
-                    ->whereIn('uuid', $request->ids)
-                    ->update(['sync_required' => true]);
-                return response()->json('В очередь поставлено ' . $count . ' уведомлений филилалам');
+                $count = MTOSyncStack::destroy($request->stack_ids);
+                return response()->json('Из стека удалено ' . $count . ' уведомлений о поставке филиалов.');
             });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
