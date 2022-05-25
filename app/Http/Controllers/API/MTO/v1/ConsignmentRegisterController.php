@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\API\MTO\v1;
 
 
+use App\Events\NewStack;
 use App\Models\ConsignmentRegisters\ConsignmentRegister;
 use App\Models\Consignments\Consignment;
 use App\Models\References\ContrAgent;
@@ -12,7 +13,9 @@ use App\Models\References\CustomerSubObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\WorkAgreementDocument;
+use App\Models\SyncStacks\ContractorSyncStack;
 use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Serializers\CustomerSerializer;
 use App\Transformers\API\MTO\v1\ConsignmentRegisterTransformer;
 use App\Transformers\API\MTO\v1\ConsignmentTransformer;
@@ -92,6 +95,7 @@ class ConsignmentRegisterController
                         'uuid' => $item['work_agreement_id'],
                     ]);
 
+                    /** @var ConsignmentRegister $consignment_register */
                     $consignment_register = ConsignmentRegister::query()->updateOrCreate([
                         'uuid' => $item['id'],
                     ], [
@@ -135,6 +139,11 @@ class ConsignmentRegisterController
                         $position_ids[] = $position->id;
                     }
                     $consignment_register->positions()->whereNotIn('id', $position_ids)->delete();
+
+                    event(new NewStack($consignment_register,
+                            (new ContractorSyncStack())->setContractor($consignment_register->contractor),
+                            (new ProviderSyncStack())->setProvider($consignment_register->provider))
+                    );
                 });
             }
             return response()->json();
