@@ -35,7 +35,10 @@ class OrganizationNotificationPositionTransformer extends TransformerAbstract
         return [
             'position_id' => $position?->position_id,
             'order' => optional($position->order)->uuid,
-            'nomenclature_id' => optional($position->nomenclature)->uuid,
+            'nomenclature' => [
+                'name' => optional($position->nomenclature)->name,
+                'mnemocode' => optional($position->nomenclature)->mnemocode,
+            ],
             'count' => $position?->count,
             'vat_rate' => $position?->vat_rate,
         ];
