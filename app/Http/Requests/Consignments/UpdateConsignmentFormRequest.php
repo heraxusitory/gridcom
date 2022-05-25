@@ -93,7 +93,7 @@ class UpdateConsignmentFormRequest extends FormRequest
                 }
                 $price_without_vat_match = $orders->find($position['order_id'])->positions
                         ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === $position['price_without_vat'];
-                if ($price_without_vat_match) {
+                if (!$price_without_vat_match) {
                     $validator->errors()->add('positions.' . $key . '.price_without_vat', 'The positions.' . $key . '.price_without_vat is invalid');
                     break;
                 }
