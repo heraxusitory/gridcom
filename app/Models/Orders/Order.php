@@ -85,6 +85,7 @@ class Order extends Model implements Syncable
             self::CUSTOMER_STATUS_DRAFT,
             self::CUSTOMER_STATUS_UNDER_CONSIDERATION,
             self::CUSTOMER_STATUS_CANCELED,
+            self::CUSTOMER_STATUS_CLOSED,
         ];
     }
 
@@ -97,6 +98,7 @@ class Order extends Model implements Syncable
             self::PROVIDER_STATUS_DRAFT,
             self::PROVIDER_STATUS_UNDER_CONSIDERATION,
             self::PROVIDER_STATUS_CANCELED,
+            self::PROVIDER_STATUS_CLOSED,
         ];
     }
 
