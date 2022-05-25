@@ -53,6 +53,8 @@ class OrderObserver
             $notification_data = [
                 'body' => "Заказ напоставку № {$order?->number} от {$order?->order_date}",
                 'header' => $header,
+                'notificationable_type' => Order::class,
+                'notificationable_id' => $order->id,
                 'config_data' => json_encode([
                     'entity' => 'order',
                     'ids' => [$order->id]
