@@ -41,7 +41,7 @@ class CreateOrganizationNotificationService implements IService
                 'status' => $organization_status,
                 'organization_id' => $data['organization_id'],
                 'provider_contr_agent_id' => $data['provider_contr_agent_id'],
-                'contract_stage' => $data['contract_stage'],
+//                'contract_stage' => $data['contract_stage'],
                 'contract_number' => $data['contract_number'],
                 'contract_date' => $data['contract_date'],
 //                'provider_contract_id' => $data['provider_contract_id'],
