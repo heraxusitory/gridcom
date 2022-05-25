@@ -149,7 +149,7 @@ class OrganizationNotificationController extends Controller
             'provider_contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
             'contract_number' => 'required|string|max:255',
             'contract_date' => 'required|date_format:Y-m-d',
-            'contract_stage' => ['required'/*, Rule::in(ProviderOrder::STAGES())*/]
+//            'contract_stage' => ['required'/*, Rule::in(ProviderOrder::STAGES())*/]
         ]);
 
         $orders = ProviderOrder::query()
@@ -157,7 +157,7 @@ class OrganizationNotificationController extends Controller
             ->where('provider_contr_agent_id', $data['provider_contr_agent_id'])
             ->where('contract_number', $data['contract_number'])
             ->where('contract_date', $data['contract_date'])
-            ->where('contract_stage', $data['contract_stage'])
+//            ->where('contract_stage', $data['contract_stage'])
             ->with(['actual_positions.nomenclature'])
             ->get();
 
