@@ -49,13 +49,13 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Order::observe(OrderObserver::class);
-        Consignment::observe(ConsignmentObserver::class);
-        ConsignmentRegister::observe(ConsignmentRegisterObserver::class);
-        ContractorNotification::observe(ContractorNotificationObserver::class);
-        OrganizationNotification::observe(OrganizationNotificationObserver::class);
-        PaymentRegister::observe(PaymentRegisterObserver::class);
-        ProviderOrder::observe(ProviderOrderObserver::class);
-        RequirementCorrection::observe(RequirementCorrectionObserver::class);
+//        Order::observe(OrderObserver::class);
+//        Consignment::observe(ConsignmentObserver::class);
+//        ConsignmentRegister::observe(ConsignmentRegisterObserver::class);
+//        ContractorNotification::observe(ContractorNotificationObserver::class);
+//        OrganizationNotification::observe(OrganizationNotificationObserver::class);
+//        PaymentRegister::observe(PaymentRegisterObserver::class);
+//        ProviderOrder::observe(ProviderOrderObserver::class);
+//        RequirementCorrection::observe(RequirementCorrectionObserver::class);
     }
 }
