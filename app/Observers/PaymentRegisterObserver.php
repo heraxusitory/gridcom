@@ -52,6 +52,8 @@ class PaymentRegisterObserver
             $notification_data = [
                 'body' => "Реестр платежей № {$payment_register?->number} от {$payment_register?->date}",
                 'header' => $header,
+                'notificationable_type' => PaymentRegister::class,
+                'notificationable_id' => $payment_register->id,
                 'config_data' => json_encode([
                     'entity' => 'payment-register',
                     'ids' => [$payment_register->id]

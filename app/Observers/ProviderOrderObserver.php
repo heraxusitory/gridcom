@@ -45,6 +45,8 @@ class ProviderOrderObserver
         $notification_data = [
             'body' => "Заказ поставщику № {$provider_order?->number} от {$provider_order?->order_date}",
             'header' => $header,
+            'notificationable_type' => ProviderOrder::class,
+            'notificationable_id' => $provider_order->id,
             'config_data' => json_encode([
                 'entity' => 'provider-order',
                 'ids' => [$provider_order->id]
