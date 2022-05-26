@@ -16,6 +16,7 @@ class PriceNegotiationPosition extends Model
         'price_negotiation_id',
         'nomenclature_id',
         'new_price_without_vat',
+        'current_price_without_vat',
         'agreed_price',
     ];
 

@@ -47,6 +47,7 @@ class UpdatePriceNegotiationService implements IService
                 ], [
                     'position_id' => $position['position_id'] ?? Str::uuid(),
                     'nomenclature_id' => $position['nomenclature_id'],
+                    'current_price_without_vat' => $position['current_price_without_vat'],
                     'new_price_without_vat' => $position['new_price_without_vat'],
                 ]);
                 $position_ids[] = $position->id;

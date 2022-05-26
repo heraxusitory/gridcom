@@ -61,6 +61,7 @@ class UpdatePriceNegotiationFormRequest extends FormRequest
                     ->whereRelation('customer', 'sub_object_id', $data['sub_object_id'])
                     ->with(['positions.nomenclature', 'customer', 'contractor', 'provider']);
                 $order_ids = $order_query->pluck('id');
+                $orders = $order_query->get();
 
 
                 Validator::validate($data, [
@@ -69,7 +70,8 @@ class UpdatePriceNegotiationFormRequest extends FormRequest
                 $nomenclature_ids = $order_query->findOrFail($data['order_id'])->positions->map(function ($position) {
                     return $position->nomenclature->id;
                 })->unique();
-                return [
+
+                $validator = Validator::make($data, [
                     'responsible_full_name' => 'required|string|max:255',
                     'responsible_phone' => 'required|string|max:255',
                     'comment' => 'required|string',
@@ -77,6 +79,21 @@ class UpdatePriceNegotiationFormRequest extends FormRequest
                     'positions' => 'required|array',
                     'positions.*' => 'required',
                     'positions.*.nomenclature_id' => ['required', Rule::in($nomenclature_ids)],
+                    'positions.*.current_price_without_vat' => ['required', 'numeric']
+                ]);
+
+                $validator->after(function ($validator) use ($data, $orders) {
+                    foreach ($data['positions'] as $key => $position) {
+                        $current_price_without_vat_match = (float)$orders->find($position['order_id'])->positions
+                                ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === (float)$position['current_price_without_vat'];
+                        if (!$current_price_without_vat_match) {
+                            $validator->errors()->add('positions.' . $key . '.current_price_without_vat', 'The positions.' . $key . '.current_price_without_vat is invalid');
+                            break;
+                        }
+                    }
+                })->validate();
+
+                return [
                     'positions.*.new_price_without_vat' => 'required|numeric',
                 ];
             case PriceNegotiation::TYPE_CONTRACT_HOME_METHOD():
@@ -90,6 +107,7 @@ class UpdatePriceNegotiationFormRequest extends FormRequest
                     ->where('organization_id', $data['organization_id'])
                     ->with('actual_positions.nomenclature');
                 $order_ids = $order_query->pluck('id');
+                $orders = $order_query->get();
 
                 Validator::validate($data, [
                     'order_id' => ['required', Rule::in($order_ids)],
@@ -98,7 +116,8 @@ class UpdatePriceNegotiationFormRequest extends FormRequest
                 $nomenclature_ids = $order_query->findOrFail($data['order_id'])->actual_positions->map(function ($position) {
                     return $position->nomenclature->id;
                 })->unique();
-                return [
+
+                $validator = Validator::make($data, [
                     'responsible_full_name' => 'required|string|max:255',
                     'responsible_phone' => 'required|string|max:255',
                     'comment' => 'required|string',
@@ -106,6 +125,20 @@ class UpdatePriceNegotiationFormRequest extends FormRequest
                     'positions' => 'required|array',
                     'positions.*' => 'required',
                     'positions.*.nomenclature_id' => ['required', Rule::in($nomenclature_ids)],
+                    'positions.*.current_price_without_vat' => ['required', 'numeric'],
+                ]);
+                $validator->after(function ($validator) use ($data, $orders) {
+                    foreach ($data['positions'] as $key => $position) {
+                        $current_price_without_vat_match = (float)$orders->find($position['order_id'])->positions
+                                ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === (float)$position['current_price_without_vat'];
+                        if (!$current_price_without_vat_match) {
+                            $validator->errors()->add('positions.' . $key . '.current_price_without_vat', 'The positions.' . $key . '.current_price_without_vat is invalid');
+                            break;
+                        }
+                    }
+                })->validate();
+
+                return [
                     'positions.*.new_price_without_vat' => 'required|numeric',
                 ];
             default:
