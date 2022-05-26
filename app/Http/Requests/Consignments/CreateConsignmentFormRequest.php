@@ -87,9 +87,9 @@ class CreateConsignmentFormRequest extends FormRequest
                     break;
                 }
                 Log::debug('debug', [$orders->find($position['order_id'])->positions
-                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat]);
-                $price_without_vat_match = $orders->find($position['order_id'])->positions
-                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === $position['price_without_vat'];
+                    ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat]);
+                $price_without_vat_match = (float)$orders->find($position['order_id'])->positions
+                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === (float)$position['price_without_vat'];
                 if (!$price_without_vat_match) {
                     $validator->errors()->add('positions.' . $key . '.price_without_vat', 'The positions.' . $key . '.price_without_vat is invalid');
                     break;
