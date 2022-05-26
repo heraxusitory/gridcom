@@ -10,6 +10,7 @@ use App\Models\ProviderOrders\Corrections\RequirementCorrection;
 use App\Models\ProviderOrders\Positions\ActualProviderOrderPosition;
 use App\Models\ProviderOrders\Positions\BaseProviderOrderPosition;
 use App\Models\References\ContrAgent;
+use App\Models\References\Organization;
 use App\Traits\UseNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
@@ -86,6 +87,11 @@ class ProviderOrder extends Model implements Syncable
     public function provider()
     {
         return $this->hasOne(ContrAgent::class, 'id', 'provider_contr_agent_id');
+    }
+
+    public function organization()
+    {
+        return $this->hasOne(Organization::class, 'id', 'organization_id');
     }
 
     public function actual_positions()

@@ -23,8 +23,12 @@ class ProviderOrderTransformer extends TransformerAbstract
             'contract_number' => $order->contract_number,
             'contract_date' => $order->contract_date,
             'contract_stage' => $order->contract_stage,
-            'provider_contr_agent_id' => $order->provider_contr_agent_id,
-            'organization_id' => $order->organization_id,
+            'provider_contr_agent' => [
+                'name' => $order->provider?->name,
+            ],
+            'organization' => [
+                'name' => $order->organization?->name,
+            ],
             'responsible_full_name' => $order->responsible_full_name,
             'responsible_phone' => $order->responsible_phone,
             'organization_comment' => $order->organization_comment,
