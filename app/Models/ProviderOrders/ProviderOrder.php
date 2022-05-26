@@ -4,6 +4,7 @@
 namespace App\Models\ProviderOrders;
 
 
+use App\Interfaces\Syncable;
 use App\Models\ProviderOrders\Corrections\OrderCorrection;
 use App\Models\ProviderOrders\Corrections\RequirementCorrection;
 use App\Models\ProviderOrders\Positions\ActualProviderOrderPosition;
@@ -13,7 +14,7 @@ use App\Traits\UseNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
-class ProviderOrder extends Model
+class ProviderOrder extends Model implements Syncable
 {
     use UseNotification;
 
