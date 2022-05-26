@@ -26,7 +26,7 @@ class OrganizationNotificationController extends Controller
         ]);
         try {
             foreach ($request['organization_notifications'] as $notification) {
-                OrganizationNotification::query()->where('uuid', $notification['id'])->update(['status', $notification['status']]);
+                OrganizationNotification::query()->where('uuid', $notification['id'])->update(['status' => $notification['status']]);
             }
             return response()->json();
         } catch (\Exception $e) {
