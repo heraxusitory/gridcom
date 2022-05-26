@@ -11,7 +11,7 @@ class RequirementCorrectionObserver
     public function created(RequirementCorrection $requirement_correction)
     {
         $provider_order = $requirement_correction->provider_order;
-        if (!is_null($provider_order))
+        if (is_null($provider_order?->provider?->uuid))
             return;
 
         $header = 'Изменение потребности';
@@ -39,7 +39,7 @@ class RequirementCorrectionObserver
     public function updated(RequirementCorrection $requirement_correction)
     {
         $provider_order = $requirement_correction->provider_order;
-        if (!is_null($provider_order))
+        if (is_null($provider_order?->provider?->uuid))
             return;
 
         $header = 'Изменение потребности';
