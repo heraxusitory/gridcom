@@ -39,6 +39,7 @@ class OrganizationNotificationPositionTransformer extends TransformerAbstract
                 'name' => optional($position->nomenclature)->name,
                 'mnemocode' => optional($position->nomenclature)->mnemocode,
             ],
+            'price_without_vat' => $position->price_without_vat,
             'count' => $position?->count,
             'vat_rate' => $position?->vat_rate,
         ];
