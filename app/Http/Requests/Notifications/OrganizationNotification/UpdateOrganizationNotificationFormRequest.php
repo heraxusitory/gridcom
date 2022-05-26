@@ -83,6 +83,16 @@ class UpdateOrganizationNotificationFormRequest extends FormRequest
             Validator::validate($data, [
                 'positions.' . $key . '.nomenclature_id' => ['required', 'integer', Rule::in($nomenclature_ids)],
             ]);
+
+            Validator::make($data, [
+                'positions.' . $key . '.price_without_vat' => ['required', 'numeric'],
+            ])->after(function ($validator) use ($position, $orders, $key) {
+                $price_without_vat_match = $orders->find($position['order_id'])->actual_positions
+                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === $position['price_without_vat'];
+                if (!$price_without_vat_match) {
+                    $validator->errors()->add('positions.' . $key . '.price_without_vat', 'The positions.' . $key . '.price_without_vat is invalid');
+                }
+            })->validate();
         }
 
         return [

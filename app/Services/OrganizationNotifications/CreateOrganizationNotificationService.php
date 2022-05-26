@@ -62,6 +62,7 @@ class CreateOrganizationNotificationService implements IService
                     'position_id' => Str::uuid(),
                     'order_id' => $position['order_id'],
                     'nomenclature_id' => $position['nomenclature_id'],
+                    'price_without_vat' => $position['price_without_vat'],
                     'count' => $position['count'],
                     'vat_rate' => $position['vat_rate'],
                 ]);
