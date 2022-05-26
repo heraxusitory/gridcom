@@ -28,6 +28,7 @@ class OrderCorrectionController extends Controller
             'order_corrections.*.positions.*.position_id' => 'required|uuid',
             'order_corrections.*.positions.*.nomenclature_id' => 'required|uuid',
             'order_corrections.*.positions.*.count' => 'nullable|numeric',
+            'order_corrections.*.positions.*.price_without_vat' => ['nullable', 'numeric'],
             'order_corrections.*.positions.*.amount_without_vat' => 'nullable|numeric',
             'order_corrections.*.positions.*.vat_rate' => ['nullable', 'numeric', Rule::in(array_keys(config('vat_rates')))],
             'order_corrections.*.positions.*.amount_with_vat' => 'nullable|numeric',
@@ -64,6 +65,7 @@ class OrderCorrectionController extends Controller
                             'position_id' => $position['position_id'],
                         ], [
                             'nomenclature_id' => $nomenclature->id,
+                            'price_without_vat' => $position['price_without_vat'],
                             'amount_without_vat' => $position['amount_without_vat'] ?? null,
                             'amount_with_vat' => $position['amount_with_vat'] ?? null,
                             'vat_rate' => $position['vat_rate'] ?? null,
