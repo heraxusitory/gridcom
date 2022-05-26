@@ -18,11 +18,11 @@ class OrganizationNotificationController extends Controller
 {
     public function sync(Request $request)
     {
+        $request->validate([
+            'id' => 'required|uuid',
+            'status' => ['required', Rule::in(OrganizationNotification::getOrganizationStatuses())]
+        ]);
         try {
-            $request->validate([
-                'id' => 'required|uuid',
-                'status' => ['required', Rule::in(OrganizationNotification::getOrganizationStatuses())]
-            ]);
             OrganizationNotification::query()->where('uuid', $request->id)->update(['status', $request->status]);
             return response()->json();
         } catch (\Exception $e) {
