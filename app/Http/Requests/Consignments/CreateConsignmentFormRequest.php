@@ -7,6 +7,7 @@ namespace App\Http\Requests\Consignments;
 use App\Models\Consignments\Consignment;
 use App\Models\Orders\Order;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\RequiredIf;
@@ -85,6 +86,8 @@ class CreateConsignmentFormRequest extends FormRequest
                     $validator->errors()->add('positions.' . $key . '.nomenclature_id', 'The positions.' . $key . '.nomenclature_id is invalid');
                     break;
                 }
+                Log::debug('debug', [$orders->find($position['order_id'])->positions
+                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === $position['price_without_vat']]);
                 $price_without_vat_match = $orders->find($position['order_id'])->positions
                         ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === $position['price_without_vat'];
                 if (!$price_without_vat_match) {
