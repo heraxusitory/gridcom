@@ -36,6 +36,7 @@ class OrganizationNotificationPositionTransformer extends TransformerAbstract
             'position_id' => $position?->position_id,
             'order' => optional($position->order)->uuid,
             'nomenclature_id' => optional($position->nomenclature)->uuid,
+            'price_without_vat' => $position->price_without_vat,
             'count' => $position?->count,
             'vat_rate' => $position?->vat_rate,
         ];
