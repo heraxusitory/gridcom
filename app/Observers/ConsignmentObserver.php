@@ -31,6 +31,10 @@ class ConsignmentObserver
 
         if (Auth::guard('webapi')->check()) {
             $user = Auth::guard('webapi')->user();
+            $user_exists = $user->isProvider() ? $consignment->contractor?->uuid : ($user->isContractor() ? $consignment->provider?->uuid : null);
+            if (!$user_exists)
+                return;
+
             $consignment->notifications()->insertOrIgnore(
                 array_merge($notification_data, [
                     'contr_agent_id' => $user->isProvider() ? $consignment->contractor?->uuid : ($user->isContractor() ? $consignment->provider?->uuid : null),
@@ -38,14 +42,18 @@ class ConsignmentObserver
         }
 
         if (Auth::guard('api')->check()) {
-            $consignment->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $consignment->provider?->uuid,
-                ]));
-            $consignment->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $consignment->contractor?->uuid,
-                ]));
+            if ($consignment->provider?->uuid) {
+                $consignment->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $consignment->provider?->uuid,
+                    ]));
+            }
+            if ($consignment->contractor?->uuid) {
+                $consignment->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $consignment->contractor?->uuid,
+                    ]));
+            }
         }
     }
 

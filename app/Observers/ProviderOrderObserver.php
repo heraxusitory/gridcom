@@ -32,10 +32,12 @@ class ProviderOrderObserver
 //        }
 
         if (Auth::guard('api')->check()) {
-            $provider_order->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $provider_order->provider?->uuid,
-                ]));
+            if ($provider_order->provider?->uuid) {
+                $provider_order->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $provider_order->provider?->uuid,
+                    ]));
+            }
         }
     }
 
@@ -64,10 +66,12 @@ class ProviderOrderObserver
 //            }
 
         if (Auth::guard('api')->check()) {
-            $provider_order->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $provider_order->provider?->uuid,
-                ]));
+            if ($provider_order->provider?->uuid) {
+                $provider_order->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $provider_order->provider?->uuid,
+                    ]));
+            }
         }
 //        }
     }

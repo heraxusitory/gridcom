@@ -24,6 +24,9 @@ class PaymentRegisterObserver
 
         if (Auth::guard('webapi')->check()) {
             $user = Auth::guard('webapi')->user();
+            $user_exists = $user->isProvider() ? $payment_register->contractor?->uuid : ($user->isContractor() ? $payment_register->provider?->uuid : null);
+            if (!$user_exists)
+                return;
             $payment_register->notifications()->insertOrIgnore(
                 array_merge($notification_data, [
                     'contr_agent_id' => $user->isProvider() ? $payment_register->contractor?->uuid : ($user->isContractor() ? $payment_register->provider?->uuid : null),
@@ -31,14 +34,18 @@ class PaymentRegisterObserver
         }
 
         if (Auth::guard('api')->check()) {
-            $payment_register->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $payment_register->provider?->uuid,
-                ]));
-            $payment_register->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $payment_register->contractor?->uuid,
-                ]));
+            if ($payment_register->provider?->uuid) {
+                $payment_register->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $payment_register->provider?->uuid,
+                    ]));
+            }
+            if ($payment_register->contractor?->uuid) {
+                $payment_register->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $payment_register->contractor?->uuid,
+                    ]));
+            }
         }
     }
 
@@ -63,6 +70,10 @@ class PaymentRegisterObserver
 
             if (Auth::guard('webapi')->check()) {
                 $user = Auth::guard('webapi')->user();
+                $user_exists = $user->isProvider() ? $payment_register->contractor?->uuid : ($user->isContractor() ? $payment_register->provider?->uuid : null);
+                if (!$user_exists)
+                    return;
+
                 $payment_register->notifications()->insertOrIgnore(
                     array_merge($notification_data, [
                         'contr_agent_id' => $user->isProvider() ? $payment_register->contractor?->uuid : ($user->isContractor() ? $payment_register->provider?->uuid : null),
@@ -70,14 +81,18 @@ class PaymentRegisterObserver
             }
 
             if (Auth::guard('api')->check()) {
-                $payment_register->notifications()->insertOrIgnore(
-                    array_merge($notification_data, [
-                        'contr_agent_id' => $payment_register->provider?->uuid,
-                    ]));
-                $payment_register->notifications()->insertOrIgnore(
-                    array_merge($notification_data, [
-                        'contr_agent_id' => $payment_register->contractor?->uuid,
-                    ]));
+                if ($payment_register->provider?->uuid) {
+                    $payment_register->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $payment_register->provider?->uuid,
+                        ]));
+                }
+                if ($payment_register->contractor?->uuid) {
+                    $payment_register->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $payment_register->contractor?->uuid,
+                        ]));
+                }
             }
         }
     }

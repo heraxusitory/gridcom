@@ -25,6 +25,10 @@ class ConsignmentRegisterObserver
 
         if (Auth::guard('webapi')->check()) {
             $user = Auth::guard('webapi')->user();
+            $user_exists = $user->isProvider() ? $consignment_register->contractor?->uuid : ($user->isContractor() ? $consignment_register->provider?->uuid : null);
+            if (!$user_exists)
+                return;
+
             $consignment_register->notifications()->insertOrIgnore(
                 array_merge($notification_data, [
                     'contr_agent_id' => $user->isProvider() ? $consignment_register->contractor?->uuid : ($user->isContractor() ? $consignment_register->provider?->uuid : null),
@@ -32,14 +36,18 @@ class ConsignmentRegisterObserver
         }
 
         if (Auth::guard('api')->check()) {
-            $consignment_register->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $consignment_register->provider?->uuid,
-                ]));
-            $consignment_register->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $consignment_register->contractor?->uuid,
-                ]));
+            if ($consignment_register->provider?->uuid) {
+                $consignment_register->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $consignment_register->provider?->uuid,
+                    ]));
+            }
+            if ($consignment_register->contractor?->uuid) {
+                $consignment_register->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $consignment_register->contractor?->uuid,
+                    ]));
+            }
         }
     }
 
@@ -64,6 +72,10 @@ class ConsignmentRegisterObserver
 
             if (Auth::guard('webapi')->check()) {
                 $user = Auth::guard('webapi')->user();
+                $user_exists = $user->isProvider() ? $consignment_register->contractor?->uuid : ($user->isContractor() ? $consignment_register->provider?->uuid : null);
+                if (!$user_exists)
+                    return;
+
                 $consignment_register->notifications()->insertOrIgnore(
                     array_merge($notification_data, [
                         'contr_agent_id' => $user->isProvider() ? $consignment_register->contractor?->uuid : ($user->isContractor() ? $consignment_register->provider?->uuid : null),
@@ -71,14 +83,18 @@ class ConsignmentRegisterObserver
             }
 
             if (Auth::guard('api')->check()) {
-                $consignment_register->notifications()->insertOrIgnore(
-                    array_merge($notification_data, [
-                        'contr_agent_id' => $consignment_register->provider?->uuid,
-                    ]));
-                $consignment_register->notifications()->insertOrIgnore(
-                    array_merge($notification_data, [
-                        'contr_agent_id' => $consignment_register->contractor?->uuid,
-                    ]));
+                if ($consignment_register->provider?->uuid) {
+                    $consignment_register->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $consignment_register->provider?->uuid,
+                        ]));
+                }
+                if ($consignment_register->contractor?->uuid) {
+                    $consignment_register->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $consignment_register->contractor?->uuid,
+                        ]));
+                }
             }
         }
     }

@@ -26,17 +26,21 @@ class RANomenclatureObserver
         if (Auth::guard('webapi')->check()) {
             $user = Auth::guard('webapi')->user();
 
-            $ra_nomenclature->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $ra_nomenclature->contr_agent?->uuid,
-                ]));
+            if ($ra_nomenclature->contr_agent?->uuid) {
+                $ra_nomenclature->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $ra_nomenclature->contr_agent?->uuid,
+                    ]));
+            }
         }
 
         if (Auth::guard('api')->check()) {
-            $ra_nomenclature->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $ra_nomenclature->contr_agent?->uuid,
-                ]));
+            if ($ra_nomenclature->contr_agent?->uuid) {
+                $ra_nomenclature->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $ra_nomenclature->contr_agent?->uuid,
+                    ]));
+            }
         }
     }
 
@@ -59,17 +63,21 @@ class RANomenclatureObserver
         if (Auth::guard('webapi')->check()) {
             $user = Auth::guard('webapi')->user();
 
-            $ra_nomenclature->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $ra_nomenclature->contr_agent?->uuid,
-                ]));
+            if ($ra_nomenclature->contr_agent?->uuid) {
+                $ra_nomenclature->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $ra_nomenclature->contr_agent?->uuid,
+                    ]));
+            }
         }
 
         if (Auth::guard('api')->check()) {
-            $ra_nomenclature->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $ra_nomenclature->contr_agent?->uuid,
-                ]));
+            if ($ra_nomenclature->contr_agent?->uuid) {
+                $ra_nomenclature->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $ra_nomenclature->contr_agent?->uuid,
+                    ]));
+            }
         }
     }
 }

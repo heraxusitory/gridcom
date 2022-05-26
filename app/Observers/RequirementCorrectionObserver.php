@@ -28,11 +28,12 @@ class RequirementCorrectionObserver
         ];
 
         if (Auth::guard('api')->check()) {
-            if ($provider_order->notifications()->where(['header' => $header])->doesntExist())
+            if ($provider_order->notifications()->where(['header' => $header])->doesntExist() && $provider_order->provider?->uuid) {
                 $provider_order->notifications()->insertOrIgnore(
                     array_merge($notification_data, [
                         'contr_agent_id' => $provider_order->provider?->uuid,
                     ]));
+            }
         }
     }
 
@@ -56,7 +57,7 @@ class RequirementCorrectionObserver
         ];
 
         if (Auth::guard('api')->check()) {
-            if ($provider_order->notifications()->where(['header' => $header])->doesntExist())
+            if ($provider_order->notifications()->where(['header' => $header])->doesntExist() && $provider_order->provider?->uuid)
                 $provider_order->notifications()->insertOrIgnore(
                     array_merge($notification_data, [
                         'contr_agent_id' => $provider_order->provider?->uuid,

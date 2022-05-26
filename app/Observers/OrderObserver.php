@@ -26,6 +26,10 @@ class OrderObserver
         ];
 
         if (Auth::guard('webapi')->check()) {
+            $contr_agent_id_exists = $order->provider?->contr_agent?->uuid;
+            if (!$contr_agent_id_exists)
+                return;
+
             $order->notifications()->insertOrIgnore(
                 array_merge($notification_data, [
                     'contr_agent_id' => $order->provider?->contr_agent?->uuid,
@@ -33,14 +37,18 @@ class OrderObserver
         }
 
         if (Auth::guard('api')->check()) {
-            $order->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $order->provider?->contr_agent?->uuid,
-                ]));
-            $order->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $order->contractor?->contr_agent?->uuid,
-                ]));
+            if ($order->provider?->contr_agent?->uuid) {
+                $order->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $order->provider?->contr_agent?->uuid,
+                    ]));
+            }
+            if ($order->contractor?->contr_agent?->uuid) {
+                $order->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $order->contractor?->contr_agent?->uuid,
+                    ]));
+            }
         }
     }
 
@@ -64,21 +72,27 @@ class OrderObserver
             ];
 
             if (Auth::guard('webapi')->check()) {
-                $order->notifications()->insertOrIgnore(
-                    array_merge($notification_data, [
-                        'contr_agent_id' => $order->provider?->contr_agent?->uuid,
-                    ]));
+                if ($order->provider?->contr_agent?->uuid) {
+                    $order->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $order->provider?->contr_agent?->uuid,
+                        ]));
+                }
             }
 
             if (Auth::guard('api')->check()) {
-                $order->notifications()->insertOrIgnore(
-                    array_merge($notification_data, [
-                        'contr_agent_id' => $order->provider?->contr_agent?->uuid,
-                    ]));
-                $order->notifications()->insertOrIgnore(
-                    array_merge($notification_data, [
-                        'contr_agent_id' => $order->contractor?->contr_agent?->uuid,
-                    ]));
+                if ($order->provider?->contr_agent?->uuid) {
+                    $order->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $order->provider?->contr_agent?->uuid,
+                        ]));
+                }
+                if ($order->contractor?->contr_agent?->uuid) {
+                    $order->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $order->contractor?->contr_agent?->uuid,
+                        ]));
+                }
             }
         }
     }

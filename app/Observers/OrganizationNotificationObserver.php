@@ -26,18 +26,22 @@ class OrganizationNotificationObserver
 
         if (Auth::guard('webapi')->check()) {
             $user = Auth::guard('webapi')->user();
-            $organization_notification->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $user->isProvider() ? $organization_notification->provider?->uuid : null,
-                ]));
+            if ($user->isProvider() ? $organization_notification->provider?->uuid : null) {
+                $organization_notification->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $user->isProvider() ? $organization_notification->provider?->uuid : null,
+                    ]));
+            }
         }
 
         if (Auth::guard('api')->check()) {
             $user = Auth::guard('api')->user();
-            $organization_notification->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $user->isProvider() ? $organization_notification->provider?->uuid : null,
-                ]));
+            if ($user->isProvider() ? $organization_notification->provider?->uuid : null) {
+                $organization_notification->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $user->isProvider() ? $organization_notification->provider?->uuid : null,
+                    ]));
+            }
         }
     }
 
@@ -61,18 +65,22 @@ class OrganizationNotificationObserver
 
         if (Auth::guard('webapi')->check()) {
             $user = Auth::guard('webapi')->user();
-            $organization_notification->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $user->isProvider() ? $organization_notification->provider?->uuid : null,
-                ]));
+            if ($user->isProvider() ? $organization_notification->provider?->uuid : null) {
+                $organization_notification->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $user->isProvider() ? $organization_notification->provider?->uuid : null,
+                    ]));
+            }
         }
 
         if (Auth::guard('api')->check()) {
             $user = Auth::guard('api')->user();
-            $organization_notification->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $user->isProvider() ? $organization_notification->provider?->uuid : null,
-                ]));
+            if ($user->isProvider() ? $organization_notification->provider?->uuid : null) {
+                $organization_notification->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $user->isProvider() ? $organization_notification->provider?->uuid : null,
+                    ]));
+            }
         }
     }
 

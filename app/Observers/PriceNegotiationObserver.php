@@ -26,28 +26,37 @@ class PriceNegotiationObserver
         if (Auth::guard('webapi')->check()) {
             $user = Auth::guard('webapi')->user();
             if ($price_negotiation->type === PriceNegotiation::TYPE_CONTRACT_WORK()) {
+                $user_exists = $user->isProvider() ? $price_negotiation->contractor?->uuid : ($user->isContractor() ? $price_negotiation->provider?->uuid : null);
+                if (!$user_exists)
+                    return;
                 $price_negotiation->notifications()->insertOrIgnore(
                     array_merge($notification_data, [
                         'contr_agent_id' => $user->isProvider() ? $price_negotiation->contractor?->uuid : ($user->isContractor() ? $price_negotiation->provider?->uuid : null),
                     ]));
             }
             if ($price_negotiation->type === PriceNegotiation::TYPE_CONTRACT_HOME_METHOD()) {
+                if ($price_negotiation->provider?->uuid) {
+                    $price_negotiation->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $price_negotiation->provider?->uuid,
+                        ]));
+                }
+            }
+        }
+
+        if (Auth::guard('api')->check()) {
+            if ($price_negotiation->provider?->uuid) {
                 $price_negotiation->notifications()->insertOrIgnore(
                     array_merge($notification_data, [
                         'contr_agent_id' => $price_negotiation->provider?->uuid,
                     ]));
             }
-        }
-
-        if (Auth::guard('api')->check()) {
-            $price_negotiation->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $price_negotiation->provider?->uuid,
-                ]));
-            $price_negotiation->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $price_negotiation->contractor?->uuid,
-                ]));
+            if ($price_negotiation->contractor?->uuid) {
+                $price_negotiation->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $price_negotiation->contractor?->uuid,
+                    ]));
+            }
         }
     }
 
@@ -70,28 +79,38 @@ class PriceNegotiationObserver
         if (Auth::guard('webapi')->check()) {
             $user = Auth::guard('webapi')->user();
             if ($price_negotiation->type === PriceNegotiation::TYPE_CONTRACT_WORK()) {
+                $user_exists = $user->isProvider() ? $price_negotiation->contractor?->uuid : ($user->isContractor() ? $price_negotiation->provider?->uuid : null);
+                if (!$user_exists)
+                    return;
+
                 $price_negotiation->notifications()->insertOrIgnore(
                     array_merge($notification_data, [
                         'contr_agent_id' => $user->isProvider() ? $price_negotiation->contractor?->uuid : ($user->isContractor() ? $price_negotiation->provider?->uuid : null),
                     ]));
             }
             if ($price_negotiation->type === PriceNegotiation::TYPE_CONTRACT_HOME_METHOD()) {
+                if ($price_negotiation->provider?->uuid) {
+                    $price_negotiation->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $price_negotiation->provider?->uuid,
+                        ]));
+                }
+            }
+        }
+
+        if (Auth::guard('api')->check()) {
+            if ($price_negotiation->provider?->uuid) {
                 $price_negotiation->notifications()->insertOrIgnore(
                     array_merge($notification_data, [
                         'contr_agent_id' => $price_negotiation->provider?->uuid,
                     ]));
             }
-        }
-
-        if (Auth::guard('api')->check()) {
-            $price_negotiation->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $price_negotiation->provider?->uuid,
-                ]));
-            $price_negotiation->notifications()->insertOrIgnore(
-                array_merge($notification_data, [
-                    'contr_agent_id' => $price_negotiation->contractor?->uuid,
-                ]));
+            if ($price_negotiation->contractor?->uuid) {
+                $price_negotiation->notifications()->insertOrIgnore(
+                    array_merge($notification_data, [
+                        'contr_agent_id' => $price_negotiation->contractor?->uuid,
+                    ]));
+            }
         }
     }
 }
