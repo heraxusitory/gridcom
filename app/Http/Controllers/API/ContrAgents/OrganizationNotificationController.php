@@ -22,35 +22,35 @@ class OrganizationNotificationController extends Controller
 {
     public function sync(Request $request)
     {
-        try {
-            $user = Auth::guard('api')->user();
-            $request->validate([
-                'organization_notifications' => 'required|array',
-                'organization_notifications.*.id' => 'required|uuid',
-                'organization_notifications.*.date' => 'required|date_format:Y-m-d',
+        $user = Auth::guard('api')->user();
+        $request->validate([
+            'organization_notifications' => 'required|array',
+            'organization_notifications.*.id' => 'required|uuid',
+            'organization_notifications.*.date' => 'required|date_format:Y-m-d',
 //                'organization_notifications.*.status' => 'required|date_format:Y-m-d',
 //                'organization_notifications.*.contract_stage' => 'nullable|string|max:255',
-                'organization_notifications.*.organization.name' => 'required|string|max:255',
-                'organization_notifications.*.provider_contr_agent.name' => 'required|string|max:255',
-                'organization_notifications.*.contract_number' => 'required|string|max:255',
-                'organization_notifications.*.contract_date' => 'required|string|max:255',
-                'organization_notifications.*.date_fact_delivery' => 'nullable|string|max:255',
-                'organization_notifications.*.delivery_address' => 'nullable|string|max:255',
-                'organization_notifications.*.car_info' => 'nullable|string|max:255',
-                'organization_notifications.*.driver_phone' => 'nullable|string|max:255',
-                'organization_notifications.*.responsible_full_name' => 'nullable|string|max:255',
-                'organization_notifications.*.responsible_phone' => 'nullable|string|max:255',
+            'organization_notifications.*.organization.name' => 'required|string|max:255',
+            'organization_notifications.*.provider_contr_agent.name' => 'required|string|max:255',
+            'organization_notifications.*.contract_number' => 'required|string|max:255',
+            'organization_notifications.*.contract_date' => 'required|string|max:255',
+            'organization_notifications.*.date_fact_delivery' => 'nullable|string|max:255',
+            'organization_notifications.*.delivery_address' => 'nullable|string|max:255',
+            'organization_notifications.*.car_info' => 'nullable|string|max:255',
+            'organization_notifications.*.driver_phone' => 'nullable|string|max:255',
+            'organization_notifications.*.responsible_full_name' => 'nullable|string|max:255',
+            'organization_notifications.*.responsible_phone' => 'nullable|string|max:255',
 
-                'organization_notifications.*.positions' => 'required|array',
-                'organization_notifications.*.positions.*.position_id' => 'required|uuid',
-                'organization_notifications.*.positions.*.order_id' => 'required|uuid|exists:provider_orders,uuid',
-                'organization_notifications.*.positions.*.price_without_vat' => 'required|numeric',
-                'organization_notifications.*.positions.*.nomenclature.name' => 'required|string|max:255',
-                'organization_notifications.*.positions.*.nomenclature.mnemocode' => 'required|string|max:255',
-                'organization_notifications.*.positions.*.nomenclature.count' => 'required|numeric',
-                'organization_notifications.*.positions.*.vat_rate' => ['required', 'numeric', Rule::in(array_keys(config('vat_rates')))],
-            ]);
+            'organization_notifications.*.positions' => 'required|array',
+            'organization_notifications.*.positions.*.position_id' => 'required|uuid',
+            'organization_notifications.*.positions.*.order_id' => 'required|uuid|exists:provider_orders,uuid',
+            'organization_notifications.*.positions.*.price_without_vat' => 'required|numeric',
+            'organization_notifications.*.positions.*.nomenclature.name' => 'required|string|max:255',
+            'organization_notifications.*.positions.*.nomenclature.mnemocode' => 'required|string|max:255',
+            'organization_notifications.*.positions.*.nomenclature.count' => 'required|numeric',
+            'organization_notifications.*.positions.*.vat_rate' => ['required', 'numeric', Rule::in(array_keys(config('vat_rates')))],
+        ]);
 
+        try {
             $data = $request->all()['organization_notifications'];
             (new CreateOrUpdateOrganizationNotificationService($data, $user))->run();
             return response()->json();
