@@ -45,6 +45,8 @@ class CreateConsignmentFormRequest extends FormRequest
 //            ->with(['positions.nomenclature'])
 //            ->findOrFail($order_id);
         $orders_query = Order::query()
+            ->where(['customer_status', '<>', Order::CUSTOMER_STATUS_DRAFT])
+            ->where(['provider_status', '<>', Order::PROVIDER_STATUS_DRAFT])
             ->whereRelation('customer', 'organization_id', $data['organization_id'])
             ->whereRelation('customer', 'object_id', $data['customer_object_id'])
             ->whereRelation('customer', 'work_agreement_id', $data['work_agreement_id'])
