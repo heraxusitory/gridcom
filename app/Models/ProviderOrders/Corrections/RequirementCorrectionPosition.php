@@ -18,6 +18,7 @@ class RequirementCorrectionPosition extends Model
         'status',
         'nomenclature_id',
         'count',
+        'price_without_vat',
         'amount_without_vat',
         'vat_rate',
         'amount_with_vat',
