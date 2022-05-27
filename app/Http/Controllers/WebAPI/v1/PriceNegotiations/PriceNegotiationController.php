@@ -128,19 +128,20 @@ class PriceNegotiationController extends Controller
 
     public function index(Request $request)
     {
+        $user = auth('webapi')->user();
         try {
             $price_negotiations = PriceNegotiation::query()->with(['positions']);
 
-            if ($this->user->isProvider()) {
-                $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_HOME_METHOD())->get()->map(function ($negotiation) {
-                    $negotiation->order = $negotiation->order()->where('provider_contr_agent_id', $this->user->contr_agent_id())->first();
+            if ($user->isProvider()) {
+                $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_HOME_METHOD())->get()->map(function ($negotiation) use ($user) {
+                    $negotiation->order = $negotiation->order()->where('provider_contr_agent_id', $user->contr_agent_id())->first();
                     return $negotiation;
                 })->filter(function ($negotiation) {
                     return $negotiation->order;
                 });
-            } elseif ($this->user->isContractor()) {
-                $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_WORK())->get()->map(function ($negotiation) {
-                    $negotiation->order = $negotiation->order()->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id())->first();
+            } elseif ($user->isContractor()) {
+                $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_WORK())->get()->map(function ($negotiation) use ($user) {
+                    $negotiation->order = $negotiation->order()->whereRelation('contractor', 'contr_agent_id', $user->contr_agent_id())->first();
                     return $negotiation;
                 })->filter(function ($negotiation) {
                     return $negotiation->order;
@@ -163,18 +164,19 @@ class PriceNegotiationController extends Controller
 
     public function getPriceNegotiation(Request $request, $price_negotiation_id)
     {
+        $user = auth('webapi')->user();
         try {
             $price_negotiation = PriceNegotiation::query()->with(['positions']);
 
-            if ($this->user->isProvider()) {
+            if ($user->isProvider()) {
                 $price_negotiation = $price_negotiation->where('type', PriceNegotiation::TYPE_CONTRACT_HOME_METHOD())
                     ->findOrFail($price_negotiation_id);
-                $price_negotiation->order = $price_negotiation->order()->where('provider_contr_agent_id', $this->user->contr_agent_id())->first();
-            } elseif ($this->user->isContractor()) {
+                $price_negotiation->order = $price_negotiation->order()->where('provider_contr_agent_id', $user->contr_agent_id())->first();
+            } elseif ($user->isContractor()) {
 
                 $price_negotiation = $price_negotiation->where('type', PriceNegotiation::TYPE_CONTRACT_WORK())
                     ->findOrFail($price_negotiation_id);
-                $price_negotiation->order = $price_negotiation->order()->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id())->first();
+                $price_negotiation->order = $price_negotiation->order()->whereRelation('contractor', 'contr_agent_id', $user->contr_agent_id())->first();
             } else {
 //            $price_negotiation = $price_negotiation->;
                 $price_negotiation = $price_negotiation->findOrFail($price_negotiation_id);
