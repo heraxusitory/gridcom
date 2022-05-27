@@ -16,9 +16,16 @@ class OrganizationNotificationPosition extends Model
         'position_id',
         'order_id',
 //        'provider_order_id',
+        'price_without_vat',
         'nomenclature_id',
         'count',
         'vat_rate',
+    ];
+
+    protected $casts = [
+        'price_without_vat' => 'float',
+        'count' => 'float',
+        'nomenclature_id' => 'integer',
     ];
 
     public function order()
