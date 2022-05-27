@@ -36,8 +36,12 @@ class OrganizationNotificationTransformer extends TransformerAbstract
             'id' => $notification?->uuid,
             'date' => $notification?->date,
             'status' => $notification?->status,
-            'organization_id' => optional($notification->organization)->uuid,
-            'provider_contr_agent_id' => optional($notification->provider)->uuid,
+            'organization' => [
+                'name' => optional($notification->organization)->name,
+            ],
+            'provider_contr_agent' => [
+                'name' => optional($notification->provider)->name,
+            ],
 //            'contract_stage' => $notification?->contract_stage,
             'contract_number' => $notification?->contract_number,
             'contract_date' => $notification?->contract_date,
