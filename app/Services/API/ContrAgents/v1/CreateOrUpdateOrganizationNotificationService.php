@@ -32,6 +32,7 @@ class CreateOrUpdateOrganizationNotificationService implements IService
             $org_notification = collect([
                 'uuid' => $item['id'],
                 'date' => $item['date'],
+                'status' => OrganizationNotification::ORGANIZATION_STATUS_UNDER_CONSIDERATION,
                 'organization_id' => $organization?->id,
                 'provider_contr_agent_id' => $provider_contr_agent->id,
                 'contract_number' => $item['contract_number'] ?? null,
