@@ -74,7 +74,7 @@ class CreateFormRequest extends FormRequest
             if (!empty($duplicates)) {
                 $validator->errors()->add('nomenclature_id', 'Номенклатурные позиции не должны дублироваться по наименованию или мнемокоду!');
             }
-        });
+        })->validate();
 
         return [
 
