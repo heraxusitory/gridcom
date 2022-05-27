@@ -176,7 +176,7 @@ class ConsignmentController extends Controller
             $orders = $orders->with('positions')->get();
 
             $orders = $orders->map(function ($order) {
-                return $order->positions->map(function ($position) use ($order) {
+                $order->positions->map(function ($position) use ($order) {
                     $max_available_count_in_order_position = (float)$position->count;
                     $common_count_by_consignments = (float)ConsignmentPosition::query()
                         ->where(['order_id' => $order->id, 'nomenclature_id' => $position->nomenclature_id])->sum('count');
@@ -184,6 +184,7 @@ class ConsignmentController extends Controller
                     $position->max_available_count = $max_available_count;
                     return $position;
                 });
+                return $order;
             });
 
 
