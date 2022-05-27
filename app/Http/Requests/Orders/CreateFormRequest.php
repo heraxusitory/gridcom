@@ -4,6 +4,7 @@ namespace App\Http\Requests\Orders;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -70,6 +71,7 @@ class CreateFormRequest extends FormRequest
         $validator->after(function ($validator) use ($data) {
             $positions = collect($data['positions']);
             $nomenclature_ids = $positions->pluck('nomenclature_id')->toArray();
+            Log::debug('nomenclature_ids', [$nomenclature_ids]);
             $duplicates = array_unique(array_diff_assoc($nomenclature_ids, array_unique($nomenclature_ids)));
             if (!empty($duplicates)) {
                 $validator->errors()->add('nomenclature_id', 'Номенклатурные позиции не должны дублироваться по наименованию или мнемокоду!');

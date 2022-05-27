@@ -14,7 +14,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $nomenclature_ids = [1,2,3,4,5,6,6];
+    $duplicates = array_unique(array_diff_assoc($nomenclature_ids, array_unique($nomenclature_ids)));
+    dd(!empty($duplicates));
 });
 
 Route::get('/dashboard', function () {
