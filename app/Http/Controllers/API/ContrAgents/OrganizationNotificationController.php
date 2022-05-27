@@ -46,7 +46,7 @@ class OrganizationNotificationController extends Controller
             'organization_notifications.*.positions.*.price_without_vat' => 'required|numeric',
             'organization_notifications.*.positions.*.nomenclature.name' => 'required|string|max:255',
             'organization_notifications.*.positions.*.nomenclature.mnemocode' => 'required|string|max:255',
-            'organization_notifications.*.positions.*.nomenclature.count' => 'required|numeric',
+            'organization_notifications.*.positions.*.count' => 'required|numeric',
             'organization_notifications.*.positions.*.vat_rate' => ['required', 'numeric', Rule::in(array_keys(config('vat_rates')))],
         ]);
 
