@@ -58,9 +58,7 @@ class CreateOrUpdateOrganizationNotificationService implements IService
                     ])
                     ->orWhere('name', $position['nomenclature']['name'])
                     ->first();
-                $provider_order = ProviderOrder::query()->firstOrFail([
-                    'uuid' => $position['order_id'],
-                ]);
+                $provider_order = ProviderOrder::query()->where('uuid', $position['order_id'])->firstOrFail();
 
                 $position = collect([
                     'position_id' => $position['position_id'],
