@@ -68,7 +68,7 @@ class CreateOrUpdateOrganizationNotificationService implements IService
                     'count' => $position['count'] ?? null,
                     'vat_rate' => $position['vat_rate'],
                 ]);
-                $org_notification->positions()->updateOrCreate([
+                $position = $org_notification->positions()->updateOrCreate([
                     'position_id' => $position['position_id'],
                 ], $position->toArray());
                 $position_ids[] = $position->id;
