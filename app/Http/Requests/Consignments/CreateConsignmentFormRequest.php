@@ -5,6 +5,7 @@ namespace App\Http\Requests\Consignments;
 
 
 use App\Models\Consignments\Consignment;
+use App\Models\Consignments\ConsignmentPosition;
 use App\Models\Orders\Order;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
@@ -69,6 +70,7 @@ class CreateConsignmentFormRequest extends FormRequest
             'positions.*.order_id' => ['required', 'integer', 'exists:orders,id'],
             'positions.*.nomenclature_id' => ['required', 'integer', 'exists:nomenclature,id'/*, Rule::in($nomenclature_ids)*/],
             'positions.*.price_without_vat' => 'required|numeric',
+            'positions.*.count' => 'required|numeric',
         ]);
 
         $validator->after(function ($validator) use ($data, $orders) {
@@ -77,31 +79,37 @@ class CreateConsignmentFormRequest extends FormRequest
 
                     $validator->errors()->add('positions.' . $key . '.order_id', 'The positions.' . $key . '.order_id is invalid');
                     break;
-//                    new BadRequestException('The positions.' . $key . '.order_id is invalid', 422));
                 }
-                $nomenclature_ids = $orders->find($position['order_id'])->positions->map(function ($position) {
+                $order = $orders->find($position['order_id']);
+                $nomenclature_ids = $order->positions->map(function ($position) {
                     return $position->nomenclature->id;
                 })->unique();
                 if (!in_array($position['nomenclature_id'], $nomenclature_ids->toArray())) {
                     $validator->errors()->add('positions.' . $key . '.nomenclature_id', 'The positions.' . $key . '.nomenclature_id is invalid');
                     break;
                 }
-                Log::debug('debug', [$orders->find($position['order_id'])->positions
-                    ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat]);
-                $price_without_vat_match = (float)$orders->find($position['order_id'])->positions
+                $price_without_vat_match = (float)$order->positions
                         ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === (float)$position['price_without_vat'];
                 if (!$price_without_vat_match) {
                     $validator->errors()->add('positions.' . $key . '.price_without_vat', 'The positions.' . $key . '.price_without_vat is invalid');
                     break;
                 }
-            }
 
+                $max_available_count_in_order_position = (float)$order->positions
+                    ->firstWhere('nomenclature_id', $position['nomenclature_id'])->count;
+                $common_count_by_consignments = (float)ConsignmentPosition::query()
+                    ->where(['order_id' => $order->id, 'nomenclature_id' => $position['nomenclature_id']])->sum('count');
+                $max_count = abs($max_available_count_in_order_position - $common_count_by_consignments);
+                Log::debug('$max_available_count_in_order_position and $common_count_by_consignments and $max_count', [$max_available_count_in_order_position, $common_count_by_consignments, $max_count]);
+                if ((float)$position['count'] > $max_count) {
+                    $validator->errors()->add('positions.' . $key . '.count', 'The positions.' . $key . '.count may not be greater than ' . $max_count);
+                    break;
+                }
+            }
         })->validate();
 
 
         return [//            'positions.*.unit_id' => 'required|integer|exists:nomenclature_units,id',
-            'positions.*.count' => 'required|numeric',
-            //TODO отрефакторить ставку НДС
             'positions.*.vat_rate' => ['required', Rule::in(array_keys(config('vat_rates')))],
             'positions.*.country' => ['required', 'string', Rule::in(array_keys(config('countries')))],
             'positions.*.cargo_custom_declaration' => 'nullable|string',

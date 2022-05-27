@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Consignments\CreateConsignmentFormRequest;
 use App\Http\Requests\Consignments\UpdateConsignmentFormRequest;
 use App\Models\Consignments\Consignment;
+use App\Models\Consignments\ConsignmentPosition;
 use App\Models\Orders\Order;
 use App\Serializers\CustomerSerializer;
 use App\Services\Consignments\CreateConsignmentService;
@@ -173,6 +174,18 @@ class ConsignmentController extends Controller
                 $orders = $orders->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id);
             }
             $orders = $orders->with('positions')->get();
+
+            $orders = $orders->map(function ($order) {
+                return $order->positions->map(function ($position) use ($order) {
+                    $max_available_count_in_order_position = (float)$position->count;
+                    $common_count_by_consignments = (float)ConsignmentPosition::query()
+                        ->where(['order_id' => $order->id, 'nomenclature_id' => $position->nomenclature_id])->sum('count');
+                    $max_available_count = abs($max_available_count_in_order_position - $common_count_by_consignments);
+                    $position->max_available_count = $max_available_count;
+                    return $position;
+                });
+            });
+
 
 //            $orders->map(function ($order) {
 //                $nomenclatures = $order->positions->map(function ($position) {
