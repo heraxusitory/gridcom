@@ -87,8 +87,8 @@ class UpdateOrganizationNotificationFormRequest extends FormRequest
             Validator::make($data, [
                 'positions.' . $key . '.price_without_vat' => ['required', 'numeric'],
             ])->after(function ($validator) use ($position, $orders, $key) {
-                $price_without_vat_match = $orders->find($position['order_id'])->actual_positions
-                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === $position['price_without_vat'];
+                $price_without_vat_match = (float)$orders->find($position['order_id'])->actual_positions
+                        ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === (float)$position['price_without_vat'];
                 if (!$price_without_vat_match) {
                     $validator->errors()->add('positions.' . $key . '.price_without_vat', 'The positions.' . $key . '.price_without_vat is invalid');
                 }
