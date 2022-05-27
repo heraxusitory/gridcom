@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth.basic:api']], function () {
         Route::post('remove_from_stack', [PaymentRegisterController::class, 'removeFromStack']);
     });
     Route::group(['prefix' => 'organization_notifications', 'middleware' => 'contr_agent_role:provider'], function () {
+        Route::post('sync', [OrganizationNotificationController::class, 'sync']);
         Route::post('synchronize', [OrganizationNotificationController::class, 'synchronize']);
         Route::post('remove_from_stack', [OrganizationNotificationController::class, 'removeFromStack']);
     });
