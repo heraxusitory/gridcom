@@ -26,6 +26,13 @@ class ActualProviderOrderPosition extends Model
         'organization_comment',
     ];
 
+    protected $casts = [
+        'price_without_vat' => 'float',
+        'amount_without_vat' => 'float',
+        'amount_with_vat' => 'float',
+
+    ];
+
     public function nomenclature()
     {
         return $this->hasOne(Nomenclature::class, 'id', 'nomenclature_id');
