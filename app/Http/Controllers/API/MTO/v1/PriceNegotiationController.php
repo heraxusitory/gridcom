@@ -5,7 +5,6 @@ namespace App\Http\Controllers\API\MTO\v1;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Notifications\OrganizationNotification;
 use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Models\SyncStacks\MTOSyncStack;
 use App\Serializers\CustomerSerializer;
