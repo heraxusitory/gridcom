@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Orders;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
 class UpdateFormRequest extends FormRequest
@@ -24,7 +25,8 @@ class UpdateFormRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+        $data = request()->all();
+        $validator = Validator::make($data, [
 //            'number' => ,
             'action' => ['required', Rule::in('draft', 'approve')],
             'order_date' => 'date_format:Y-m-d',
@@ -55,11 +57,25 @@ class UpdateFormRequest extends FormRequest
             'contractor.responsible_phone' => 'required|string',
 
             'positions' => 'required_if:action,approve|array',
-            'positions.*.nomenclature_id' => 'required|exists:nomenclature,id',
+            'positions.*.nomenclature_id' => 'required|integer|exists:nomenclature,id',
             'positions.*.count' => 'required|integer',
 //            'positions.*.price_without_vat' => 'required|numeric',
             'positions.*.delivery_time' => 'required|date_format:Y-m-d',
             'positions.*.delivery_address' => 'required|string',
+        ]);
+
+
+        $validator->after(function ($validator) use ($data) {
+            $positions = collect($data['positions']);
+            $nomenclature_ids = $positions->pluck('nomenclature_id')->toArray();
+            $duplicates = array_unique(array_diff_assoc($nomenclature_ids, array_unique($nomenclature_ids)));
+            if (!empty($duplicates)) {
+                $validator->errors()->add('nomenclature_id', 'Номенклатурные позиции не должны дублироваться по наименованию или мнемокоду!');
+            }
+        });
+
+        return [
+
         ];
     }
 }
