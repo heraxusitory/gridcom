@@ -50,6 +50,17 @@ class PriceNegotiation extends Model
     private const ACTION_DRAFT = 'draft';
     private const ACTION_APPROVE = 'approve';
 
+    public static function getOrganizationStatuses()
+    {
+        return [
+            self::ORGANIZATION_STATUS_NOT_AGREED,
+            self::ORGANIZATION_STATUS_AGREED,
+            self::ORGANIZATION_STATUS_DRAFT,
+            self::ORGANIZATION_STATUS_UNDER_CONSIDERATION,
+            self::ORGANIZATION_STATUS_CANCELED,
+        ];
+    }
+
 
     public static function HUMAN_READABLE_TYPES()
     {

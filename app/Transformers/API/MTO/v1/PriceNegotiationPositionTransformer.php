@@ -35,6 +35,7 @@ class PriceNegotiationPositionTransformer extends TransformerAbstract
         return [
             'position_id' => $position?->position_id,
             'nomenclature_id' => optional($position->nomenclature)->uuid,
+            'current_price_without_vat' => $position?->current_price_without_vat,
             'new_price_without_vat' => $position?->new_price_without_vat,
             'agreed_price' => $position?->agreed_price,
         ];
