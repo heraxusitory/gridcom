@@ -51,7 +51,9 @@ class GetReportService implements IService
 
         $payment_fact = $payment_positions->sum('payment_register_amount_payment');
 
+        //Факт оплаты
         $this->top_report['payment_fact'] = $payment_fact;
+        //Факт оплаты(подробный отчет)
         $this->top_report['payment_fact_data'] = $payment_positions;
 
         $consignment_positions_for_top_report = ConsignmentPosition::query()
@@ -64,8 +66,11 @@ class GetReportService implements IService
             ->orderBy('consignments.date')
             ->get();
 
+        //Факт отгрузки
         $this->top_report['shipment_fact'] = $consignment_positions_for_top_report->sum('consignment_position_amount_with_vat');
+        //Факт отгрузки(подробный отчет)
         $this->top_report['shipment_fact_data'] = $consignment_positions_for_top_report;
+        //Сальдо
         $this->top_report['balance'] = abs($this->top_report['payment_fact'] - $this->top_report['shipment_fact']);
 
         $order_positions = $this->order->positions()->with(['nomenclature.units'])
