@@ -47,4 +47,9 @@ class PaymentRegisterPosition extends Model
     {
         return $this->hasOne(Order::class, 'id', 'order_id');
     }
+
+    public function payment_register()
+    {
+        return $this->belongsTo(PaymentRegister::class, 'payment_register_id', 'id');
+    }
 }

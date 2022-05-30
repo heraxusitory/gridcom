@@ -7,6 +7,7 @@ namespace App\Services\Orders\Reports;
 use App\Models\Consignments\Consignment;
 use App\Models\Consignments\ConsignmentPosition;
 use App\Models\Orders\Order;
+use App\Models\PaymentRegisters\PaymentRegister;
 use App\Models\PaymentRegisters\PaymentRegisterPosition;
 use App\Services\IService;
 use Carbon\Carbon;
@@ -41,6 +42,7 @@ class GetReportService implements IService
         $this->top_report['fact_deadline_date'] = $consignment_last_date;
 
         $payment_positions = PaymentRegisterPosition::query()
+            ->whereRelation('payment_register', 'provider_status', PaymentRegister::PROVIDER_STATUS_AGREED)
             ->selectRaw('payment_registers.date as payment_register_date, payment_register_positions.amount_payment as payment_register_amount_payment')
             ->where('order_id', $this->order->id)
             ->leftJoin('payment_registers', 'payment_register_positions.payment_register_id', '=', 'payment_registers.id')

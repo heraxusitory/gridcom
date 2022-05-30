@@ -22,7 +22,6 @@ class PaymentRegister extends Model implements Syncable
     protected $fillable = [
         'uuid',
         'number',
-        'customer_status',
         'provider_status',
         'provider_contr_agent_id',
         'contractor_contr_agent_id',
