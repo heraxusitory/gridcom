@@ -38,6 +38,7 @@ class PriceNegotiationTransformer extends TransformerAbstract
             'type' => $price_negotiation?->type,
             'number' => $price_negotiation?->number,
             'date' => $price_negotiation?->date,
+            'creator_contr_agent_id' => $price_negotiation?->creator_contr_agent_id,
             'organization_status' => $price_negotiation?->organization_status,
             'order_id' => optional($price_negotiation->order()->first())->uuid,
             'responsible_full_name' => $price_negotiation?->responsible_full_name,

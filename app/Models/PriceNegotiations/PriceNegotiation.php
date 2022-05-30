@@ -2,6 +2,7 @@
 
 namespace App\Models\PriceNegotiations;
 
+use App\Interfaces\Syncable;
 use App\Models\Orders\Order;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Traits\UseNotification;
@@ -9,9 +10,8 @@ use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Storage;
 
-class PriceNegotiation extends Model
+class PriceNegotiation extends Model implements Syncable
 {
     use HasFactory, UsesNumberLKK, UseNotification;
 
@@ -23,6 +23,7 @@ class PriceNegotiation extends Model
         'number',
         'date',
         'organization_status',
+        'creator_contr_agent_id',
 //        'object_id',
 //        'sub_object_id',
 //        'provider_contr_agent_id',
