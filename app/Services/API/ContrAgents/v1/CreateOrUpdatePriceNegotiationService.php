@@ -29,7 +29,7 @@ class CreateOrUpdatePriceNegotiationService implements IService
 
                 if ($item['type'] === PriceNegotiation::TYPE_CONTRACT_WORK())
                     $order = Order::query()->where('uuid', $item['order_id'])->firstOrFail();
-                if ($item['type' === PriceNegotiation::TYPE_CONTRACT_HOME_METHOD()])
+                if ($item['type'] === PriceNegotiation::TYPE_CONTRACT_HOME_METHOD())
                     $order = ProviderOrder::query()->where('uuid', $item['order_id'])->firstOrFail();
 
                 $pn_data = collect([
