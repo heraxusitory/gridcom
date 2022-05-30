@@ -34,7 +34,7 @@ class GetReportService implements IService
             ->orderByDesc('date')
             ->first()?->date;
         //Срок оплаты
-        $this->top_report['payment_period'] = isset($consignment_last_date) ? (new Carbon($consignment_last_date))->format('Y-m-d') . ' - ' . (new Carbon($consignment_last_date))->addMonth()->format('Y.m.d') : null;
+        $this->top_report['payment_period'] = isset($consignment_last_date) ? (new Carbon($consignment_last_date))->format('d.m.Y') . ' - ' . (new Carbon($consignment_last_date))->addMonth()->format('d.m.Y') : null;
         //Плановый срок исполнения по заказу
         $this->top_report['plan_deadline_date'] = $this->order->deadline_date;
         //Фактический срок исполнения по заказу
