@@ -23,6 +23,7 @@ class GetReportService implements IService
     public function run()
     {
 
+        //Сумма заказа
         $this->top_report['amount_total'] = $this->order->positions->sum('amount_without_vat');
 
 
@@ -32,8 +33,12 @@ class GetReportService implements IService
             })
             ->orderByDesc('date')
             ->first()?->date;
+        //Срок оплаты
         $this->top_report['payment_period'] = isset($consignment_last_date) ? (new Carbon($consignment_last_date))->format('Y-m-d') . ' - ' . (new Carbon($consignment_last_date))->addMonth()->format('d.m.Y') : null;
-        $this->top_report['deadline_date'] = $this->order->deadline_date;
+        //Плановый срок исполнения по заказу
+        $this->top_report['plan_deadline_date'] = $this->order->deadline_date;
+        //Фактический срок исполнения по заказу
+        $this->top_report['fact_deadline_date'] = $consignment_last_date;
 
         $payment_positions = PaymentRegisterPosition::query()
             ->selectRaw('payment_registers.date as payment_register_date, payment_register_positions.amount_payment as payment_register_amount_payment')
