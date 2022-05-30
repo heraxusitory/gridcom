@@ -56,7 +56,7 @@ class GetReportService implements IService
 
         $consignment_positions_for_top_report = ConsignmentPosition::query()
             ->selectRaw("
-            consignment_positions.amount_without_vat as consignment_position_amount_without_vat,
+            consignment_positions.amount_with_vat as consignment_position_amount_with_vat,
             consignments.date as consignment_date
             ")
             ->join('consignments', 'consignment_positions.consignment_id', 'consignments.id')
@@ -64,7 +64,7 @@ class GetReportService implements IService
             ->orderBy('consignments.date')
             ->get();
 
-        $this->top_report['shipment_fact'] = $consignment_positions_for_top_report->sum('consignment_position_amount_without_vat');
+        $this->top_report['shipment_fact'] = $consignment_positions_for_top_report->sum('consignment_position_amount_with_vat');
         $this->top_report['shipment_fact_data'] = $consignment_positions_for_top_report;
         $this->top_report['balance'] = abs($this->top_report['payment_fact'] - $this->top_report['shipment_fact']);
 
