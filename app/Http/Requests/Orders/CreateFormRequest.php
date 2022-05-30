@@ -68,7 +68,7 @@ class CreateFormRequest extends FormRequest
             'positions.*.delivery_address' => 'required|string',
         ]);
 
-        $validator->after(function ($validator) use ($data) {
+        $validator/*->after(function ($validator) use ($data) {
             $positions = collect($data['positions']);
             $nomenclature_ids = $positions->pluck('nomenclature_id')->toArray();
             Log::debug('nomenclature_ids', [$nomenclature_ids]);
@@ -76,7 +76,7 @@ class CreateFormRequest extends FormRequest
             if (!empty($duplicates)) {
                 $validator->errors()->add('nomenclature_id', 'Номенклатурные позиции не должны дублироваться по наименованию или мнемокоду!');
             }
-        })->validate();
+        })*/->validate();
 
         return [
 
