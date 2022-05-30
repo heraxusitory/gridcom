@@ -17,6 +17,7 @@ class UpdatePriceNegotiationService implements IService
 {
     public function __construct(private $payload, private PriceNegotiation $price_negotiation)
     {
+        $this->user = auth('webapi')->user();
     }
 
     public function run()
@@ -34,6 +35,7 @@ class UpdatePriceNegotiationService implements IService
                 'type' => $data['type'],
                 'organization_status' => $organization_status,
                 'order_id' => $data['order_id'],
+                'creator_contr_agent_id' => $this->user->contr_agent->id,
                 'responsible_full_name' => $data['responsible_full_name'],
                 'responsible_phone' => $data['responsible_phone'],
                 'comment' => $data['comment'],

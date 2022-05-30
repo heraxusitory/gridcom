@@ -17,6 +17,7 @@ class CreatePriceNegotiationService implements IService
 {
     public function __construct(private $payload)
     {
+        $this->user = auth('webapi')->user();
     }
 
     public function run()
@@ -35,6 +36,7 @@ class CreatePriceNegotiationService implements IService
                 'type' => $data['type'],
                 'organization_status' => $organization_status,
                 'order_id' => $data['order_id'],
+                'creator_contr_agent_id' => $this->user->contr_agent->id,
                 'responsible_full_name' => $data['responsible_full_name'],
                 'responsible_phone' => $data['responsible_phone'],
                 'comment' => $data['comment'],
@@ -52,7 +54,8 @@ class CreatePriceNegotiationService implements IService
             }
             if (isset($data['file'])) {
                 $file_link = Storage::disk('public')->putFile('price-negotiations/' . $price_negotiation->id, $data['file']);
-                $price_negotiation->file_url = /*Storage::disk('public')->*//*url*/$file_link;
+                $price_negotiation->file_url = /*Storage::disk('public')->*//*url*/
+                    $file_link;
                 $price_negotiation->save();
             }
             return $price_negotiation;
