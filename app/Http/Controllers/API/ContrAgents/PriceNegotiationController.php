@@ -48,6 +48,7 @@ class PriceNegotiationController extends Controller
             'price_negotiations.*.file' => ['nullable', 'file'],
 
             'price_negotiations.*.positions' => ['required', 'array'],
+            'price_negotiations.*.positions.*' => ['required'],
             'price_negotiations.*.positions.*.position_id' => ['required', 'uuid'],
             'price_negotiations.*.positions.*.nomenclature.mnemocode' => ['required', 'string', 'max:255'],
             'price_negotiations.*.positions.*.nomenclature.name' => ['required', 'string', 'max:255'],
@@ -55,6 +56,7 @@ class PriceNegotiationController extends Controller
             'price_negotiations.*.positions.*.new_price_without_vat' => ['required', 'numeric'],
         ]);
 
+        Log::debug('data', [$data]);
         $validator->after(function ($validator) use ($data) {
             foreach ($data['price_negotiations'] as $key => $item) {
                 if ($item['type'] === PriceNegotiation::TYPE_CONTRACT_WORK()) {
