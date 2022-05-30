@@ -34,7 +34,7 @@ class PriceNegotiationController extends Controller
 //            $types = PriceNegotiation::TYPE_CONTRACT_WORK();
 //        }
         $data = $request->all();
-        $validator = Validator::make($data, [
+        Validator::make($data, [
             'price_negotiations' => 'required|array',
             'price_negotiations.*.id' => 'required|uuid',
 //            'price_negotiations.*.organization_status' => ['required', Rule::in/(PriceNegotiation::getOrganizationStatuses())]
@@ -46,7 +46,9 @@ class PriceNegotiationController extends Controller
             'price_negotiations.*.responsible_phone' => ['nullable', 'string', 'max:255'],
             'price_negotiations.*.comment' => ['required', 'string', 'max:255'],
             'price_negotiations.*.file' => ['nullable', 'file'],
+        ])->validate();
 
+        $validator = Validator::make($data, [
             'price_negotiations.*.positions' => ['required', 'array'],
             'price_negotiations.*.positions.*' => ['required'],
             'price_negotiations.*.positions.*.position_id' => ['required', 'uuid'],
