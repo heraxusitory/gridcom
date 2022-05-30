@@ -57,6 +57,7 @@ class GetReportService implements IService
         $this->top_report['payment_fact_data'] = $payment_positions;
 
         $consignment_positions_for_top_report = ConsignmentPosition::query()
+            ->whereRelation('consignment', 'is_approved', true)
             ->selectRaw("
             consignment_positions.amount_with_vat as consignment_position_amount_with_vat,
             consignments.date as consignment_date
@@ -93,6 +94,7 @@ class GetReportService implements IService
 
         /************для нижнего отчета в подробном виде*****************/
         $consignment_positions = ConsignmentPosition::query()
+            ->whereRelation('consignment', 'is_approved', true)
             ->selectRaw("
             nomenclature.mnemocode as nomenclature_mnemocode,
             SUM(consignment_positions.count) as delivery_fact_count,
