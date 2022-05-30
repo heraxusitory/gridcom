@@ -28,17 +28,17 @@ class PriceNegotiationController extends Controller
         /** @var IntegrationUser $user */
         $user = Auth::guard('api')->user();
 
-        if ($user->isProvider()) {
-            $type = PriceNegotiation::TYPE_CONTRACT_HOME_METHOD();
-        } else if ($user->isContractor()) {
-            $type = PriceNegotiation::TYPE_CONTRACT_WORK();
-        }
+//        if ($user->isProvider()) {
+//            $types = PriceNegotiation::TYPE_CONTRACT_HOME_METHOD();
+//        } else if ($user->isContractor()) {
+//            $types = PriceNegotiation::TYPE_CONTRACT_WORK();
+//        }
         $data = $request->all();
         $validator = Validator::make($data, [
             'price_negotiations' => 'required|array',
             'price_negotiations.*.id' => 'required|uuid',
 //            'price_negotiations.*.organization_status' => ['required', Rule::in/(PriceNegotiation::getOrganizationStatuses())]
-            'price_negotiations.*.type' => ['required', Rule::in($type)],
+            'price_negotiations.*.type' => ['required', Rule::in(PriceNegotiation::TYPES())],
             'price_negotiations.*.number' => ['required', 'string', 'max:255'],
             'price_negotiations.*.date' => ['required', 'date_format:Y-m-d'],
             'price_negotiations.*.order_id' => ['required', 'uuid'],
