@@ -43,7 +43,7 @@ class PriceNegotiationController extends Controller
             'price_negotiations.*.date' => ['required', 'date_format:Y-m-d'],
             'price_negotiations.*.order_id' => ['required', 'uuid'],
             'price_negotiations.*.responsible_full_name' => ['required', 'string', 'max:255'],
-            'price_negotiations.*.responsible_phone' => ['required', 'string', 'max:255'],
+            'price_negotiations.*.responsible_phone' => ['nullable', 'string', 'max:255'],
             'price_negotiations.*.comment' => ['required', 'string', 'max:255'],
             'price_negotiations.*.file' => ['nullable', 'file'],
 
