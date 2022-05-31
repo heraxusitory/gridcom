@@ -103,7 +103,7 @@ class CreateConsignmentFormRequest extends FormRequest
                     ->where(['order_id' => $order->id, 'nomenclature_id' => $position['nomenclature_id']])->sum('count');
                 $max_count = abs($max_available_count_in_order_position - $common_count_by_consignments);
                 Log::debug('$max_available_count_in_order_position and $common_count_by_consignments and $max_count', [$max_available_count_in_order_position, $common_count_by_consignments, $max_count]);
-                if ((float)$position['count'] > $max_count && $max_count != 0) {
+                if ((float)$position['count'] > $max_count || $max_count != 0) {
                     $validator->errors()->add('positions.' . $key . '.count', 'The positions.' . $key . '.count may not be greater than ' . $max_count . ' or equal to zero');
                     break;
                 }
