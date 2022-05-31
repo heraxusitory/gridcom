@@ -33,7 +33,8 @@ class CreateRAObjectFormRequest extends FormRequest
         //TODO: костыль переделать , когда будут роли и юзеры
         Validator::validate($data, [
             'action' => ['required', Rule::in(RequestAdditionObject::getActions())],
-            'contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])]
+//            'contr_agent_id' => ['required', 'exists:contr_agents,id', Rule::in([Auth::user()->contr_agent_id()])],
+            'type' => ['required', Rule::in(RequestAdditionObject::getTypes())]
 //            'contr_agent_type' => ['required', Rule::in(['provider', 'contractor']),
         ]);
 
@@ -65,7 +66,12 @@ class CreateRAObjectFormRequest extends FormRequest
 
         return [
             'organization_id' => ['required', Rule::in($organization_ids)],
-            'object_id' => 'required|exists:customer_objects,id',
+            'object_id' => ['nullable', Rule::requiredIf(function () use ($data) {
+                return $data['type'] === RequestAdditionObject::TYPE_CHANGE();
+            }), 'exists:objects,id'],
+            'object_name' => ['nullable', Rule::requiredIf(function () use ($data) {
+                return $data['type'] === RequestAdditionObject::TYPE_NEW();
+            })],
             'description' => 'required|string',
             'responsible_full_name' => 'required|string|max:255',
             'contr_agent_comment' => 'required|string',

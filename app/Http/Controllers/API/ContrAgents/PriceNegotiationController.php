@@ -25,7 +25,6 @@ class PriceNegotiationController extends Controller
 {
     public function sync(Request $request)
     {
-        Log::debug('file', [$request->file]);
         /** @var IntegrationUser $user */
         $user = Auth::guard('api')->user();
 

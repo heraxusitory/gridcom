@@ -33,6 +33,7 @@ class UpdateRANomenclatureFormRequest extends FormRequest
         //TODO: костыль переделать , когда будут роли и юзеры
         Validator::validate($data, [
             'action' => ['required', Rule::in(RequestAdditionNomenclature::getActions())],
+            'type' => ['required', Rule::in(RequestAdditionNomenclature::getTypes())]
 //            'contr_agent_type' => ['required', Rule::in(['provider', 'contractor']),
         ]);
 
@@ -64,7 +65,12 @@ class UpdateRANomenclatureFormRequest extends FormRequest
 
         return [
             'organization_id' => ['required', Rule::in($organization_ids)],
-            'nomenclature_id' => 'required|exists:nomenclature,id',
+            'nomenclature_id' => ['nullable', Rule::requiredIf(function () use ($data) {
+                return $data['type'] === RequestAdditionNomenclature::TYPE_CHANGE();
+            }), 'exists:nomenclature,id'],
+            'nomenclature_name' => ['nullable', Rule::requiredIf(function () use ($data) {
+                return $data['type'] === RequestAdditionNomenclature::TYPE_NEW();
+            })],
             'description' => 'required|string',
             'responsible_full_name' => 'required|string|max:255',
             'contr_agent_comment' => 'required|string',

@@ -30,6 +30,7 @@ class RequestAdditionObject extends Model
         'organization_id',
         'organization_status',
         'object_id',
+        'object_name',
         'description',
         'responsible_full_name',
         'contr_agent_comment',
@@ -45,6 +46,29 @@ class RequestAdditionObject extends Model
     const ORGANIZATION_STATUS_DRAFT = 'Черновик';
     const ORGANIZATION_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const ORGANIZATION_STATUS_CANCELED = 'Аннулировано';
+
+
+    private const TYPE_NEW = 'new';
+    private const TYPE_CHANGE = 'change';
+
+
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_NEW,
+            self::TYPE_CHANGE,
+        ];
+    }
+
+    public static function TYPE_CHANGE(): string
+    {
+        return self::TYPE_CHANGE;
+    }
+
+    public static function TYPE_NEW(): string
+    {
+        return self::TYPE_NEW;
+    }
 
     public static function getOrganizationStatuses()
     {

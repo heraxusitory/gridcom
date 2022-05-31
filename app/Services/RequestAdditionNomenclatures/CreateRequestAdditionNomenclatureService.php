@@ -42,7 +42,9 @@ class CreateRequestAdditionNomenclatureService implements IService
                 'provider_contract_id' => $data['provider_contract_id'] ?? null,
                 'organization_id' => $data['organization_id'],
                 'organization_status' => $organization_status,
-                'nomenclature_id' => $data['nomenclature_id'],
+                'type' => $data['type'],
+                'nomenclature_id' => $data['type'] === RequestAdditionNomenclature::TYPE_CHANGE() ? $data['nomenclature_id'] : null,
+                'nomenclature_name' => $data['type'] === RequestAdditionNomenclature::TYPE_NEW() ? $data['nomenclature_name'] : null,
                 'description' => $data['description'],
                 'responsible_full_name' => $data['responsible_full_name'],
                 'contr_agent_comment' => $data['contr_agent_comment'],
@@ -51,7 +53,9 @@ class CreateRequestAdditionNomenclatureService implements IService
 
             if (isset($data['file'])) {
                 $file_link = Storage::disk('public')->putFile('request-addition-nomenclature/' . $ra_nomenclature->id, $data['file']);
-                $ra_nomenclature->file_url = /*Storage::disk('public')->url(*/$file_link/*)*/;
+                $ra_nomenclature->file_url = /*Storage::disk('public')->url(*/
+                    $file_link/*)*/
+                ;
                 $ra_nomenclature->save();
             }
             return $ra_nomenclature;

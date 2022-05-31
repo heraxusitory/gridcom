@@ -31,6 +31,7 @@ class RequestAdditionNomenclature extends Model
         'organization_id',
         'organization_status',
         'nomenclature_id',
+        'nomenclature_name',
         'description',
         'responsible_full_name',
         'contr_agent_comment',
@@ -46,6 +47,9 @@ class RequestAdditionNomenclature extends Model
     const ORGANIZATION_STATUS_DRAFT = 'Черновик';
     const ORGANIZATION_STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const ORGANIZATION_STATUS_CANCELED = 'Аннулировано';
+
+    private const TYPE_NEW = 'new';
+    private const TYPE_CHANGE = 'change';
 
     public static function getOrganizationStatuses()
     {
@@ -64,6 +68,24 @@ class RequestAdditionNomenclature extends Model
             self::ACTION_APPROVE,
             self::ACTION_DRAFT,
         ];
+    }
+
+    public static function getTypes(): array
+    {
+        return [
+            self::TYPE_NEW,
+            self::TYPE_CHANGE,
+        ];
+    }
+
+    public static function TYPE_CHANGE(): string
+    {
+        return self::TYPE_CHANGE;
+    }
+
+    public static function TYPE_NEW(): string
+    {
+        return self::TYPE_NEW;
     }
 
     public static function ACTION_APPROVE()
