@@ -39,7 +39,7 @@ class UpdateFormRequest extends FormRequest
             'customer.work_agreement.date' => 'required|date_format:Y-m-d',
             'customer.work_type' => ['required', Rule::in(['Cтроительство', 'Разработка', 'Интеграция'])],
             'customer.object_id' => 'required|exists:customer_objects,id',
-            'customer.sub_object_id' => 'required|exists:customer_sub_objects,id',
+            'customer.sub_object_id' => 'nullable|exists:customer_sub_objects,id',
 
             'provider.contr_agent_id' => 'required|exists:contr_agents,id',
             'provider.contract_id' => 'required|exists:provider_contarcts,id',
