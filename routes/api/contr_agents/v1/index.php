@@ -8,6 +8,7 @@ use App\Http\Controllers\API\ContrAgents\PaymentRegisterController;
 use App\Http\Controllers\API\ContrAgents\PriceNegotiationController;
 use App\Http\Controllers\API\ContrAgents\ProviderOrderController;
 use App\Http\Controllers\API\ContrAgents\RequestAdditionNomenclatureController;
+use App\Http\Controllers\API\ContrAgents\RequestAdditionObjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth.basic:api']], function () {
@@ -46,10 +47,17 @@ Route::group(['middleware' => ['auth.basic:api']], function () {
         Route::post('synchronize', [PriceNegotiationController::class, 'synchronize']);
         Route::post('remove_from_stack', [PriceNegotiationController::class, 'removeFromStack']);
     });
-    Route::group(['prefix' => 'request_addition_nomenclatures', 'middleware' => 'contr_agent_role:provider,contractor'], function () {
-        Route::post('sync', [RequestAdditionNomenclatureController::class, 'sync']);
-        Route::post('synchronize', [RequestAdditionNomenclatureController::class, 'synchronize']);
-        Route::post('remove_from_stack', [RequestAdditionNomenclatureController::class, 'removeFromStack']);
+    Route::group(['prefix' => 'request_additions', 'middleware' => 'contr_agent_role:provider,contractor'], function () {
+        Route::group(['prefix' => 'nomenclature'], function () {
+            Route::post('sync', [RequestAdditionNomenclatureController::class, 'sync']);
+            Route::post('synchronize', [RequestAdditionNomenclatureController::class, 'synchronize']);
+            Route::post('remove_from_stack', [RequestAdditionNomenclatureController::class, 'removeFromStack']);
+        });
+        Route::group(['prefix' => 'objects'], function () {
+            Route::post('sync', [RequestAdditionObjectController::class, 'sync']);
+            Route::post('synchronize', [RequestAdditionObjectController::class, 'synchronize']);
+            Route::post('remove_from_stack', [RequestAdditionObjectController::class, 'removeFromStack']);
+        });
     });
 //    require 'references.php';
 //    require 'consignment_registers.php';
