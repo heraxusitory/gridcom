@@ -35,6 +35,7 @@ class RAObjectTransformer extends TransformerAbstract
     {
         return [
             'id' => $object?->uuid,
+            'type' => $object->type,
             'number' => $object?->number,
             'date' => $object?->date,
             'contr_agent_id' => optional($object->contr_agent)->uuid,
@@ -43,6 +44,7 @@ class RAObjectTransformer extends TransformerAbstract
             'organization_id' => optional($object->organization)->uuid,
             'organization_status' => $object?->organization_status,
             'object_id' => optional($object->object)->uuid,
+            'object_name' => $object?->object_name,
             'description' => $object?->description,
             'responsible_full_name' => $object?->responsible_full_name,
             'contr_agent_comment' => $object?->contr_agent_comment,

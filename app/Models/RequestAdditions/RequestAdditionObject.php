@@ -2,6 +2,7 @@
 
 namespace App\Models\RequestAdditions;
 
+use App\Interfaces\Syncable;
 use App\Models\References\ContrAgent;
 use App\Models\References\CustomerObject;
 use App\Models\References\Organization;
@@ -14,7 +15,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
 
-class RequestAdditionObject extends Model
+class RequestAdditionObject extends Model implements Syncable
 {
     use HasFactory, UsesNumberLKK, UseNotification;
 

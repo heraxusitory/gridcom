@@ -6,12 +6,12 @@ namespace App\Http\Controllers\API\ContrAgents;
 
 use App\Http\Controllers\Controller;
 use App\Models\IntegrationUser;
-use App\Models\RequestAdditions\RequestAdditionNomenclature;
+use App\Models\RequestAdditions\RequestAdditionObject;
 use App\Models\SyncStacks\ContractorSyncStack;
 use App\Models\SyncStacks\ProviderSyncStack;
 use App\Serializers\CustomerSerializer;
-use App\Services\API\ContrAgents\v1\CreateOrUpdateRANomenclatureService;
-use App\Transformers\API\ContrAgents\v1\RANomenclatureTransformer;
+use App\Services\API\ContrAgents\v1\CreateOrUpdateRAObjectService;
+use App\Transformers\API\ContrAgents\v1\RAObjectTransformer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class RequestAdditionNomenclatureController extends Controller
+class RequestAdditionObjectController extends Controller
 {
     public function sync(Request $request)
     {
@@ -28,29 +28,28 @@ class RequestAdditionNomenclatureController extends Controller
 
         $data = $request->all();
         Validator::make($data, [
-            'ra_nomenclatures' => 'required|array',
-            'ra_nomenclatures.*.id' => 'required|uuid',
-            'ra_nomenclatures.*.type' => ['required', Rule::in(['new', 'change'])],
-            'ra_nomenclatures.*.number' => 'required|string|max:255',
-            'ra_nomenclatures.*.date' => 'required|date_format:Y-m-d',
-            'ra_nomenclatures.*.work_agreement.number' => ['nullable', Rule::requiredIf(function () use ($user) {
+            'ra_objects' => 'required|array',
+            'ra_objects.*.id' => 'required|uuid',
+            'ra_objects.*.type' => ['required', Rule::in(['new', 'change'])],
+            'ra_objects.*.number' => 'required|string|max:255',
+            'ra_objects.*.date' => 'required|date_format:Y-m-d',
+            'ra_objects.*.work_agreement.number' => ['nullable', Rule::requiredIf(function () use ($user) {
                 return $user->isContractor();
             }), 'string', 'max:255'],
-            'ra_nomenclatures.*.provider_contract.number' => ['nullable', Rule::requiredIf(function () use ($user) {
+            'ra_objects.*.provider_contract.number' => ['nullable', Rule::requiredIf(function () use ($user) {
                 return $user->isProvider();
             }), 'string', 'max:255'],
-            'ra_nomenclatures.*.organization.name' => 'required|string|max:255',
-            'ra_nomenclatures.*.nomenclature.mnemocode' => 'required|string|max:255',
-            'ra_nomenclatures.*.nomenclature.name' => 'required|string|max:255',
-            'ra_nomenclatures.*.description' => 'nullable|string',
-            'ra_nomenclatures.*.responsible_full_name' => 'nullable|string|max:255',
-            'ra_nomenclatures.*.contr_agent_comment' => 'nullable|string|max:255',
-            'ra_nomenclatures.*.file' => 'nullable|file',
+            'ra_objects.*.organization.name' => 'required|string|max:255',
+            'ra_objects.*.object.name' => 'required|string|max:255',
+            'ra_objects.*.description' => 'nullable|string',
+            'ra_objects.*.responsible_full_name' => 'nullable|string|max:255',
+            'ra_objects.*.contr_agent_comment' => 'nullable|string|max:255',
+            'ra_objects.*.file' => 'nullable|file',
         ])->validate();
 
         try {
-            $data = $data['price_negotiations'];
-            (new CreateOrUpdateRANomenclatureService($data, $user))->run();
+            $data = $data['ra_objects'];
+            (new CreateOrUpdateRAObjectService($data, $user))->run();
             return response()->json();
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
@@ -65,11 +64,11 @@ class RequestAdditionNomenclatureController extends Controller
                 /** @var IntegrationUser $user */
                 $user = Auth::guard('api')->user();
                 if ($user->isContractor())
-                    $pr = ContractorSyncStack::getModelEntities(RequestAdditionNomenclature::class, $user->contr_agent);
+                    $pr = ContractorSyncStack::getModelEntities(RequestAdditionObject::class, $user->contr_agent);
                 else if ($user->isProvider())
-                    $pr = ProviderSyncStack::getModelEntities(RequestAdditionNomenclature::class, $user->contr_agent);
+                    $pr = ProviderSyncStack::getModelEntities(RequestAdditionObject::class, $user->contr_agent);
                 else $pr = [];
-                return fractal()->collection($pr)->transformWith(RANomenclatureTransformer::class)->serializeWith(CustomerSerializer::class);
+                return fractal()->collection($pr)->transformWith(RAObjectTransformer::class)->serializeWith(CustomerSerializer::class);
             });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
@@ -93,7 +92,7 @@ class RequestAdditionNomenclatureController extends Controller
                     $count = ProviderSyncStack::destroy($request->stack_ids);
                 elseif ($user->isContractor())
                     $count = ContractorSyncStack::destroy($request->stack_ids);
-                return response()->json('Из стека удалено ' . $count . ' НСИ(номенклатуры)');
+                return response()->json('Из стека удалено ' . $count . ' НСИ(объекты)');
             });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());

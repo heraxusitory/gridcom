@@ -5,18 +5,20 @@ namespace App\Services\API\ContrAgents\v1;
 
 
 use App\Events\NewStack;
+use App\Models\Customer;
 use App\Models\IntegrationUser;
+use App\Models\References\CustomerObject;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
-use App\Models\RequestAdditions\RequestAdditionNomenclature;
+use App\Models\RequestAdditions\RequestAdditionObject;
 use App\Models\SyncStacks\MTOSyncStack;
 use App\Services\IService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
-class CreateOrUpdateRANomenclature implements IService
+class CreateOrUpdateRAObjectService implements IService
 {
     public function __construct(private $data, private IntegrationUser $user)
     {
@@ -35,12 +37,11 @@ class CreateOrUpdateRANomenclature implements IService
                 $organization = Organization::query()
                     ->where('name', $item['organization']['name'])
                     ->first();
-                $nomenclature = Nomenclature::query()
+                $object = CustomerObject::query()
                     ->where('name', $item['nomenclature']['name'])
-                    ->orWhere('mnemocode', $item['nomenclature']['mnemocode'])
                     ->first();
 
-                $ra_nomenclature_data = collect([
+                $ra_object_data = collect([
                     'uuid' => $item['id'],
                     'type' => $item['type'],
                     'number' => $item['number'] ?? null,
@@ -49,30 +50,30 @@ class CreateOrUpdateRANomenclature implements IService
                     'work_agreement_id' => $this->user->isContractor() ? $work_agreement?->id : null,
                     'provider_contract_id' => $this->user->isProvider() ? $provider_contract?->id : null,
                     'organization_id' => $organization?->id,
-                    'nomenclature_id' => $nomenclature?->id,
+                    'nomenclature_id' => $object?->id,
                     'description' => $item['description'] ?? null,
-                    'responsible_full_name	' => $item['responsible_full_name	'] ?? null,
+                    'responsible_full_name	' => $item['responsible_full_name'] ?? null,
                     'contr_agent_comment' => $item['contr_agent_comment'] ?? null,
                 ]);
 
-                $ra_nomenclature = RequestAdditionNomenclature::query()->where('uuid', $ra_nomenclature_data['uuid'])->first();
-                if (!is_null($ra_nomenclature))
-                    $ra_nomenclature->update($ra_nomenclature_data->toArray());
-                else $ra_nomenclature = RequestAdditionNomenclature::query()->create(array_merge($ra_nomenclature_data->toArray(), ['organization_status' => RequestAdditionNomenclature::ORGANIZATION_STATUS_UNDER_CONSIDERATION]));
+                $ra_object = RequestAdditionObject::query()->where('uuid', $ra_object_data['uuid'])->first();
+                if (!is_null($ra_object))
+                    $ra_object->update($ra_object_data->toArray());
+                else $ra_object = RequestAdditionObject::query()->create(array_merge($ra_object_data->toArray(), ['organization_status' => RequestAdditionObject::ORGANIZATION_STATUS_UNDER_CONSIDERATION]));
 
-                $old_file_url = $ra_nomenclature->file_url;
+                $old_file_url = $ra_object->file_url;
                 if (!is_null($old_file_url)) {
                     Storage::disk('public')->delete($old_file_url);
                 }
-                $ra_nomenclature->file_url = null;
+                $ra_object->file_url = null;
 
                 if (isset($item['file'])) {
-                    $file_link = Storage::disk('public')->putFile('request-addition-nomenclature/' . $ra_nomenclature->id, $item['file']);
-                    $ra_nomenclature->file_url = $file_link;
+                    $file_link = Storage::disk('public')->putFile('request-addition-nomenclature/' . $ra_object->id, $item['file']);
+                    $ra_object->file_url = $file_link;
                 }
-                $ra_nomenclature->save();
+                $ra_object->save();
 
-                event(new NewStack($ra_nomenclature, (new MTOSyncStack())));
+                event(new NewStack($ra_object, (new MTOSyncStack())));
             });
         }
     }
