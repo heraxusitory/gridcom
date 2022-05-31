@@ -7,6 +7,7 @@ use App\Http\Controllers\API\ContrAgents\OrganizationNotificationController;
 use App\Http\Controllers\API\ContrAgents\PaymentRegisterController;
 use App\Http\Controllers\API\ContrAgents\PriceNegotiationController;
 use App\Http\Controllers\API\ContrAgents\ProviderOrderController;
+use App\Http\Controllers\API\ContrAgents\RequestAdditionNomenclatureController;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['middleware' => ['auth.basic:api']], function () {
@@ -44,6 +45,11 @@ Route::group(['middleware' => ['auth.basic:api']], function () {
         Route::post('sync', [PriceNegotiationController::class, 'sync']);
         Route::post('synchronize', [PriceNegotiationController::class, 'synchronize']);
         Route::post('remove_from_stack', [PriceNegotiationController::class, 'removeFromStack']);
+    });
+    Route::group(['prefix' => 'request_addition_nomenclatures', 'middleware' => 'contr_agent_role:provider,contractor'], function () {
+        Route::post('sync', [RequestAdditionNomenclatureController::class, 'sync']);
+        Route::post('synchronize', [RequestAdditionNomenclatureController::class, 'synchronize']);
+        Route::post('remove_from_stack', [RequestAdditionNomenclatureController::class, 'removeFromStack']);
     });
 //    require 'references.php';
 //    require 'consignment_registers.php';
