@@ -140,6 +140,7 @@ class UpdateOrderService implements IService
                     'amount_without_vat' => round($position['count'] * $nomenclature->price, 2),
 //                    'total_amount',
                     'delivery_time' => $position['delivery_time'],
+                    'delivery_plan_time' => $position['delivery_plan_time'],
                     'delivery_address' => $position['delivery_address'],
                 ]);
                 $position_ids[] = $position->id;
