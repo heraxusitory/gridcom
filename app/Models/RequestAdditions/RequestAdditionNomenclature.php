@@ -2,6 +2,7 @@
 
 namespace App\Models\RequestAdditions;
 
+use App\Interfaces\Syncable;
 use App\Models\References\ContrAgent;
 use App\Models\References\Nomenclature;
 use App\Models\References\Organization;
@@ -12,9 +13,8 @@ use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Storage;
 
-class RequestAdditionNomenclature extends Model
+class RequestAdditionNomenclature extends Model implements Syncable
 {
     use HasFactory, UsesNumberLKK, UseNotification;
 
