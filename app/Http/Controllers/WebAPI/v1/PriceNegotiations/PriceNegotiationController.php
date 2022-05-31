@@ -38,7 +38,7 @@ class PriceNegotiationController extends Controller
                 $object = CustomerObject::query()->findOrFail($data['object_id']);
                 $sub_object_ids = $object->subObjects()->pluck('id');
                 Validator::validate($data, [
-                    'sub_object_id' => ['required', 'exists:customer_sub_objects,id', Rule::in($sub_object_ids)]
+                    'sub_object_id' => ['nullable', 'exists:customer_sub_objects,id', Rule::in($sub_object_ids)]
                 ]);
 
                 Validator::validate($data, [
@@ -47,13 +47,16 @@ class PriceNegotiationController extends Controller
                     'organization_id' => 'required|exists:organizations,id',
                 ]);
 
-                $orders = Order::query()
+                $orders_query = Order::query()
                     ->whereRelation('contractor', 'contr_agent_id', $data['contractor_contr_agent_id'])
                     ->whereRelation('customer', 'organization_id', $data['organization_id'])
                     ->whereRelation('customer', 'object_id', $data['object_id'])
-                    ->whereRelation('customer', 'sub_object_id', $data['sub_object_id'])
-                    ->with(['positions.nomenclature', 'customer', 'contractor', 'provider'])
-                    ->get();
+                    ->with(['positions.nomenclature', 'customer', 'contractor', 'provider']);
+
+                if (!empty($data['sub_object_id'])) {
+                    $orders_query->whereRelation('customer', 'sub_object_id', $data['sub_object_id']);
+                }
+                $orders = $orders_query->get();
 
                 $orders->map(function ($order) {
                     $nomenclatures = $order->positions->map(function ($position) {
