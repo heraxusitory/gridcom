@@ -85,6 +85,8 @@ class CreatePriceNegotiationFormRequest extends FormRequest
                     'positions.*.current_price_without_vat' => ['required', 'numeric']
                 ]);
 
+                $validator->validate();
+
                 $validator->after(function ($validator) use ($data, $orders) {
                     foreach ($data['positions'] as $key => $position) {
                         $current_price_without_vat_match = (float)$orders->find($data['order_id'])->positions
