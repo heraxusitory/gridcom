@@ -34,12 +34,12 @@ class PriceNegotiationController extends Controller
                 if ($price_negotiation) {
                     $price_negotiation->update(['organization_status' => $price_negotiation['organization_status']]);
 
-                    if (IntegrationUser::where('contr_agent_id', $price_negotiation->contr_agent?->uuid)->first()?->isProvider()) {
+                    if (IntegrationUser::where('contr_agent_id', $price_negotiation->contr_agent?->id)->first()?->isProvider()) {
                         event(new NewStack($price_negotiation,
                             (new ProviderSyncStack())->setProvider($price_negotiation->contr_agent),
                         ));
                     }
-                    if (IntegrationUser::where('contr_agent_id', $price_negotiation->contr_agent?->uuid)->first()?->isContractor()) {
+                    if (IntegrationUser::where('contr_agent_id', $price_negotiation->contr_agent?->id)->first()?->isContractor()) {
                         event(new NewStack($price_negotiation,
                             (new ContractorSyncStack())->setContractor($price_negotiation->contr_agent),
                         ));
