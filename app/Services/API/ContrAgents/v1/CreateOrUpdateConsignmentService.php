@@ -55,6 +55,7 @@ class CreateOrUpdateConsignmentService implements IService
                     'uuid' => $item['id'],
                     'number' => $item['number'],
                     'date' => $item['date'],
+                    'is_approved' => true,
                     'organization_id' => $organization?->id,
                     'provider_contr_agent_id' => $provider_contr_agent?->id,
                     'provider_contract_id' => $provider_contract?->id,
