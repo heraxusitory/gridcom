@@ -55,9 +55,9 @@ class CreateConsignmentFormRequest extends FormRequest
             ->whereRelation('provider', 'provider_contract_id', $data['provider_contract_id'])
             ->whereRelation('contractor', 'contr_agent_id', $data['contractor_contr_agent_id'])
             ->with([
-                'positions.nomenclature',
+//                'positions.nomenclature',
                 'positions' => function ($query) {
-                    $query->where('status', OrderPosition::STATUS_AGREED);
+                    $query->where('status', OrderPosition::STATUS_AGREED)->with('nomenclature');
                 }
             ]);
 
