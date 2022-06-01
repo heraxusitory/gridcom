@@ -16,6 +16,7 @@ use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\RequestAdditions\RequestAdditionNomenclature;
 use App\Models\RequestAdditions\RequestAdditionObject;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class NotificationController extends Controller
 {
@@ -81,6 +82,7 @@ class NotificationController extends Controller
 
             if (array_key_exists(RequestAdditionNomenclature::class, $notifications_count))
                 $data['request_additions'] = $data['request_additions'] + $notifications_count[RequestAdditionNomenclature::class];
+
             if (array_key_exists(OrganizationNotification::class, $notifications_count))
                 $data['organization_notifications'] = $notifications_count[OrganizationNotification::class];
         }
@@ -93,6 +95,21 @@ class NotificationController extends Controller
         if ($notification) {
             $parent = $notification->notificationable;
             $parent->notifications()->delete();
+        }
+        return response('', 204);
+    }
+
+    public function destroyByEntity(Request $request)
+    {
+        $request->validate([
+            'entity' => ['required', Rule::in(Notification::ENTITIES())],
+            'id' => 'required,integer',
+        ]);
+
+        $model_class = Notification::ENTITY_TO_MODEL()[$request->entity];
+        $object = $model_class::where('id', $request->id)->first();
+        if (!is_null($object)) {
+            $object->notifications()->where('contr_agent_id', $this->user->contr_agent()->uuid)->delete();
         }
         return response('', 204);
     }

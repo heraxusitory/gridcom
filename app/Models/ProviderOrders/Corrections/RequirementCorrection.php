@@ -5,11 +5,14 @@ namespace App\Models\ProviderOrders\Corrections;
 
 
 use App\Models\ProviderOrders\ProviderOrder;
+use App\Traits\UseNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class RequirementCorrection extends Model
 {
+    use UseNotification;
+
     protected $table = 'requirement_corrections';
 
     protected $fillable = [
