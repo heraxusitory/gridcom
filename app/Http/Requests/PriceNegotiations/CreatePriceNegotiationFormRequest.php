@@ -45,7 +45,7 @@ class CreatePriceNegotiationFormRequest extends FormRequest
                 $object = CustomerObject::query()->findOrFail($data['object_id']);
                 $sub_object_ids = $object->subObjects()->pluck('id');
                 Validator::validate($data, [
-                    'sub_object_id' => ['nullable', 'exists:customer_sub_objects,id', Rule::in($sub_object_ids)]
+                    'sub_object_id' => ['nullable', Rule::in($sub_object_ids)]
                 ]);
 
                 Validator::validate($data, [
