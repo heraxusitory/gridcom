@@ -7,6 +7,7 @@ namespace App\Http\Requests\Consignments;
 use App\Models\Consignments\Consignment;
 use App\Models\Consignments\ConsignmentPosition;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderPositions\OrderPosition;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -53,7 +54,12 @@ class CreateConsignmentFormRequest extends FormRequest
             ->whereRelation('provider', 'contr_agent_id', $data['provider_contr_agent_id'])
             ->whereRelation('provider', 'provider_contract_id', $data['provider_contract_id'])
             ->whereRelation('contractor', 'contr_agent_id', $data['contractor_contr_agent_id'])
-            ->with('positions.nomenclature');
+            ->with([
+                'positions.nomenclature',
+                'positions' => function ($query) {
+                    $query->where('status', OrderPosition::STATUS_AGREED);
+                }
+            ]);
 
         if ($data['customer_sub_object_id'] ?? null) {
             $orders_query = $orders_query->whereRelation('customer', 'sub_object_id', $data['customer_sub_object_id']);

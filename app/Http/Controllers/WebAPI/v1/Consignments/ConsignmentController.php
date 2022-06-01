@@ -10,6 +10,7 @@ use App\Http\Requests\Consignments\UpdateConsignmentFormRequest;
 use App\Models\Consignments\Consignment;
 use App\Models\Consignments\ConsignmentPosition;
 use App\Models\Orders\Order;
+use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Serializers\CustomerSerializer;
 use App\Services\Consignments\CreateConsignmentService;
 use App\Services\Consignments\GetConsignmentService;
@@ -170,7 +171,13 @@ class ConsignmentController extends Controller
                 ->whereRelation('contractor', 'contr_agent_id', $request->contractor_contr_agent_id)
                 ->where('customer_status', '<>', Order::CUSTOMER_STATUS_DRAFT)
                 ->where('provider_status', '<>', Order::PROVIDER_STATUS_DRAFT)
-                ->with(['customer', 'provider', 'contractor', 'positions.nomenclature']);
+                ->with([
+                    'customer', 'provider', 'contractor',
+                    'positions.nomenclature',
+                    'positions' => function ($query) {
+                        $query->where('status', OrderPosition::STATUS_AGREED);
+                    }
+                ]);
 
             if ($request->customer_sub_object_id ?? null) {
                 $orders = $orders->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id);
