@@ -36,7 +36,7 @@ class RequestAdditionNomenclatureController extends Controller
                 $ra_nomenclature = RequestAdditionNomenclature::query()
                     ->where('uuid', $item['id'])->first();
                 if ($ra_nomenclature) {
-                    $ra_nomenclature->save(['organization_status' => $item['organization_status']]);
+                    $ra_nomenclature->update(['organization_status' => $item['organization_status']]);
 
                     if (IntegrationUser::where('contr_agent_id', $ra_nomenclature->contr_agent?->uuid)->first()?->isProvider()) {
                         event(new NewStack($ra_nomenclature,
