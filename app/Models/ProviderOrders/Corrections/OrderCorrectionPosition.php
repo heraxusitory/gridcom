@@ -18,6 +18,7 @@ class OrderCorrectionPosition extends Model
         'nomenclature_id',
         'count',
         'amount_without_vat',
+        'price_without_vat',
         'vat_rate',
         'amount_with_vat',
         'delivery_time',
