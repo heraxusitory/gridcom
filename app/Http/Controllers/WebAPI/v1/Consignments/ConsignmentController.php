@@ -173,9 +173,9 @@ class ConsignmentController extends Controller
                 ->where('provider_status', '<>', Order::PROVIDER_STATUS_DRAFT)
                 ->with([
                     'customer', 'provider', 'contractor',
-                    'positions.nomenclature',
+//                    'positions.nomenclature',
                     'positions' => function ($query) {
-                        $query->where('status', OrderPosition::STATUS_AGREED);
+                        $query->where('status', OrderPosition::STATUS_AGREED)->with('nomenclature');
                     }
                 ]);
 
