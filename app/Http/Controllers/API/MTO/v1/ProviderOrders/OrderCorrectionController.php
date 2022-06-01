@@ -65,6 +65,7 @@ class OrderCorrectionController extends Controller
                             'position_id' => $position['position_id'],
                         ], [
                             'nomenclature_id' => $nomenclature->id,
+                            'count' => $position['count'] ?? null,
                             'price_without_vat' => $position['price_without_vat'],
                             'amount_without_vat' => $position['amount_without_vat'] ?? null,
                             'amount_with_vat' => $position['amount_with_vat'] ?? null,
