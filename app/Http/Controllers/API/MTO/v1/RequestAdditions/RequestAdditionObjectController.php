@@ -36,7 +36,7 @@ class RequestAdditionObjectController extends Controller
                 $ra_object = RequestAdditionObject::query()
                     ->where('uuid', $item['id'])->first();
                 if ($ra_object) {
-                    $ra_object = $ra_object->save(['organization_status' => $item['organization_status']]);
+                    $ra_object->save(['organization_status' => $item['organization_status']]);
 
                     if (IntegrationUser::where('contr_agent_id', $ra_object->contr_agent?->uuid)->first()?->isProvider()) {
                         event(new NewStack($ra_object,
