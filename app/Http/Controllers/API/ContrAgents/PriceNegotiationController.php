@@ -44,7 +44,7 @@ class PriceNegotiationController extends Controller
             'price_negotiations.*.order_id' => ['required', 'uuid'],
             'price_negotiations.*.responsible_full_name' => ['nullable', 'string', 'max:255'],
             'price_negotiations.*.responsible_phone' => ['nullable', 'string', 'max:255'],
-            'price_negotiations.*.comment' => ['required', 'string', 'max:255'],
+            'price_negotiations.*.comment' => ['nullable', 'string', 'max:255'],
             'price_negotiations.*.file' => ['nullable', 'file'],
         ])->validate();
 
