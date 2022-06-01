@@ -191,6 +191,9 @@ class ReferenceController extends Controller
             'contractor_notification_statuses' => ContractorNotification:: getContractorStatuses(),
             'organization_notification_statuses' => OrganizationNotification::getOrganizationStatuses(),
         ];
+        $data['notifications_for_users'] = [
+            'entities_for_destroy' => \App\Models\Notification::ENTITIES(),
+        ];
 
         return response()->json(['data' => $data]);
     }
