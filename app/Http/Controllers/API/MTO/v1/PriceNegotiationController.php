@@ -28,11 +28,11 @@ class PriceNegotiationController extends Controller
             'price_negotiations.*.organization_status' => ['required', Rule::in(PriceNegotiation::getOrganizationStatuses())]
         ]);
         try {
-            foreach ($request['price_negotiations'] as $price_negotiation) {
+            foreach ($request['price_negotiations'] as $negotiation) {
                 /** @var PriceNegotiation $price_negotiation */
-                $price_negotiation = PriceNegotiation::query()->where('uuid', $price_negotiation['id'])->first();
+                $price_negotiation = PriceNegotiation::query()->where('uuid', $negotiation['id'])->first();
                 if ($price_negotiation) {
-                    $price_negotiation->update(['organization_status' => $price_negotiation['organization_status']]);
+                    $price_negotiation->update(['organization_status' => $negotiation['organization_status']]);
 
                     if (IntegrationUser::where('contr_agent_id', $price_negotiation->contr_agent?->id)->first()?->isProvider()) {
                         event(new NewStack($price_negotiation,
