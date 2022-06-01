@@ -103,7 +103,7 @@ class NotificationController extends Controller
     {
         $request->validate([
             'entity' => ['required', Rule::in(Notification::ENTITIES())],
-            'id' => 'required,integer',
+            'id' => 'required|integer',
         ]);
 
         $model_class = Notification::ENTITY_TO_MODEL()[$request->entity];
