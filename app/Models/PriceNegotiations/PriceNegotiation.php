@@ -5,6 +5,7 @@ namespace App\Models\PriceNegotiations;
 use App\Interfaces\Syncable;
 use App\Models\Orders\Order;
 use App\Models\ProviderOrders\ProviderOrder;
+use App\Models\References\ContrAgent;
 use App\Traits\UseNotification;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -132,5 +133,10 @@ class PriceNegotiation extends Model implements Syncable
     public function getDateAttribute($value)
     {
         return (new Carbon($value))->format('Y-m-d');
+    }
+
+    public function contr_agent()
+    {
+        return $this->hasOne(ContrAgent::class, 'id', 'creator_contr_agent_id');
     }
 }

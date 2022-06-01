@@ -4,9 +4,13 @@
 namespace App\Http\Controllers\API\MTO\v1;
 
 
+use App\Events\NewStack;
 use App\Http\Controllers\Controller;
+use App\Models\IntegrationUser;
 use App\Models\PriceNegotiations\PriceNegotiation;
+use App\Models\SyncStacks\ContractorSyncStack;
 use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Serializers\CustomerSerializer;
 use App\Transformers\API\MTO\v1\PriceNegotiationTransformer;
 use Illuminate\Http\Request;
@@ -25,7 +29,22 @@ class PriceNegotiationController extends Controller
         ]);
         try {
             foreach ($request['price_negotiations'] as $price_negotiation) {
-                PriceNegotiation::query()->where('uuid', $price_negotiation['id'])->update(['organization_status' => $price_negotiation['organization_status']]);
+                /** @var PriceNegotiation $price_negotiation */
+                $price_negotiation = PriceNegotiation::query()->where('uuid', $price_negotiation['id'])->first();
+                if ($price_negotiation) {
+                    $price_negotiation->update(['organization_status' => $price_negotiation['organization_status']]);
+
+                    if (IntegrationUser::where('contr_agent_id', $price_negotiation->contr_agent?->uuid)->first()?->isProvider()) {
+                        event(new NewStack($price_negotiation,
+                            (new ProviderSyncStack())->setProvider($price_negotiation->contr_agent),
+                        ));
+                    }
+                    if (IntegrationUser::where('contr_agent_id', $price_negotiation->contr_agent?->uuid)->first()?->isContractor()) {
+                        event(new NewStack($price_negotiation,
+                            (new ContractorSyncStack())->setContractor($price_negotiation->contr_agent),
+                        ));
+                    }
+                }
             }
             return response()->json();
         } catch (\Exception $e) {
