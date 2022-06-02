@@ -49,7 +49,7 @@ class RequestAdditionNomenclatureController extends Controller
         ])->validate();
 
         try {
-            $data = $data['price_negotiations'];
+            $data = $data['ra_nomenclatures'];
             (new CreateOrUpdateRANomenclatureService($data, $user))->run();
             return response()->json();
         } catch (\Exception $e) {
