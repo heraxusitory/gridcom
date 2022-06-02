@@ -16,6 +16,7 @@ use App\Models\SyncStacks\MTOSyncStack;
 use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
+use Faker\Provider\Payment;
 use Illuminate\Support\Facades\DB;
 
 class CreateOrUpdatePaymentRegisterService implements IService
@@ -49,7 +50,7 @@ class CreateOrUpdatePaymentRegisterService implements IService
                     $pr_data = collect([
                         'uuid' => $item['id'],
                         'number' => $item['number'],
-                        'provider_status' => $item['provider_status'],
+//                        'provider_status' => $item['provider_status'],
                         'provider_contr_agent_id' => $provider_contr_agent->id,
                         'provider_contract_id' => $provider_contract->id,
                         'contractor_contr_agent_id' => $contractor_contr_agent->id,
@@ -58,9 +59,25 @@ class CreateOrUpdatePaymentRegisterService implements IService
                         'comment' => $item['comment'],
                         'date' => (new Carbon($item['date']))->format('d.m.Y'),
                     ]);
-                    $payment_register = PaymentRegister::query()->updateOrCreate([
-                        'uuid' => $pr_data['uuid']
-                    ], $pr_data->toArray());
+
+                    $payment_register = PaymentRegister::query()->where('uuid', $pr_data['uuid'])->first();
+                    if ($payment_register) {
+                        if ($this->user->isProvider()) {
+                            $pr_data->provider_status = PaymentRegister::PROVIDER_STATUS_AGREED;
+                        }
+                        $payment_register->update($pr_data->toArray());
+                    } else {
+                        if ($this->user->isProvider()) {
+                            $pr_data->provider_status = PaymentRegister::PROVIDER_STATUS_AGREED;
+                        }
+                        if ($this->user->isContractor()) {
+                            $pr_data->provider_status = PaymentRegister::PROVIDER_STATUS_UNDER_CONSIDERATION;
+                        }
+                        $payment_register = PaymentRegister::query()->create($pr_data->toArray());
+                    }
+//                    $payment_register = PaymentRegister::query()->updateOrCreate([
+//                        'uuid' => $pr_data['uuid']
+//                    ], $pr_data->toArray());
 //                    });
 
                     $position_ids = [];
@@ -86,6 +103,11 @@ class CreateOrUpdatePaymentRegisterService implements IService
                             (new ProviderSyncStack())->setProvider($provider_contr_agent)
                         /*(new MTOSyncStack())*/)
                     );
+                    if ($payment_register->provider_status === PaymentRegister::PROVIDER_STATUS_AGREED) {
+                        event(new NewStack($payment_register,
+                                (new MTOSyncStack()))
+                        );
+                    }
                 }
 
                 if ($this->user->isProvider()) {
