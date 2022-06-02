@@ -58,13 +58,13 @@ class PriceNegotiationController extends Controller
                 }
                 $orders = $orders_query->get();
 
-               /* $orders->map(function ($order) {
-                    $nomenclatures = $order->positions->map(function ($position) {
-                        return $position->nomenclature;
-                    });
-                    unset($order->positions);
-                    return $order->nomenclatures = $nomenclatures->unique();
-                });*/
+                /* $orders->map(function ($order) {
+                     $nomenclatures = $order->positions->map(function ($position) {
+                         return $position->nomenclature;
+                     });
+                     unset($order->positions);
+                     return $order->nomenclatures = $nomenclatures->unique();
+                 });*/
                 return response()->json($orders);
 
             case PriceNegotiation::TYPE_CONTRACT_HOME_METHOD():
@@ -142,6 +142,7 @@ class PriceNegotiationController extends Controller
                 })->filter(function ($negotiation) {
                     return $negotiation->order;
                 });
+                Log::debug('p_n_provider', [$price_negotiations]);
             } elseif ($user->isContractor()) {
                 $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_WORK())->get()->map(function ($negotiation) use ($user) {
                     $negotiation->order = $negotiation->order()->whereRelation('contractor', 'contr_agent_id', $user->contr_agent_id())->first();
@@ -149,6 +150,7 @@ class PriceNegotiationController extends Controller
                 })->filter(function ($negotiation) {
                     return $negotiation->order;
                 });
+                Log::debug('p_n_contractor', [$price_negotiations]);
             }
 
 //            return response()->json(new Paginator($price_negotiations, 15));
