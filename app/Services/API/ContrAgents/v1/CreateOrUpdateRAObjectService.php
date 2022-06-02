@@ -38,7 +38,7 @@ class CreateOrUpdateRAObjectService implements IService
                     ->where('name', $item['organization']['name'])
                     ->first();
                 $object = CustomerObject::query()
-                    ->where('name', $item['nomenclature']['name'])
+                    ->where('name', $item['object']['name'])
                     ->first();
 
                 $ra_object_data = collect([
@@ -50,9 +50,10 @@ class CreateOrUpdateRAObjectService implements IService
                     'work_agreement_id' => $this->user->isContractor() ? $work_agreement?->id : null,
                     'provider_contract_id' => $this->user->isProvider() ? $provider_contract?->id : null,
                     'organization_id' => $organization?->id,
-                    'nomenclature_id' => $object?->id,
+                    'object_id' => $item['type'] === RequestAdditionObject::TYPE_CHANGE() ? $object?->id : null,
+                    'object_name' => $item['type'] === RequestAdditionObject::TYPE_NEW() ? $item['object']['name'] : null,
                     'description' => $item['description'] ?? null,
-                    'responsible_full_name	' => $item['responsible_full_name'] ?? null,
+                    'responsible_full_name' => $item['responsible_full_name'] ?? null,
                     'contr_agent_comment' => $item['contr_agent_comment'] ?? null,
                 ]);
 

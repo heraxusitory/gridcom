@@ -35,10 +35,12 @@ class CreateOrUpdateRANomenclatureService implements IService
                 $organization = Organization::query()
                     ->where('name', $item['organization']['name'])
                     ->first();
-                $nomenclature = Nomenclature::query()
-                    ->where('name', $item['nomenclature']['name'])
-                    ->orWhere('mnemocode', $item['nomenclature']['mnemocode'])
-                    ->first();
+                $nomenclature_query = Nomenclature::query()
+                    ->where('name', $item['nomenclature']['name']);
+                if ($item['nomenclature']['mnemocode'] ?? null) {
+                    $nomenclature_query->orWhere('mnemocode', $item['nomenclature']['mnemocode']);
+                }
+                $nomenclature = $nomenclature_query->first();
 
                 $ra_nomenclature_data = collect([
                     'uuid' => $item['id'],

@@ -40,7 +40,7 @@ class RequestAdditionNomenclatureController extends Controller
                 return $user->isProvider();
             }), 'string', 'max:255'],
             'ra_nomenclatures.*.organization.name' => 'required|string|max:255',
-            'ra_nomenclatures.*.nomenclature.mnemocode' => 'required|string|max:255',
+            'ra_nomenclatures.*.nomenclature.mnemocode' => 'nullable|string|max:255',
             'ra_nomenclatures.*.nomenclature.name' => 'required|string|max:255',
             'ra_nomenclatures.*.description' => 'nullable|string',
             'ra_nomenclatures.*.responsible_full_name' => 'nullable|string|max:255',
