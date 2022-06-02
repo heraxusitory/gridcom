@@ -87,9 +87,14 @@ class UpdateConsignmentRegisterService implements IService
 
             event(new NewStack($this->consignment_register,
                     (new ProviderSyncStack())->setProvider($this->consignment_register->provider),
-                    (new ContractorSyncStack())->setContractor($this->consignment_register->contractor),
-                    (new MTOSyncStack()))
+                    (new ContractorSyncStack())->setContractor($this->consignment_register->contractor))
             );
+
+            if (in_array($this->consignment_register->contr_agent_status, [ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE, ConsignmentRegister::CONTRACTOR_STATUS_AGREED])) {
+                event(new NewStack($this->consignment_register,
+                        (new MTOSyncStack()))
+                );
+            }
 
             return $this->consignment_register;
         });

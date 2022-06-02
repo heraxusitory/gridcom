@@ -124,14 +124,18 @@ class CreateOrUpdateConsignmentRegisterService implements IService
 
                 if ($this->user->isContractor())
                     event(new NewStack($consignment_register,
-                            (new ProviderSyncStack())->setProvider($provider_contr_agent),
-                            new MTOSyncStack())
+                            (new ProviderSyncStack())->setProvider($provider_contr_agent))
                     );
                 if ($this->user->isProvider())
                     event(new NewStack($consignment_register,
-                            (new ContractorSyncStack())->setContractor($contractor_contr_agent),
+                            (new ContractorSyncStack())->setContractor($contractor_contr_agent))
+                    );
+
+                if (in_array($consignment_register->contr_agent_status, [ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE, ConsignmentRegister::CONTRACTOR_STATUS_AGREED])) {
+                    event(new NewStack($consignment_register,
                             new MTOSyncStack())
                     );
+                }
             });
         }
     }

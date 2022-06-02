@@ -74,9 +74,14 @@ class CreateConsignmentRegisterService implements IService
 
             event(new NewStack($consignment_register,
                     (new ProviderSyncStack())->setProvider($consignment_register->provider),
-                    (new ContractorSyncStack())->setContractor($consignment_register->contractor),
-                    (new MTOSyncStack()))
+                    (new ContractorSyncStack())->setContractor($consignment_register->contractor))
             );
+
+            if (in_array($consignment_register->contr_agent_status, [ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE, ConsignmentRegister::CONTRACTOR_STATUS_AGREED])) {
+                event(new NewStack($consignment_register,
+                        (new MTOSyncStack()))
+                );
+            }
 
             return $consignment_register;
         });
