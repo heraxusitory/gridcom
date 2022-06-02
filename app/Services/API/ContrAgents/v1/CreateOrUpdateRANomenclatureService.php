@@ -52,7 +52,7 @@ class CreateOrUpdateRANomenclatureService implements IService
                     'nomenclature_id' => $item['type'] === RequestAdditionNomenclature::TYPE_CHANGE() ? $nomenclature?->id : null,
                     'nomenclature_name' => $item['type'] === RequestAdditionNomenclature::TYPE_NEW() ? $item['nomenclature']['mnemocode'] . ' ' . $item['nomenclature']['name'] : null,
                     'description' => $item['description'] ?? null,
-                    'responsible_full_name	' => $item['responsible_full_name'] ?? null,
+                    'responsible_full_name' => $item['responsible_full_name'] ?? null,
                     'contr_agent_comment' => $item['contr_agent_comment'] ?? null,
                 ]);
 
