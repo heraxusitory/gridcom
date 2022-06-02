@@ -58,13 +58,13 @@ class PriceNegotiationController extends Controller
                 }
                 $orders = $orders_query->get();
 
-                $orders->map(function ($order) {
+               /* $orders->map(function ($order) {
                     $nomenclatures = $order->positions->map(function ($position) {
                         return $position->nomenclature;
                     });
                     unset($order->positions);
                     return $order->nomenclatures = $nomenclatures->unique();
-                });
+                });*/
                 return response()->json($orders);
 
             case PriceNegotiation::TYPE_CONTRACT_HOME_METHOD():
