@@ -136,7 +136,7 @@ class PriceNegotiationController extends Controller
             $price_negotiations = PriceNegotiation::query()->with(['positions']);
 
             if ($user->isProvider()) {
-                $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_HOME_METHOD())->get()->map(function ($negotiation) use ($user) {
+                $price_negotiations = $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_HOME_METHOD())->get()->map(function ($negotiation) use ($user) {
                     $negotiation->order = $negotiation->order()->where('provider_contr_agent_id', $user->contr_agent_id())->first();
                     return $negotiation;
                 })->filter(function ($negotiation) {
@@ -144,7 +144,7 @@ class PriceNegotiationController extends Controller
                 });
                 Log::debug('p_n_provider', [$price_negotiations]);
             } elseif ($user->isContractor()) {
-                $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_WORK())->get()->map(function ($negotiation) use ($user) {
+                $price_negotiations = $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_WORK())->get()->map(function ($negotiation) use ($user) {
                     $negotiation->order = $negotiation->order()->whereRelation('contractor', 'contr_agent_id', $user->contr_agent_id())->first();
                     return $negotiation;
                 })->filter(function ($negotiation) {
