@@ -182,13 +182,13 @@ class ConsignmentController extends Controller
             if ($request->customer_sub_object_id ?? null) {
                 $orders = $orders->whereRelation('customer', 'sub_object_id', $request->customer_sub_object_id);
             }
-            $orders = $orders/*->with('positions')*/->get();
+            $orders = $orders/*->with('positions')*/ ->get();
 
             $orders = $orders->map(function ($order) {
                 $order->positions->map(function ($position) use ($order) {
                     $max_available_count_in_order_position = (float)$position->count;
                     $common_count_by_consignments = (float)ConsignmentPosition::query()
-                        ->where(['order_id' => $order->id, 'nomenclature_id' => $position->nomenclature_id])->sum('count');
+                        ->where(['order_id' => $order->id, 'nomenclature_id' => $position->nomenclature_id, 'price_without_vat' => $position->price_without_vat])->sum('count');
                     $max_available_count = abs($max_available_count_in_order_position - $common_count_by_consignments);
                     $position->max_available_count = $max_available_count;
                     return $position;

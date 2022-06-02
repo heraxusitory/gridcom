@@ -111,9 +111,14 @@ class UpdateConsignmentFormRequest extends FormRequest
                 }
 
                 $max_available_count_in_order_position = (float)$order->positions
+                    ->where('price_without_vat', $position['price_without_vat'])
                     ->firstWhere('nomenclature_id', $position['nomenclature_id'])->count;
                 $common_count_by_consignments = (float)ConsignmentPosition::query()
-                    ->where(['order_id' => $order->id, 'nomenclature_id' => $position['nomenclature_id']])->sum('count');
+                    ->where([
+                        'order_id' => $order->id,
+                        'nomenclature_id' => $position['nomenclature_id'],
+                        'price_without_vat' => $position['price_without_vat'],
+                    ])->sum('count');
                 $max_count = abs($max_available_count_in_order_position - $common_count_by_consignments);
                 Log::debug('$max_available_count_in_order_position and $common_count_by_consignments and $max_count', [$max_available_count_in_order_position, $common_count_by_consignments, $max_count]);
                 if ((float)$position['count'] > $max_count || $max_count == 0) {

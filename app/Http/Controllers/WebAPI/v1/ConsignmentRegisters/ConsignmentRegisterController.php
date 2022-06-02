@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\ConsignmentRegisters\CreateConsignmentRegisterFormRequest;
 use App\Http\Requests\ConsignmentRegisters\UpdateConsignmentRegisterFormRequest;
 use App\Models\ConsignmentRegisters\ConsignmentRegister;
+use App\Models\ConsignmentRegisters\ConsignmentRegisterPosition;
 use App\Models\Consignments\Consignment;
 use App\Models\Orders\Order;
 use App\Services\ConsignmentRegisters\CreateConsignmentRegisterService;
@@ -78,6 +79,7 @@ class ConsignmentRegisterController extends Controller
                 'contractor_contr_agent_id' => $data['contractor_contr_agent_id'],
                 'customer_object_id' => $data['customer_object_id'],
                 'work_agreement_id' => $data['work_agreement_id'],
+                'is_approved' => true,
             ])
             ->with('positions.nomenclature');
 
@@ -85,6 +87,17 @@ class ConsignmentRegisterController extends Controller
             $consignments = $consignments->where('customer_sub_object_id', $data['customer_sub_object_id']);
         $consignments = $consignments->get();
 
+        $consignments = $consignments->map(function ($consignment) {
+            $consignment->positions->map(function ($position) use ($consignment) {
+                $max_available_count_in_consignment_position = (float)$position->count;
+                $common_count_by_consignment_registers = (float)ConsignmentRegisterPosition::query()
+                    ->where(['consignment_id' => $consignment->id, 'nomenclature_id' => $position->nomenclature_id, 'price_without_vat' => $position->price_without_vat])->sum('count');
+                $max_available_count = abs($max_available_count_in_consignment_position - $common_count_by_consignment_registers);
+                $position->max_available_count = $max_available_count;
+                return $position;
+            });
+            return $consignment;
+        });
 //        $consignments->map(function ($consignment) {
 //            $nomenclatures = $consignment->positions->map(function ($position) {
 //                return $position->nomenclature;

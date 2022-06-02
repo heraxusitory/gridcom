@@ -5,9 +5,11 @@ namespace App\Http\Requests\ConsignmentRegisters;
 
 
 use App\Models\ConsignmentRegisters\ConsignmentRegister;
+use App\Models\ConsignmentRegisters\ConsignmentRegisterPosition;
 use App\Models\Consignments\Consignment;
 use App\Models\Orders\Order;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -31,6 +33,8 @@ class CreateConsignmentRegisterFormRequest extends FormRequest
         ])->validate();
 
         $orders = Order::query()
+            ->where('customer_status', '<>', Order::CUSTOMER_STATUS_DRAFT)
+            ->where('provider_status', '<>', Order::PROVIDER_STATUS_DRAFT)
             ->whereRelation('customer', 'organization_id', request()->organization_id)
             ->whereRelation('customer', 'object_id', request()->customer_object_id)
             ->whereRelation('provider', 'contr_agent_id', request()->provider_contr_agent_id)
@@ -69,6 +73,7 @@ class CreateConsignmentRegisterFormRequest extends FormRequest
             ->whereHas('positions', function ($q) use ($orders) {
                 $q->whereIn('order_id', $orders->pluck('id'));
             })
+            ->where('is_approved', true)
 //            ->whereIn('id', $request_consignment_ids)
             ->with('positions')
             ->get();
@@ -79,7 +84,8 @@ class CreateConsignmentRegisterFormRequest extends FormRequest
                     $validator->errors()->add('positions.' . $key . '.consignment_id', 'The positions.' . $key . '.consignment_id is invalid');
                     break;
                 }
-                $nomenclature_ids = $consignments->find($position['consignment_id'])->positions->map(function ($position) {
+                $consignment = $consignments->find($position['consignment_id']);
+                $nomenclature_ids = $consignment->positions->map(function ($position) {
                     return $position->nomenclature->id;
                 })->unique();
                 if (!in_array($position['nomenclature_id'], $nomenclature_ids->toArray())) {
@@ -87,10 +93,26 @@ class CreateConsignmentRegisterFormRequest extends FormRequest
                     break;
                 }
 
-                $price_without_vat_match = (float)$consignments->find($position['consignment_id'])->positions
+                $price_without_vat_match = (float)$consignment->positions
                         ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === (float)$position['price_without_vat'];
                 if (!$price_without_vat_match) {
                     $validator->errors()->add('positions.' . $key . '.price_without_vat', 'The positions.' . $key . '.price_without_vat is invalid');
+                    break;
+                }
+
+                $max_available_count_in_consignment_position = (float)$consignment->positions
+                    ->where('price_without_vat', $position['price_without_vat'])
+                    ->firstWhere('nomenclature_id', $position['nomenclature_id'])->count;
+                $common_count_by_consignment_registers = (float)ConsignmentRegisterPosition::query()
+                    ->where([
+                        'consignment_id' => $consignment->id,
+                        'nomenclature_id' => $position['nomenclature_id'],
+                        'price_without_vat' => $position['price_without_vat'],
+                    ])->sum('count');
+                $max_count = abs($max_available_count_in_consignment_position - $common_count_by_consignment_registers);
+                Log::debug('$max_available_count_in_consignment_position and $common_count_by_consignment_registers and $max_count', [$max_available_count_in_consignment_position, $common_count_by_consignment_registers, $max_count]);
+                if ((float)$position['count'] > $max_count || $max_count == 0) {
+                    $validator->errors()->add('positions.' . $key . '.count', 'The positions.' . $key . '.count may not be greater than ' . $max_count . ' or equal to zero');
                     break;
                 }
             }
