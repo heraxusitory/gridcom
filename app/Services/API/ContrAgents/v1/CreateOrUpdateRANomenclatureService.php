@@ -53,6 +53,7 @@ class CreateOrUpdateRANomenclatureService implements IService
                     'organization_id' => $organization?->id,
                     'nomenclature_id' => $item['type'] === RequestAdditionNomenclature::TYPE_CHANGE() ? $nomenclature?->id : null,
                     'nomenclature_name' => $item['type'] === RequestAdditionNomenclature::TYPE_NEW() ? $item['nomenclature']['name'] : null,
+                    'nomenclature_unit' => $item['type'] === RequestAdditionNomenclature::TYPE_NEW() ? $item['nomenclature']['unit'] : null,
                     'description' => $item['description'] ?? null,
                     'responsible_full_name' => $item['responsible_full_name'] ?? null,
                     'contr_agent_comment' => $item['contr_agent_comment'] ?? null,

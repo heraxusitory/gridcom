@@ -45,6 +45,7 @@ class RANomenclatureTransformer extends TransformerAbstract
             'organization_status' => $ra_nomenclature->organization_status,
             'nomenclature_id' => optional($ra_nomenclature->nomenclature)->uuid,
             'nomenclature_name' => $ra_nomenclature?->nomenclature_name,
+            'nomenclature_unit' => $ra_nomenclature?->nomenclature_unit,
             'description' => $ra_nomenclature?->description,
             'responsible_full_name' => $ra_nomenclature?->responsible_full_name,
             'contr_agent_comment' => $ra_nomenclature?->contr_agent_comment,

@@ -40,8 +40,15 @@ class RequestAdditionNomenclatureController extends Controller
                 return $user->isProvider();
             }), 'string', 'max:255'],
             'ra_nomenclatures.*.organization.name' => 'required|string|max:255',
-            'ra_nomenclatures.*.nomenclature.mnemocode' => 'nullable|string|max:255',
-            'ra_nomenclatures.*.nomenclature.name' => 'required|string|max:255',
+            'ra_nomenclatures.*.nomenclature.mnemocode' => [Rule::requiredIf(function () use ($data) {
+                return $data['type'] === RequestAdditionNomenclature::TYPE_CHANGE();
+            }), 'string', 'max:255'],
+            'ra_nomenclatures.*.nomenclature.name' => [Rule::requiredIf(function () use ($data) {
+                return $data['type'] === RequestAdditionNomenclature::TYPE_NEW();
+            }), 'string', 'max:255'],
+            'ra_nomenclatures.*.nomenclature.unit' => [Rule::requiredIf(function () use ($data) {
+                return $data['type'] === RequestAdditionNomenclature::TYPE_NEW();
+            }), 'string', 'max:255'],
             'ra_nomenclatures.*.description' => 'nullable|string',
             'ra_nomenclatures.*.responsible_full_name' => 'nullable|string|max:255',
             'ra_nomenclatures.*.contr_agent_comment' => 'nullable|string|max:255',
