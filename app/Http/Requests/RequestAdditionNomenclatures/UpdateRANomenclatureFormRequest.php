@@ -71,6 +71,9 @@ class UpdateRANomenclatureFormRequest extends FormRequest
             'nomenclature_name' => ['nullable', Rule::requiredIf(function () use ($data) {
                 return $data['type'] === RequestAdditionNomenclature::TYPE_NEW();
             })],
+            'nomenclature_unit' => ['nullable', Rule::requiredIf(function () use ($data) {
+                return $data['type'] === RequestAdditionNomenclature::TYPE_NEW();
+            })],
             'description' => 'required|string',
             'responsible_full_name' => 'required|string|max:255',
             'contr_agent_comment' => 'required|string',

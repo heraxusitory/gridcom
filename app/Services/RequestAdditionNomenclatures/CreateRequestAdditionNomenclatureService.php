@@ -45,6 +45,7 @@ class CreateRequestAdditionNomenclatureService implements IService
                 'type' => $data['type'],
                 'nomenclature_id' => $data['type'] === RequestAdditionNomenclature::TYPE_CHANGE() ? $data['nomenclature_id'] : null,
                 'nomenclature_name' => $data['type'] === RequestAdditionNomenclature::TYPE_NEW() ? $data['nomenclature_name'] : null,
+                'nomenclature_unit' => $data['type'] === RequestAdditionNomenclature::TYPE_NEW() ? $data['nomenclature_unit'] : null,
                 'description' => $data['description'],
                 'responsible_full_name' => $data['responsible_full_name'],
                 'contr_agent_comment' => $data['contr_agent_comment'],
