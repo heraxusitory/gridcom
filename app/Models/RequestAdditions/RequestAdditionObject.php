@@ -37,6 +37,7 @@ class RequestAdditionObject extends Model implements Syncable
         'contr_agent_comment',
         'organization_comment',
         'file_url',
+        'type',
     ];
 
     private const ACTION_DRAFT = 'draft';
