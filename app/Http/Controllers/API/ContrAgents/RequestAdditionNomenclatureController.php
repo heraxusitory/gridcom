@@ -111,12 +111,12 @@ class RequestAdditionNomenclatureController extends Controller
         }
     }
 
-    public function downloadFile(Request $request, $price_negotiation_id)
+    public function downloadFile(Request $request, $ra_nomenclature_id)
     {
         /** @var IntegrationUser $user */
         $user = Auth::guard('api')->user();
         try {
-            $ra_nomenclature = RequestAdditionNomenclature::query()->where('contr_agent_id', $user->contr_agent()->id)->findOrFail($price_negotiation_id);
+            $ra_nomenclature = RequestAdditionNomenclature::query()->where(['uuid' => $ra_nomenclature_id, 'contr_agent_id' => $user->contr_agent()->id])->firstOrFail();
             if (Storage::exists($ra_nomenclature->file_url)) {
                 return response()->download(storage_path($ra_nomenclature->file_url));
             }

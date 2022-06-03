@@ -90,10 +90,10 @@ class RequestAdditionObjectController extends Controller
         }
     }
 
-    public function downloadFile(Request $request, $price_negotiation_id)
+    public function downloadFile(Request $request, $ra_object_id)
     {
         try {
-            $ra_object = RequestAdditionObject::query()->findOrFail($price_negotiation_id);
+            $ra_object = RequestAdditionObject::query()->where('uuid', $ra_object_id)->firstOrFail();
             if (Storage::exists($ra_object->file_url)) {
                 return response()->download(storage_path($ra_object->file_url));
             }

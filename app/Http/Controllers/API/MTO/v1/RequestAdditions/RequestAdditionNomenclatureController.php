@@ -90,10 +90,10 @@ class RequestAdditionNomenclatureController extends Controller
         }
     }
 
-    public function downloadFile(Request $request, $price_negotiation_id)
+    public function downloadFile(Request $request, $ra_nomenclature_id)
     {
         try {
-            $ra_nomenclature = RequestAdditionNomenclature::query()->findOrFail($price_negotiation_id);
+            $ra_nomenclature = RequestAdditionNomenclature::query()->where('uuid', $ra_nomenclature_id)->firstOrFail();
             if (Storage::exists($ra_nomenclature->file_url)) {
                 return response()->download(storage_path($ra_nomenclature->file_url));
             }

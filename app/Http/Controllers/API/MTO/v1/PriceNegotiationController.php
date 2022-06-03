@@ -89,7 +89,7 @@ class PriceNegotiationController extends Controller
     public function downloadFile(Request $request, $price_negotiation_id)
     {
         try {
-            $price_negotiation = PriceNegotiation::query()->findOrFail($price_negotiation_id);
+            $price_negotiation = PriceNegotiation::query()->where('uuid', $price_negotiation_id)->firstOrFail();
             if (Storage::exists($price_negotiation->file_url)) {
                 return response()->download(storage_path($price_negotiation->file_url));
             }

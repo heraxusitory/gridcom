@@ -137,7 +137,7 @@ class PriceNegotiationController extends Controller
         /** @var IntegrationUser $user */
         $user = Auth::guard('api')->user();
         try {
-            $price_negotiation = PriceNegotiation::query()->where('creator_contr_agent_id', $user->contr_agent()->id)->findOrFail($price_negotiation_id);
+            $price_negotiation = PriceNegotiation::query()->where(['uuid' => $price_negotiation_id, 'creator_contr_agent_id' => $user->contr_agent()->id])->firstOrFail();
             if (Storage::exists($price_negotiation->file_url)) {
                 return response()->download(storage_path($price_negotiation->file_url));
             }
