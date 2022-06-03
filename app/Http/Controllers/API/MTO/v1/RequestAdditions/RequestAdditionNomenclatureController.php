@@ -42,12 +42,12 @@ class RequestAdditionNomenclatureController extends Controller
                 if ($ra_nomenclature) {
                     $ra_nomenclature->update(['organization_status' => $item['organization_status']]);
 
-                    if (IntegrationUser::where('contr_agent_id', $ra_nomenclature->contr_agent?->uuid)->first()?->isProvider()) {
+                    if (IntegrationUser::where('contr_agent_id', $ra_nomenclature->contr_agent?->id)->first()?->isProvider()) {
                         event(new NewStack($ra_nomenclature,
                             (new ProviderSyncStack())->setProvider($ra_nomenclature->contr_agent),
                         ));
                     }
-                    if (IntegrationUser::where('contr_agent_id', $ra_nomenclature->contr_agent?->uuid)->first()?->isContractor()) {
+                    if (IntegrationUser::where('contr_agent_id', $ra_nomenclature->contr_agent?->id)->first()?->isContractor()) {
                         event(new NewStack($ra_nomenclature,
                             (new ContractorSyncStack())->setContractor($ra_nomenclature->contr_agent),
                         ));
