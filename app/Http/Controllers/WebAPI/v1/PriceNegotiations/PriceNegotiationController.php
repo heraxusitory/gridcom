@@ -9,6 +9,7 @@ use App\Models\Orders\Order;
 use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\CustomerObject;
+use App\Models\User;
 use App\Services\PriceNegotiations\CreatePriceNegotiationService;
 use App\Services\PriceNegotiations\UpdatePriceNegotiationService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -172,7 +173,7 @@ class PriceNegotiationController extends Controller
     {
         $user = auth('webapi')->user();
         try {
-            $price_negotiation = PriceNegotiation::query()->with(['positions']);
+            $price_negotiation = PriceNegotiation::query()->with(['positions.nomenclature']);
 
             if ($user->isProvider()) {
                 $price_negotiation = $price_negotiation->where('type', PriceNegotiation::TYPE_CONTRACT_HOME_METHOD())
@@ -190,6 +191,26 @@ class PriceNegotiationController extends Controller
             }
 
             return response()->json(['data' => $price_negotiation]);
+        } catch
+        (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function downloadFile(Request $request, $price_negotiation_id)
+    {
+        /** @var User $user */
+        $user = auth('webapi')->user();
+        try {
+            $price_negotiation = PriceNegotiation::query()->where('creator_contr_agent_id', $user->contr_agent_id())->findOrFail($price_negotiation_id);
+
         } catch
         (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
