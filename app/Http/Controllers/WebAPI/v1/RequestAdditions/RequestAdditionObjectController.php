@@ -7,12 +7,15 @@ use App\Http\Requests\RequestAdditionObjects\CreateRAObjectFormRequest;
 use App\Http\Requests\RequestAdditionObjects\UpdateRAObjectFormRequest;
 use App\Models\Orders\Order;
 use App\Models\References\Organization;
+use App\Models\RequestAdditions\RequestAdditionNomenclature;
 use App\Models\RequestAdditions\RequestAdditionObject;
+use App\Models\User;
 use App\Services\RequestAdditionObjects\CreateRequestAdditionObjectService;
 use App\Services\RequestAdditionObjects\UpdateRequestAdditionObjectService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
@@ -165,6 +168,29 @@ class RequestAdditionObjectController extends Controller
             return Organization::query()->whereIn('id', $organization_ids)->get();
         } else {
             throw new BadRequestException('Данное действие разрешено следующим ролям: подрядчик, поставщик.', 403);
+        }
+    }
+
+    public function downloadFile(Request $request, $ra_object_id)
+    {
+        /** @var User $user */
+        $user = auth('webapi')->user();
+        try {
+            $ra_object = RequestAdditionNomenclature::query()->where('contr_agent_id', $user->contr_agent_id())->findOrFail($ra_object_id);
+            if (Storage::exists($ra_object->file_url)) {
+                return response()->download(storage_path($ra_object->file_url));
+            }
+            return response('', 204);
+        } catch
+        (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
         }
     }
 }
