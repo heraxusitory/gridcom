@@ -139,7 +139,7 @@ class PriceNegotiationController extends Controller
         try {
             $price_negotiation = PriceNegotiation::query()->where(['uuid' => $price_negotiation_id, 'creator_contr_agent_id' => $user->contr_agent()->id])->firstOrFail();
             if (Storage::exists($price_negotiation->file_url)) {
-                return response()->download(storage_path($price_negotiation->file_url));
+                return response()->download(Storage::path($price_negotiation->file_url));
             }
             return response('', 204);
         } catch

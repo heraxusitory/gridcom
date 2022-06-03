@@ -110,7 +110,7 @@ class RequestAdditionObjectController extends Controller
         try {
             $ra_object = RequestAdditionObject::query()->where(['uuid' => $ra_object_id, 'contr_agent_id' => $user->contr_agent()->id])->firstOrFail();
             if (Storage::exists($ra_object->file_url)) {
-                return response()->download(storage_path($ra_object->file_url));
+                return response()->download(Storage::path($ra_object->file_url));
             }
             return response('', 204);
         } catch
