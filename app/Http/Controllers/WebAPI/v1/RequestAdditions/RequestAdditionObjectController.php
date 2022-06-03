@@ -178,7 +178,7 @@ class RequestAdditionObjectController extends Controller
         try {
             $ra_object = RequestAdditionNomenclature::query()->where('contr_agent_id', $user->contr_agent_id())->findOrFail($ra_object_id);
             if (Storage::exists($ra_object->file_url)) {
-                return response()->download(storage_path($ra_object->file_url));
+                return response()->download(Storage::path($ra_object->file_url));
             }
             return response('', 204);
         } catch

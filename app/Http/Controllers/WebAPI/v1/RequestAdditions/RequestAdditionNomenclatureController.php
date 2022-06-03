@@ -175,7 +175,7 @@ class RequestAdditionNomenclatureController extends Controller
         try {
             $ra_nomenclature = RequestAdditionNomenclature::query()->where('contr_agent_id', $user->contr_agent_id())->findOrFail($ra_nomenclature_id);
             if (Storage::exists($ra_nomenclature->file_url)) {
-                return response()->download(storage_path($ra_nomenclature->file_url));
+                return response()->download(Storage::path($ra_nomenclature->file_url));
             }
             return response('', 204);
         } catch
