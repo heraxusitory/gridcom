@@ -13,9 +13,12 @@ use App\Models\SyncStacks\MTOSyncStack;
 use App\Models\SyncStacks\ProviderSyncStack;
 use App\Serializers\CustomerSerializer;
 use App\Transformers\API\MTO\v1\RANomenclatureTransformer;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -84,6 +87,27 @@ class RequestAdditionNomenclatureController extends Controller
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
             return response()->json(['message' => 'System error'], 500);
+        }
+    }
+
+    public function downloadFile(Request $request, $price_negotiation_id)
+    {
+        try {
+            $ra_nomenclature = RequestAdditionNomenclature::query()->findOrFail($price_negotiation_id);
+            if (Storage::exists($ra_nomenclature->file_url)) {
+                return response()->download(storage_path($ra_nomenclature->file_url));
+            }
+            return response('', 204);
+        } catch
+        (ModelNotFoundException $e) {
+            return response()->json(['message' => 'Не найдено обьекта НСИ(номенклатура).'], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
         }
     }
 }

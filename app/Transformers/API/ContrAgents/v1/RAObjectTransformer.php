@@ -49,7 +49,7 @@ class RAObjectTransformer extends TransformerAbstract
             'responsible_full_name' => $object?->responsible_full_name,
             'contr_agent_comment' => $object?->contr_agent_comment,
             'organization_comment' => $object?->organization_comment,
-            'file_url' => $object?->file_url ? Storage::url($object->file_url) : $object?->file_url,
+            'file_exists' => /*$object?->file_url ? Storage::url($object->file_url) : $object?->file_url*/Storage::exists($object->file_url),
         ];
     }
 }
