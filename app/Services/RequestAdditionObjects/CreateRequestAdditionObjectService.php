@@ -50,7 +50,7 @@ class CreateRequestAdditionObjectService implements IService
 
 
             if (isset($data['file'])) {
-                $file_link = Storage::disk('public')->putFile('request-addition-objects/' . $ra_object->id, $data['file']);
+                $file_link = Storage::putFile('request-addition-objects/' . $ra_object->id, $data['file']);
                 $ra_object->file_url = /*Storage::disk('public')->*/url($file_link);
                 $ra_object->save();
             }

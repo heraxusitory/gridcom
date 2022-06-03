@@ -11,5 +11,6 @@ Route::group(['prefix' => 'price-negotiations', 'middleware' => 'role:provider,c
         Route::get('', [PriceNegotiationController::class, 'getPriceNegotiation'])->can('view,' . PriceNegotiation::class);
         Route::post('', [PriceNegotiationController::class, 'update'])->can('update,' . PriceNegotiation::class);
         Route::delete('', [PriceNegotiationController::class, 'delete'])->can('delete,' . PriceNegotiation::class);
+        Route::get('file_download', [PriceNegotiationController::class, 'downloadFile']);
     });
 });

@@ -66,12 +66,12 @@ class CreateOrUpdateRANomenclatureService implements IService
 
                 $old_file_url = $ra_nomenclature->file_url;
                 if (!is_null($old_file_url)) {
-                    Storage::disk('public')->delete($old_file_url);
+                    Storage::delete($old_file_url);
                 }
                 $ra_nomenclature->file_url = null;
 
                 if (isset($item['file'])) {
-                    $file_link = Storage::disk('public')->putFile('request-addition-nomenclature/' . $ra_nomenclature->id, $item['file']);
+                    $file_link = Storage::putFile('request-addition-nomenclature/' . $ra_nomenclature->id, $item['file']);
                     $ra_nomenclature->file_url = $file_link;
                 }
                 $ra_nomenclature->save();

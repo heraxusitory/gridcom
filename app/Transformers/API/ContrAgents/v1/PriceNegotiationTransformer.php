@@ -44,7 +44,7 @@ class PriceNegotiationTransformer extends TransformerAbstract
             'responsible_full_name' => $price_negotiation?->responsible_full_name,
             'responsible_phone' => $price_negotiation?->responsible_phone,
             'comment' => $price_negotiation?->comment,
-            'file_url' => $price_negotiation?->file_url ? Storage::disk('public')->url($price_negotiation->file_url) : $price_negotiation?->file_url,
+            'file_url' => $price_negotiation?->file_url ? Storage::url($price_negotiation->file_url) : $price_negotiation?->file_url,
         ];
     }
 

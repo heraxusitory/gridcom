@@ -64,12 +64,12 @@ class CreateOrUpdateRAObjectService implements IService
 
                 $old_file_url = $ra_object->file_url;
                 if (!is_null($old_file_url)) {
-                    Storage::disk('public')->delete($old_file_url);
+                    Storage::delete($old_file_url);
                 }
                 $ra_object->file_url = null;
 
                 if (isset($item['file'])) {
-                    $file_link = Storage::disk('public')->putFile('request-addition-nomenclature/' . $ra_object->id, $item['file']);
+                    $file_link = Storage::putFile('request-addition-nomenclature/' . $ra_object->id, $item['file']);
                     $ra_object->file_url = $file_link;
                 }
                 $ra_object->save();

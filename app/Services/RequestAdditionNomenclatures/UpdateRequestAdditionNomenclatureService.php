@@ -58,7 +58,7 @@ class UpdateRequestAdditionNomenclatureService implements IService
             $this->ra_nomenclature->file_url = null;
 
             if (isset($data['file'])) {
-                $file_link = Storage::disk('public')->putFile('request-addition-nomenclature' . $this->ra_nomenclature->id, $data['file']);
+                $file_link = Storage::putFile('request-addition-nomenclature' . $this->ra_nomenclature->id, $data['file']);
                 $this->ra_nomenclature->file_url = $file_link;
             }
             $this->ra_nomenclature->save();

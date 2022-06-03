@@ -55,7 +55,7 @@ class UpdateRequestAdditionObjectService implements IService
             $this->ra_object->file_url = null;
 
             if (isset($data['file'])) {
-                $file_link = Storage::disk('public')->putFile('request-addition-objects' . $this->ra_object->id, $data['file']);
+                $file_link = Storage::putFile('request-addition-objects' . $this->ra_object->id, $data['file']);
                 $this->ra_object->file_url = $file_link;
             }
             $this->ra_object->save();

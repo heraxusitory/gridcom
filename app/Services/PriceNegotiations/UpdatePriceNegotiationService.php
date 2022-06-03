@@ -58,12 +58,12 @@ class UpdatePriceNegotiationService implements IService
 
             $old_file_url = $this->price_negotiation->file_url;
             if (!is_null($old_file_url)) {
-                Storage::disk('public')->delete($old_file_url);
+                Storage::delete($old_file_url);
             }
             $this->price_negotiation->file_url = null;
 
             if (isset($data['file'])) {
-                $file_link = Storage::disk('public')->putFile('price-negotiations/' . $this->price_negotiation->id, $data['file']);
+                $file_link = Storage::putFile('price-negotiations/' . $this->price_negotiation->id, $data['file']);
                 $this->price_negotiation->file_url = $file_link;
             }
             $this->price_negotiation->save();

@@ -52,12 +52,12 @@ class CreateOrUpdatePriceNegotiationService implements IService
 
                 $old_file_url = $pn->file_url;
                 if (!is_null($old_file_url)) {
-                    Storage::disk('public')->delete($old_file_url);
+                    Storage::delete($old_file_url);
                 }
                 $pn->file_url = null;
 
                 if (isset($item['file'])) {
-                    $file_link = Storage::disk('public')->putFile('price-negotiations/' . $pn->id, $item['file']);
+                    $file_link = Storage::putFile('price-negotiations/' . $pn->id, $item['file']);
                     $pn->file_url = $file_link;
                 }
                 $pn->save();

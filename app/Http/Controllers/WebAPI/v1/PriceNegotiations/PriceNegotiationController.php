@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
@@ -210,7 +211,10 @@ class PriceNegotiationController extends Controller
         $user = auth('webapi')->user();
         try {
             $price_negotiation = PriceNegotiation::query()->where('creator_contr_agent_id', $user->contr_agent_id())->findOrFail($price_negotiation_id);
-
+            if (Storage::exists($price_negotiation->file_url)) {
+                return response()->download(storage_path($price_negotiation->file_url));
+            }
+            return response('', 204);
         } catch
         (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
