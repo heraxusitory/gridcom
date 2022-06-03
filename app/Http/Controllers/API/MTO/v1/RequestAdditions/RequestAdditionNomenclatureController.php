@@ -33,6 +33,7 @@ class RequestAdditionNomenclatureController extends Controller
             'ra_nomenclatures.*.organization_status' => ['required', Rule::in(RequestAdditionNomenclature::getOrganizationStatuses())],
         ])->validate();
 
+        $data = $data['ra_nomenclatures'];
         try {
             foreach ($data as $item) {
                 /** @var RequestAdditionNomenclature $ra_nomenclature */
