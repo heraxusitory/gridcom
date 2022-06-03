@@ -8,21 +8,23 @@ use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Http\File;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class CreatePriceNegotiationService implements IService
 {
-    public function __construct(private $payload)
+    public function __construct(private Request $payload)
     {
         $this->user = auth('webapi')->user();
     }
 
     public function run()
     {
-        $data = $this->payload;
+        $data = $this->payload->all();
 
         $organization_status = match ($data['action']) {
             PriceNegotiation::ACTION_DRAFT() => PriceNegotiation::ORGANIZATION_STATUS_DRAFT,
@@ -53,7 +55,9 @@ class CreatePriceNegotiationService implements IService
                 ]);
             }
             if (isset($data['file'])) {
-                $file_link = Storage::putFile('price-negotiations/' . $price_negotiation->id, $data['file']);
+                Log::debug('data_file', [$data['file']]);
+                Log::debug('data_file2', [$this->payload->file('file')]);
+                $file_link = Storage::putFile('price-negotiations/' . $price_negotiation->id, /*$data['file']*/ $this->payload->file('file'));
                 $price_negotiation->file_url = /*Storage::disk('public')->*//*url*/
                     $file_link;
                 $price_negotiation->save();

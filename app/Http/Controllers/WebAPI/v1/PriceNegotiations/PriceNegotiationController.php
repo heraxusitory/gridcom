@@ -96,7 +96,7 @@ class PriceNegotiationController extends Controller
     public function create(CreatePriceNegotiationFormRequest $request)
     {
         try {
-            return response()->json(['data' => (new CreatePriceNegotiationService($request->all()))->run()]);
+            return response()->json(['data' => (new CreatePriceNegotiationService($request))->run()]);
         } catch
         (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
@@ -117,7 +117,7 @@ class PriceNegotiationController extends Controller
             $price_negotiation = PriceNegotiation::query()->findOrFail($price_negotiation_id);
             throw_if($price_negotiation->organization_status !== PriceNegotiation::ORGANIZATION_STATUS_DRAFT,
                 new BadRequestException('Невоможно редактировать запрос на согласование цен. Запрос на согласование цен уже отправлен на согласование', 400));
-            return response()->json(['data' => (new UpdatePriceNegotiationService($request->all(), $price_negotiation))->run()]);
+            return response()->json(['data' => (new UpdatePriceNegotiationService($request, $price_negotiation))->run()]);
         } catch
         (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
