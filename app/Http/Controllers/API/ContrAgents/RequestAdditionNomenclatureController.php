@@ -116,7 +116,7 @@ class RequestAdditionNomenclatureController extends Controller
         /** @var IntegrationUser $user */
         $user = Auth::guard('api')->user();
         try {
-            $ra_nomenclature = RequestAdditionNomenclature::query()->where(['uuid' => $ra_nomenclature_id, 'contr_agent_id' => $user->contr_agent()->id])->firstOrFail();
+            $ra_nomenclature = RequestAdditionNomenclature::query()->where(['uuid' => $ra_nomenclature_id, 'contr_agent_id' => $user->contr_agent?->id])->firstOrFail();
             if (Storage::exists($ra_nomenclature->file_url)) {
                 return response()->download(Storage::path($ra_nomenclature->file_url));
             }
