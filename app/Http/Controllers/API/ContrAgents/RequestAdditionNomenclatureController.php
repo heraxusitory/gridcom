@@ -46,9 +46,9 @@ class RequestAdditionNomenclatureController extends Controller
         ])->validate();
 
         Validator::make($data, [
-            'ra_nomenclatures.*.nomenclature.mnemocode' => ['required_if:ra_nomenclatures.*.type,' . RequestAdditionNomenclature::TYPE_CHANGE(), 'string', 'max:255'],
-            'ra_nomenclatures.*.nomenclature.name' => ['required_if:ra_nomenclatures.*.type,' . RequestAdditionNomenclature::TYPE_NEW(), 'string', 'max:255'],
-            'ra_nomenclatures.*.nomenclature.unit' => ['required_if:ra_nomenclatures.*.type,' . RequestAdditionNomenclature::TYPE_NEW(), 'string', 'max:255'],
+            'ra_nomenclatures.*.nomenclature.mnemocode' => ['nullable', 'required_if:ra_nomenclatures.*.type,' . RequestAdditionNomenclature::TYPE_CHANGE(), 'string', 'max:255'],
+            'ra_nomenclatures.*.nomenclature.name' => ['nullable', 'required_if:ra_nomenclatures.*.type,' . RequestAdditionNomenclature::TYPE_NEW(), 'string', 'max:255'],
+            'ra_nomenclatures.*.nomenclature.unit' => ['nullable', 'required_if:ra_nomenclatures.*.type,' . RequestAdditionNomenclature::TYPE_NEW(), 'string', 'max:255'],
             'ra_nomenclatures.*.description' => 'nullable|string',
             'ra_nomenclatures.*.responsible_full_name' => 'nullable|string|max:255',
             'ra_nomenclatures.*.contr_agent_comment' => 'nullable|string|max:255',
