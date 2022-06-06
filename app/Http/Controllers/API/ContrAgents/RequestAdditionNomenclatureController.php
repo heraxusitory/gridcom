@@ -43,6 +43,9 @@ class RequestAdditionNomenclatureController extends Controller
                 return $user->isProvider();
             }), 'string', 'max:255'],
             'ra_nomenclatures.*.organization.name' => 'required|string|max:255',
+        ])->validate();
+
+        Validator::make($data, [
             'ra_nomenclatures.*.nomenclature.mnemocode' => [Rule::requiredIf(function () use ($data) {
                 return $data['ra_nomenclatures']['type'] === RequestAdditionNomenclature::TYPE_CHANGE();
             }), 'string', 'max:255'],
