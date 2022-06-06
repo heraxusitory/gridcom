@@ -44,10 +44,10 @@ class RequestAdditionNomenclatureController extends Controller
             }), 'string', 'max:255'],
             'ra_nomenclatures.*.organization.name' => 'required|string|max:255',
             'ra_nomenclatures.*.nomenclature.mnemocode' => [Rule::requiredIf(function () use ($data) {
-                return $data['type'] === RequestAdditionNomenclature::TYPE_CHANGE();
+                return $data['ra_nomenclatures']['type'] === RequestAdditionNomenclature::TYPE_CHANGE();
             }), 'string', 'max:255'],
             'ra_nomenclatures.*.nomenclature.name' => [Rule::requiredIf(function () use ($data) {
-                return $data['type'] === RequestAdditionNomenclature::TYPE_NEW();
+                return $data['ra_nomenclatures']['type'] === RequestAdditionNomenclature::TYPE_NEW();
             }), 'string', 'max:255'],
             'ra_nomenclatures.*.nomenclature.unit' => [Rule::requiredIf(function () use ($data) {
                 return $data['type'] === RequestAdditionNomenclature::TYPE_NEW();
