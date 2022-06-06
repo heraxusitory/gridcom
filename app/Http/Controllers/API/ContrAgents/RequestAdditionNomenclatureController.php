@@ -33,7 +33,7 @@ class RequestAdditionNomenclatureController extends Controller
         Validator::make($data, [
             'ra_nomenclatures' => 'required|array',
             'ra_nomenclatures.*.id' => 'required|uuid',
-            'ra_nomenclatures.*.type' => ['required', Rule::in(['new', 'change'])],
+            'ra_nomenclatures.*.type' => ['required', Rule::in([RequestAdditionNomenclature::TYPE_CHANGE(), RequestAdditionNomenclature::TYPE_NEW()])],
             'ra_nomenclatures.*.number' => 'required|string|max:255',
             'ra_nomenclatures.*.date' => 'required|date_format:Y-m-d',
             'ra_nomenclatures.*.work_agreement.number' => ['nullable', Rule::requiredIf(function () use ($user) {
@@ -46,26 +46,20 @@ class RequestAdditionNomenclatureController extends Controller
         ])->validate();
 
         Validator::make($data, [
-            'ra_nomenclatures.*.nomenclature.mnemocode' => [Rule::requiredIf(function () use ($data) {
-                return $data['ra_nomenclatures']['type'] === RequestAdditionNomenclature::TYPE_CHANGE();
-            }), 'string', 'max:255'],
-            'ra_nomenclatures.*.nomenclature.name' => [Rule::requiredIf(function () use ($data) {
-                return $data['ra_nomenclatures']['type'] === RequestAdditionNomenclature::TYPE_NEW();
-            }), 'string', 'max:255'],
-            'ra_nomenclatures.*.nomenclature.unit' => [Rule::requiredIf(function () use ($data) {
-                return $data['type'] === RequestAdditionNomenclature::TYPE_NEW();
-            }), 'string', 'max:255'],
+            'ra_nomenclatures.*.nomenclature.mnemocode' => ['required_if:ra_nomenclatures.*.type,' . RequestAdditionNomenclature::TYPE_CHANGE(), 'string', 'max:255'],
+            'ra_nomenclatures.*.nomenclature.name' => ['required_if:ra_nomenclatures.*.type,' . RequestAdditionNomenclature::TYPE_NEW(), 'string', 'max:255'],
+            'ra_nomenclatures.*.nomenclature.unit' => ['required_if:ra_nomenclatures.*.type,' . RequestAdditionNomenclature::TYPE_NEW(), 'string', 'max:255'],
             'ra_nomenclatures.*.description' => 'nullable|string',
             'ra_nomenclatures.*.responsible_full_name' => 'nullable|string|max:255',
             'ra_nomenclatures.*.contr_agent_comment' => 'nullable|string|max:255',
-            'ra_nomenclatures.*.file' => 'nullable|file',
-        ])->validate();
+            'ra_nomenclatures.*.file' => 'nullable|file',])->validate();
 
         try {
             $data = $data['ra_nomenclatures'];
             (new CreateOrUpdateRANomenclatureService($data, $user))->run();
             return response()->json();
-        } catch (\Exception $e) {
+        } catch
+        (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
             return response()->json(['message' => 'System error'], 500);
         }
