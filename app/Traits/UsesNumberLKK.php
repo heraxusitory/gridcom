@@ -11,11 +11,13 @@ trait UsesNumberLKK
 {
     protected static function booted()
     {
-        static::creating(function ($model) {
+        static::created(function ($model) {
             if (Auth::guard('webapi')->check()) {
-                $last_increment_id = $model->newQuery()->max('id');
-                $last_increment_id++;
-                $model->number = (string)config('mto_lkk.prefix_lkk_number') . $last_increment_id;
+//                dd($model->id);
+//                $last_increment_id = $model->newQuery()->max('id');
+//                $last_increment_id++;
+                $model->number = (string)config('mto_lkk.prefix_lkk_number') . $model->id;
+                $model->save();
             }
         });
     }
