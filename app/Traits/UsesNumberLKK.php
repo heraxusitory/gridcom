@@ -4,6 +4,7 @@
 namespace App\Traits;
 
 
+use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Support\Facades\Auth;
 
 trait UsesNumberLKK
@@ -12,9 +13,13 @@ trait UsesNumberLKK
     {
         static::creating(function ($model) {
             if (Auth::guard('webapi')->check()) {
-                $last_increment_id = $model->newQuery()->max('id');
-                $last_increment_id++;
-                $model->number = (string)config('mto_lkk.prefix_lkk_number') . $last_increment_id;
+//                $last_increment_id = $model->newQuery()->max('id');
+//                $last_increment_id++;
+                $model->number = IdGenerator::generate([
+                    'table' => $this->getTable(),
+                    'field' => 'number', 'length' => 7,
+                    'prefix' => config('lkk.prefix_lkk_number')
+                ]);
             }
         });
     }
