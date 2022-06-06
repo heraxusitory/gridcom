@@ -16,7 +16,7 @@ trait UsesNumberLKK
 //                $last_increment_id = $model->newQuery()->max('id');
 //                $last_increment_id++;
                 $model->number = IdGenerator::generate([
-                    'table' => $this->getTable(),
+                    'table' => $model->getTable(),
                     'field' => 'number', 'length' => 7,
                     'prefix' => config('lkk.prefix_lkk_number')
                 ]);
