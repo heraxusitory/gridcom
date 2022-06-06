@@ -8,6 +8,7 @@ use App\Traits\HasSyncStack;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Log;
 
 class MTOSyncStack extends Model implements SyncStackable
 {
@@ -32,6 +33,8 @@ class MTOSyncStack extends Model implements SyncStackable
             ->with('entity')
             ->get()
             ->map(function ($stack) {
+                Log::debug('stack', [$stack]);
+                Log::debug('stack_entity', [$stack->entity]);
                 $stack->entity->stack_id = $stack->id;
                 return $stack->entity;
             });
