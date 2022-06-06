@@ -33,10 +33,15 @@ class MTOSyncStack extends Model implements SyncStackable
             ->with('entity')
             ->get()
             ->map(function ($stack) {
-                Log::debug('stack', [$stack]);
-                Log::debug('stack_entity', [$stack->entity]);
-                $stack->entity->stack_id = $stack->id;
-                return $stack->entity;
+//                Log::debug('stack', [$stack]);
+//                Log::debug('stack_entity', [$stack->entity]);
+                if ($stack->entity) {
+                    $stack->entity->stack_id = $stack->id;
+                    return $stack->entity;
+                }
+                return $stack;
+            })->filter(function ($stack) {
+                return isset($stack->entity);
             });
     }
 }

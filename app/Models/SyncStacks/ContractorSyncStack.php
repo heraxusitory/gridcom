@@ -46,8 +46,13 @@ class ContractorSyncStack extends Model implements SyncStackable
             ->with('entity')
             ->get()
             ->map(function ($stack) {
-                $stack->entity->stack_id = $stack->id;
-                return $stack->entity;
+                if ($stack->entity) {
+                    $stack->entity->stack_id = $stack->id;
+                    return $stack->entity;
+                }
+                return $stack;
+            })->filter(function ($stack) {
+                return isset($stack->entity);
             });
     }
 }
