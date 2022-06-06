@@ -37,7 +37,7 @@ class RequestAdditionNomenclatureController extends Controller
             if ($this->user->isProvider()) {
                 $ra_nomenclatures->where('contr_agent_id', $this->user->contr_agent_id())->whereNotNull('provider_contract_id');
             } elseif ($this->user->isContractor()) {
-                $ra_nomenclatures->where('contr_agent_id', $this->user->contr_agent_id()->whereNotNull('work_agreement_id'));
+                $ra_nomenclatures->where('contr_agent_id', $this->user->contr_agent_id())->whereNotNull('work_agreement_id');
             }
             $ra_nomenclatures = $ra_nomenclatures->paginate();
             return response()->json($ra_nomenclatures);
