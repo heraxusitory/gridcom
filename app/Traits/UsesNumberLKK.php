@@ -13,13 +13,9 @@ trait UsesNumberLKK
     {
         static::creating(function ($model) {
             if (Auth::guard('webapi')->check()) {
-//                $last_increment_id = $model->newQuery()->max('id');
-//                $last_increment_id++;
-                $model->number = IdGenerator::generate([
-                    'table' => $model->getTable(),
-                    'field' => 'number', 'length' => 11,
-                    'prefix' => config('lkk.prefix_lkk_number')
-                ]);
+                $last_increment_id = $model->newQuery()->max('id');
+                $last_increment_id++;
+                $model->number = (string)config('mto_lkk.prefix_lkk_number') . $last_increment_id;
             }
         });
     }
