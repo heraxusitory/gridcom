@@ -45,14 +45,12 @@ class ProviderSyncStack extends Model implements SyncStackable
             ->where('model', $model_class)
             ->with('entity')
             ->get()
-            ->map(function ($stack) {
-                if ($stack->entity) {
-                    $stack->entity->stack_id = $stack->id;
-                    return $stack->entity;
-                }
-                return $stack;
-            })->filter(function ($stack) {
+            ->filter(function ($stack) {
                 return isset($stack->entity);
+            })
+            ->map(function ($stack) {
+                $stack->entity->stack_id = $stack->id;
+                return $stack->entity;
             });
     }
 }
