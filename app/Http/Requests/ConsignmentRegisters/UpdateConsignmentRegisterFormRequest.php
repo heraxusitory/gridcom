@@ -63,13 +63,11 @@ class UpdateConsignmentRegisterFormRequest extends FormRequest
             'positions.*.price_without_vat' => 'required|numeric',
         ]);
 
-        //todo
         $orders = $orders->filter(function ($order) {
             return $order->customer->work_agreement_id === request()->work_agreement_id;
         });
 
 
-//        $request_consignment_ids = collect(request()->positions)->pluck('consignment_id');
         $consignments = Consignment::query()
             ->whereHas('positions', function ($q) use ($orders) {
                 $q->whereIn('order_id', $orders->pluck('id'));
@@ -118,14 +116,6 @@ class UpdateConsignmentRegisterFormRequest extends FormRequest
                     break;
                 }
             }
-//            foreach ($consignments as $consignment) {
-//                $nomenclature_ids = $consignment->positions->pluck('nomenclature_id')->unique();
-//
-//                Validator::validate(request()->all(), [
-//                    'positions.*.consignment_id' => ['required', Rule::in($consignment->pluck('id'))],
-//                    'positions.*.nomenclature_id' => ['required', 'integer', Rule::in($nomenclature_ids)],
-//                ]);
-//            }
         })->validate();
 
 
