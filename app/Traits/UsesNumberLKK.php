@@ -16,7 +16,7 @@ trait UsesNumberLKK
 //                dd($model->id);
 //                $last_increment_id = $model->newQuery()->max('id');
 //                $last_increment_id++;
-                $model->number = (string)config('mto_lkk.prefix_lkk_number') . $model->id;
+                $model->number = (string)config('lkk.prefix_lkk_number') . $model->id;
                 $model->save();
             }
         });
