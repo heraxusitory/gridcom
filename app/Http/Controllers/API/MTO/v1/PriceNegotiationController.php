@@ -60,8 +60,8 @@ class PriceNegotiationController extends Controller
     {
         try {
             return DB::transaction(function () {
-                $orders = MTOSyncStack::getModelEntities(PriceNegotiation::class);
-                return fractal()->collection($orders)->transformWith(PriceNegotiationTransformer::class)->serializeWith(CustomerSerializer::class);
+                $price_negotiations = MTOSyncStack::getModelEntities(PriceNegotiation::class);
+                return fractal()->collection($price_negotiations)->transformWith(PriceNegotiationTransformer::class)->serializeWith(CustomerSerializer::class);
             });
         } catch (\Exception $e) {
             Log::error($e->getMessage(), $e->getTrace());
