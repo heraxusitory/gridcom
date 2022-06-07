@@ -23,12 +23,12 @@ class OrderFilter extends QueryFilter
         return $this->builder->whereDate('order_date', '<=', $time);
     }
 
-    public function dedline_date_start(string $time)
+    public function deadline_date_start(string $time)
     {
         return $this->builder->whereDate('deadline_date', '>=', $time);
     }
 
-    public function dedline_date_end(string $time)
+    public function deadline_date_end(string $time)
     {
         return $this->builder->whereDate('deadline_date', '<=', $time);
     }
