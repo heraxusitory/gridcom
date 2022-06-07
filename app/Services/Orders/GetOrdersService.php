@@ -15,7 +15,7 @@ class GetOrdersService implements IService
     private $payload;
     private $user;
 
-    public function __construct($payload)
+    public function __construct($payload, private $filter)
     {
         $this->payload = $payload;
         $this->user = Auth::user();
@@ -23,7 +23,7 @@ class GetOrdersService implements IService
 
     public function run()
     {
-        $orders = Order::query()
+        $orders = Order::query()->filter($this->filter)
             ->with(['customer.contract', 'provider.contract', 'contractor']);
         if ($this->user->isProvider()) {
             $orders->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id())

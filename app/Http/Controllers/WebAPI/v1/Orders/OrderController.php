@@ -6,6 +6,7 @@ namespace App\Http\Controllers\WebAPI\v1\Orders;
 
 use App\Http\Controllers\Controller;
 use App\Models\Orders\Order;
+use App\Services\Filters\OrderFilter;
 use App\Services\Orders\GetOrderService;
 use App\Services\Orders\GetOrdersService;
 use App\Services\Orders\Reports\GetReportService;
@@ -23,11 +24,11 @@ class OrderController extends Controller
         $this->user = auth('webapi')->user();
     }
 
-    public function index(Request $request)
+    public function index(Request $request, OrderFilter $filter)
     {
         try {
             $data = $request->all();
-            $orders = (new GetOrdersService($data))->run();
+            $orders = (new GetOrdersService($data, $filter))->run();
             return response()->json(['data' => $orders]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
