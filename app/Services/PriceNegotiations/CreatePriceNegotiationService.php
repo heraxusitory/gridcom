@@ -4,7 +4,12 @@
 namespace App\Services\PriceNegotiations;
 
 
+use App\Events\NewStack;
 use App\Models\PriceNegotiations\PriceNegotiation;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
+use App\Models\User;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Http\File;
@@ -17,6 +22,8 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class CreatePriceNegotiationService implements IService
 {
+    private ?\Illuminate\Contracts\Auth\Authenticatable $user;
+
     public function __construct(private Request $payload)
     {
         $this->user = auth('webapi')->user();
@@ -33,6 +40,7 @@ class CreatePriceNegotiationService implements IService
         };
 
         return DB::transaction(function () use ($data, $organization_status) {
+            /** @var PriceNegotiation $price_negotiation */
             $price_negotiation = PriceNegotiation::query()->create([
                 'uuid' => Str::uuid(),
                 'type' => $data['type'],
@@ -62,6 +70,20 @@ class CreatePriceNegotiationService implements IService
                     $file_link;
                 $price_negotiation->save();
             }
+
+            if ($this->user->isProvider())
+                event(new NewStack($price_negotiation,
+                        (new ProviderSyncStack())->setProvider($this->user->contr_agent_id()))
+                );
+            if ($this->user->isContractor())
+                event(new NewStack($price_negotiation,
+                        (new ContractorSyncStack())->setContractor($this->user->contr_agent_id()))
+                );
+
+            event(new NewStack($price_negotiation,
+                    new MTOSyncStack())
+            );
+
             return $price_negotiation;
         });
     }
