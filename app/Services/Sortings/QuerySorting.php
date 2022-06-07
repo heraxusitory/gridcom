@@ -33,7 +33,7 @@ abstract class QuerySorting
 //            }
 //        }
 //        foreach ($this->fields() as $field => $value) {
-        $method = Str::camel($this->sort_field());
+        $method = Str::snake($this->sort_field());
         if (method_exists($this, $method)) {
             call_user_func([$this, $method]);
         } else $this->default_order();

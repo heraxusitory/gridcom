@@ -40,23 +40,21 @@ class OrderSorting extends QuerySorting
 
     public function work_type()
     {
-        return $this->builder->with(['customer' => function ($q) {
-            $q->orderBy('work_type', $this->order);
-        }]);
+        return $this->builder
+            ->leftJoin('order_customers', 'orders.customer_id', '=', 'order_customers.id')
+            ->orderBy('order_customers.work_type', $this->order);
     }
 
     public function organization()
     {
-        return $this->builder->with(['customer.organization' => function ($q) {
-            $q->orderBy('name', $this->order);
-        }]);
+        return $this->builder
+            ->leftJoin('order_customers', 'orders.customer_id', '=', 'order_customers.id')
+            ->leftJoin('organizations', 'order_customers.organization_id', '=', 'organizations.id')
+            ->orderBy('organizations.name', $this->order);
     }
 
     public function positions_sum_amount_without_vat()
     {
-//        return $this->builder->with(['customer.organization' => function ($q) {
-//            $q->orderBy('name', $this->order);
-//        }]);
         return $this->builder->withSum('positions', 'amount_without_vat')->orderBy('positions_sum_amount_without_vat', $this->order);
     }
 }
