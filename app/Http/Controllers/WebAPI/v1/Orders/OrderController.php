@@ -10,6 +10,7 @@ use App\Services\Filters\OrderFilter;
 use App\Services\Orders\GetOrderService;
 use App\Services\Orders\GetOrdersService;
 use App\Services\Orders\Reports\GetReportService;
+use App\Services\Sortings\OrderSorting;
 use App\Transformers\WebAPI\v1\OrderTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -24,11 +25,11 @@ class OrderController extends Controller
         $this->user = auth('webapi')->user();
     }
 
-    public function index(Request $request, OrderFilter $filter)
+    public function index(Request $request, OrderFilter $filter, OrderSorting $sorting)
     {
         try {
             $data = $request->all();
-            $orders = (new GetOrdersService($data, $filter))->run();
+            $orders = (new GetOrdersService($data, $filter, $sorting))->run();
             return response()->json(['data' => $orders]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);

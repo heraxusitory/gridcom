@@ -10,6 +10,7 @@ use App\Models\Customer;
 use App\Models\Orders\OrderPositions\OrderPosition;
 use App\Models\Provider;
 use App\Traits\Filterable;
+use App\Traits\Sortable;
 use App\Traits\UseNotification;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -19,7 +20,7 @@ use Illuminate\Support\Carbon;
 
 class Order extends Model implements Syncable
 {
-    use HasFactory, UsesNumberLKK, UseNotification, Filterable;
+    use HasFactory, UsesNumberLKK, UseNotification, Filterable, Sortable;
 
     protected $table = 'orders';
 

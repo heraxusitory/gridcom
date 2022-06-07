@@ -73,11 +73,11 @@ class OrderFilter extends QueryFilter
         return $this->builder->whereRelation('customer.subObject', 'id', $sub_object_id);
     }
 
-    public function amount_without_vat(float $amount_without_vat)
+    public function positions_sum_amount_without_vat(float $positions_sum_amount_without_vat)
     {
         $order_ids = Order::query()->withSum('positions', 'amount_without_vat')->get()
-            ->filter(function ($order) use ($amount_without_vat) {
-                return (float)$order->positions_sum_amount_without_vat === (float)$amount_without_vat;
+            ->filter(function ($order) use ($positions_sum_amount_without_vat) {
+                return (float)$order->positions_sum_amount_without_vat === (float)$positions_sum_amount_without_vat;
             })->pluck('id');
         return $this->builder->whereIn('id', $order_ids);
     }
