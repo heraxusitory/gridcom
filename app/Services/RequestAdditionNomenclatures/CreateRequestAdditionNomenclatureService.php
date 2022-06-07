@@ -4,7 +4,11 @@
 namespace App\Services\RequestAdditionNomenclatures;
 
 
+use App\Events\NewStack;
 use App\Models\RequestAdditions\RequestAdditionNomenclature;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +37,7 @@ class CreateRequestAdditionNomenclatureService implements IService
         };
 
         return DB::transaction(function () use ($data, $organization_status) {
+            /** @var RequestAdditionNomenclature $ra_nomenclature */
             $ra_nomenclature = RequestAdditionNomenclature::query()->create([
                 'uuid' => Str::uuid(),
                 'date' => Carbon::today()->format('Y-m-d'),
@@ -59,6 +64,22 @@ class CreateRequestAdditionNomenclatureService implements IService
                 ;
                 $ra_nomenclature->save();
             }
+
+            if ($ra_nomenclature->organization_status !== RequestAdditionNomenclature::ORGANIZATION_STATUS_DRAFT) {
+                if ($this->user->isProvider())
+                    event(new NewStack($ra_nomenclature,
+                            (new ProviderSyncStack())->setProvider($this->user->contr_agent()))
+                    );
+                if ($this->user->isContractor())
+                    event(new NewStack($ra_nomenclature,
+                            (new ContractorSyncStack())->setContractor($this->user->contr_agent()))
+                    );
+
+                event(new NewStack($ra_nomenclature,
+                        new MTOSyncStack())
+                );
+            }
+
             return $ra_nomenclature;
         });
     }

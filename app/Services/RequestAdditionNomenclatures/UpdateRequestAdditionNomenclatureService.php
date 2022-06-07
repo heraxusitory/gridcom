@@ -4,7 +4,11 @@
 namespace App\Services\RequestAdditionNomenclatures;
 
 
+use App\Events\NewStack;
 use App\Models\RequestAdditions\RequestAdditionNomenclature;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -62,6 +66,21 @@ class UpdateRequestAdditionNomenclatureService implements IService
                 $this->ra_nomenclature->file_url = $file_link;
             }
             $this->ra_nomenclature->save();
+
+            if ($this->ra_nomenclature->organization_status !== RequestAdditionNomenclature::ORGANIZATION_STATUS_DRAFT) {
+                if ($this->user->isProvider())
+                    event(new NewStack($this->ra_nomenclature,
+                            (new ProviderSyncStack())->setProvider($this->user->contr_agent()))
+                    );
+                if ($this->user->isContractor())
+                    event(new NewStack($this->ra_nomenclature,
+                            (new ContractorSyncStack())->setContractor($this->user->contr_agent()))
+                    );
+
+                event(new NewStack($this->ra_nomenclature,
+                        new MTOSyncStack())
+                );
+            }
 
             return $this->ra_nomenclature;
         });
