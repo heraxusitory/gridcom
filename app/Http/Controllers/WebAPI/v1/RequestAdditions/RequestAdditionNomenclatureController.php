@@ -39,7 +39,7 @@ class RequestAdditionNomenclatureController extends Controller
             } elseif ($this->user->isContractor()) {
                 $ra_nomenclatures->where('contr_agent_id', $this->user->contr_agent_id())->whereNotNull('work_agreement_id');
             }
-            $ra_nomenclatures = $ra_nomenclatures->paginate();
+            $ra_nomenclatures = $ra_nomenclatures->get();
             return response()->json($ra_nomenclatures);
         } catch
         (ModelNotFoundException $e) {
