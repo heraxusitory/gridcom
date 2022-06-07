@@ -32,6 +32,7 @@ class RequestAdditionNomenclature extends Model implements Syncable
         'organization_status',
         'nomenclature_id',
         'nomenclature_name',
+        'nomenclature_unit',
         'description',
         'responsible_full_name',
         'contr_agent_comment',
