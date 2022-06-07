@@ -73,11 +73,11 @@ class CreatePriceNegotiationService implements IService
 
             if ($this->user->isProvider())
                 event(new NewStack($price_negotiation,
-                        (new ProviderSyncStack())->setProvider($this->user->contr_agent_id()))
+                        (new ProviderSyncStack())->setProvider($this->user->contr_agent()))
                 );
             if ($this->user->isContractor())
                 event(new NewStack($price_negotiation,
-                        (new ContractorSyncStack())->setContractor($this->user->contr_agent_id()))
+                        (new ContractorSyncStack())->setContractor($this->user->contr_agent()))
                 );
 
             event(new NewStack($price_negotiation,
