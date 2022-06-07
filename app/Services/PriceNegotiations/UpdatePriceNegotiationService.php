@@ -77,18 +77,20 @@ class UpdatePriceNegotiationService implements IService
             }
             $this->price_negotiation->save();
 
-            if ($this->user->isProvider())
-                event(new NewStack($this->price_negotiation,
-                        (new ProviderSyncStack())->setProvider($this->user->contr_agent()))
-                );
-            if ($this->user->isContractor())
-                event(new NewStack($this->price_negotiation,
-                        (new ContractorSyncStack())->setContractor($this->user->contr_agent()))
-                );
+            if ($this->price_negotiation->organization_status !== PriceNegotiation::ORGANIZATION_STATUS_DRAFT) {
+                if ($this->user->isProvider())
+                    event(new NewStack($this->price_negotiation,
+                            (new ProviderSyncStack())->setProvider($this->user->contr_agent()))
+                    );
+                if ($this->user->isContractor())
+                    event(new NewStack($this->price_negotiation,
+                            (new ContractorSyncStack())->setContractor($this->user->contr_agent()))
+                    );
 
-            event(new NewStack($this->price_negotiation,
-                    new MTOSyncStack())
-            );
+                event(new NewStack($this->price_negotiation,
+                        new MTOSyncStack())
+                );
+            }
 
             return $this->price_negotiation;
         });
