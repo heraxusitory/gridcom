@@ -17,7 +17,7 @@ class GetOrdersService implements IService
     private $payload;
     private $user;
 
-    public function __construct($payload, private OrderFilter$filter ,private OrderSorting $sorting)
+    public function __construct($payload, private OrderFilter $filter, private OrderSorting $sorting)
     {
         $this->payload = $payload;
         $this->user = Auth::user();
@@ -35,6 +35,6 @@ class GetOrdersService implements IService
             $orders->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id());
         }
         $orders->withSum('positions', 'amount_without_vat');
-        return $orders->sorting($this->sorting)/*orderByDesc('created_at')*/->get();
+        return $orders->sorting($this->sorting)/*orderByDesc('created_at')*/ ->get();
     }
 }
