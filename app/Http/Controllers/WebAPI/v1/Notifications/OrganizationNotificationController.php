@@ -7,8 +7,10 @@ use App\Http\Requests\Notifications\OrganizationNotification\CreateOrganizationN
 use App\Http\Requests\Notifications\OrganizationNotification\UpdateOrganizationNotificationFormRequest;
 use App\Models\Notifications\OrganizationNotification;
 use App\Models\ProviderOrders\ProviderOrder;
+use App\Services\Filters\OrganizationNotificationFilter;
 use App\Services\OrganizationNotifications\CreateOrganizationNotificationService;
 use App\Services\OrganizationNotifications\UpdateOrganizationNotificationService;
+use App\Services\Sortings\OrganizationNotificationSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,14 +28,14 @@ class OrganizationNotificationController extends Controller
         $this->user = auth('webapi')->user();
     }
 
-    public function index(Request $request)
+    public function index(Request $request, OrganizationNotificationFilter $filter, OrganizationNotificationSorting $sorting)
     {
         try {
-            $organization_notifications = OrganizationNotification::query();
+            $organization_notifications = OrganizationNotification::query()->filter($filter);
             if ($this->user->isProvider()) {
                 $organization_notifications->where('provider_contr_agent_id', $this->user->contr_agent_id());
             }
-            $organization_notifications = $organization_notifications->get();
+            $organization_notifications = $organization_notifications->sorting($sorting)->get();
             return response()->json($organization_notifications);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
