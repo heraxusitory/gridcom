@@ -5,12 +5,13 @@ namespace App\Services\Consignments;
 
 
 use App\Models\Consignments\Consignment;
+use App\Services\Filters\ConsignmentFilter;
 use App\Services\IService;
 use Illuminate\Support\Facades\Auth;
 
 class GetConsignmentsService implements IService
 {
-    public function __construct(private $payload)
+    public function __construct(private $payload, private ConsignmentFilter $filter)
     {
         $this->user = Auth::user();
     }
@@ -18,6 +19,7 @@ class GetConsignmentsService implements IService
     public function run()
     {
         $consignments = Consignment::query()
+            ->filter($this->filter)
             ->with([
                 'provider',
                 'contractor',
