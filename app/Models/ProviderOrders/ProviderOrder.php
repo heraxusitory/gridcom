@@ -11,13 +11,15 @@ use App\Models\ProviderOrders\Positions\ActualProviderOrderPosition;
 use App\Models\ProviderOrders\Positions\BaseProviderOrderPosition;
 use App\Models\References\ContrAgent;
 use App\Models\References\Organization;
+use App\Traits\Filterable;
+use App\Traits\Sortable;
 use App\Traits\UseNotification;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class ProviderOrder extends Model implements Syncable
 {
-    use UseNotification;
+    use UseNotification, Filterable, Sortable;
 
     protected $table = 'provider_orders';
 
