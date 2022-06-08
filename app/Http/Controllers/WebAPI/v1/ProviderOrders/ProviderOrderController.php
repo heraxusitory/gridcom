@@ -8,6 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Models\ProviderOrders\Corrections\RequirementCorrection;
 use App\Models\ProviderOrders\Corrections\RequirementCorrectionPosition;
 use App\Models\ProviderOrders\ProviderOrder;
+use App\Services\Filters\ProviderOrderFilter;
+use App\Services\Sortings\ProviderOrderSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -24,19 +26,21 @@ class ProviderOrderController extends Controller
         $this->user = auth('webapi')->user();
     }
 
-    public function index(Request $request)
+    public function index(Request $request, ProviderOrderFilter $filter, ProviderOrderSorting $sorting)
     {
         try {
-            $provider_orders = ProviderOrder::query()->with([
-                'base_positions',
-                'actual_positions',
-                'requirement_corrections.positions',
-                'order_corrections.positions',
-            ]);
+            $provider_orders = ProviderOrder::query()
+                ->filter($filter)
+                ->with([
+                    'base_positions',
+                    'actual_positions',
+                    'requirement_corrections.positions',
+                    'order_corrections.positions',
+                ]);
             if ($this->user->isProvider()) {
                 $provider_orders->where('provider_contr_agent_id', $this->user->contr_agent_id());
             }
-            $provider_orders = $provider_orders->get();
+            $provider_orders = $provider_orders->sorting($sorting)->get();
             return response()->json($provider_orders);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
