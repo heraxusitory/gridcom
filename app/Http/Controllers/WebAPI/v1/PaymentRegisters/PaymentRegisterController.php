@@ -13,10 +13,12 @@ use App\Models\PaymentRegisters\PaymentRegister;
 use App\Models\SyncStacks\ContractorSyncStack;
 use App\Models\SyncStacks\MTOSyncStack;
 use App\Models\SyncStacks\ProviderSyncStack;
+use App\Services\Filters\PaymentRegisterFilter;
 use App\Services\PaymentRegisters\CreatePaymentRegisterService;
 use App\Services\PaymentRegisters\GetPaymentRegisterService;
 use App\Services\PaymentRegisters\GetPaymentRegistersService;
 use App\Services\PaymentRegisters\UpdatePaymentRegisterService;
+use App\Services\Sortings\PaymentRegisterSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,10 +30,10 @@ use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class PaymentRegisterController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, PaymentRegisterFilter $filter, PaymentRegisterSorting $sorting)
     {
         try {
-            $register_payments = (new GetPaymentRegistersService())->run();
+            $register_payments = (new GetPaymentRegistersService($request->all(), $filter, $sorting))->run();
             return response()->json(['data' => $register_payments]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);

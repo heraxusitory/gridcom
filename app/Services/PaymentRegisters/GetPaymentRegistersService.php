@@ -5,21 +5,25 @@ namespace App\Services\PaymentRegisters;
 
 
 use App\Models\PaymentRegisters\PaymentRegister;
+use App\Services\Filters\PaymentRegisterFilter;
 use App\Services\IService;
+use App\Services\Sortings\PaymentRegisterSorting;
 use Illuminate\Support\Facades\Auth;
 
 class GetPaymentRegistersService implements IService
 {
     private ?\Illuminate\Contracts\Auth\Authenticatable $user;
 
-    public function __construct()
+    public function __construct(private $payload, private PaymentRegisterFilter $filter, private PaymentRegisterSorting $sorting)
     {
         $this->user = auth('webapi')->user();
     }
 
     public function run()
     {
-        $payment_registers = PaymentRegister::query()->with([
+        $payment_registers = PaymentRegister::query()
+            ->filter($this->filter)
+            ->with([
             'positions'
         ]);
 
@@ -28,6 +32,6 @@ class GetPaymentRegistersService implements IService
         } elseif ($this->user->isContractor()) {
             $payment_registers->where('contractor_contr_agent_id', $this->user->contr_agent_id());
         }
-        return $payment_registers->get();
+        return $payment_registers->sorting($this->sorting)->get();
     }
 }

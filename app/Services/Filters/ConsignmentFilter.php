@@ -39,7 +39,7 @@ class ConsignmentFilter extends QueryFilter
 
     public function work_agreement_id(string $work_agreement_id)
     {
-        return $this->builder->whereRelation('work_agreement_id', 'id', $work_agreement_id);
+        return $this->builder->whereRelation('work_agreement', 'id', $work_agreement_id);
     }
 
     public function work_agreement_date(string $from, string $to)
