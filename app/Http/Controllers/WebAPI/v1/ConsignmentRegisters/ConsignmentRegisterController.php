@@ -15,6 +15,8 @@ use App\Services\ConsignmentRegisters\CreateConsignmentRegisterService;
 use App\Services\ConsignmentRegisters\GetConsignmentRegisterService;
 use App\Services\ConsignmentRegisters\GetConsignmentRegistersService;
 use App\Services\ConsignmentRegisters\UpdateConsignmentRegisterService;
+use App\Services\Filters\ConsignmentRegisterFilter;
+use App\Services\Sortings\ConsignmentRegisterSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -108,10 +110,10 @@ class ConsignmentRegisterController extends Controller
         return response()->json(['data' => $consignments]);
     }
 
-    public function index(Request $request)
+    public function index(Request $request, ConsignmentRegisterFilter $filter, ConsignmentRegisterSorting $sorting)
     {
         try {
-            return response()->json(['data' => (new GetConsignmentRegistersService())->run()]);
+            return response()->json(['data' => (new GetConsignmentRegistersService($request->all(), $filter, $sorting))->run()]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {

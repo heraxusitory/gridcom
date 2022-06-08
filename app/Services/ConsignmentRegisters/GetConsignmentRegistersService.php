@@ -5,7 +5,9 @@ namespace App\Services\ConsignmentRegisters;
 
 
 use App\Models\ConsignmentRegisters\ConsignmentRegister;
+use App\Services\Filters\ConsignmentRegisterFilter;
 use App\Services\IService;
+use App\Services\Sortings\ConsignmentRegisterSorting;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\Auth;
 
@@ -13,7 +15,7 @@ class GetConsignmentRegistersService implements IService
 {
     private ?\Illuminate\Contracts\Auth\Authenticatable $user;
 
-    public function __construct()
+    public function __construct(private $payload, private ConsignmentRegisterFilter $filter, private ConsignmentRegisterSorting $sorting)
     {
         $this->user = Auth::user();
     }
@@ -21,6 +23,7 @@ class GetConsignmentRegistersService implements IService
     public function run()
     {
         $consignment_registers = ConsignmentRegister::query()
+            ->filter($this->filter)
             ->with(['positions.nomenclature']);/*->get();*/
         if ($this->user->isProvider()) {
             $consignment_registers->where('provider_contr_agent_id', $this->user->contr_agent_id());
@@ -38,7 +41,7 @@ class GetConsignmentRegistersService implements IService
 //            return $consignment_register;
 //        });
 
-        return $consignment_registers->get();
+        return $consignment_registers->sorting($this->sorting)->get();
 //        return (new Paginator($consignment_registers, 15));
     }
 }
