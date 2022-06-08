@@ -16,6 +16,7 @@ use App\Services\Consignments\CreateConsignmentService;
 use App\Services\Consignments\GetConsignmentService;
 use App\Services\Consignments\GetConsignmentsService;
 use App\Services\Consignments\UpdateConsignmentService;
+use App\Services\Filters\ConsignmentFilter;
 use App\Transformers\WebAPI\v1\ConsignmentTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -33,10 +34,10 @@ class ConsignmentController extends Controller
         $this->user = auth('webapi')->user();
     }
 
-    public function index(Request $request)
+    public function index(Request $request, ConsignmentFilter $filter)
     {
         try {
-            $consignments = (new GetConsignmentsService($request->all()))->run();
+            $consignments = (new GetConsignmentsService($request->all(), $filter))->run();
             return fractal()->collection($consignments)->transformWith(ConsignmentTransformer::class)/*->serializeWith(CustomerSerializer::class)*/ ;
 //            return response()->json($consignments);
         } catch (\Exception $e) {
