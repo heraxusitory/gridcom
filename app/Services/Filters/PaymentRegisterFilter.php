@@ -17,7 +17,7 @@ class PaymentRegisterFilter extends QueryFilter
         return $this->builder->where('provider_status', $provider_status);
     }
 
-    public function date(string $from, string $to)
+    public function date(string $from = null, string $to = null)
     {
         if (is_numeric(strtotime($from))) {
             $this->builder->whereDate('date', '>=', $from);
@@ -39,7 +39,7 @@ class PaymentRegisterFilter extends QueryFilter
     }
 
 
-    public function provider_contract_date(string $from, string $to)
+    public function provider_contract_date(string $from = null, string $to = null)
     {
         if (is_numeric(strtotime($from))) {
             $this->builder->whereRelation('provider_contract', 'date', '>=', $from);
