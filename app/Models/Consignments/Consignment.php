@@ -12,6 +12,8 @@ use App\Models\References\CustomerSubObject;
 use App\Models\References\Organization;
 use App\Models\References\ProviderContractDocument;
 use App\Models\References\WorkAgreementDocument;
+use App\Traits\Filterable;
+use App\Traits\Sortable;
 use App\Traits\UseNotification;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,7 +22,7 @@ use Illuminate\Support\Carbon;
 
 class Consignment extends Model implements Syncable
 {
-    use HasFactory, UsesNumberLKK, UseNotification;
+    use HasFactory, UsesNumberLKK, UseNotification, Filterable, Sortable;
 
     protected $table = 'consignments';
 
