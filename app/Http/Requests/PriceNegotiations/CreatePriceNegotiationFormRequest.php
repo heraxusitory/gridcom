@@ -133,9 +133,12 @@ class CreatePriceNegotiationFormRequest extends FormRequest
                     'positions.*.nomenclature_id' => ['required', Rule::in($nomenclature_ids)],
                     'positions.*.current_price_without_vat' => ['required', 'numeric'],
                 ]);
+
+                $validator->validate();
+
                 $validator->after(function ($validator) use ($data, $orders) {
                     foreach ($data['positions'] as $key => $position) {
-                        $current_price_without_vat_match = (float)$orders->find($data['order_id'])->positions
+                        $current_price_without_vat_match = (float)$orders->find($data['order_id'])->actual_positions
                                 ->firstWhere('nomenclature_id', $position['nomenclature_id'])->price_without_vat === (float)$position['current_price_without_vat'];
                         if (!$current_price_without_vat_match) {
                             $validator->errors()->add('positions.' . $key . '.current_price_without_vat', 'The positions.' . $key . '.current_price_without_vat is invalid');
