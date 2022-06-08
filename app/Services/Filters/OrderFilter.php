@@ -13,24 +13,28 @@ class OrderFilter extends QueryFilter
         return $this->builder->where('number', 'ILIKE', "%{$number}%");
     }
 
-    public function order_date_start(string $time)
+    public function order_date(string $time_start = null, string $time_end = null)
     {
-        return $this->builder->whereDate('order_date', '>=', $time);
+
+        if (is_numeric(strtotime($time_start))) {
+            $this->builder->whereDate('order_date', '>=', $time_start);
+        }
+        if (is_numeric(strtotime($time_end))) {
+            $this->builder->whereDate('order_date', '<=', $time_end);
+        }
+        return $this->builder;
     }
 
-    public function order_date_end(string $time)
+    public function deadline_date(string $time_start = null, string $time_end = null)
     {
-        return $this->builder->whereDate('order_date', '<=', $time);
-    }
+        if (is_numeric(strtotime($time_start))) {
+            $this->builder->whereDate('deadline_date', '>=', $time_start);
+        }
+        if (is_numeric(strtotime($time_end))) {
+            $this->builder->whereDate('deadline_date', '<=', $time_end);
+        }
+        return $this->builder;
 
-    public function deadline_date_start(string $time)
-    {
-        return $this->builder->whereDate('deadline_date', '>=', $time);
-    }
-
-    public function deadline_date_end(string $time)
-    {
-        return $this->builder->whereDate('deadline_date', '<=', $time);
     }
 
     public function customer_status(string $customer_status)
