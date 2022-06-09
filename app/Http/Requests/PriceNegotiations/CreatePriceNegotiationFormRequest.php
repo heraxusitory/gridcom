@@ -6,10 +6,12 @@ use App\Models\Orders\Order;
 use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\CustomerObject;
+use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use function PHPUnit\Framework\throwException;
 
 class CreatePriceNegotiationFormRequest extends FormRequest
 {
@@ -27,13 +29,24 @@ class CreatePriceNegotiationFormRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
+     * @throws Exception
      */
     public function rules()
     {
+        $user = auth('webapi')->user();
+
+        if ($user->isProvider()) {
+            $type = Rule::in(PriceNegotiation::TYPE_CONTRACT_HOME_METHOD());
+        } elseif ($user->isContractor()) {
+            $type = Rule::in(PriceNegotiation::TYPE_CONTRACT_WORK());
+        } else {
+            throw new Exception('Пользователь не имеет соответствующей роли для совершения данного действия', 403);
+        };
+
         $data = request()->all();
         Validator::validate($data, [
             'action' => ['required', Rule::in(PriceNegotiation::ACTIONS())],
-            'type' => ['required', Rule::in(PriceNegotiation::TYPES())],
+            'type' => ['required', $type],
         ]);
 
         switch ($data['type']) {

@@ -6,6 +6,7 @@ use App\Models\Orders\Order;
 use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\CustomerObject;
+use Exception;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -27,13 +28,23 @@ class UpdatePriceNegotiationFormRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array
+     * @throws Exception
      */
     public function rules()
     {
         $data = request()->all();
+        $user = auth('webapi')->user();
+
+        if ($user->isProvider()) {
+            $type = Rule::in(PriceNegotiation::TYPE_CONTRACT_HOME_METHOD());
+        } elseif ($user->isContractor()) {
+            $type = Rule::in(PriceNegotiation::TYPE_CONTRACT_WORK());
+        } else {
+            throw new Exception('Пользователь не имеет соответствующей роли для совершения данного действия', 403);
+        };
         Validator::validate($data, [
             'action' => ['required', Rule::in(PriceNegotiation::ACTIONS())],
-            'type' => ['required', Rule::in(PriceNegotiation::TYPES())],
+            'type' => ['required', $type],
         ]);
 
         switch ($data['type']) {
