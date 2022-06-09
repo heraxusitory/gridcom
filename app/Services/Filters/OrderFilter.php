@@ -25,6 +25,7 @@ class OrderFilter extends QueryFilter
         if (is_numeric(strtotime($time_end))) {
             $this->builder->where('order_date', '<=', $time_end);
         }
+        Log::debug('builder', [$this->builder]);
         return $this->builder;
     }
 
