@@ -124,13 +124,19 @@ class Order extends Model implements Syncable
         return $this->belongsTo(Contractor::class, 'contractor_id', 'id');
     }
 
-    public function getOrderDateAttribute($value)
+    public function getOrderDateAttribute($value = null)
     {
-        return (new Carbon($value))->format('Y-m-d');
+        if (!is_null($value)) {
+            return (new Carbon($value))->format('Y-m-d');
+        }
+        return $value;
     }
 
-    public function getDeadlineDateAttribute($value)
+    public function getDeadlineDateAttribute($value = null)
     {
-        return (new Carbon($value))->format('Y-m-d');
+        if (!is_null($value)) {
+            return (new Carbon($value))->format('Y-m-d');
+        }
+        return $value;
     }
 }
