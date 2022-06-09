@@ -82,13 +82,13 @@ class PriceNegotiationController extends Controller
                     ->with('actual_positions.nomenclature')
                     ->get();
 
-                $orders->map(function ($order) {
-                    $nomenclatures = $order->actual_positions->map(function ($position) {
-                        return $position->nomenclature;
-                    });
-                    unset($order->actual_positions);
-                    return $order->nomenclatures = $nomenclatures->unique();
-                });
+//                $orders->map(function ($order) {
+//                    $nomenclatures = $order->actual_positions->map(function ($position) {
+//                        return $position->nomenclature;
+//                    });
+//                    unset($order->actual_positions);
+//                    return $order->nomenclatures = $nomenclatures->unique();
+//                });
                 return response()->json($orders);
             default:
                 throw new BadRequestException('Type is required', 400);
