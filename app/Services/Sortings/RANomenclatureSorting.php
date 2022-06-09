@@ -44,6 +44,11 @@ class RANomenclatureSorting extends QuerySorting
         return $this->builder->orderBy('organization_comment', $this->order);
     }
 
+    public function organization_status()
+    {
+        return $this->builder->orderBy('organization_status', $this->order);
+    }
+
     public function nomenclature()
     {
         return $this->builder
@@ -88,10 +93,31 @@ class RANomenclatureSorting extends QuerySorting
             ->orderBy('organizations.name', $this->order);
     }
 
-//    public function work_agreement()
-//    {
-//        return $this->builder
-//            ->leftJoin('organizations', 'request_addition_nomenclatures.organization_id', '=', 'organizations.id')
-//            ->orderBy('organizations.name', $this->order);
-//    }
+    public function work_agreement_number()
+    {
+        return $this->builder
+            ->leftJoin('work_agreements', 'request_addition_nomenclatures.work_agreement_id', '=', 'work_agreements.id')
+            ->orderBy('work_agreements.number', $this->order);
+    }
+
+    public function work_agreement_date()
+    {
+        return $this->builder
+            ->leftJoin('work_agreements', 'request_addition_nomenclatures.work_agreement_id', '=', 'work_agreements.id')
+            ->orderBy('work_agreements.date', $this->order);
+    }
+
+    public function provider_contract_number()
+    {
+        return $this->builder
+            ->leftJoin('provider_contracts', 'request_addition_nomenclatures.provider_contract_id', '=', 'provider_contracts.id')
+            ->orderBy('provider_contracts.number', $this->order);
+    }
+
+    public function provider_contract_date()
+    {
+        return $this->builder
+            ->leftJoin('provider_contracts', 'request_addition_nomenclatures.provider_contract_id', '=', 'provider_contracts.id')
+            ->orderBy('provider_contracts.date', $this->order);
+    }
 }
