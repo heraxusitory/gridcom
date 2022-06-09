@@ -10,8 +10,10 @@ use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Models\References\Organization;
 use App\Models\RequestAdditions\RequestAdditionNomenclature;
 use App\Models\User;
+use App\Services\Filters\RANomenclatureFilter;
 use App\Services\RequestAdditionNomenclatures\CreateRequestAdditionNomenclatureService;
 use App\Services\RequestAdditionNomenclatures\UpdateRequestAdditionNomenclatureService;
+use App\Services\Sortings\RANomenclatureSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -29,17 +31,18 @@ class RequestAdditionNomenclatureController extends Controller
         $this->user = auth('webapi')->user();
     }
 
-    public function index(Request $request)
+    public function index(Request $request, RANomenclatureFilter $filter, RANomenclatureSorting $sorting)
     {
         try {
             $ra_nomenclatures = RequestAdditionNomenclature::query()
+                ->filter($filter)
                 ->with(['work_agreement', 'provider_contract', 'organization', 'nomenclature']);
             if ($this->user->isProvider()) {
-                $ra_nomenclatures->where('contr_agent_id', $this->user->contr_agent_id())->whereNotNull('provider_contract_id');
+                $ra_nomenclatures->where('contr_agent_id', $this->user->contr_agent_id())/*->whereNotNull('provider_contract_id')*/;
             } elseif ($this->user->isContractor()) {
-                $ra_nomenclatures->where('contr_agent_id', $this->user->contr_agent_id())->whereNotNull('work_agreement_id');
+                $ra_nomenclatures->where('contr_agent_id', $this->user->contr_agent_id())/*->whereNotNull('work_agreement_id')*/;
             }
-            $ra_nomenclatures = $ra_nomenclatures->get();
+            $ra_nomenclatures = $ra_nomenclatures->sorting($sorting)->get();
             return response()->json($ra_nomenclatures);
         } catch
         (ModelNotFoundException $e) {
