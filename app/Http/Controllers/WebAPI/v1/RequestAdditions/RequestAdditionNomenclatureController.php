@@ -64,9 +64,9 @@ class RequestAdditionNomenclatureController extends Controller
                 ->with(['work_agreement', 'provider_contract', 'organization', 'nomenclature']);
 
             if ($this->user->isProvider()) {
-                $ra_nomenclature->where('contr_agent_id', $this->user->contr_agent_id())->whereNotNull('provider_contract_id');
+                $ra_nomenclature->where('contr_agent_id', $this->user->contr_agent_id())/*->whereNotNull('provider_contract_id')*/;
             } elseif ($this->user->isContractor()) {
-                $ra_nomenclature->where('contr_agent_id', $this->user->contr_agent_id()->whereNotNull('work_agreement_id'));
+                $ra_nomenclature->where('contr_agent_id', $this->user->contr_agent_id())/*->whereNotNull('work_agreement_id')*/;
             }
             $ra_nomenclature = $ra_nomenclature->findOrFail($ra_nomenclature_id);
             return response()->json(['data' => $ra_nomenclature]);
