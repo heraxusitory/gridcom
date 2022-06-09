@@ -18,10 +18,10 @@ class OrderFilter extends QueryFilter
     public function order_date(string $time_start = null, string $time_end = null)
     {
         if (is_numeric(strtotime($time_start))) {
-            $this->builder->where('order_date', '>=', $time_start);
+            $this->builder->whereDate('order_date', '>=', $time_start);
         }
         if (is_numeric(strtotime($time_end))) {
-            $this->builder->where('order_date', '<=', $time_end);
+            $this->builder->whereDate('order_date', '<=', $time_end);
         }
         return $this->builder;
     }
