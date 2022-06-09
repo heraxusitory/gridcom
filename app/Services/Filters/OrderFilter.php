@@ -5,6 +5,7 @@ namespace App\Services\Filters;
 
 
 use App\Models\Orders\Order;
+use Illuminate\Support\Facades\Log;
 
 class OrderFilter extends QueryFilter
 {
@@ -17,6 +18,7 @@ class OrderFilter extends QueryFilter
     {
 
         if (is_numeric(strtotime($time_start))) {
+            Log::debug('time_start', [$time_start]);
             $this->builder->whereDate('order_date', '>=', $time_start);
         }
         if (is_numeric(strtotime($time_end))) {
