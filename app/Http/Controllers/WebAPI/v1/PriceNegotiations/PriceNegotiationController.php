@@ -10,8 +10,10 @@ use App\Models\PriceNegotiations\PriceNegotiation;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\CustomerObject;
 use App\Models\User;
+use App\Services\Filters\PriceNegotiationFilter;
 use App\Services\PriceNegotiations\CreatePriceNegotiationService;
 use App\Services\PriceNegotiations\UpdatePriceNegotiationService;
+use App\Services\Sortings\PriceNegotiationSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\Paginator;
@@ -131,28 +133,32 @@ class PriceNegotiationController extends Controller
         }
     }
 
-    public function index(Request $request)
+    public function index(Request $request, PriceNegotiationFilter $filter, PriceNegotiationSorting $sorting)
     {
         $user = auth('webapi')->user();
         try {
-            $price_negotiations = PriceNegotiation::query()->with(['positions']);
+            $price_negotiations = PriceNegotiation::query()->filter($filter)->with(['positions']);
 
             if ($user->isProvider()) {
-                $price_negotiations = $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_HOME_METHOD())->get()->map(function ($negotiation) use ($user) {
+                $price_negotiations = $price_negotiations->where([
+                    'type' => PriceNegotiation::TYPE_CONTRACT_HOME_METHOD(),
+                    'creator_contr_agent_id' => $user->contr_agent_id(),
+                ])->sorting($sorting)->get()->map(function ($negotiation) use ($user) {
                     $negotiation->order = $negotiation->order()->where('provider_contr_agent_id', $user->contr_agent_id())->first();
                     return $negotiation;
                 })->filter(function ($negotiation) {
                     return $negotiation->order;
                 });
-                Log::debug('p_n_provider', [$price_negotiations]);
             } elseif ($user->isContractor()) {
-                $price_negotiations = $price_negotiations->where('type', PriceNegotiation::TYPE_CONTRACT_WORK())->get()->map(function ($negotiation) use ($user) {
+                $price_negotiations = $price_negotiations->where([
+                    'type' => PriceNegotiation::TYPE_CONTRACT_WORK(),
+                    'creator_contr_agent_id' => $user->contr_agent_id(),
+                ])->sorting($sorting)->get()->map(function ($negotiation) use ($user) {
                     $negotiation->order = $negotiation->order()->whereRelation('contractor', 'contr_agent_id', $user->contr_agent_id())->first();
                     return $negotiation;
                 })->filter(function ($negotiation) {
                     return $negotiation->order;
                 });
-                Log::debug('p_n_contractor', [$price_negotiations]);
             }
 
 //            return response()->json(new Paginator($price_negotiations, 15));
@@ -161,12 +167,8 @@ class PriceNegotiationController extends Controller
         (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {
-            if ($e->getCode() >= 400 && $e->getCode() < 500)
-                return response()->json(['message' => $e->getMessage()], $e->getCode());
-            else {
-                Log::error($e->getMessage(), $e->getTrace());
-                return response()->json(['message' => 'System error'], 500);
-            }
+            Log::error($e->getMessage(), $e->getTrace());
+            return response()->json(['message' => 'System error'], 500);
         }
     }
 

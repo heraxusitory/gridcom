@@ -6,6 +6,8 @@ use App\Interfaces\Syncable;
 use App\Models\Orders\Order;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\ContrAgent;
+use App\Traits\Filterable;
+use App\Traits\Sortable;
 use App\Traits\UseNotification;
 use App\Traits\UsesNumberLKK;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,7 +16,7 @@ use Illuminate\Support\Carbon;
 
 class PriceNegotiation extends Model implements Syncable
 {
-    use HasFactory, UsesNumberLKK, UseNotification;
+    use HasFactory, UsesNumberLKK, UseNotification, Filterable, Sortable;
 
     protected $table = 'price_negotiations';
 
