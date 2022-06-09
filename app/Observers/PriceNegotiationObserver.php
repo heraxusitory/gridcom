@@ -99,18 +99,18 @@ class PriceNegotiationObserver
         }
 
         if (Auth::guard('api')->check()) {
-            if ($price_negotiation->provider?->uuid) {
+            if ($price_negotiation->contr_agent?->uuid) {
                 $price_negotiation->notifications()->insertOrIgnore(
                     array_merge($notification_data, [
-                        'contr_agent_id' => $price_negotiation->provider?->uuid,
+                        'contr_agent_id' => $price_negotiation->contr_agent?->uuid,
                     ]));
             }
-            if ($price_negotiation->contractor?->uuid) {
-                $price_negotiation->notifications()->insertOrIgnore(
-                    array_merge($notification_data, [
-                        'contr_agent_id' => $price_negotiation->contractor?->uuid,
-                    ]));
-            }
+//            if ($price_negotiation->contractor?->uuid) {
+//                $price_negotiation->notifications()->insertOrIgnore(
+//                    array_merge($notification_data, [
+//                        'contr_agent_id' => $price_negotiation->contractor?->uuid,
+//                    ]));
+//            }
         }
     }
 }
