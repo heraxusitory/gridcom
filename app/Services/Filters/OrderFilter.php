@@ -20,10 +20,10 @@ class OrderFilter extends QueryFilter
 
         if (is_numeric(strtotime($time_start))) {
             Log::debug('time_start', [$time_start]);
-            $this->builder->whereDate('order_date', '>=', (new Carbon($time_start)));
+            $this->builder->where('order_date', '>=', $time_start);
         }
         if (is_numeric(strtotime($time_end))) {
-            $this->builder->whereDate('order_date', '<=', $time_end);
+            $this->builder->where('order_date', '<=', $time_end);
         }
         return $this->builder;
     }
