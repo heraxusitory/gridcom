@@ -17,16 +17,16 @@ class OrderFilter extends QueryFilter
 
     public function order_date(string $time_start = null, string $time_end = null)
     {
-
+        $builder = $this->builder;
         if (is_numeric(strtotime($time_start))) {
             Log::debug('time_start', [$time_start]);
-            $this->builder->where('order_date', '>=', $time_start);
+            $builder = $this->builder->where('order_date', '>=', $time_start);
         }
         if (is_numeric(strtotime($time_end))) {
-            $this->builder->where('order_date', '<=', $time_end);
+            $builder = $this->builder->where('order_date', '<=', $time_end);
         }
         Log::debug('builder', [$this->builder]);
-        return $this->builder;
+        return $builder;
     }
 
     public function deadline_date(string $time_start = null, string $time_end = null)
