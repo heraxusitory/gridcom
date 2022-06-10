@@ -32,7 +32,10 @@ class OrganizationNotificationController extends Controller
                 /** @var OrganizationNotification $organization_notification */
                 $organization_notification = OrganizationNotification::query()->where('uuid', $notification['id'])->first();
                 if ($organization_notification) {
-                    $organization_notification->update(['status' => $notification['status'], 'organization_comment' => $notification['organization_comment'] ?? null]);
+                    $organization_notification->update([
+                        'status' => $notification['status'],
+                        'organization_comment' => $notification['organization_comment'] ?? null
+                    ]);
                     event(new NewStack($organization_notification,
                         (new ProviderSyncStack())->setProvider($organization_notification->provider),
                     ));
