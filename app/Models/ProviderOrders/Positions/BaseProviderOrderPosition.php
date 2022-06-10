@@ -28,7 +28,7 @@ class BaseProviderOrderPosition extends Model
 
     public function getDeliveryTimeAttribute($value)
     {
-        return (new Carbon($value))->format('Y-m-d');
+        return !is_null($value) ? (new Carbon($value))->format('Y-m-d') : null;
     }
 
     public function nomenclature()

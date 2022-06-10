@@ -93,10 +93,7 @@ class PaymentRegister extends Model implements Syncable
 
     public function getDateAttribute($value)
     {
-        if (!is_null($value)) {
-            return (new Carbon($value))->format('Y-m-d');
-        }
-        return null;
+        return !is_null($value) ? (new Carbon($value))->format('Y-m-d') : null;
     }
 
     public function provider()

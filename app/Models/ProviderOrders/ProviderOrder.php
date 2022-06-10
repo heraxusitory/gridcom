@@ -118,6 +118,6 @@ class ProviderOrder extends Model implements Syncable
 
     public function getOrderDateAttribute($value)
     {
-        return (new Carbon($value))->format('Y-m-d');
+        return !is_null($value) ? (new Carbon($value))->format('Y-m-d') : null;
     }
 }

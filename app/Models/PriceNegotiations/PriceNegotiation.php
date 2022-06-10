@@ -134,7 +134,7 @@ class PriceNegotiation extends Model implements Syncable
 
     public function getDateAttribute($value)
     {
-        return (new Carbon($value))->format('Y-m-d');
+        return !is_null($value) ? (new Carbon($value))->format('Y-m-d') : null;
     }
 
     public function contr_agent()

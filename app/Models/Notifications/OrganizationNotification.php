@@ -67,12 +67,12 @@ class OrganizationNotification extends Notification implements Syncable
 
     public function getDateAttribute($value)
     {
-        return (new Carbon($value))->format('Y-m-d');
+        return !is_null($value) ? (new Carbon($value))->format('Y-m-d') : null;
     }
 
     public function getDateFactDeliveryAttribute($value)
     {
-        return (new Carbon($value))->format('Y-m-d');
+        return !is_null($value) ? (new Carbon($value))->format('Y-m-d') : null;
     }
 
     public function organization()

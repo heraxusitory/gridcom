@@ -126,17 +126,11 @@ class Order extends Model implements Syncable
 
     public function getOrderDateAttribute($value = null)
     {
-        if (!is_null($value)) {
-            return (new Carbon($value))->format('Y-m-d');
-        }
-        return $value;
+        return !is_null($value) ? (new Carbon($value))->format('Y-m-d') : null;
     }
 
     public function getDeadlineDateAttribute($value = null)
     {
-        if (!is_null($value)) {
-            return (new Carbon($value))->format('Y-m-d');
-        }
-        return $value;
+        return !is_null($value) ? (new Carbon($value))->format('Y-m-d') : null;
     }
 }
