@@ -4,6 +4,7 @@
 namespace App\Http\Controllers\WebAPI\v1\ConsignmentRegisters;
 
 
+use App\Events\NewStack;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ConsignmentRegisters\CreateConsignmentRegisterFormRequest;
 use App\Http\Requests\ConsignmentRegisters\UpdateConsignmentRegisterFormRequest;
@@ -11,6 +12,9 @@ use App\Models\ConsignmentRegisters\ConsignmentRegister;
 use App\Models\ConsignmentRegisters\ConsignmentRegisterPosition;
 use App\Models\Consignments\Consignment;
 use App\Models\Orders\Order;
+use App\Models\SyncStacks\ContractorSyncStack;
+use App\Models\SyncStacks\MTOSyncStack;
+use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\ConsignmentRegisters\CreateConsignmentRegisterService;
 use App\Services\ConsignmentRegisters\GetConsignmentRegisterService;
 use App\Services\ConsignmentRegisters\GetConsignmentRegistersService;
@@ -218,6 +222,7 @@ class ConsignmentRegisterController extends Controller
     {
         try {
             $user = auth('webapi')->user();
+            /** @var ConsignmentRegister $consignment_register */
             $consignment_register = ConsignmentRegister::query();
             if ($user->isContractor()) {
                 $consignment_register->where('contractor_contr_agent_id', $user->contr_agent_id());
@@ -242,6 +247,17 @@ class ConsignmentRegisterController extends Controller
             $consignment_register->save();
 //            $order->save();
 
+            event(new NewStack($consignment_register,
+                    (new ProviderSyncStack())->setProvider($consignment_register->provider),
+                    (new ContractorSyncStack())->setContractor($consignment_register->contractor))
+            );
+
+            if (in_array($consignment_register->contr_agent_status, [ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE, ConsignmentRegister::CONTRACTOR_STATUS_AGREED])) {
+                event(new NewStack($consignment_register,
+                        (new MTOSyncStack()))
+                );
+            }
+
             return $consignment_register;
         } catch
         (ModelNotFoundException $e) {
@@ -261,6 +277,7 @@ class ConsignmentRegisterController extends Controller
     {
         try {
             $user = auth('webapi')->user();
+            /** @var ConsignmentRegister $consignment_register */
             $consignment_register = ConsignmentRegister::query();
             if ($user->isContractor()) {
                 $consignment_register->where('contractor_contr_agent_id', $user->contr_agent_id());
@@ -279,6 +296,18 @@ class ConsignmentRegisterController extends Controller
 //            $order_provider->rejected_comment = $request->comment;
 //            $order_provider->save();
             $consignment_register->save();
+
+            event(new NewStack($consignment_register,
+                    (new ProviderSyncStack())->setProvider($consignment_register->provider),
+                    (new ContractorSyncStack())->setContractor($consignment_register->contractor))
+            );
+
+            if (in_array($consignment_register->contr_agent_status, [ConsignmentRegister::CONTRACTOR_STATUS_SELF_PURCHASE, ConsignmentRegister::CONTRACTOR_STATUS_AGREED])) {
+                event(new NewStack($consignment_register,
+                        (new MTOSyncStack()))
+                );
+            }
+
             return $consignment_register;
         } catch
         (ModelNotFoundException $e) {
