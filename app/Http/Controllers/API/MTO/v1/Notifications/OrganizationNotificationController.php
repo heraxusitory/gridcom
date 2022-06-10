@@ -24,14 +24,15 @@ class OrganizationNotificationController extends Controller
             'organization_notifications' => 'required|array',
 
             'organization_notifications.*.id' => 'required|uuid',
-            'organization_notifications.*.status' => ['required', Rule::in(OrganizationNotification::getOrganizationStatuses())]
+            'organization_notifications.*.status' => ['required', Rule::in(OrganizationNotification::getOrganizationStatuses())],
+            'organization_notifications.*.organization_comment' => ['nullable', 'string']
         ]);
         try {
             foreach ($request['organization_notifications'] as $notification) {
                 /** @var OrganizationNotification $organization_notification */
                 $organization_notification = OrganizationNotification::query()->where('uuid', $notification['id'])->first();
                 if ($organization_notification) {
-                    $organization_notification->update(['status' => $notification['status']]);
+                    $organization_notification->update(['status' => $notification['status'], 'organization_comment' => $notification['organization_comment'] ?? null]);
                     event(new NewStack($organization_notification,
                         (new ProviderSyncStack())->setProvider($organization_notification->provider),
                     ));
