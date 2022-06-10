@@ -18,6 +18,7 @@ use App\Services\IService;
 use Carbon\Carbon;
 use Faker\Provider\Payment;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class CreateOrUpdatePaymentRegisterService implements IService
 {
@@ -67,6 +68,7 @@ class CreateOrUpdatePaymentRegisterService implements IService
                         }
                         $payment_register->update($pr_data->toArray());
                     } else {
+                        Log::debug('user', [$this->user]);
                         if ($this->user->isProvider()) {
                             $pr_data->provider_status = PaymentRegister::PROVIDER_STATUS_AGREED;
                         }
