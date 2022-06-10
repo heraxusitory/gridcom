@@ -68,14 +68,12 @@ class CreateOrUpdatePaymentRegisterService implements IService
                         }
                         $payment_register->update($pr_data->toArray());
                     } else {
-                        Log::debug('user', [$this->user]);
                         if ($this->user->isProvider()) {
                             $pr_data = $pr_data->merge(['provider_status' => PaymentRegister::PROVIDER_STATUS_AGREED]);
                         }
                         if ($this->user->isContractor()) {
                             $pr_data = $pr_data->merge(['provider_status' => PaymentRegister::PROVIDER_STATUS_UNDER_CONSIDERATION]);
                         }
-                        Log::debug('pr_data', [$pr_data]);
                         $payment_register = PaymentRegister::query()->create($pr_data->toArray());
                     }
 //                    $payment_register = PaymentRegister::query()->updateOrCreate([
