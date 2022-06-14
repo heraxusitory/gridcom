@@ -18,7 +18,8 @@ class PaymentRegisterObserver
             'config_data' => json_encode([
                 'entity' => 'payment-register',
                 'ids' => [$payment_register->id]
-            ])
+            ]),
+            'created_at' => now()
         ];
 
 

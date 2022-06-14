@@ -114,6 +114,7 @@ class OrderContractorController extends OrderController
     {
         try {
             DB::transaction(function () use ($order_id) {
+                /** @var Order $order */
                 $order = Order::query()->findOrFail($order_id);
                 $order->positions()->delete();
                 $order->customer()->delete();
