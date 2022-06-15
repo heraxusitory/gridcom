@@ -42,7 +42,7 @@ class ConsignmentFilter extends QueryFilter
         return $this->builder->whereRelation('work_agreement', 'id', $work_agreement_id);
     }
 
-    public function work_agreement_date(string $from, string $to)
+    public function work_agreement_date(string $from = null, string $to = null)
     {
         if (is_numeric(strtotime($from))) {
             $this->builder->whereRelation('work_agreement', 'date', '>=', $from);
