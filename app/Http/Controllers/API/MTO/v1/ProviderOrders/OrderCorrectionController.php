@@ -24,6 +24,9 @@ class OrderCorrectionController extends Controller
             'order_corrections.*.date' => 'nullable|date_format:Y-m-d',
             'order_corrections.*.number' => 'nullable|string|max:255',
 
+            'order_corrections.*.common_amount_without_vat' => ['nullable', 'numeric',],
+            'order_corrections.*.common_amount_with_vat' => ['nullable', 'numeric',],
+
             'order_corrections.*.positions' => 'nullable|array',
             'order_corrections.*.positions.*.position_id' => 'required|uuid',
             'order_corrections.*.positions.*.nomenclature_id' => 'required|uuid',
@@ -53,6 +56,8 @@ class OrderCorrectionController extends Controller
                         'date' => $item['date'] ?? null,
                         'number' => $item['number'] ?? null,
                         'provider_order_id' => $provider_order->id,
+                        'common_amount_without_vat' => $item['common_amount_without_vat'],
+                        'common_amount_with_vat' => $item['common_amount_with_vat'],
                     ]);
 
                     $position_ids = [];

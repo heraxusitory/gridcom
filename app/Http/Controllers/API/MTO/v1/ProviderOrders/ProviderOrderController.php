@@ -37,6 +37,11 @@ class ProviderOrderController extends Controller
             'payment_orders.*.responsible_phone' => ['nullable', 'string', 'max:255'],
             'payment_orders.*.organization_comment' => ['nullable', 'string',],
 
+            'payment_orders.*.common_amount_without_vat_in_base_positions' => ['nullable', 'numeric',],
+            'payment_orders.*.common_amount_with_vat_in_base_positions' => ['nullable', 'numeric',],
+            'payment_orders.*.common_amount_without_vat_in_actual_positions' => ['nullable', 'numeric',],
+            'payment_orders.*.common_amount_with_vat_in_actual_positions' => ['nullable', 'numeric',],
+
             'payment_orders.*.base_positions' => ['nullable', 'array',],
             'payment_orders.*.base_positions.*.position_id' => ['required', 'uuid'],
             'payment_orders.*.base_positions.*.nomenclature_id' => ['required', 'uuid'],
@@ -91,6 +96,10 @@ class ProviderOrderController extends Controller
                         'responsible_full_name' => $item['responsible_full_name'] ?? null,
                         'responsible_phone' => $item['responsible_phone'] ?? null,
                         'organization_comment' => $item['organization_comment'] ?? null,
+                        'common_amount_without_vat_in_base_positions' => $item['common_amount_without_vat_in_base_positions'] ?? null,
+                        'common_amount_with_vat_in_base_positions' => $item['common_amount_with_vat_in_base_positions'] ?? null,
+                        'common_amount_without_vat_in_actual_positions' => $item['common_amount_without_vat_in_actual_positions'] ?? null,
+                        'common_amount_with_vat_in_actual_positions' => $item['common_amount_with_vat_in_actual_positions'] ?? null,
                     ]);
 
                     $base_position_ids = [];

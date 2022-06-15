@@ -28,6 +28,9 @@ class RequirementCorrectionController extends Controller
             'requirement_corrections.*.number' => 'nullable|string|max:255',
             'requirement_corrections.*.provider_status' => ['required', 'string', Rule::in(RequirementCorrection::getProviderStatuses())],
 
+            'requirement_corrections.*.common_amount_without_vat' => ['nullable', 'numeric',],
+            'requirement_corrections.*.common_amount_with_vat' => ['nullable', 'numeric',],
+
             'requirement_corrections.*.positions' => 'nullable|array',
             'requirement_corrections.*.positions.*.position_id' => 'required|uuid',
             'requirement_corrections.*.positions.*.status' => ['nullable', Rule::in(RequirementCorrectionPosition::getStatuses())],
@@ -61,6 +64,8 @@ class RequirementCorrectionController extends Controller
                         'number' => $item['number'] ?? null,
                         'provider_order_id' => $provider_order->id,
                         'provider_status' => $item['provider_status'],
+                        'common_amount_without_vat' => $item['common_amount_without_vat'] ?? null,
+                        'common_amount_with_vat' => $item['common_amount_with_vat'] ?? null,
                     ]);
 
                     $position_ids = [];
