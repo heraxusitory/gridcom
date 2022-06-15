@@ -11,9 +11,12 @@ class ProviderOrderFilter extends QueryFilter
         return $this->builder->where('number', 'ILIKE', "%{$number}%");
     }
 
-    public function order_date(string $order_date)
+    public function order_date(string $order_date = null)
     {
-        return $this->builder->where('order_date', $order_date);
+        if (is_numeric(strtotime($order_date))) {
+            return $this->builder->whereDate('order_date', $order_date);
+        }
+        return $this->builder;
     }
 
     public function contract_stage(string $contract_stage)
