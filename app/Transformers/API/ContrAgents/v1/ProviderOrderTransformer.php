@@ -32,6 +32,10 @@ class ProviderOrderTransformer extends TransformerAbstract
             'responsible_full_name' => $order->responsible_full_name,
             'responsible_phone' => $order->responsible_phone,
             'organization_comment' => $order->organization_comment,
+            'common_amount_without_vat_in_base_positions' => $order->common_amount_without_vat_in_base_positions,
+            'common_amount_with_vat_in_base_positions' => $order->common_amount_with_vat_in_base_positions,
+            'common_amount_without_vat_in_actual_positions' => $order->common_amount_without_vat_in_actual_positions,
+            'common_amount_with_vat_in_actual_positions' => $order->common_amount_with_vat_in_actual_positions,
         ];
     }
 
