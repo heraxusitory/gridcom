@@ -22,6 +22,7 @@ class RequirementCorrectionPosition extends Model
         'amount_without_vat',
         'vat_rate',
         'amount_with_vat',
+        'delta',
         'delivery_time',
         'delivery_address',
         'organization_comment',
