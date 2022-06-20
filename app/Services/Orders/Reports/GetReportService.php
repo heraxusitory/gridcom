@@ -11,13 +11,15 @@ use App\Models\PaymentRegisters\PaymentRegister;
 use App\Models\PaymentRegisters\PaymentRegisterPosition;
 use App\Services\IService;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class GetReportService implements IService
 {
     private $top_report = [];
     private $bottom_report = [];
 
-    public function __construct(private Order $order)
+    public function __construct(private Request $request, private Order $order)
     {
     }
 
@@ -155,6 +157,37 @@ class GetReportService implements IService
                 $position->nomenclature_unit);
             return $position;
         });
+
+        if ($this->request?->mnemocode) {
+            $order_positions = $order_positions->filter(function ($position) {
+                return Str::contains(Str::lower($position->nomenclature->mnemocode), Str::lower($this->request->mnemocode));
+            });
+        }
+        if ($this->request?->nomenclature_name) {
+            $order_positions = $order_positions->filter(function ($position) {
+                return Str::contains(Str::lower($position->nomenclature->name), Str::lower($this->request->nomenclature_name));
+            });
+        }
+
+        if ($this->request?->sort_field) {
+            $sort_order_value = Str::camel(data_get($this->request, 'sort_order'));
+            $sort_order = $sort_order_value === 'asc' ? 'sortBy' : 'sortByDesc';
+            $sort_field = trim($this->request->sort_field);
+            $order_positions = match ($sort_field) {
+                'nomenclature_name' => $order_positions->$sort_order('nomenclature.name')->values()->all(),
+                'mnemocode' => $order_positions->$sort_order('nomenclature.mnemocode')->values()->all(),
+                'unit' => $order_positions->$sort_order('nomenclature.units.0')->values()->all(),
+                'delivery_plan_count' => $order_positions->$sort_order('delivery_plan_count')->values()->all(),
+                'delivery_fact_count' => $order_positions->$sort_order('delivery_fact_count')->values()->all(),
+                'delivery_time' => $order_positions->$sort_order('delivery_time')->values()->all(),
+                'delivery_fact_time' => $order_positions->$sort_order('delivery_fact_time')->values()->all(),
+                'remainder' => $order_positions->$sort_order('remainder')->values()->all(),
+                'delivery_plan_time' => $order_positions->$sort_order('delivery_plan_time')->values()->all(),
+                'fact_amount_without_vat' => $order_positions->$sort_order('fact_amount_without_vat')->values()->all(),
+                'amount_without_vat' => $order_positions->$sort_order('amount_without_vat')->values()->all(),
+                default => $order_positions,
+            };
+        }
 
         $this->bottom_report = $order_positions;
 

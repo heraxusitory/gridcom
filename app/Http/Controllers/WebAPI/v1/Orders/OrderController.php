@@ -106,7 +106,7 @@ class OrderController extends Controller
         }
         /** @var Order $order */
         $order = $order->findOrFail($order_id);
-        return response()->json(['data' => (new GetReportService($order))->run()]);
+        return response()->json(['data' => (new GetReportService($request, $order))->run()]);
 //        } catch (ModelNotFoundException $e) {
 //            return response()->json(['message' => $e->getMessage()], 404);
 //        } catch (\Exception $e) {
