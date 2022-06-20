@@ -20,6 +20,8 @@ Route::group(['prefix' => 'consignment-registers', 'middleware' => 'role:provide
         Route::post('reject', [ConsignmentRegisterController::class, 'reject'])->can('update,' . ConsignmentRegister::class)->middleware('role:contractor');
 
 
-        Route::group(['prefix' => 'positions', [ConsignmentRegisterController::class, 'getPositions']]);
+        Route::group(['prefix' => 'positions'], function () {
+            Route::get('', [ConsignmentRegisterController::class, 'getPositions']);
+        });
     });
 });
