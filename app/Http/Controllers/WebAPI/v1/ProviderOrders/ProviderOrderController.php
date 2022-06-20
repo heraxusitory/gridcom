@@ -8,7 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Models\ProviderOrders\Corrections\RequirementCorrection;
 use App\Models\ProviderOrders\Corrections\RequirementCorrectionPosition;
 use App\Models\ProviderOrders\ProviderOrder;
+use App\Services\Filters\ProivderOrders\ActualPositionFilter;
+use App\Services\Filters\ProivderOrders\BasePositionFilter;
 use App\Services\Filters\ProviderOrderFilter;
+use App\Services\Sortings\ProviderOrders\ActualPositionSorting;
+use App\Services\Sortings\ProviderOrders\BasePositionSorting;
 use App\Services\Sortings\ProviderOrderSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -63,6 +67,48 @@ class ProviderOrderController extends Controller
             }
             $provider_order = $provider_order->findOrFail($provider_order_id);
             return response()->json(['data' => $provider_order]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getBasePositions(Request $request, $provider_order_id, BasePositionFilter $filter, BasePositionSorting $sorting)
+    {
+        try {
+            $provider_order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $provider_order = $provider_order->findOrFail($provider_order_id);
+            return response()->json($provider_order->base_positions()->filter($filter)->sorting($sorting)->paginate($request->per_page));
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getActualPositions(Request $request, $provider_order_id, ActualPositionFilter $filter, ActualPositionSorting $sorting)
+    {
+        try {
+            $provider_order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $provider_order = $provider_order->findOrFail($provider_order_id);
+            return response()->json($provider_order->actual_positions()->filter($filter)->sorting($sorting)->paginate($request->per_page));
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {

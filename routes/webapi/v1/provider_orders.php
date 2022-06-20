@@ -7,6 +7,12 @@ Route::group(['prefix' => 'provider-orders', 'middleware' => 'role:provider'], f
     Route::get('', [ProviderOrderController::class, 'index'])->can('view,' . ProviderOrder::class);
     Route::group(['prefix' => '{provider_order_id}'], function () {
         Route::get('', [ProviderOrderController::class, 'getOrder'])->can('view,' . ProviderOrder::class);
+        Route::group(['prefix' => 'actual_positions'], function () {
+            Route::get('', [ProviderOrderController::class, 'getActualPositions']);
+        });
+        Route::group(['prefix' => 'base_positions'], function () {
+            Route::get('', [ProviderOrderController::class, 'getBasePositions']);
+        });
         Route::group(['prefix' => 'requirement-corrections'], function () {
             Route::group(['prefix' => '{requirement_correction_id}'], function () {
                 Route::get('', [ProviderOrderController::class, 'getRequirementCorrection']);
