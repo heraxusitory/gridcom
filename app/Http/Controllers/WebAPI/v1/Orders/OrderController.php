@@ -97,7 +97,7 @@ class OrderController extends Controller
 
     public function getReport(Request $request, $order_id)
     {
-//        try {
+        try {
         $order = Order::query();
         if ($this->user->isProvider()) {
             $order->whereRelation('provider', 'contr_agent_id', $this->user->contr_agent_id());
@@ -107,15 +107,15 @@ class OrderController extends Controller
         /** @var Order $order */
         $order = $order->findOrFail($order_id);
         return response()->json(['data' => (new GetReportService($request, $order))->run()]);
-//        } catch (ModelNotFoundException $e) {
-//            return response()->json(['message' => $e->getMessage()], 404);
-//        } catch (\Exception $e) {
-//            if ($e->getCode() >= 400 && $e->getCode() < 500)
-//                return response()->json(['message' => $e->getMessage()], $e->getCode());
-//            else {
-//                Log::error($e->getMessage(), $e->getTrace());
-//                return response()->json(['message' => 'System error'], 500);
-//            }
-//        }
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
     }
 }
