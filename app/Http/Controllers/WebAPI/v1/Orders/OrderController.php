@@ -30,7 +30,7 @@ class OrderController extends Controller
         try {
             $data = $request->all();
             $orders = (new GetOrdersService($data, $filter, $sorting))->run();
-            return response()->json(['data' => $orders]);
+            return response()->json(['data' => $orders->paginate($request->per_page)]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {
