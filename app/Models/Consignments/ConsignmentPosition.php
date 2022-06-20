@@ -6,13 +6,15 @@ namespace App\Models\Consignments;
 
 use App\Models\Orders\Order;
 use App\Models\References\Nomenclature;
+use App\Traits\Filterable;
+use App\Traits\Sortable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class ConsignmentPosition extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable, Sortable;
 
     protected $table = 'consignment_positions';
 

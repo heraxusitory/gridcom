@@ -17,6 +17,8 @@ use App\Services\Consignments\GetConsignmentService;
 use App\Services\Consignments\GetConsignmentsService;
 use App\Services\Consignments\UpdateConsignmentService;
 use App\Services\Filters\ConsignmentFilter;
+use App\Services\Filters\ConsignmentPositionFilter;
+use App\Services\Sortings\ConsignmentPositionSorting;
 use App\Services\Sortings\ConsignmentSorting;
 use App\Transformers\WebAPI\v1\ConsignmentTransformer;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -64,6 +66,30 @@ class ConsignmentController extends Controller
             $consignment = $consignment->findOrFail($consignment_id);
             $consignment = (new GetConsignmentService($request->all(), $consignment))->run();
             return response()->json(['data' => $consignment]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getConsignmentPositions(Request $request, $consignment_id, ConsignmentPositionFilter $filter, ConsignmentPositionSorting $sorting)
+    {
+        try {
+            $consignment = Consignment::query();
+            if ($this->user->isProvider()) {
+                $consignment->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            } elseif ($this->user->isContractor()) {
+                $consignment->where('contractor_contr_agent_id', $this->user->contr_agent_id());
+            }
+            /** @var Consignment $consignment */
+            $consignment = $consignment->findOrFail($consignment_id);
+            return response()->json(['data' => $consignment->positions()->filter($filter)->sorting($sorting)->paginate($request->per_page)]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {

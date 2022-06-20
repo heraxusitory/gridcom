@@ -15,7 +15,7 @@ class OrderPositionSorting extends QuerySorting
 
     public function number()
     {
-        return $this->builder->orderBy('number', $this->order);
+        return $this->builder->orderBy('id', $this->order);
     }
 
     public function status()

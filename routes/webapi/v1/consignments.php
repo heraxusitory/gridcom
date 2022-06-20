@@ -11,5 +11,8 @@ Route::group(['prefix' => 'consignments', 'middleware' => 'role:provider,contrac
         Route::get('', [ConsignmentController::class, 'getConsignment'])->can('view,' . Consignment::class);
         Route::put('', [ConsignmentController::class, 'update'])->can('update,' . Consignment::class);
         Route::delete('', [ConsignmentController::class, 'delete'])->can('delete,' . Consignment::class);
+        Route::group(['prefix' => 'positions'], function () {
+            Route::get('', [ConsignmentController::class, 'getConsignmentPositions']);
+        });
     });
 });
