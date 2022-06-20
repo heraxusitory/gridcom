@@ -18,6 +18,7 @@ Route::group(['prefix' => 'orders'], function () {
         Route::put('approve_closing', [OrderProviderController::class, 'approveClosing'])->middleware('role:provider');
 
         Route::group(['prefix' => 'positions'], function () {
+            Route::get('', [OrderController::class, 'getOrderPositions'])->middleware('role:provider,contractor');
             Route::group(['prefix' => '{order_position}'], function () {
                 Route::patch('', [OrderProviderController::class, 'changePosition'])->middleware('role:provider')->can('update,' . Order::class);
             });

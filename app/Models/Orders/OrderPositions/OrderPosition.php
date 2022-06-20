@@ -4,6 +4,8 @@ namespace App\Models\Orders\OrderPositions;
 
 use App\Models\Comments\Comment;
 use App\Models\References\Nomenclature;
+use App\Traits\Filterable;
+use App\Traits\Sortable;
 use App\Traits\UsesUuid;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -12,7 +14,7 @@ use Illuminate\Support\Carbon;
 
 class OrderPosition extends Model
 {
-    use HasFactory;
+    use HasFactory, Filterable, Sortable;
 
     protected $table = 'order_positions'; #positons in order
 
