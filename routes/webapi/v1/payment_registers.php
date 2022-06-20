@@ -16,5 +16,10 @@ Route::group(['prefix' => 'payment-registers'], function () {
         //роуты поставшика
         Route::post('approve', [PaymentRegisterController::class, 'approve'])->can('update,' . PaymentRegister::class)->middleware('role:provider');
         Route::post('reject', [PaymentRegisterController::class, 'reject'])->can('update,' . PaymentRegister::class)->middleware('role:provider');
+
+
+        Route::group(['prefix' => 'positions'], function () {
+            Route::get('', [PaymentRegisterController::class, 'getPositions']);
+        });
     });
 });

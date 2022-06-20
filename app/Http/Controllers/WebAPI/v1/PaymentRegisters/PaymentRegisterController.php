@@ -14,10 +14,12 @@ use App\Models\SyncStacks\ContractorSyncStack;
 use App\Models\SyncStacks\MTOSyncStack;
 use App\Models\SyncStacks\ProviderSyncStack;
 use App\Services\Filters\PaymentRegisterFilter;
+use App\Services\Filters\PaymentRegisterPositionFilter;
 use App\Services\PaymentRegisters\CreatePaymentRegisterService;
 use App\Services\PaymentRegisters\GetPaymentRegisterService;
 use App\Services\PaymentRegisters\GetPaymentRegistersService;
 use App\Services\PaymentRegisters\UpdatePaymentRegisterService;
+use App\Services\Sortings\PaymentRegisterPositionSorting;
 use App\Services\Sortings\PaymentRegisterSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -53,6 +55,33 @@ class PaymentRegisterController extends Controller
         try {
             $register_payment = (new GetPaymentRegisterService($payment_register_id))->run();
             return response()->json(['data' => $register_payment]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch
+        (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getPositions(Request $request, $payment_register_id, PaymentRegisterPositionFilter $filter, PaymentRegisterPositionSorting $sorting)
+    {
+        try {
+            $user = auth('webapi')->user();
+            $payment_register = PaymentRegister::query()->with([
+                'positions.order'
+            ]);
+            if ($user->isProvider()) {
+                $payment_register->where('provider_contr_agent_id', $user->contr_agent_id());
+            } elseif ($user->isContractor()) {
+                $payment_register->where('contractor_contr_agent_id', $user->contr_agent_id());
+            }
+            $payment_register = $payment_register->findOrFail($payment_register_id);
+            return response()->json(['data' => $payment_register->positions()->filter($filter)->sorting($sorting)->paginate($request->per_page)]);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch
@@ -187,7 +216,7 @@ class PaymentRegisterController extends Controller
             event(new NewStack($payment_register,
                     (new ProviderSyncStack())->setProvider($payment_register->provider),
                     (new ContractorSyncStack())->setContractor($payment_register->contractor),
-                    /*(new MTOSyncStack())*/)
+                /*(new MTOSyncStack())*/)
             );
 
             return $payment_register;

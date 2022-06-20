@@ -5,11 +5,15 @@ namespace App\Models\PaymentRegisters;
 
 
 use App\Models\Orders\Order;
+use App\Traits\Filterable;
+use App\Traits\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class PaymentRegisterPosition extends Model
 {
+    use Sortable, Filterable;
+
     protected $table = 'payment_register_positions';
 
     protected $fillable = [
