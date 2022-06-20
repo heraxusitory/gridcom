@@ -35,6 +35,7 @@ class GetOrdersService implements IService
             $orders->whereRelation('contractor', 'contr_agent_id', $this->user->contr_agent_id());
         }
         $orders->withSum('positions', 'amount_without_vat');
+        Log::debug('payload', $this->payload);
         return $orders->sorting($this->sorting)/*orderByDesc('created_at')*/ ->paginate($this->payload['per_page']);
     }
 }
