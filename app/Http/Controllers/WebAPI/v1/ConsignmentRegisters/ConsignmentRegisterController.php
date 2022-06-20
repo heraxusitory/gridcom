@@ -20,6 +20,8 @@ use App\Services\ConsignmentRegisters\GetConsignmentRegisterService;
 use App\Services\ConsignmentRegisters\GetConsignmentRegistersService;
 use App\Services\ConsignmentRegisters\UpdateConsignmentRegisterService;
 use App\Services\Filters\ConsignmentRegisterFilter;
+use App\Services\Filters\ConsignmentRegisterPositionFilter;
+use App\Services\Sortings\ConsignmentRegisterPositionSorting;
 use App\Services\Sortings\ConsignmentRegisterSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -104,13 +106,6 @@ class ConsignmentRegisterController extends Controller
             });
             return $consignment;
         });
-//        $consignments->map(function ($consignment) {
-//            $nomenclatures = $consignment->positions->map(function ($position) {
-//                return $position->nomenclature;
-//            });
-//            unset($consignment->positions);
-//            return $consignment->nomenclatures = $nomenclatures->unique();
-//        });
         return response()->json(['data' => $consignments]);
     }
 
@@ -145,6 +140,32 @@ class ConsignmentRegisterController extends Controller
             $consignment_register = $consignment_register->findOrFail($consignment_register_id);
             $consignment_register = (new GetConsignmentRegisterService($request->all(), $consignment_register))->run();
             return response()->json(['data' => $consignment_register]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getPositions(Request $request, $consignment_register_id, ConsignmentRegisterPositionFilter $filter, ConsignmentRegisterPositionSorting $sorting)
+    {
+        try {
+            $consignment_register = ConsignmentRegister::query()->with([
+                'positions.consignment'
+            ]);
+            if ($this->user->isProvider()) {
+                $consignment_register->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            } elseif ($this->user->isContractor()) {
+                $consignment_register->where('contractor_contr_agent_id', $this->user->contr_agent_id());
+            }
+            /** @var ConsignmentRegister $consignment_register */
+            $consignment_register = $consignment_register->findOrFail($consignment_register_id);
+            return response()->json($consignment_register->positions()->filter($filter)->sorting($sorting)->paginate($request->per_page));
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {

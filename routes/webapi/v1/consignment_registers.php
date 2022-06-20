@@ -18,5 +18,8 @@ Route::group(['prefix' => 'consignment-registers', 'middleware' => 'role:provide
         //роуты подрядчика
         Route::post('approve', [ConsignmentRegisterController::class, 'approve'])->can('update,' . ConsignmentRegister::class)->middleware('role:contractor');
         Route::post('reject', [ConsignmentRegisterController::class, 'reject'])->can('update,' . ConsignmentRegister::class)->middleware('role:contractor');
+
+
+        Route::group(['prefix' => 'positions', [ConsignmentRegisterController::class, 'getPositions']]);
     });
 });
