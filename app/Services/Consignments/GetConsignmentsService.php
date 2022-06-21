@@ -8,11 +8,12 @@ use App\Models\Consignments\Consignment;
 use App\Services\Filters\ConsignmentFilter;
 use App\Services\IService;
 use App\Services\Sortings\ConsignmentSorting;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class GetConsignmentsService implements IService
 {
-    public function __construct(private $payload, private ConsignmentFilter $filter, private ConsignmentSorting $sorting)
+    public function __construct(private Request $request, private ConsignmentFilter $filter, private ConsignmentSorting $sorting)
     {
         $this->user = Auth::user();
     }
@@ -41,7 +42,7 @@ class GetConsignmentsService implements IService
         } elseif ($this->user->isContractor()) {
             $consignments->where('contractor_contr_agent_id', $this->user->contr_agent_id());
         }
-        return $consignments->sorting($this->sorting)->get();
+        return $consignments->sorting($this->sorting)->paginate($this->request->per_page);
     }
 
 }
