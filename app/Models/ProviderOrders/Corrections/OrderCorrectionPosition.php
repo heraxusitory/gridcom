@@ -5,11 +5,15 @@ namespace App\Models\ProviderOrders\Corrections;
 
 
 use App\Models\References\Nomenclature;
+use App\Traits\Filterable;
+use App\Traits\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class OrderCorrectionPosition extends Model
 {
+    use Filterable, Sortable;
+
     protected $table = 'order_correction_positions';
 
     protected $fillable = [

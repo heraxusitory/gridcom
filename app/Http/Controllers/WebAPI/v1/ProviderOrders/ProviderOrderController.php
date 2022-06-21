@@ -8,11 +8,15 @@ use App\Http\Controllers\Controller;
 use App\Models\ProviderOrders\Corrections\RequirementCorrection;
 use App\Models\ProviderOrders\Corrections\RequirementCorrectionPosition;
 use App\Models\ProviderOrders\ProviderOrder;
-use App\Services\Filters\ProivderOrders\ActualPositionFilter;
-use App\Services\Filters\ProivderOrders\BasePositionFilter;
+use App\Services\Filters\ProviderOrders\ActualPositionFilter;
+use App\Services\Filters\ProviderOrders\BasePositionFilter;
 use App\Services\Filters\ProviderOrderFilter;
+use App\Services\Filters\ProviderOrders\OrderCorrectionPositionFilter;
+use App\Services\Filters\ProviderOrders\RequirementCorrectionPositionFilter;
 use App\Services\Sortings\ProviderOrders\ActualPositionSorting;
 use App\Services\Sortings\ProviderOrders\BasePositionSorting;
+use App\Services\Sortings\ProviderOrders\OrderCorrectionPositionSorting;
+use App\Services\Sortings\ProviderOrders\RequirementCorrectionPositionSorting;
 use App\Services\Sortings\ProviderOrderSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -145,6 +149,30 @@ class ProviderOrderController extends Controller
         }
     }
 
+    public function getRequirementCorrectionPositions(Request $request, $provider_order_id, $requirement_correction_id, RequirementCorrectionPositionFilter $filter, RequirementCorrectionPositionSorting $sorting)
+    {
+        try {
+            /** @var ProviderOrder $provider_order */
+            $provider_order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $provider_order = $provider_order->findOrFail($provider_order_id);
+
+            $requirement_correction = $provider_order->requirement_corrections()->with(['positions.nomenclature', 'provider_order'])->findOrFail($requirement_correction_id);
+            return response()->json($requirement_correction->positions()->filter($filter)->sorting($sorting)->paginate($request->per_page));
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
     public function getOrderCorrection(Request $request, $provider_order_id, $order_correction_id)
     {
         try {
@@ -157,6 +185,30 @@ class ProviderOrderController extends Controller
 
             $order_correction = $provider_order->order_corrections()->with(['positions.nomenclature', 'provider_order'])->findOrFail($order_correction_id);
             return response()->json(['data' => $order_correction]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getOrderCorrectionPositions(Request $request, $provider_order_id, $order_correction_id, OrderCorrectionPositionFilter $filter, OrderCorrectionPositionSorting $sorting)
+    {
+        try {
+            /** @var ProviderOrder $provider_order */
+            $provider_order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $provider_order = $provider_order->findOrFail($provider_order_id);
+
+            $order_correction = $provider_order->order_corrections()->with(['positions.nomenclature', 'provider_order'])->findOrFail($order_correction_id);
+            return response()->json($order_correction->positions()->filter($filter)->sorting($sorting)->paginate($request->per_page));
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {

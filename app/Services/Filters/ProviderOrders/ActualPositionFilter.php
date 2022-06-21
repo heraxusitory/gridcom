@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Services\Filters\ProivderOrders;
+namespace App\Services\Filters\ProviderOrders;
 
 
 use App\Services\Filters\QueryFilter;
 
-class BasePositionFilter extends QueryFilter
+class ActualPositionFilter extends QueryFilter
 {
     public function nomenclature_name(string $name)
     {
