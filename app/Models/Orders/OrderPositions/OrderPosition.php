@@ -43,6 +43,10 @@ class OrderPosition extends Model
         'amount_without_vat' => 'float',
     ];
 
+    protected $with = [
+        'nomenclature',
+    ];
+
     const STATUS_AGREED = 'Согласовано';
     const STATUS_UNDER_CONSIDERATION = 'На рассмотрении';
     const STATUS_REJECTED = 'Отклонено';
