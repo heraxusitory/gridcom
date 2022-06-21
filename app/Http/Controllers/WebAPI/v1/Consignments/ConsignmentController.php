@@ -26,6 +26,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use League\Fractal\Pagination\IlluminatePaginatorAdapter;
+use League\Fractal\Serializer\ArraySerializer;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class ConsignmentController extends Controller
@@ -40,8 +42,11 @@ class ConsignmentController extends Controller
     public function index(Request $request, ConsignmentFilter $filter, ConsignmentSorting $sorting)
     {
         try {
-            $consignments = (new GetConsignmentsService($request->all(), $filter, $sorting))->run();
-            return fractal()->collection($consignments)->transformWith(ConsignmentTransformer::class)/*->serializeWith(CustomerSerializer::class)*/ ;
+            $consignments = (new GetConsignmentsService($request, $filter, $sorting))->run();
+            return fractal()->collection($consignments)->transformWith(ConsignmentTransformer::class)
+                ->serializeWith(new ArraySerializer())
+                ->paginateWith(new IlluminatePaginatorAdapter($consignments))
+                ->toArray()/*->serializeWith(CustomerSerializer::class)*/ ;
 //            return response()->json($consignments);
         } catch (\Exception $e) {
             if ($e->getCode() >= 400 && $e->getCode() < 500)
