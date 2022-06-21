@@ -8,8 +8,10 @@ use App\Http\Requests\Notifications\OrganizationNotification\UpdateOrganizationN
 use App\Models\Notifications\OrganizationNotification;
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Services\Filters\OrganizationNotificationFilter;
+use App\Services\Filters\OrganizationNotificationPositionFilter;
 use App\Services\OrganizationNotifications\CreateOrganizationNotificationService;
 use App\Services\OrganizationNotifications\UpdateOrganizationNotificationService;
+use App\Services\Sortings\OrganizationNotificationPositionSorting;
 use App\Services\Sortings\OrganizationNotificationSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -59,6 +61,28 @@ class OrganizationNotificationController extends Controller
             }
             $organization_notification = $organization_notification->findOrFail($organization_notification_id);
             return response()->json(['data' => $organization_notification]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch
+        (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getNotificationPositions(Request $request, $organization_notification_id, OrganizationNotificationPositionFilter $filter, OrganizationNotificationPositionSorting $sorting)
+    {
+        try {
+            $organization_notification = OrganizationNotification::query();
+            if ($this->user->isProvider()) {
+                $organization_notification->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $organization_notification = $organization_notification->findOrFail($organization_notification_id);
+            return response()->json($organization_notification->positions()->filter($filter)->sorting($sorting)->paginate($request->per_page));
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch

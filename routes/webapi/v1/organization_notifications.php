@@ -12,5 +12,9 @@ Route::group(['prefix' => 'organization-notifications', 'middleware' => 'role:pr
         Route::get('', [OrganizationNotificationController::class, 'getNotification'])->can('view,' . OrganizationNotification::class);
         Route::put('', [OrganizationNotificationController::class, 'update'])->can('update,' . OrganizationNotification::class);
         Route::delete('', [OrganizationNotificationController::class, 'delete'])->can('delete,' . OrganizationNotification::class);
+
+        Route::group(['prefix' => 'positions'], function () {
+            Route::get('', [OrganizationNotificationController::class, 'getNotificationPositions']);
+        });
     });
 });

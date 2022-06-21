@@ -6,10 +6,14 @@ namespace App\Models\Notifications;
 
 use App\Models\ProviderOrders\ProviderOrder;
 use App\Models\References\Nomenclature;
+use App\Traits\Filterable;
+use App\Traits\Sortable;
 use Illuminate\Database\Eloquent\Model;
 
 class OrganizationNotificationPosition extends Model
 {
+    use Filterable, Sortable;
+
     protected $table = 'organization_notification_positions';
 
     protected $fillable = [
