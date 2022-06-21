@@ -26,9 +26,12 @@ class OrderPositionFilter extends QueryFilter
         return $this->builder->where('price_without_vat', 'ILIKE', "%{$price_without_vat}%");
     }
 
-    public function delivery_time(string $delivery_time)
+    public function delivery_time(string $delivery_time = null)
     {
-        return $this->builder->where('delivery_time', 'ILIKE', "%{$delivery_time}%");
+        if (is_numeric(strtotime($delivery_time))) {
+            return $this->builder->where('delivery_time', 'ILIKE', "%{$delivery_time}%");
+        }
+        return $this->builder;
     }
 
     public function delivery_address(string $delivery_address)
