@@ -73,6 +73,7 @@ class OrderTransformer extends TransformerAbstract
             'provider_closing_confirmation' => $order->provider_closing_confirmation,
 
             'positions' => optional($order)->positions,
+            'positions_sum_amount_without_vat' => optional($order)->positions()->sum('amount_without_vat'),
         ];
     }
 }
