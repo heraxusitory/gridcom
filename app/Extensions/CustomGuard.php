@@ -148,6 +148,7 @@ class CustomGuard implements Guard
         $user->name = $this->decodedToken->name ?? null;
         $user->email = $this->decodedToken->email ?? null;
         $user->company_IN = $this->decodedToken->company_IN ?? null;
+        $user->phone = $this->decodedToken->phone ?? null;
         $user->roles = $this->getRoles(env('KEYCLOAK_ALLOWED_RESOURCES'));
 
 //        dd($user);
