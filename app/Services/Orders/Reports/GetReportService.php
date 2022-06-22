@@ -12,6 +12,7 @@ use App\Models\PaymentRegisters\PaymentRegisterPosition;
 use App\Services\IService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Str;
 
 class GetReportService implements IService
@@ -189,7 +190,7 @@ class GetReportService implements IService
             };
         }
 
-        $this->bottom_report = $order_positions;
+        $this->bottom_report = new Paginator($order_positions, $this->request->per_page);
 
         return [
             'top_report' => $this->top_report,
