@@ -36,7 +36,7 @@ class PaymentRegisterController extends Controller
     {
         try {
             $register_payments = (new GetPaymentRegistersService($request->all(), $filter, $sorting))->run();
-            return response()->json(['data' => $register_payments]);
+            return response()->json($register_payments);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch
