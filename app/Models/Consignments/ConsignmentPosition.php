@@ -41,6 +41,10 @@ class ConsignmentPosition extends Model
         'amount_with_vat' => 'float'
     ];
 
+    protected $with = [
+        'nomenclature',
+    ];
+
     public function nomenclature()
     {
         return $this->belongsTo(Nomenclature::class, 'nomenclature_id', 'id');
