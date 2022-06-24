@@ -16,7 +16,9 @@ class GetConsignmentService implements IService
     public function run()
     {
         /** @var Consignment $consignment */
-        $consignment = $this->consignment;
+        $consignment = $this->consignment
+        ->loadSum('positions', 'amount_without_vat')
+        ->loadSum('positions', 'amount_with_vat');
 //            ->with([
 //                'positions.order',
 //                'positions.nomenclature',
