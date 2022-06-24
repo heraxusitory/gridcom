@@ -16,15 +16,15 @@ class GetConsignmentService implements IService
     public function run()
     {
         /** @var Consignment $consignment */
-        $consignment = $this->consignment
-            ->with([
-                'positions.order',
-                'positions.nomenclature',
-                'provider',
-                'contractor',
-                'work_agreement',
-                'provider_contract',
-            ])
+        $consignment = $this->consignment->newQuery()
+//            ->with([
+//                'positions.order',
+//                'positions.nomenclature',
+//                'provider',
+//                'contractor',
+//                'work_agreement',
+//                'provider_contract',
+//            ])
             ->withSum('positions', 'amount_without_vat')
             ->withSum('positions', 'amount_with_vat')
             ->get();
