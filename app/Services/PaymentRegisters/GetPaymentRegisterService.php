@@ -27,6 +27,6 @@ class GetPaymentRegisterService implements IService
         } elseif ($this->user->isContractor()) {
             $payment_register->where('contractor_contr_agent_id', $this->user->contr_agent_id());
         }
-        return $payment_register->findOrFail($this->payment_register_id);
+        return $payment_register->withSum('positions', 'amount_payment')->findOrFail($this->payment_register_id);
     }
 }
