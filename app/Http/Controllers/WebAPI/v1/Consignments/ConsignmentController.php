@@ -43,11 +43,11 @@ class ConsignmentController extends Controller
     {
         try {
             $consignments = (new GetConsignmentsService($request, $filter, $sorting))->run();
-            return fractal()->collection($consignments)->transformWith(ConsignmentTransformer::class)
+//            return fractal()->collection($consignments)->transformWith(ConsignmentTransformer::class)
 //                ->serializeWith(new ArraySerializer())
-                ->paginateWith(new IlluminatePaginatorAdapter($consignments));
+//                ->paginateWith(new IlluminatePaginatorAdapter($consignments));
 //                ->toArray()*//*->serializeWith(CustomerSerializer::class)*/ ;
-//            return response()->json($consignments);
+            return response()->json($consignments);
         } catch (\Exception $e) {
             if ($e->getCode() >= 400 && $e->getCode() < 500)
                 return response()->json(['message' => $e->getMessage()], $e->getCode());
