@@ -41,7 +41,7 @@ class GetConsignmentRegistersService implements IService
 //            return $consignment_register;
 //        });
 
-        return $consignment_registers->sorting($this->sorting)->get();
+        return $consignment_registers->sorting($this->sorting)->paginate();
 //        return (new Paginator($consignment_registers, 15));
     }
 }
