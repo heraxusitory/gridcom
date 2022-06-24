@@ -26,7 +26,8 @@ class GetConsignmentService implements IService
                 'provider_contract',
             ])
             ->withSum('positions', 'amount_without_vat')
-            ->withSum('positions', 'amount_with_vat');
+            ->withSum('positions', 'amount_with_vat')
+            ->get();
 
         return $consignment;
     }
