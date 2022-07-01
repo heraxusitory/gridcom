@@ -35,16 +35,16 @@ class PaymentRegisterPositionFilter extends QueryFilter
 
     public function object(string $name)
     {
-        return $this->builder->whereRelation('order.order_customers.object', 'name', 'ILIKE', "%{$name}%");
+        return $this->builder->whereRelation('order.customer.object', 'name', 'ILIKE', "%{$name}%");
     }
 
     public function organization(string $name)
     {
-        return $this->builder->whereRelation('order.order_customers.organization', 'name', 'ILIKE', "%{$name}%");
+        return $this->builder->whereRelation('order.customer.organization', 'name', 'ILIKE', "%{$name}%");
     }
 
     public function work_agreement_number(string $name)
     {
-        return $this->builder->whereRelation('order.order_customers.work_agreement', 'number', 'ILIKE', "%{$name}%");
+        return $this->builder->whereRelation('order.customer.work_agreement', 'number', 'ILIKE', "%{$name}%");
     }
 }
