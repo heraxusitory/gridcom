@@ -5,11 +5,15 @@ namespace App\Models\ProviderOrders\Positions;
 
 
 use App\Models\References\Nomenclature;
+use App\Traits\Filterable;
+use App\Traits\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class ActualProviderOrderPosition extends Model
 {
+    use Filterable, Sortable;
+
     protected $table = 'actual_provider_order_positions';
 
     protected $fillable = [
