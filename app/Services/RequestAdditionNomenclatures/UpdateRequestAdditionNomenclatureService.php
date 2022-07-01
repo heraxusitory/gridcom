@@ -52,7 +52,7 @@ class UpdateRequestAdditionNomenclatureService implements IService
                     'description' => $data['description'],
                     'responsible_full_name' => $data['responsible_full_name'],
                     'contr_agent_comment' => $data['contr_agent_comment'],
-                    'organization_comment' => $data['organization_comment'] ?? null,
+//                    'organization_comment' => $data['organization_comment'] ?? null,
                 ]);
 
 
