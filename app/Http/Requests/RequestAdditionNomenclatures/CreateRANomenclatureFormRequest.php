@@ -78,6 +78,7 @@ class CreateRANomenclatureFormRequest extends FormRequest
             'description' => 'required|string',
             'responsible_full_name' => 'required|string|max:255',
             'contr_agent_comment' => 'required|string',
+            'organization_comment' => 'nullable|string',
             'file' => 'nullable|file',
         ];
     }
