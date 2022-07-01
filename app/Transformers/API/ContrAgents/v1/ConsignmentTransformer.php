@@ -46,8 +46,6 @@ class ConsignmentTransformer extends TransformerAbstract
             'responsible_full_name' => $consignment?->responsible_full_name,
             'responsible_phone' => $consignment?->responsible_phone,
             'comment' => $consignment?->comment,
-
-
         ];
     }
 
