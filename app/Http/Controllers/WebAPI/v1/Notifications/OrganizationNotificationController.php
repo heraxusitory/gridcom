@@ -162,7 +162,13 @@ class OrganizationNotificationController extends Controller
             ->select('contract_number', 'contract_date')
             ->where('organization_id', $data['organization_id'])
             ->where('provider_contr_agent_id', $data['provider_contr_agent_id'])
-            ->get();
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'contract_date' => $order->contract_date,
+                    'contract_number' => $order->contract_number,
+                ];
+            })->unique();
 
         return response()->json(['data' => $contracts]);
     }
