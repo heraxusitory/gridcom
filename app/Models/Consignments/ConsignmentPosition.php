@@ -43,6 +43,7 @@ class ConsignmentPosition extends Model
 
     protected $with = [
         'nomenclature',
+        'order',
     ];
 
     public function nomenclature()
