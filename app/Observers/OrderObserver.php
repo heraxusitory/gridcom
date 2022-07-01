@@ -95,5 +95,44 @@ class OrderObserver
                 }
             }
         }
+
+        if ($order->wasChanged('contractor_require_closure') && $order->contractor_require_closure) {
+            $header = 'Запрос на закрытие заказа';
+            $notification_data = [
+                'body' => "Заказ на поставку № {$order?->number} от {$order?->order_date}",
+                'header' => $header,
+                'notificationable_type' => Order::class,
+                'notificationable_id' => $order->id,
+                'config_data' => json_encode([
+                    'entity' => 'order',
+                    'ids' => [$order->id]
+                ]),
+                'created_at' => now()
+            ];
+
+            if (Auth::guard('webapi')->check()) {
+                if ($order->provider?->contr_agent?->uuid) {
+                    $order->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $order->provider?->contr_agent?->uuid,
+                        ]));
+                }
+            }
+
+            if (Auth::guard('api')->check()) {
+                if ($order->provider?->contr_agent?->uuid) {
+                    $order->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $order->provider?->contr_agent?->uuid,
+                        ]));
+                }
+                if ($order->contractor?->contr_agent?->uuid) {
+                    $order->notifications()->insertOrIgnore(
+                        array_merge($notification_data, [
+                            'contr_agent_id' => $order->contractor?->contr_agent?->uuid,
+                        ]));
+                }
+            }
+        }
     }
 }
