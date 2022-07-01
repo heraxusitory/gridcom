@@ -30,6 +30,10 @@ class ActualProviderOrderPosition extends Model
         'organization_comment',
     ];
 
+    protected $with = [
+        'nomenclature',
+    ];
+
     protected $casts = [
         'price_without_vat' => 'float',
         'amount_without_vat' => 'float',
