@@ -31,6 +31,11 @@ class Customer extends Model
         return $this->hasOne(Organization::class, 'id', 'organization_id');
     }
 
+    public function work_agreement(): hasOne
+    {
+        return $this->hasOne(WorkAgreementDocument::class, 'id', 'work_agreement_id');
+    }
+
     public function contract(): hasOne
     {
         return $this->hasOne(WorkAgreementDocument::class, 'id', 'work_agreement_id');
