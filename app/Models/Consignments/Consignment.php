@@ -47,7 +47,8 @@ class Consignment extends Model implements Syncable
     protected $with = [
         'organization', 'provider', 'provider_contract',
         'contractor', 'work_agreement', 'object', 'subObject',
-        'positions.nomenclature'
+        'positions.nomenclature',
+        'positions.order',
     ];
 
     private const ACTION_DRAFT = 'draft';
