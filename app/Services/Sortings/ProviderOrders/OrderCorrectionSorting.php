@@ -1,0 +1,30 @@
+<?php
+
+
+namespace App\Services\Sortings\ProviderOrders;
+
+
+use App\Services\Sortings\QuerySorting;
+
+class OrderCorrectionSorting extends QuerySorting
+{
+    protected function default_order()
+    {
+        return $this->builder->orderByDesc('created_at');
+    }
+
+    protected function number()
+    {
+        return $this->builder->orderBy('id', $this->order);
+    }
+
+    protected function order_correction_number()
+    {
+        return $this->builder->orderBy('number', $this->order);
+    }
+
+    protected function date()
+    {
+        return $this->builder->orderBy('date', $this->order);
+    }
+}

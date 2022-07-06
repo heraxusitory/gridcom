@@ -5,11 +5,14 @@ namespace App\Models\ProviderOrders\Corrections;
 
 
 use App\Models\ProviderOrders\ProviderOrder;
+use App\Traits\Sortable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
 
 class OrderCorrection extends Model
 {
+    use Sortable;
+
     protected $table = 'order_corrections';
 
     protected $fillable = [

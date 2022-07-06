@@ -16,7 +16,9 @@ use App\Services\Filters\ProviderOrders\RequirementCorrectionPositionFilter;
 use App\Services\Sortings\ProviderOrders\ActualPositionSorting;
 use App\Services\Sortings\ProviderOrders\BasePositionSorting;
 use App\Services\Sortings\ProviderOrders\OrderCorrectionPositionSorting;
+use App\Services\Sortings\ProviderOrders\OrderCorrectionSorting;
 use App\Services\Sortings\ProviderOrders\RequirementCorrectionPositionSorting;
+use App\Services\Sortings\ProviderOrders\RequirementCorrectionSorting;
 use App\Services\Sortings\ProviderOrderSorting;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
@@ -149,7 +151,7 @@ class ProviderOrderController extends Controller
         }
     }
 
-    public function getRequirementCorrections(Request $request, $provider_order_id)
+    public function getRequirementCorrections(Request $request, $provider_order_id, RequirementCorrectionSorting $sorting)
     {
         try {
             /** @var ProviderOrder $provider_order */
@@ -159,7 +161,9 @@ class ProviderOrderController extends Controller
             }
             $provider_order = $provider_order->findOrFail($provider_order_id);
 
-            $requirement_corrections = $provider_order->requirement_corrections()->with(['positions.nomenclature', 'provider_order'])->paginate($request->per_page);
+            $requirement_corrections = $provider_order->requirement_corrections()->with(['positions.nomenclature', 'provider_order'])
+                ->sorting($sorting)
+                ->paginate($request->per_page);
             return response()->json($requirement_corrections);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
@@ -221,7 +225,7 @@ class ProviderOrderController extends Controller
         }
     }
 
-    public function getOrderCorrections(Request $request, $provider_order_id)
+    public function getOrderCorrections(Request $request, $provider_order_id, OrderCorrectionSorting $sorting)
     {
         try {
             /** @var ProviderOrder $provider_order */
@@ -231,7 +235,9 @@ class ProviderOrderController extends Controller
             }
             $provider_order = $provider_order->findOrFail($provider_order_id);
 
-            $order_correction = $provider_order->order_corrections()->with(['positions.nomenclature', 'provider_order'])->paginate($request->per_page);
+            $order_correction = $provider_order->order_corrections()->with(['positions.nomenclature', 'provider_order'])
+                ->sorting($sorting)
+                ->paginate($request->per_page);
             return response()->json($order_correction);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
