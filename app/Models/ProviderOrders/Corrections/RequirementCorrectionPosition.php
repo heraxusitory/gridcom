@@ -33,6 +33,10 @@ class RequirementCorrectionPosition extends Model
         'provider_comment',
     ];
 
+    protected $with = [
+        'nomenclature',
+    ];
+
     private const STATUS_AGREED = 'Согласовано';
     private const STATUS_REJECTED = 'Не согласовано';
     private const STATUS_UNDER_CONSIDERATION = 'На рассмотрении';

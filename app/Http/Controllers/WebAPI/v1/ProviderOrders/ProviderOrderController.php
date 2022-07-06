@@ -149,6 +149,30 @@ class ProviderOrderController extends Controller
         }
     }
 
+    public function getRequirementCorrections(Request $request, $provider_order_id)
+    {
+        try {
+            /** @var ProviderOrder $provider_order */
+            $provider_order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $provider_order = $provider_order->findOrFail($provider_order_id);
+
+            $requirement_corrections = $provider_order->requirement_corrections()->with(['positions.nomenclature', 'provider_order'])->paginate($request->per_page);
+            return response()->json($requirement_corrections);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
     public function getRequirementCorrectionPositions(Request $request, $provider_order_id, $requirement_correction_id, RequirementCorrectionPositionFilter $filter, RequirementCorrectionPositionSorting $sorting)
     {
         try {
@@ -185,6 +209,30 @@ class ProviderOrderController extends Controller
 
             $order_correction = $provider_order->order_corrections()->with(['positions.nomenclature', 'provider_order'])->findOrFail($order_correction_id);
             return response()->json(['data' => $order_correction]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json(['message' => $e->getMessage()], 404);
+        } catch (\Exception $e) {
+            if ($e->getCode() >= 400 && $e->getCode() < 500)
+                return response()->json(['message' => $e->getMessage()], $e->getCode());
+            else {
+                Log::error($e->getMessage(), $e->getTrace());
+                return response()->json(['message' => 'System error'], 500);
+            }
+        }
+    }
+
+    public function getOrderCorrections(Request $request, $provider_order_id)
+    {
+        try {
+            /** @var ProviderOrder $provider_order */
+            $provider_order = ProviderOrder::query();
+            if ($this->user->isProvider()) {
+                $provider_order->where('provider_contr_agent_id', $this->user->contr_agent_id());
+            }
+            $provider_order = $provider_order->findOrFail($provider_order_id);
+
+            $order_correction = $provider_order->order_corrections()->with(['positions.nomenclature', 'provider_order'])->paginate($request->per_page);
+            return response()->json($order_correction);
         } catch (ModelNotFoundException $e) {
             return response()->json(['message' => $e->getMessage()], 404);
         } catch (\Exception $e) {

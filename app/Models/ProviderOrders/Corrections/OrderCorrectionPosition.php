@@ -29,6 +29,10 @@ class OrderCorrectionPosition extends Model
         'delivery_address',
     ];
 
+    protected $with = [
+        'nomenclature',
+    ];
+
     public function getDeliveryTimeAttribute($value)
     {
         return !is_null($value) ? (new Carbon($value))->format('Y-m-d') : null;

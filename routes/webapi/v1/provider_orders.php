@@ -14,6 +14,7 @@ Route::group(['prefix' => 'provider-orders', 'middleware' => 'role:provider'], f
             Route::get('', [ProviderOrderController::class, 'getBasePositions']);
         });
         Route::group(['prefix' => 'requirement-corrections'], function () {
+            Route::get('', [ProviderOrderController::class, 'getRequirementCorrections']);
             Route::group(['prefix' => '{requirement_correction_id}'], function () {
                 Route::get('', [ProviderOrderController::class, 'getRequirementCorrection']);
                 Route::post('approve', [ProviderOrderController::class, 'approve'])->can('update,' . ProviderOrder::class);
@@ -25,6 +26,7 @@ Route::group(['prefix' => 'provider-orders', 'middleware' => 'role:provider'], f
             });
         });
         Route::group(['prefix' => 'order-corrections'], function () {
+            Route::get('', [ProviderOrderController::class, 'getOrderCorrections']);
             Route::group(['prefix' => '{order_correction_id}'], function () {
                 Route::get('', [ProviderOrderController::class, 'getOrderCorrection']);
                 Route::group(['prefix' => 'positions'], function () {
